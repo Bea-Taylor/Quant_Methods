@@ -34,3 +34,10 @@ cloud-config.yml
 render-local.sh
 render.log
 render.err.log
+
+# Quarto figure dirs written next to the source qmds (regenerated every render)
+sessions/*_files/
+
+# Maps written into sessions/ by week6_practical.qmd chunks (outputs, not inputs)
+sessions/interactive_school_map.html
+sessions/static_school_map_with_basemap.png
