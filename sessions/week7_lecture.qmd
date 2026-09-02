@@ -15,7 +15,7 @@ format:
     transition: none
     slide-number: TRUE
     preview-links: auto
-    theme: casa-slides
+    theme: ../css/casa-slides.scss
     # chalkboard: true
     
 filters:

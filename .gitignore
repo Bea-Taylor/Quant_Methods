@@ -27,3 +27,10 @@ cloud-config.yml
 *.quarto_ipynb
 
 /.luarc.json
+
+**/*.quarto_ipynb
+
+# local dev helpers
+render-local.sh
+render.log
+render.err.log
