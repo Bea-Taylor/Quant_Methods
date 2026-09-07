@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<link href="..//img/favicon.ico" rel="icon">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-f81f3c79f694eaf6f88ebcce70241f9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="Adam Dennett">
+  <title>Quantitative Methods – Prof D’s Regression Sessions - Vol 3</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-3903353f5457d2a8a8c48812a6ae8559.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+<meta property="og:title" content="Prof D’s Regression Sessions - Vol 3 – Quantitative Methods">
+<meta property="og:description" content="In the mix - the linear mix(ed effects model lecture)">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/img/logo/full_sm.png">
+<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:locale" content="en_GB">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="title-slide" data-background-color="#4e3c56" data-background-image="L6_images/regression.png" data-background-opacity="0.08" data-background-size="stretch" style="height:100%" class="center">
+
+<br>
+<br>
+
+<h1 class="title">Prof D’s Regression Sessions - Vol 3</h1>
+
+  <h3 style="opacity:0.8;" class="subtitle">In the mix - the linear mix(ed effects model lecture)</h3>
+
+<p><span style="margin:0px; font-weight:700;" class="author">Adam Dennett</span> - a.dennett@ucl.ac.uk </p>
+
+<p style="opacity: 0.8">1st August 2024</p>
+
+<p style="opacity:0.8;">CASA0007 Quantitative Methods</p>
+
+</section>
+<section>
+<section id="this-week" class="title-slide slide level1 center">
+<h1>This week</h1>
+<p>Another long lecture - sorry!!</p>
+<p>I’ll try and stop for another break in the middle</p>
+</section>
+<section id="recap" class="slide level2">
+<h2>Recap</h2>
+<ul>
+<li>Last week we saw how multiple regression models can allow us to understand complex relationships between predictor and outcome variables</li>
+<li>We began to explore how by increasing the complexity of our regression models, we can begin to observe how the effects of different variables can confound (obscure) and mediate (partially cause) the effects of others, giving us a deeper understanding of our system of interest</li>
+<li>We were able to see that with just a relatively small number of variables, we could explain most of the variation in school-level attainment scores in England</li>
+</ul>
+</section>
+<section id="ols-regression-with-interaction-terms" class="slide level2">
+<h2>OLS regression with interaction terms</h2>
+<div class="cell" width="80%">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-5-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>In our most sophisticated model we could even see how the relationship between our main predictor and our outcome might vary between levels of a categorical variable</li>
+</ul>
+</section>
+<section id="ols-regression-with-interaction-terms-1" class="slide level2">
+<h2>OLS regression with Interaction Terms</h2>
+<ul>
+<li>Interacting categorical variables with other continuous predictor variables allowed us to see how levels of continuous predictor slope coefficient vary according to the categorical predictor</li>
+<li>In our example, we saw how in a simple bivariate model of Attainment 8 vs Disadvantage, the slope less severe in regions such as London, the West Midlands and Yorkshire and the Humber when compared to the South East.</li>
+<li>The effects of concentrations of disadvantaged pupils in schools felt more severely in the South East.</li>
+</ul>
+</section>
+<section id="drawbacks-of-ols-with-interaction" class="slide level2">
+<h2>Drawbacks of OLS with Interaction</h2>
+<ul>
+<li>OLS assumes all observations (schools) are independent of each other
+<ul>
+<li>In reality, they may have characteristics which mean they are not independent - i.e.&nbsp;Being in the same local authority or having similar Ofsted ratings could mean that effects are <strong><em>clustered</em></strong>.</li>
+</ul></li>
+<li>OLS assumes the effects (parameters) are constant (fixed) across the whole population / dataset</li>
+<li>OLS assumes the errors are independent, <strong><em>not clustered</em></strong> by space, time or some other group</li>
+<li>OLS only has one global intercept with group level differences in the data only crudely represented with dummy variables</li>
+</ul>
+</section>
+<section id="spotting-important-clustering-non-independence" class="slide level2">
+<h2>Spotting Important Clustering / non-independence</h2>
+<ul>
+<li>It’s possible to visualise clusters / sources of non-independence in our model through plotting relationships for different categorical variables</li>
+<li>We are likely to have clustering / non-independence if these plots produce different slopes and intercepts</li>
+</ul>
+</section>
+<section id="different-slopes-and-intercepts---attainment-8" class="slide level2">
+<h2>Different Slopes and Intercepts - Attainment 8</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-6-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="different-slopes-and-intercepts---attainment-8-1" class="slide level2">
+<h2>Different Slopes and Intercepts - Attainment 8</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="different-slopes-and-intercepts---progress-8" class="slide level2">
+<h2>Different Slopes and Intercepts - Progress 8</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="different-slopes-and-intercepts---progress-8-1" class="slide level2">
+<h2>Different Slopes and Intercepts - Progress 8</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="different-slopes-and-intercepts" class="slide level2">
+<h2>Different Slopes and Intercepts</h2>
+<ul>
+<li>Solution: can we just partition our data and run different models for different groups?</li>
+<li>Answer: Well yes, you could, but we couldn’t then answer questions about:
+<ul>
+<li>whether variation between individual schools (<strong><em>within groups</em></strong>) is more important than <strong><em>between groups</em></strong> (e.g.&nbsp;local authorities or Ofsted ratings)</li>
+<li>how much variation the groups account for themselves</li>
+</ul></li>
+</ul>
+<p>In order to model these grouping factors more explicitly and understand their general impact, we need a new type of model - a <strong><em>linear mixed effects model</em></strong></p>
+</section>
+<section id="jargon-alert" class="slide level2">
+<h2>Jargon Alert!</h2>
+<ul>
+<li>Before we embark on our linear mixed effects journey, there are two key pieces of jargon you need to learn</li>
+<li><strong><em>Fixed Effects</em></strong> - A Fixed Effect is your traditional explanatory variable (or covariate) whose relationship with the outcome you are primarily interested in estimating for its own sake.
+<ul>
+<li>Example: Proportion of disadvantaged students in a school. You want the single, best-estimated coefficient (<span class="math inline">\(\beta\)</span>) for this factor.</li>
+</ul></li>
+<li><strong><em>Random Effects</em></strong> - A Random Effect is a grouping factor (or nesting factor) whose variability you want to account for, but whose specific individual levels you don’t necessarily want to draw conclusions about.
+<ul>
+<li>Example: The different Ofsted ratings (or individual Schools). You’re interested in how much the relationship varies across these groups, not the specific effect of ‘outstanding’ or ‘Longhill School’</li>
+</ul></li>
+</ul>
+</section>
+<section id="fixed-effects---more-detail" class="slide level2">
+<h2>Fixed Effects - More Detail</h2>
+<ul>
+<li>Fixed effects estimate the mean relationship across all groups. They represent the “fixed” part of the model that applies to <em>every observation</em>.
+<ul>
+<li>You estimate a single <span class="math inline">\(\beta\)</span> coefficient for a fixed effect - the population average effect of that variable.</li>
+<li>Fixed effects can be either continuous (e.g., % of disadvantaged students in a school) or categorical (region, Ofsted rating).</li>
+</ul></li>
+<li>Depending on how you formulate your model, a fixed effect could be a random effect in a different context.</li>
+</ul>
+</section>
+<section id="random-effects---more-detail" class="slide level2">
+<h2>Random Effects - More Detail</h2>
+<ul>
+<li>Random effects, (random intercepts and slopes) represent the deviations of each group’s effect from the overall fixed-effect average.
+<ul>
+<li>When you model a grouping factor (like Ofsted Rating) as a random effect, you are not estimating five separate coefficients (one for each rating).</li>
+<li>Instead, you estimate a variance term (<span class="math inline">\(\sigma^2_{\text{group}}\)</span>) that quantifies how much the true group effects (intercepts and/or slopes) scatter around the overall mean effect.</li>
+<li>Remember: Higher variance = Higher uncertainty, so higher variance groups have less weight in the model</li>
+<li>This allows the model to “borrow strength” across groups to stabilise estimates (the principle of shrinkage).</li>
+</ul></li>
+</ul>
+</section>
+<section id="random-effects-vs-dummy-variables" class="slide level2">
+<h2>Random Effects vs Dummy Variables</h2>
+<ul>
+<li>Random Effects and Dummy Variables are often exactly the same variable, they are just treated differently in a LME vs OLS model</li>
+<li>In an OLS, the Dummy variable gets a specific coefficient value</li>
+<li>In a LME, the random effect represents the overall variability that that variable brings to the explanation (i.e.&nbsp;how much variability in attainment is down to schools themselves <strong><em>generally</em></strong>, rather than a particular school <strong><em>specifically</em></strong>)</li>
+<li>Where you might have lots of Dummy categories, a random effect might be more suitable</li>
+</ul>
+</section>
+<section id="linear-mixed-effects-models" class="slide level2">
+<h2>Linear Mixed Effects Models</h2>
+<ul>
+<li>A Linear Mixed Effects (LME) model is a more general class of statistical model that features both a fixed-effects component (the population-average parameters) and a random-effects component (the group-specific deviations)</li>
+<li>A common type of LME model is the <strong><em>multilevel model</em></strong> or hierarchical linear model.
+<ul>
+<li><strong>Multilevel models</strong> focus specifically on <strong>nested</strong> data structures, e.g.&nbsp;students in classes <span class="math inline">\(\rightarrow\)</span> classes within schools <span class="math inline">\(\rightarrow\)</span> schools within local authorities <span class="math inline">\(\rightarrow\)</span> local authorities within regions</li>
+</ul></li>
+<li>All multilevel models are linear mixed effects models, but other types of linear mixed effects models can handle even more types of groupings (e.g.&nbsp;longitudinal - repeated observations over time)</li>
+</ul>
+</section>
+<section id="linear-mixed-effects-models-1" class="slide level2">
+<h2>Linear Mixed Effects Models</h2>
+<p><a href="L6_images/multilevel_data.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="L6_images/multilevel_data.webp"></a></p>
+<ul>
+<li>In practice, LME models essentially result in varying intercepts, slopes or both.</li>
+</ul>
+<p>Multilevel Data Structures (Source:<a href="http://www.stat.columbia.edu/~gelman/arm/">Gelman &amp; Hill (2006)</a>) and <a href="https://paulrjohnson.net/blog/2022-11-01-multilevel-model-r-cheatsheet/" class="uri">https://paulrjohnson.net/blog/2022-11-01-multilevel-model-r-cheatsheet/</a></p>
+</section>
+<section id="the-null-model" class="slide level2">
+<h2>The Null Model</h2>
+<ul>
+<li>The first step in a linear mixed effects model is to fit what is often called a <strong><em>null model</em></strong> (otherwise know as the <strong><em>‘Variance Components’</em></strong> / <strong><em>‘Unconditional Means’</em></strong> Model)</li>
+<li>Point of the null model is to partition the total variance in the outcome variable (Progress 8 - P8MEA) into the levels or components we think are relevant.</li>
+<li>In our example, we have:
+<ul>
+<li>Schools (Level 1 - our primary unit) and
+<ul>
+<li>Local authority (level 2) - or other grouping factors e.g.&nbsp;Ofsted rating,
+<ul>
+<li>Region (level 3).</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-null-model---a-2-level-example" class="slide level2">
+<h2>The Null Model - a 2 Level example</h2>
+<div class="cell" data-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+ -0.2646198 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-13-1.png" style="width:80.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Most (as box plots hide counts) of the information in the two-level NULL model is contained in this plot!</li>
+</ul>
+</section>
+<section id="shrinkage" class="slide level2">
+<h2>Shrinkage</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:70.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The global mean in the null model is not just a simple average</li>
+<li>Groups have few observations / high variance / unreliable means are given less importance in the average in a process called <strong><em>shrinkage</em></strong></li>
+<li>Groups with few observations are ‘shrunk’ towards the overall mean</li>
+</ul>
+</section>
+<section id="shrinkage-1" class="slide level2">
+<h2>Shrinkage</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:70.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Shrinkage is another reason why LME models are better than OLS models where clustering exists in the data</li>
+<li>Small groups have less of an influence as their averages get pulled towards the mean - less uncertainty and avoids over-fitting to small groups</li>
+</ul>
+</section>
+<section id="the-null-model---a-2-level-example-1" class="slide level2">
+<h2>The Null Model - a 2 Level example</h2>
+<p><span class="math display">\[Y_{ij} = \gamma_{00} + u_{0j} + \epsilon_{ij}\]</span> The total variability in outcome <span class="math inline">\(Y_{ij}\)</span> (Progress 8) for the <span class="math inline">\(i^{th}\)</span> school in the <span class="math inline">\(j^{th}\)</span> Ofsted rating is decomposed into:</p>
+<ul>
+<li><strong>Fixed Effect</strong>: <span class="math inline">\(\gamma_{00}\)</span> (gamma - the overall population average - <strong>grand/global mean</strong>).</li>
+<li><strong>Random Effect - Level 1</strong>: <span class="math inline">\(\epsilon_{ij}\)</span> - <strong>Within-Group Variance</strong> - the height of each individual box and the length of its whiskers. Taller boxes and longer whiskers indicate more variability among schools within that single rating category.</li>
+<li><strong>Random Effect - Level 2</strong>: <span class="math inline">\(u_{0j}\)</span> - <strong>Between-Group Variance</strong></li>
+</ul>
+</section>
+<section id="level-1---within-group-variance" class="slide level2">
+<h2>Level 1 - Within-Group Variance</h2>
+<p><span class="math display">\[
+Y_{ij} = \beta_{0j} + \epsilon_{ij}
+\]</span></p>
+<ul>
+<li><strong>The Progress 8 Outcome</strong>: <span class="math inline">\(Y_{ij}\)</span></li>
+<li><strong>The within-group intercept</strong>: <span class="math inline">\(\beta_{0j}\)</span> for the specific Ofsted rating <span class="math inline">\(j\)</span>. This represents the true mean Progress 8 for all schools within that rating.<br>
+</li>
+<li><strong>The Level 1 residual error</strong>: <span class="math inline">\(\epsilon_{ij}\)</span> (or “school-level error”). This is the deviation of the <span class="math inline">\(i^{th}\)</span> school’s P8MEA from its own Ofsted group’s mean (<span class="math inline">\(\beta_{0j}\)</span>).
+<ul>
+<li>Assumption: <span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})\)</span> where <span class="math inline">\(\sigma^2_{\epsilon}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="level-1---within-group-variance-1" class="slide level2 smaller">
+<h2>Level 1 - Within-Group Variance</h2>
+<p><span class="math display">\[\epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})\]</span></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 69%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Notation</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\epsilon_{ij}\)</span></td>
+<td>The <strong>Level 1 Residual Error</strong> (or “within-group error”) for the <span class="math inline">\(i\)</span>-th school in the <span class="math inline">\(j\)</span>-th Ofsted rating.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sim\)</span></td>
+<td>“Is distributed as” or “Follows the distribution.”</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(N(\dots)\)</span></td>
+<td>The <strong><em>N</em></strong>ormal (Gaussian) Distribution.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(0\)</span></td>
+<td>The <strong>Mean</strong> of the distribution = 0.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sigma^2_{\epsilon}\)</span></td>
+<td>The <strong>Within-Group Variance</strong> of the the error term. Sigma - <span class="math inline">\(\sigma\)</span> is commonly used to represent standard deviation. Variance is <span class="math inline">\(\sigma^2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="level-2---between-group-variance" class="slide level2">
+<h2>Level 2 - Between-Group Variance</h2>
+<p><span class="math display">\[
+\beta_{0j} = \gamma_{00} + u_{0j}
+\]</span></p>
+<ul>
+<li>Level 1 intercept <span class="math inline">\(\beta_{0j}\)</span>: The mean Progress 8 for the <span class="math inline">\(j^{th}\)</span> Ofsted rating</li>
+<li><strong>The grand mean</strong> <span class="math inline">\(\gamma_{00}\)</span>: the overall fixed intercept. This is the mean Progress 8 averaged across all Ofsted ratings. <strong><em>The dotted black line on our earlier plot</em></strong></li>
+<li><strong>Level 2 residual error</strong> <span class="math inline">\(u_{0j}\)</span>: “group-level error”. This is the deviation of the <span class="math inline">\(j^{th}\)</span> Ofsted rating’s mean (<span class="math inline">\(\beta_{0j}\)</span>) from the grand mean (<span class="math inline">\(\gamma_{00}\)</span>).
+<ul>
+<li>Assumption: <span class="math inline">\(u_{0j} \sim N(0, \sigma^2_{u_{0}})\)</span> where <span class="math inline">\(\sigma^2_{u_{0}}\)</span> is the Between-Group Variance (or Level 2 variance/Random Intercept Variance).</li>
+</ul></li>
+</ul>
+</section>
+<section id="total-variance" class="slide level2">
+<h2>Total Variance</h2>
+<ol type="1">
+<li><strong>Between-Group Variance</strong> (<span class="math inline">\(\sigma^2_{\text{Between}}\)</span> - or more generally <span class="math inline">\(\sigma^2_{u_{0}}\)</span>): The variability in average P8MEA that exists <strong><em>between</em></strong> the different Ofsted ratings.</li>
+<li><strong>Within-Group (Residual) Variance</strong> (<span class="math inline">\(\sigma^2_{\text{Within}}\)</span> - or more generally <span class="math inline">\(\sigma^2_{\epsilon}\)</span>): The variability in P8MEA that exists between schools <strong><em>within</em></strong> each rating (i.e., the school-level differences).</li>
+</ol>
+<ul>
+<li>Total Variance is simply the sum of these two</li>
+</ul>
+<p><span class="math display">\[\sigma^2_{\text{Total}} = \sigma^2_{\text{Between}} + \sigma^2_{\text{Within}}\]</span> <span class="math display">\[\sigma^2_{\text{Total}} = \sigma^2_{u_{0}} + \sigma^2_{\epsilon}\]</span></p>
+</section>
+<section id="the-intraclass-correlation-coefficient-icc" class="slide level2">
+<h2>The Intraclass Correlation Coefficient (ICC)</h2>
+<p><span class="math display">\[\text{ICC} = \frac{\text{Between-Group Variance}}{\text{Total Variance}} = \frac{\sigma^2_{u_{0}}}{\sigma^2_{u_{0}} + \sigma^2_{\epsilon}}\]</span></p>
+<ul>
+<li>This ICC is simply the ratio between the between the between group variance and the total variance</li>
+<li>The higher the ICC (closer to 1), the more variance is due to differences between groups (i.e.&nbsp;differences between the Ofsted rating of schools) than within groups (i.e.&nbsp;between schools within Ofsted rating bands)</li>
+<li><strong>A high ICC is a strong indication that a multilevel model is a suitable modelling strategy to pursue to try and explain these group-level differences</strong></li>
+</ul>
+</section>
+<section id="visualising-the-icc" class="slide level2">
+<h2>Visualising The ICC</h2>
+<div class="cell" data-align="center">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-16-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:80.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>High ICC = distinct, non-overlapping humps</li>
+<li>Low ICC = density plots all overlapping on-top of each other</li>
+</ul>
+</section>
+<section id="the-null-model---fixed-global-intercept-fixed-random-effect-slopes" class="slide level2">
+<h2>The Null Model - Fixed Global Intercept &amp; Fixed Random Effect Slopes</h2>
+<ul>
+<li>Using <a href="https://paulrjohnson.net/blog/2022-11-01-multilevel-model-r-cheatsheet/">Paul Johnson’s</a> excellent guide for syntax, the null model in R follows this format: <code>y ~ 1 + (1 | g)</code></li>
+<li><strong>Fixed effects outside of the brackets</strong>. The first <code>1</code> just tells the model to use a fixed global intercept (global average <code>y</code>)</li>
+<li><strong>Random Effects are inside the brackets</strong> <code>(...|...)</code>
+<ul>
+<li>To the <em>left</em> of the pipe symbol <code>|</code> we have a <code>1</code> as all slopes are fixed as group <code>g</code> average of <code>y</code></li>
+<li>To the <em>right</em> of the vertical bar or pipe symbol <code>|</code> we have the grouping variable <code>g</code> itself.</li>
+</ul></li>
+<li>The full model in R would like like: <code>lme_model1 &lt;- lmer(P8MEA ~ 1 + (1|OFSTEDRATING), data = ...)</code></li>
+</ul>
+</section>
+<section id="running-the-null-model" class="slide level2 smaller">
+<h2>Running The Null Model</h2>
+<div class="cell" data-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: P8MEA ~ 1 + (1 | OFSTEDRATING)
+   Data: england_filtered_clean
+
+REML criterion at convergence: 3156.8
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.3316 -0.6163  0.0060  0.6152  4.2823 
+
+Random effects:
+ Groups       Name        Variance Std.Dev.
+ OFSTEDRATING (Intercept) 0.3146   0.5609  
+ Residual                 0.1718   0.4145  
+Number of obs: 2906, groups:  OFSTEDRATING, 5
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  -0.2646     0.2523  -1.049</code></pre>
+</div>
+</div>
+<ul>
+<li>Fixed Effect: Global Average <code>y</code> (Progress 8) is -0.26</li>
+<li>Random Effect: Progress 8 varies by 0.31 points on average <strong><em>between</em></strong> Ofsted categories</li>
+<li>Residual variation between schools <strong><em>within</em></strong> categories is smaller: 0.17 points</li>
+</ul>
+</section>
+<section id="the-null-model-icc" class="slide level2">
+<h2>The NULL model ICC</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(performance)</span>
+<span id="cb3-2"><a></a><span class="fu">icc</span>(lme1, <span class="at">by_group =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># ICC by Group
+
+Group        |   ICC
+--------------------
+OFSTEDRATING | 0.647</code></pre>
+</div>
+</div>
+<ul>
+<li>ICC of 0.647 means around 65% of the total variation in Progress 8 scores is explained by differences <strong><em>between</em></strong> OFSTED rating groups</li>
+<li>The remaining 35% is due to variation <strong><em>within</em></strong> those groups (i.e.&nbsp;between individual schools)</li>
+<li>ICC of 65% is very high - Schools in the same OFSTED category tend to have very similar Progress 8 scores</li>
+<li>High ICC means clustering is important. Ignoring it (e.g., using OLS) would underestimate uncertainty - justifies using a LME model</li>
+</ul>
+</section>
+<section id="null-model-visualisation" class="slide level2">
+<h2>NULL Model Visualisation</h2>
+<div class="cell" data-align="center">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-19-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-19-1.png" style="width:80.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-with-a-fixed-effect-predictor" class="slide level2">
+<h2>Model with a Fixed Effect Predictor</h2>
+<ul>
+<li><code>y ~ x + (1 | g)</code></li>
+<li>In this model, each group in the Random Effect part of the model has it’s own intercept but a fixed slope still - <code>(1 | g)</code></li>
+<li>Adding a variable into the Fixed Effect part of the model shows how <code>x</code> influences <code>y</code> across all groups</li>
+<li>The Null Model asks: “How much do groups differ, ignoring everything else?”</li>
+<li>This model asks: “How does <code>x</code> affect <code>y</code>, while still accounting for group differences?”</li>
+</ul>
+</section>
+<section id="model-with-a-fixed-effect-predictor-1" class="slide level2">
+<h2>Model with a Fixed Effect Predictor</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-with-a-fixed-effect-predictor-2" class="slide level2 smaller">
+<h2>Model with a Fixed Effect Predictor</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: P8MEA ~ PTFSM6CLA1A + (1 | OFSTEDRATING)
+   Data: england_filtered_clean
+
+REML criterion at convergence: 2744
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.1283 -0.6451 -0.0364  0.5935  4.7671 
+
+Random effects:
+ Groups       Name        Variance Std.Dev.
+ OFSTEDRATING (Intercept) 0.2320   0.4817  
+ Residual                 0.1485   0.3853  
+Number of obs: 2906, groups:  OFSTEDRATING, 5
+
+Fixed effects:
+              Estimate Std. Error t value
+(Intercept)  0.0673133  0.2174828    0.31
+PTFSM6CLA1A -0.0110830  0.0005174  -21.42
+
+Correlation of Fixed Effects:
+            (Intr)
+PTFSM6CLA1A -0.071</code></pre>
+</div>
+</div>
+<ul>
+<li>Adding the fixed effect variable reduces Random Effect Ofsted group variance from 0.31 to 0.23. Some between group variance now captured by PTFSM6CLA1A</li>
+<li>Fixed effect of % disadvantaged students highly significant</li>
+<li>REML criterion: 3156.8 → 2729.2 indicating better fit</li>
+</ul>
+</section>
+<section id="model-with-a-fixed-effect-predictor-3" class="slide level2">
+<h2>Model with a Fixed Effect Predictor</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Random effects (BLUPs): deviations from the global intercept, by group</span></span>
+<span id="cb6-2"><a></a><span class="fu">ranef</span>(lme1)<span class="sc">$</span>OFSTEDRATING</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     (Intercept)
+Special Measures      -0.5358379
+Serious Weaknesses    -0.3498755
+Requires improvement  -0.2039681
+Good                   0.2300834
+Outstanding            0.8595982</code></pre>
+</div>
+</div>
+<ul>
+<li>While the main summary doesn’t show the specific intercepts for each group, these can be extracted from the model object using the <code>ranef</code> (random effect) function in R</li>
+<li>These Random Effect intercepts are the deviation from the global mean and effectively show what is on the plot when combined with the Fixed Effect parameter</li>
+</ul>
+</section>
+<section id="model-with-a-fixed-effect-predictor-4" class="slide level2">
+<h2>Model with a Fixed Effect Predictor</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="random-intercept-and-random-slope-model" class="slide level2">
+<h2>Random Intercept and Random Slope Model</h2>
+<ul>
+<li>Right back at the beginning of the lecture when we plotted each Ofsted Subset as a separate regression model, it was clear that the relationship between % Disadvantaged Pupils in a school &amp; Progress 8 had different slopes as well as intercepts</li>
+<li><code>y ~ x + (x | g)</code></li>
+<li>Adding the random slopes simply requires the predictor variable to the left of the pipe in the Random effects bracket <code>(x | g)</code></li>
+<li>In this model each group has its own baseline (intercept) and its own relationship between <code>x</code> and <code>y</code> (whereas in the last model the relationship between <code>x</code> and <code>y</code> was assumed constant across groups)</li>
+</ul>
+</section>
+<section id="random-intercept-and-random-slope-model-1" class="slide level2 smaller">
+<h2>Random Intercept and Random Slope Model</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-24-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Most Ofsted Groups are similar to the mean</li>
+<li>Although for Outstanding schools, the proportions of disadvantage appear to have very little effect on Progress 8</li>
+</ul>
+</section>
+<section id="random-intercept-and-random-slope-model-2" class="slide level2 smaller">
+<h2>Random Intercept and Random Slope Model</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: P8MEA ~ PTFSM6CLA1A + (PTFSM6CLA1A | OFSTEDRATING)
+   Data: england_filtered_clean
+
+REML criterion at convergence: 2702.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.1370 -0.6525 -0.0411  0.5920  4.6984 
+
+Random effects:
+ Groups       Name        Variance  Std.Dev. Corr
+ OFSTEDRATING (Intercept) 9.851e-02 0.313870     
+              PTFSM6CLA1A 3.549e-05 0.005957 1.00
+ Residual                 1.463e-01 0.382504     
+Number of obs: 2906, groups:  OFSTEDRATING, 5
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.172412   0.142010   1.214
+PTFSM6CLA1A -0.013490   0.002723  -4.954
+
+Correlation of Fixed Effects:
+            (Intr)
+PTFSM6CLA1A 0.959 
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+</div>
+<ul>
+<li>REML dropped from 2744 → 2702, meaning the second model fits slightly better (lower REML = better fit)</li>
+<li>However, slope variance 3.549e-05 (0.000035) very small (i.e.&nbsp;possibly not worth additional complexity compared to fixed slope model)</li>
+<li>And correlation of 1.0 between slope and intercept in Random effects is problematic</li>
+<li>Suggests visual difference in Outstanding Ofsted not statistically reliable.</li>
+</ul>
+</section>
+<section id="random-intercept-and-random-slope-model-3" class="slide level2">
+<h2>Random Intercept and Random Slope Model</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Extract random effects for each OFSTED group</span></span>
+<span id="cb9-2"><a></a>ranef_values <span class="ot">&lt;-</span> <span class="fu">ranef</span>(lme3)<span class="sc">$</span>OFSTEDRATING</span>
+<span id="cb9-3"><a></a></span>
+<span id="cb9-4"><a></a><span class="co"># Fixed slope</span></span>
+<span id="cb9-5"><a></a>fixed_slope <span class="ot">&lt;-</span> <span class="fu">fixef</span>(lme3)[<span class="st">"PTFSM6CLA1A"</span>]</span>
+<span id="cb9-6"><a></a></span>
+<span id="cb9-7"><a></a><span class="co"># Add random deviations to get group-specific slopes</span></span>
+<span id="cb9-8"><a></a>group_slopes <span class="ot">&lt;-</span> fixed_slope <span class="sc">+</span> ranef_values<span class="sc">$</span>PTFSM6CLA1A</span>
+<span id="cb9-9"><a></a></span>
+<span id="cb9-10"><a></a><span class="co"># Combine into a tidy data frame</span></span>
+<span id="cb9-11"><a></a>slopes_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-12"><a></a>  <span class="at">OFSTEDRATING =</span> <span class="fu">rownames</span>(ranef_values),</span>
+<span id="cb9-13"><a></a>  <span class="at">slope =</span> group_slopes</span>
+<span id="cb9-14"><a></a>)</span>
+<span id="cb9-15"><a></a></span>
+<span id="cb9-16"><a></a><span class="fu">print</span>(slopes_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          OFSTEDRATING        slope
+1     Special Measures -0.018639324
+2   Serious Weaknesses -0.017126695
+3 Requires improvement -0.016104820
+4                 Good -0.011586886
+5          Outstanding -0.003994586</code></pre>
+</div>
+</div>
+<ul>
+<li>Again, while the standard model outputs don’t print the slope parameters, these can be extracted</li>
+</ul>
+</section>
+<section id="random-intercept-and-random-slope-model-4" class="slide level2 smaller">
+<h2>Random Intercept and Random Slope Model</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-27-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-27-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="other-linear-mixed-effects-models" class="slide level2 smaller">
+<h2>Other Linear Mixed Effects Models</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 41%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Element</th>
+<th>Meaning</th>
+<th>Sample Equation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(1|g)</code></td>
+<td>Null Model or Varying Intercept Model</td>
+<td><code>P8 ~ 1 + (1 | OFSTEDRATING)</code></td>
+</tr>
+<tr class="even">
+<td><code>(1|g1/g2)</code></td>
+<td>Multilevel Model with intercept varying within g1 and for g2 within g1</td>
+<td><code>P8 ~ 1 + (1 | LocalAuthority/Region)</code></td>
+</tr>
+<tr class="odd">
+<td><code>(1|g1) + (1|g2)</code></td>
+<td>Intercept varying among g1 and g2</td>
+<td><code>P8 ~ 1 + (1 | OFSTEDRATING) + (1 | Region)</code></td>
+</tr>
+<tr class="even">
+<td><code>(0+x|g)</code></td>
+<td>Varying Slope Model</td>
+<td><code>P8 ~ Disadvantage + (0 + Disadvantage | OFSTEDRATING)</code></td>
+</tr>
+<tr class="odd">
+<td><code>x + (x|g)</code></td>
+<td>Varying and correlated intercepts and slopes</td>
+<td><code>P8 ~ Disadvantage + (Disadvantage | OFSTEDRATING)</code></td>
+</tr>
+<tr class="even">
+<td><code>x + (x||g)</code></td>
+<td>Uncorrelated Intercepts and Slopes</td>
+<td><code>P8 ~ Disadvantage + (Disadvantage || OFSTEDRATING)</code></td>
+</tr>
+</tbody>
+</table>
+
+<aside><div>
+<p>Borrowed from Levi Wolf and Paul Johnson</p>
+</div></aside></section>
+<section id="last-weeks-attainment-8-best-model" class="slide level2 smaller">
+<h2>Last Week’s Attainment 8 Best Model</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(ATT8SCR) ~ log(PTFSM6CLA1A) + log(PERCTOT) + 
+    log(PNUMEAL) + OFSTEDRATING + gor_name + PTPRIORLO + ADMPOL_PT, 
+    data = england_filtered_clean, na.action = na.exclude)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.37723 -0.04528  0.00333  0.04912  0.30081 
+
+Coefficients:
+                                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                       4.5966533  0.0178852 257.009  &lt; 2e-16 ***
+log(PTFSM6CLA1A)                 -0.0699264  0.0036900 -18.950  &lt; 2e-16 ***
+log(PERCTOT)                     -0.2244960  0.0074455 -30.152  &lt; 2e-16 ***
+log(PNUMEAL)                      0.0179676  0.0016174  11.109  &lt; 2e-16 ***
+OFSTEDRATING.L                    0.1141381  0.0134587   8.481  &lt; 2e-16 ***
+OFSTEDRATING.Q                    0.0223425  0.0113333   1.971 0.048773 *  
+OFSTEDRATING.C                    0.0094244  0.0118583   0.795 0.426824    
+OFSTEDRATING^4                   -0.0130171  0.0085375  -1.525 0.127442    
+gor_nameEast of England           0.0056999  0.0063522   0.897 0.369630    
+gor_nameLondon                    0.0266978  0.0065474   4.078 4.67e-05 ***
+gor_nameNorth East                0.0202813  0.0084342   2.405 0.016250 *  
+gor_nameNorth West               -0.0139159  0.0060835  -2.287 0.022239 *  
+gor_nameSouth East               -0.0128394  0.0060587  -2.119 0.034161 *  
+gor_nameSouth West                0.0254495  0.0065872   3.863 0.000114 ***
+gor_nameWest Midlands             0.0058630  0.0063008   0.931 0.352183    
+gor_nameYorkshire and the Humber  0.0199996  0.0065661   3.046 0.002341 ** 
+PTPRIORLO                        -0.0069371  0.0002201 -31.525  &lt; 2e-16 ***
+ADMPOL_PTOTHER NON SEL            0.0154098  0.0060930   2.529 0.011488 *  
+ADMPOL_PTSEL                      0.0806871  0.0098281   8.210 3.30e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.07492 on 2883 degrees of freedom
+  (59 observations deleted due to missingness)
+Multiple R-squared:  0.8443,    Adjusted R-squared:  0.8433 
+F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="a-linear-mixed-effects-revision" class="slide level2 smaller">
+<h2>A Linear Mixed Effects Revision</h2>
+<p>“He threw everything but the kitchen sink at it!”</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>lme9 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
+<span id="cb12-2"><a></a>  <span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> </span>
+<span id="cb12-3"><a></a>    <span class="fu">log</span>(PTFSM6CLA1A) <span class="sc">+</span></span>
+<span id="cb12-4"><a></a>    <span class="fu">log</span>(PERCTOT) <span class="sc">+</span></span>
+<span id="cb12-5"><a></a>    <span class="fu">log</span>(PNUMEAL) <span class="sc">+</span></span>
+<span id="cb12-6"><a></a>    PTPRIORLO <span class="sc">+</span></span>
+<span id="cb12-7"><a></a>    ADMPOL_PT <span class="sc">+</span></span>
+<span id="cb12-8"><a></a>    (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span></span>
+<span id="cb12-9"><a></a>    (<span class="dv">1</span> <span class="sc">|</span> gor_name <span class="sc">/</span> LANAME),</span>
+<span id="cb12-10"><a></a>  <span class="at">data =</span> england_filtered_clean,</span>
+<span id="cb12-11"><a></a>  <span class="at">na.action =</span> na.exclude</span>
+<span id="cb12-12"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Not quite everything, but:</li>
+<li>Fixed Effects: % Disadvantaged Students, % pupils where English not first language, % Overall Absence, % of pupils at the end of key stage 4 with low prior attainment at the end of key stage 2, Admissions Policy</li>
+<li>Random Effects: Ofsted Rating and <em>nested</em> (multilevel) Local Authority and Regional Geographic effects</li>
+</ul>
+</section>
+<section id="my-final-kitchen-sink-model" class="slide level2 smaller">
+<h2>My Final kitchen sink model!!</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: log(ATT8SCR) ~ log(PTFSM6CLA1A) + log(PERCTOT) + log(PNUMEAL) +  
+    PTPRIORLO + ADMPOL_PT + (1 | OFSTEDRATING) + (1 | gor_name/LANAME)
+   Data: england_filtered_clean
+
+REML criterion at convergence: -6867.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.7645 -0.5790  0.0301  0.6358  4.5633 
+
+Random effects:
+ Groups          Name        Variance  Std.Dev.
+ LANAME:gor_name (Intercept) 0.0006878 0.02623 
+ gor_name        (Intercept) 0.0002478 0.01574 
+ OFSTEDRATING    (Intercept) 0.0032801 0.05727 
+ Residual                    0.0050031 0.07073 
+Number of obs: 2902, groups:  
+LANAME:gor_name, 151; gor_name, 9; OFSTEDRATING, 5
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)             4.6350167  0.0320063 144.816
+log(PTFSM6CLA1A)       -0.0753777  0.0039754 -18.961
+log(PERCTOT)           -0.2237835  0.0073213 -30.566
+log(PNUMEAL)            0.0143445  0.0017594   8.153
+PTPRIORLO              -0.0068604  0.0002199 -31.202
+ADMPOL_PTOTHER NON SEL  0.0059090  0.0089869   0.658
+ADMPOL_PTSEL            0.0748478  0.0097318   7.691
+
+Correlation of Fixed Effects:
+            (Intr) l(PTFS l(PERC l(PNUM PTPRIO ADMPNS
+l(PTFSM6CLA -0.106                                   
+lg(PERCTOT) -0.377 -0.354                            
+lg(PNUMEAL) -0.080 -0.257  0.165                     
+PTPRIORLO    0.110 -0.412 -0.208 -0.150              
+ADMPOL_PTNS -0.265 -0.044  0.016 -0.013  0.074       
+ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
+</div>
+</div>
+</section>
+<section id="my-final-kitchen-sink-model-1" class="slide level2 smaller">
+<h2>My Final kitchen sink model!!</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-33-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="my-final-kitchen-sink-model-2" class="slide level2 smaller">
+<h2>My Final kitchen sink model!!</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="my-final-kitchen-sink-model-3" class="slide level2">
+<h2>My Final kitchen sink model!!</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Very good fit, <span class="math inline">\(R^2\)</span> = 86%</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---random-effects" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Random Effects</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 65%">
+<col style="width: 18%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Variance</th>
+<th>Std. Dev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Intercept Local Authority Within Region</strong></td>
+<td><strong>0.00069</strong></td>
+<td><strong>0.026</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Intercept Region</strong></td>
+<td><strong>0.00025</strong></td>
+<td><strong>0.016</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Intercept OFSTEDRATING</strong></td>
+<td><strong>0.00328</strong></td>
+<td><strong>0.057</strong></td>
+</tr>
+<tr class="even">
+<td>Residual School-to-School</td>
+<td>0.00500</td>
+<td>0.071</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Random effects represent variation across levels (categories) within a grouping factor</li>
+<li>Larger variance = more difference between those levels (e.g.&nbsp;London to SE in Region)</li>
+<li>SD (sqrt(variance)) is typical size of deviation from the overall mean for a group.</li>
+<li>A typical OFSTED level differs from the overall mean by about ±1 SD (≈ 0.057 on the log scale)</li>
+<li><span class="math inline">\(exp(\sigma^2_{\text{OFSTEDRATING}})-1 ≈ exp(0.0573)−1 ≈ 0.059 ≈ 5.9\%\)</span></li>
+<li>Baseline Attainment 8 (from null model) - <span class="math inline">\(exp(3.75644) = 42.8\)</span></li>
+<li>Average jump between Ofsted Rating Groups worth <span class="math inline">\(42.8 \times 0.059 ≈ 2.52\)</span> GCSE points</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---random-effects-1" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Random Effects</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Variance</th>
+<th>Std. Dev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept Local Authority Within Region</td>
+<td>0.00069</td>
+<td>0.026</td>
+</tr>
+<tr class="even">
+<td>Intercept Region</td>
+<td>0.00025</td>
+<td>0.016</td>
+</tr>
+<tr class="odd">
+<td>Intercept OFSTEDRATING</td>
+<td>0.00328</td>
+<td>0.057</td>
+</tr>
+<tr class="even">
+<td><strong>Residual School-to-School</strong></td>
+<td><strong>0.00500</strong></td>
+<td><strong>0.071</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Residual variance (0.0050) represents the within-group variation—differences between individual schools after accounting for fixed effects and the random intercepts for OFSTED, LA, and region</li>
+<li>Since 0.0050 (residual) &gt; 0.00328 (OFSTED) and much larger than LA or region variances, most of the unexplained variation is within groups (school-to-school differences) rather than between OFSTED categories or geographic clusters.</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---random-effects-2" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Random Effects</h2>
+<p>What about specific point differences between Ofsted Groups?</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                     (Intercept)
+Special Measures     -0.06084082
+Serious Weaknesses   -0.03189554
+Requires improvement -0.01942173
+Good                  0.03077845
+Outstanding           0.08137964</code></pre>
+</div>
+</div>
+<ul>
+<li>Good vs Requires Improvement: <span class="math inline">\(\Delta\log = 0.0308−(−0.0194) = 0.0502\)</span></li>
+<li>Good vs RI: <span class="math inline">\(exp(0.0502) ≈ 1.0515 → +5.15\%\)</span></li>
+<li>Good vs RI: <span class="math inline">\(42.8 \times ≈ 0.0515 ≈ 2.2\)</span> GCSE Points</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---random-effects-3" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Random Effects</h2>
+<div class="cell" data-align="center">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="week8_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="week8_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" style="width:80.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Extracting the random effects and their variances for individual groups and plotting them in a caterpillar plot allows you to see which groups are meaningfully different from the average</li>
+<li>If a group’s confidence interval doesn’t cross the 0 line, it’s an interesting case (oh look, there’s Brighton!)</li>
+<li>Similar to looking for significant dummies in an OLS model - although these are shrunken estimates</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---fixed-effects" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Fixed Effects</h2>
+<p>Fixed Effects</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>OLS</th>
+<th>LMM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td>4.597 (0.023)***</td>
+<td>4.635 (0.032)***</td>
+</tr>
+<tr class="even">
+<td>log(PTFSM6CLA1A)</td>
+<td>-0.070 (0.004)***</td>
+<td>-0.075 (0.004)***</td>
+</tr>
+<tr class="odd">
+<td>log(PERCTOT)</td>
+<td>-0.224 (0.010)***</td>
+<td>-0.224 (0.007)***</td>
+</tr>
+<tr class="even">
+<td>log(PNUMEAL)</td>
+<td>0.018 (0.002)***</td>
+<td>0.014 (0.002)***</td>
+</tr>
+<tr class="odd">
+<td>PTPRIORLO</td>
+<td>-0.007 (0.000)***</td>
+<td>-0.007 (0.000)***</td>
+</tr>
+<tr class="even">
+<td>ADMPOL_PTOTHER NON SEL</td>
+<td>0.015 (0.006)*</td>
+<td>0.006 (0.009)</td>
+</tr>
+<tr class="odd">
+<td>ADMPOL_PTSEL</td>
+<td>0.081 (0.010)***</td>
+<td>0.075 (0.010)***</td>
+</tr>
+<tr class="even">
+<td>R2 (Conditional)</td>
+<td>0.843</td>
+<td>0.856</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Very little change in the fixed effects from the original OLS model</li>
+<li>Only the very small ‘other non selective school’ group loses significance</li>
+<li>Most coefficients and the overall intercept very similar</li>
+</ul>
+</section>
+<section id="interpreting-the-final-model---fixed-effects-1" class="slide level2 smaller">
+<h2>Interpreting the Final Model - Fixed Effects</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Predictor</th>
+<th>Scenario</th>
+<th>Log shift = equation for % change</th>
+<th>% change</th>
+<th>Raw points = 42.8 baseline x % change</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>% Overall Absence - log(PERCTOT)</strong></td>
+<td>40% → 30%</td>
+<td>−0.2238 × log(30/40)</td>
+<td>+6.65%</td>
+<td>+2.85</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>20% → 10%</td>
+<td>−0.2238 × log(10/20)</td>
+<td>+16.78%</td>
+<td>+7.18</td>
+</tr>
+<tr class="odd">
+<td><strong>% Disadvantage - log(PTFSM6CLA1A)</strong></td>
+<td>40% → 30%</td>
+<td>−0.0754 × log(30/40)</td>
+<td>+2.19%</td>
+<td>+0.94</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>20% → 10%</td>
+<td>−0.0754 × log(10/20)</td>
+<td>+5.36%</td>
+<td>+2.30</td>
+</tr>
+<tr class="odd">
+<td><strong>Prior low attainment - (PTPRIORLO)</strong></td>
+<td>40 → 30 pp</td>
+<td>−0.00686 × (−10)</td>
+<td>+7.10%</td>
+<td>+3.04</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>20 → 10 pp</td>
+<td>−0.00686 × (−10)</td>
+<td>+7.10%</td>
+<td>+3.04</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Note</strong> - final column only illustrative as using global average</li>
+</ul>
+</section>
+<section id="wrapping-it-all-up" class="slide level2 smaller">
+<h2>Wrapping it all up</h2>
+<ul>
+<li>In our final model we are to see that controlling for:
+<ul>
+<li>absence, disadvantage, prior attainment, selectivity in admissions and English not as a first language while also controlling for the variability within and between geographical locations and Ofsted ratings, Prior Low Attainment at KS2 is the most important predictor of Attainment 8</li>
+</ul></li>
+<li>The effects of prior low attainment are linear, but the effects of absence and disadvantage are felt more strongly where low levels change and less strongly where higher levels change</li>
+<li>Reducing absence is significantly more likely to improve Attainment 8 than reducing levels of disadvantage in a school</li>
+<li>In terms of random effects, while not causal a jump between Ofsted ratings is worth, on average, about 2.5 GSCE points - similar to a reduction in disadvanage in a school from 20%-10%.</li>
+</ul>
+</section>
+<section id="back-to-our-week-6-reserarch-questions" class="slide level2">
+<h2>Back to our Week 6 Reserarch Question(s)</h2>
+<ul>
+<li>What are the factors that affect school-level educational attainment in Brighton and Hove?</li>
+<li>To what extent is attainment driven by social mixing?</li>
+<li>Are there any other factors that are relevant?</li>
+<li>What are the implications of this for local policy?</li>
+<li>Can regression help us and, if it can, how can we go about carefully building a regression model to help us answer these questions?</li>
+</ul>
+</section>
+<section id="custom-policy---brighton-schools" class="slide level2 smaller">
+<h2>Custom Policy - Brighton Schools</h2>
+<div class="cell">
+<div id="tbl-display-min" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-display-min-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1
+</figcaption>
+<div aria-describedby="tbl-display-min-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 30%">
+<col style="width: 17%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Brighton Aldridge Community Academy</th>
+<th style="text-align: left;">Longhill High School</th>
+<th style="text-align: left;">Patcham High School</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PERCTOT</td>
+<td style="text-align: left;">16.2</td>
+<td style="text-align: left;">13.4</td>
+<td style="text-align: left;">9.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PTFSM6CLA1A</td>
+<td style="text-align: left;">45.0</td>
+<td style="text-align: left;">29.0</td>
+<td style="text-align: left;">19.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PNUMEAL</td>
+<td style="text-align: left;">12.3</td>
+<td style="text-align: left;">7.9</td>
+<td style="text-align: left;">6.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PTPRIORLO</td>
+<td style="text-align: left;">37.0</td>
+<td style="text-align: left;">34.0</td>
+<td style="text-align: left;">14.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ADMPOL_PT</td>
+<td style="text-align: left;">OTHER NON SEL</td>
+<td style="text-align: left;">OTHER NON SEL</td>
+<td style="text-align: left;">OTHER NON SEL</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RE: OFSTEDRATING</td>
+<td style="text-align: left;">-0.019</td>
+<td style="text-align: left;">-0.019</td>
+<td style="text-align: left;">0.031</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RE: gor_name</td>
+<td style="text-align: left;">-0.015</td>
+<td style="text-align: left;">-0.015</td>
+<td style="text-align: left;">-0.015</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RE: LANAME:gor_name</td>
+<td style="text-align: left;">0.037</td>
+<td style="text-align: left;">0.037</td>
+<td style="text-align: left;">0.037</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RE: total</td>
+<td style="text-align: left;">0.003</td>
+<td style="text-align: left;">0.003</td>
+<td style="text-align: left;">0.053</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baseline ATT8 (fixed only)</td>
+<td style="text-align: left;">33.5</td>
+<td style="text-align: left;">36.7</td>
+<td style="text-align: left;">47.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Baseline ATT8 (incl.&nbsp;RE)</td>
+<td style="text-align: left;">33.7</td>
+<td style="text-align: left;">36.8</td>
+<td style="text-align: left;">49.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baseline ATT8 (incl.&nbsp;RE, bias-corrected)</td>
+<td style="text-align: left;">33.7</td>
+<td style="text-align: left;">36.9</td>
+<td style="text-align: left;">49.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="custom-policy---longhill-example" class="slide level2 smaller">
+<h2>Custom Policy - Longhill Example</h2>
+<ul>
+<li>Longhill High School (baseline ≈ 36.8) Profile highlights: PERCTOT=13.4; PTPRIORLO=34; PTFSM=29.</li>
+<li>Top levers:
+<ul>
+<li>Reduce overall absence (PERCTOT) — biggest bang-per-buck, and Longhill starts higher than Patcham. − 1 pp (13.4% → 12.4%): +1.75% ATT8 ⇒ ≈ +0.64 GCSE points − 2 pp (13.4% → 11.4)%: +3.68% ATT8 ⇒ ≈ +1.36 GCSE points. No collateral damage.</li>
+<li>Reduce prior low attainment effects (PTPRIORLO) — strong, feasible medium‑term via targeted KS3 catch‑up, transition, targeted support. − 5 pp (34% → 29%): +3.49% ⇒ ≈ +1.28 GCSE points − 10 pp (34 → 24): +7.10% ⇒ ≈ +2.61 GCSE points. No collateral damage.</li>
+<li>To contrast, reducing the numbers of disadvantaged students (PTFSM6CLA1A) in the school by 10 pp from 29% to 19%, is only worth ≈ +1.19 GCSE points (less than reducing absence by just 2 percentage points). Busing children across the city to achieve this, high collateral damage.</li>
+</ul></li>
+</ul>
+</section>
+<section id="custom-policy---longhill-example-1" class="slide level2 smaller">
+<h2>Custom Policy - Longhill Example</h2>
+<ul>
+<li>Attendance is the fastest, most controllable lever with meaningful point gains even for small pp reductions;</li>
+<li>PTPRIORLO is the next best lever via academic catch‑up. Better policy might be to focus on mitigation rather than changing intake.</li>
+<li>Bottom line for Longhill:
+<ul>
+<li>A move RI → Good in this model corresponds to ~+5.1% in ATT8, i.e., ~+1.9 points from a 36.8 baseline.</li>
+<li>That’s roughly equivalent to: - Reducing overall absence by ~2.7 percentage points (13.4 → ~10.7), or - Reducing prior-low attainment by ~7.3 percentage points (34 → ~26.7).</li>
+<li>Among actionable levers, attendance remains the fastest high-return route; PTPRIORLO reduction is similarly powerful but typically requires sustained academic interventions across KS3/KS4.</li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusions" class="slide level2">
+<h2>Conclusions</h2>
+<ul>
+<li>Phew!! That was a lot!</li>
+<li>We’ve come a long way since the start of the Regression Sessions 3 weeks ago</li>
+<li>Mainly I hope we’ve learned a step-by-step recipe which can be applied to many different quantitative modelling applications</li>
+<li>Hope we’ve demystified, through visualisation and worked examples, some of the esoteric elements of regression modelling</li>
+</ul>
+</section>
+<section id="conclusions-1" class="slide level2">
+<h2>Conclusions</h2>
+<ul>
+<li>If we start with a simple model guided by sound theory and an understanding of the system of interest, we can start to build complexity and explanatory power though successive modelling iterations</li>
+<li>By the final iteration, it’s possible to derive deep insights into your system of interest</li>
+<li>Careful interpretation of your outputs, relative to policy ambitions, can present a powerful message (whether policy makers will listen is a different matter!)</li>
+</ul>
+</section>
+<section id="conclusions-2" class="slide level2">
+<h2>Conclusions</h2>
+<ul>
+<li>Linear Mixed Effects Models are just one useful extension to OLS standard regression. They work well particularly when there are logical groups, hierarchies or repeated measurements within your data</li>
+<li>Other regression variants (not yet covered in this course) might be more appropriate in other situations:
+<ul>
+<li>Generalised Linear Models
+<ul>
+<li>Logistic Regression (binary or multinomial outcomes)</li>
+<li>Poisson Regression / Negative Binomal Regression (count data)</li>
+<li>Generalised Additive Models (non-linear relationships)</li>
+</ul></li>
+<li>Geographically Weighted or Spatial Regression Models</li>
+<li>Lasso and Ridge Regression (incorporating shrinkage)</li>
+</ul></li>
+<li>Now you have a good grounding in the basics of linear regression, these other methods should be much easier learn in future</li>
+</ul>
+</section>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s Practical</h2>
+<ul>
+<li>Regression Sessions Vol 3 - A linear mixed effects model walkthrough.</li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="../img/logo/full.svg" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>© CASA &nbsp; | &nbsp; <a href="https://www.ucl.ac.uk/bartlett/casa">ucl.ac.uk/bartlett/casa</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/bea-taylor\.com\/quant_methods");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>

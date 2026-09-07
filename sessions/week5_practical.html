@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Practical 5: Measuring relationships – Quantitative Methods</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="..//img/favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Practical 5: Measuring relationships – Quantitative Methods">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week5_practical_files/figure-html/cell-6-output-1.png">
+<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image:height" content="898">
+<meta property="og:image:width" content="1169">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-md " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content">
+    <img src="../img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Quantitative Methods</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../setup/index.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-week-by-week" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Week-by-Week</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-week-by-week">    
+        <li>
+    <a class="dropdown-item" href="../sessions/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 1: Basics</li>
+        <li>
+    <a class="dropdown-item" href="../sessions/week1.html">
+ <span class="dropdown-text">1. Explanatory Data Analysis #1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week2.html">
+ <span class="dropdown-text">2. Explanatory Data Analysis #2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week3.html">
+ <span class="dropdown-text">3. Hypothesis Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week4.html">
+ <span class="dropdown-text">4. Introduction to Linear Algebra</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 2: Correlation and Regression</li>
+        <li>
+    <a class="dropdown-item" href="../sessions/week5.html">
+ <span class="dropdown-text">5. Measuring Relationship</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week6.html">
+ <span class="dropdown-text">6. Introduction to Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week7.html">
+ <span class="dropdown-text">7. Multiple Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week8.html">
+ <span class="dropdown-text">8. Multilevel Regression</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 3: Dimension Reduction &amp; Clustering</li>
+        <li>
+    <a class="dropdown-item" href="../sessions/week9.html">
+ <span class="dropdown-text">9. Dimension Reduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/week10.html">
+ <span class="dropdown-text">10. Clustering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../references.qmd">
+ <span class="dropdown-text">Bibliography</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-assessments" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Assessments</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-assessments">    
+        <li>
+    <a class="dropdown-item" href="../assessments/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../help.html"> 
+<span class="menu-text">Getting Help</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
+  <li><a href="#first-question-is-overall-absence-related-to-average-attainment-8-score" id="toc-first-question-is-overall-absence-related-to-average-attainment-8-score" class="nav-link" data-scroll-target="#first-question-is-overall-absence-related-to-average-attainment-8-score">First question: is overall absence related to average attainment 8 score?</a></li>
+  <li><a href="#second-attempt-using-spearman-correlation" id="toc-second-attempt-using-spearman-correlation" class="nav-link" data-scroll-target="#second-attempt-using-spearman-correlation">Second attempt: using Spearman correlation</a></li>
+  <li><a href="#calculating-pearson-correlation-for-all-pairs-of-variables" id="toc-calculating-pearson-correlation-for-all-pairs-of-variables" class="nav-link" data-scroll-target="#calculating-pearson-correlation-for-all-pairs-of-variables">Calculating Pearson correlation for all pairs of variables</a></li>
+  <li><a href="#moving-to-anova---testing-difference-in-lads" id="toc-moving-to-anova---testing-difference-in-lads" class="nav-link" data-scroll-target="#moving-to-anova---testing-difference-in-lads">Moving to ANOVA - testing difference in LADs</a></li>
+  <li><a href="#youre-done" id="toc-youre-done" class="nav-link" data-scroll-target="#youre-done">You’re Done!</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="week5_practical.ipynb" download="week5_practical.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Practical 5: Measuring relationships</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This week is focused on measuring the relationship between two variables using Pearson/Spearman correlation coefficients.</p>
+<p>In the practical, we’re going to explore the correlation between different variables in the school dataset.</p>
+<div id="a3f23f6f" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr, spearmanr</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.formula.api <span class="im">import</span> ols</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We’re going to use a piece of filtered school data that is kindly provided by Adam. In W6, Adam will describe the source and processing of this dataset in details. For now, we just use this dataset as is.</p>
+<div id="c5fc6575" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the dataset from Github</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_school <span class="op">=</span> pd.read_csv(<span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L6_data/Performancetables_130242/2022-2023/england_filtered.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Check the shape and columns of this data frame.</p>
+<div id="b951bc74" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"df_school has </span><span class="sc">{</span>df_school<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> rows and </span><span class="sc">{</span>df_school<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> columns."</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"First 5 rows:</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_school.head(<span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>df_school has 3056 rows and 37 columns.
+First 5 rows:
+
+      URN                                  SCHNAME.x  LEA  LANAME  TOWN.x  \
+0  100053                     Acland Burghley School  202  Camden  London   
+1  100054                The Camden School for Girls  202  Camden  London   
+2  100052                           Hampstead School  202  Camden  London   
+3  100049                          Haverstock School  202  Camden  London   
+4  100059  La Sainte Union Catholic Secondary School  202  Camden  London   
+
+  gor_name  TOTPUPS  ATT8SCR  ATT8SCRENG  ATT8SCRMAT  ATT8SCR_FSM6CLA1A  \
+0   London   1163.0     50.3        10.7        10.2               34.8   
+1   London   1047.0     65.8        13.5        12.7               54.7   
+2   London   1319.0     44.6         9.7         9.1               39.3   
+3   London    982.0     41.7         8.7         8.8               37.7   
+4   London    817.0     49.6        10.8         9.4               45.9   
+
+   ATT8SCR_NFSM6CLA1A  ATT8SCR_BOYS  ATT8SCR_GIRLS  P8MEA  P8MEA_FSM6CLA1A  \
+0                59.2          51.5           46.8  -0.16            -0.99   
+1                72.0           NaN           65.8   0.77             0.25   
+2                49.0          41.9           47.1  -0.03            -0.18   
+3                48.5          40.1           43.7  -0.28            -0.44   
+4                52.2           NaN           49.6   0.06            -0.20   
+
+   P8MEA_NFSM6CLA1A  PTFSM6CLA1A  PTNOTFSM6CLA1A  PNUMEAL  PNUMENGFL  \
+0              0.34         37.0            63.0     23.6       70.5   
+1              1.13         36.0            64.0     25.5       73.7   
+2              0.09         45.0            55.0     38.1       61.9   
+3              0.02         63.0            37.0     57.5       41.9   
+4              0.25         41.0            59.0     50.6       46.0   
+
+   PTPRIORLO  PTPRIORHI   NORB   NORG  PNUMFSMEVER  PERCTOT  PPERSABS10  \
+0       15.0       33.0  765.0  398.0         39.6      8.1        24.7   
+1        5.0       50.0  139.0  908.0         30.3      4.5         6.6   
+2       21.0       18.0  681.0  638.0         51.3      8.2        24.0   
+3       30.0       15.0  559.0  423.0         69.8     10.1        33.1   
+4       16.0       28.0   40.0  777.0         42.7     10.3        33.8   
+
+             SCHOOLTYPE.x         RELCHAR       ADMPOL.y      ADMPOL_PT  \
+0  State-funded secondary  Does not apply  Non-selective  OTHER NON SEL   
+1  State-funded secondary             NaN  Non-selective  OTHER NON SEL   
+2  State-funded secondary  Does not apply  Non-selective  OTHER NON SEL   
+3  State-funded secondary  Does not apply  Non-selective  OTHER NON SEL   
+4  State-funded secondary  Roman Catholic  Non-selective  OTHER NON SEL   
+
+  gender_name OFSTEDRATING         MINORGROUP   easting  northing  
+0       Mixed         Good  Maintained school  528962.0  185931.0  
+1       Girls         Good  Maintained school  529441.0  184659.0  
+2       Mixed         Good  Maintained school  524402.0  185633.0  
+3       Mixed         Good  Maintained school  528159.0  184498.0  
+4       Girls         Good  Maintained school  528379.0  186191.0  </code></pre>
+</div>
+</div>
+<p>The metadata of this data is available <a href="https://github.com/huanfachen/QM/blob/main/sessions/L6_data/Performancetables_130249/2022-2023/census_meta.csv">here</a>. For convenience, the columns are described as below:<br>
+1. <strong>URN</strong>: Unique Reference Number identifying a school.<br>
+2. <strong>SCHNAME.x</strong>: School name as recorded in the official register.<br>
+3. <strong>LEA</strong>: Local Education Authority (code).<br>
+4. <strong>LANAME</strong>: Name of the Local Authority.<br>
+5. <strong>TOWN.x</strong>: Town in which the school is located.<br>
+6. <strong>gor_name</strong>: Government Office Region name.<br>
+7. <strong>TOTPUPS</strong>: Total number of pupils on roll.<br>
+8. <strong>ATT8SCR</strong>: Average Attainment 8 score for all pupils.<br>
+9. <strong>ATT8SCRENG</strong>: Average Attainment 8 score for English subject grouping.<br>
+10. <strong>ATT8SCRMAT</strong>: Average Attainment 8 score for Maths subject grouping.<br>
+11. <strong>ATT8SCR_FSM6CLA1A</strong>: Average Attainment 8 score for pupils eligible for Free School Meals in the last 6 years and/or Children Looked After.<br>
+12. <strong>ATT8SCR_NFSM6CLA1A</strong>: Average Attainment 8 score for pupils not eligible for Free School Meals in the last 6 years and not Children Looked After.<br>
+13. <strong>ATT8SCR_BOYS</strong>: Average Attainment 8 score for male pupils.<br>
+14. <strong>ATT8SCR_GIRLS</strong>: Average Attainment 8 score for female pupils.<br>
+15. <strong>P8MEA</strong>: Progress 8 measure for all pupils.<br>
+16. <strong>P8MEA_FSM6CLA1A</strong>: Progress 8 measure for disadvantaged pupils (FSM6 and/or CLA1A).<br>
+17. <strong>P8MEA_NFSM6CLA1A</strong>: Progress 8 measure for non-disadvantaged pupils.<br>
+18. <strong>PTFSM6CLA1A</strong>: Percentage of pupils eligible for FSM6 and/or CLA1A.<br>
+19. <strong>PTNOTFSM6CLA1A</strong>: Percentage of pupils not eligible for FSM6 and/or CLA1A.<br>
+20. <strong>PNUMEAL</strong>: Percentage of pupils whose first language is known or believed to be other than English.<br>
+21. <strong>PNUMENGFL</strong>: Percentage of pupils whose first language is English.<br>
+22. <strong>PTPRIORLO</strong>: Percentage of pupils with low prior attainment from Key Stage 2.<br>
+23. <strong>PTPRIORHI</strong>: Percentage of pupils with high prior attainment from Key Stage 2.<br>
+24. <strong>NORB</strong>: Number of boys on roll.<br>
+25. <strong>NORG</strong>: Number of girls on roll.<br>
+26. <strong>PNUMFSMEVER</strong>: Percentage of pupils who have been eligible for free school meals in the past six years (FSM6 measure).<br>
+27. <strong>PERCTOT</strong>: Percentage of total pupil absence (authorised and unauthorised combined).<br>
+28. <strong>PPERSABS10</strong>: Percentage of pupils who are persistently absent (overall absence rate 10% or more).<br>
+29. <strong>SCHOOLTYPE.x</strong>: Official classification of the school type (e.g., Academy, Community, Voluntary Aided).<br>
+30. <strong>RELCHAR</strong>: Religious character of the school (e.g., Church of England, Roman Catholic, None).<br>
+31. <strong>ADMPOL.y</strong>: Admission policy type (e.g., non-selective, selective).<br>
+32. <strong>ADMPOL_PT</strong>: Percentage breakdown related to admission policy (context-specific).<br>
+33. <strong>gender_name</strong>: Gender intake of the school (Mixed, Boys, Girls).<br>
+34. <strong>OFSTEDRATING</strong>: Latest Ofsted inspection overall effectiveness grade.<br>
+35. <strong>MINORGROUP</strong>: Ethnic minority group classification for aggregation purposes.<br>
+36. <strong>easting</strong>: Ordnance Survey Easting coordinate of school location.<br>
+37. <strong>northing</strong>: Ordnance Survey Northing coordinate of school location.</p>
+<p>To demonstrate, we will focus on 6 columns of this dataset. 1. <strong>LANAME</strong>: local authority name 2. <strong>SCHNAME.x</strong>: school name 3. <strong>ATT8SCR</strong>: Average Attainment 8 score per pupil (0-100) 4. <strong>PERCTOT</strong>: Percentage of total absence 5. <strong>PTFSM6CLA1A</strong>: Percentage of pupils eligible for FSM6 (free school meals at any point in the last six years) and/or CLA1A (proxy for socio-economic disadvantage). CLA1A stands for <em>Children Looked After (for at least one day)</em>, which identifies pupils who have been in the care of a local authority. 6. <strong>PNUMEAL</strong>: Percentage of pupils whose first language is known or believed to be other than English.</p>
+<div id="b0b555b1" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the selected columns</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_school_reduced <span class="op">=</span> df_school[[<span class="st">'LANAME'</span>, <span class="st">'SCHNAME.x'</span>, <span class="st">'ATT8SCR'</span>, <span class="st">'PERCTOT'</span>, <span class="st">'PTFSM6CLA1A'</span>, <span class="st">'PNUMEAL'</span>]]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_school_reduced.head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   LANAME                                  SCHNAME.x  ATT8SCR  PERCTOT  \
+0  Camden                     Acland Burghley School     50.3      8.1   
+1  Camden                The Camden School for Girls     65.8      4.5   
+2  Camden                           Hampstead School     44.6      8.2   
+3  Camden                          Haverstock School     41.7     10.1   
+4  Camden  La Sainte Union Catholic Secondary School     49.6     10.3   
+
+   PTFSM6CLA1A  PNUMEAL  
+0         37.0     23.6  
+1         36.0     25.5  
+2         45.0     38.1  
+3         63.0     57.5  
+4         41.0     50.6  </code></pre>
+</div>
+</div>
+</section>
+<section id="first-question-is-overall-absence-related-to-average-attainment-8-score" class="level2">
+<h2 class="anchored" data-anchor-id="first-question-is-overall-absence-related-to-average-attainment-8-score">First question: is overall absence related to average attainment 8 score?</h2>
+<p>We will start with investigating the relationship between percentage of overall absence and attainment 8 score. The very first step is to make a scatterplot:</p>
+<div id="686e74b6" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatterplot between PERCTOT and ATT8SCR</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(df_school_reduced[<span class="st">'PERCTOT'</span>], df_school_reduced[<span class="st">'ATT8SCR'</span>], alpha<span class="op">=</span><span class="fl">0.7</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Axis labels</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Pct of total absence (%)'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Average Attainment 8 score per pupil'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Title</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Scatterplot of Total Absence vs. Attainment 8 Score'</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: grid</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="week5_practical_files/figure-html/cell-6-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="week5_practical_files/figure-html/cell-6-output-1.png" width="585" height="449" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot shows a decreasing trend: the higher total absence, the lower average attainment.</p>
+<p>The records with PERCTOT greater than 25% look like outliers, which are printed as below:</p>
+<div id="b42fe3e8" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter rows where PERCTOT &gt; 25</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>filtered_rows <span class="op">=</span> df_school_reduced[df_school_reduced[<span class="st">'PERCTOT'</span>] <span class="op">&gt;</span> <span class="dv">25</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Schools with %total_absence &gt; 25:"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filtered_rows)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Schools with %total_absence &gt; 25:
+        LANAME                           SCHNAME.x  ATT8SCR  PERCTOT  \
+616    Walsall               Walsall Studio School     35.5     26.2   
+976   Bradford                      Hanson Academy     32.2     25.3   
+2207      Kent  Mayfield Grammar School, Gravesend     64.4     32.6   
+
+      PTFSM6CLA1A  PNUMEAL  
+616          42.0      3.2  
+976          46.0     30.3  
+2207         10.0     24.5  </code></pre>
+</div>
+</div>
+<p>For now, we are keeping these records because there is no evidence to confirm they are outliers</p>
+<p>As both variables are continous, we can use <strong>Pearson correlation</strong> to measure if they follow a linear relationship. we’ll use the <strong>pearsonr</strong> function the scipy.stats package, as this fucntion calculates the correlation coefficient and p values in one line.</p>
+<div id="6b906edd" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Pearson correlation</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>corr_coef, p_value <span class="op">=</span> pearsonr(df_school_reduced[<span class="st">'PERCTOT'</span>], df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Pearson correlation coefficient:"</span>, corr_coef)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Two-tailed p-value:"</span>, p_value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pearson correlation coefficient: nan
+Two-tailed p-value: nan</code></pre>
+</div>
+</div>
+<p>Wait. We got an ERROR - <code>ValueError: array must not contain infs or NaNs</code>. Remember that we discussed <em>NA</em> or <em>NaN</em> values in W1. <em>You might want to remove the above code cell from the notebook, since it doesn’t run.</em></p>
+<p>Unfortunately, the <em>pearsonr</em> function doesn’t handle NaNs internally. We would have to handle NaNs before computing.</p>
+<p>The logic would be: 1. Retain the rows with no NaN in <em>PERCTOT</em> and <em>ATT8SCR</em>: <code>~np.isnan(df_school_reduced['PERCTOT']) &amp; ~np.isnan(df_school_reduced['ATT8SCR'])</code> returns a list of <strong>mask</strong>, which is <em>True</em> when no NaN values are in <em>PERCTOT</em> and <em>ATT8SCR</em>. 2. Calculate the Pearson correlation between <em>PERCTOT</em> and <em>ATT8SCR</em> in these rows.</p>
+<div id="f5eca5d7" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with NaNs in either column</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'PERCTOT'</span>]) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"#all records: </span><span class="sc">{</span>df_school_reduced<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"#records with no NaN in both PERCTOT and ATT8SCR: </span><span class="sc">{</span><span class="bu">len</span>(mask[mask<span class="op">==</span><span class="va">True</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df_school_reduced.loc[mask, <span class="st">'PERCTOT'</span>]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df_school_reduced.loc[mask, <span class="st">'ATT8SCR'</span>]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>corr_coef, p_value <span class="op">=</span> pearsonr(x, y)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Pearson correlation coefficient:</span><span class="sc">{</span>corr_coef<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Two-tailed p-value:</span><span class="sc">{</span>p_value<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#all records: 3056
+#records with no NaN in both PERCTOT and ATT8SCR: 2969
+Pearson correlation coefficient:-0.72
+Two-tailed p-value:0.00</code></pre>
+</div>
+</div>
+<p>The results look good.</p>
+<ul>
+<li>A Pearson correlation of <code>-0.72</code> indicates that <em>PERCTOT</em> and <em>ATT8SCR</em> are negatively correlated, which is aligned with our hypothesis.</li>
+<li>A very small p value (<em>0.00</em> meaning it is smaller than 0.01) indicates that their correlation is statistically significant at the level of 0.05.</li>
+</ul>
+</section>
+<section id="second-attempt-using-spearman-correlation" class="level2">
+<h2 class="anchored" data-anchor-id="second-attempt-using-spearman-correlation">Second attempt: using Spearman correlation</h2>
+<p>Can we apply Spearman correlation to these two variables? Definitely - Spearman correlation is applicable to continuous variables.</p>
+<p>Following a similar procedure:</p>
+<div id="701edbaa" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with NaNs in either column</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'PERCTOT'</span>]) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"#all records: </span><span class="sc">{</span>df_school_reduced<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"#records with no NaN in both PERCTOT and ATT8SCR: </span><span class="sc">{</span><span class="bu">len</span>(mask[mask<span class="op">==</span><span class="va">True</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df_school_reduced.loc[mask, <span class="st">'PERCTOT'</span>]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df_school_reduced.loc[mask, <span class="st">'ATT8SCR'</span>]</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>corr_coef, p_value <span class="op">=</span> spearmanr(x, y)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Spearman correlation coefficient:</span><span class="sc">{</span>corr_coef<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Two-tailed p-value:</span><span class="sc">{</span>p_value<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#all records: 3056
+#records with no NaN in both PERCTOT and ATT8SCR: 2969
+Spearman correlation coefficient:-0.77
+Two-tailed p-value:0.00</code></pre>
+</div>
+</div>
+<p>The results are quite similar to Pearson correlation: - Spearman correlation coefficient of -0.77 indicates a negative correlation between these two variables. - The p value is smaller than 0.01, indicating statistical significance.</p>
+</section>
+<section id="calculating-pearson-correlation-for-all-pairs-of-variables" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-pearson-correlation-for-all-pairs-of-variables">Calculating Pearson correlation for all pairs of variables</h2>
+<p>The df_school_reduced dataframe contains four continous variables, and there are 6 possible pairs of variables.</p>
+<p>Is it possible to compute and visualise the correlation of all pairs in one line?</p>
+<p>The solution is to create and plot a correlation matrix, using <em>pandas</em>.</p>
+<div id="7ab14fae" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the correlation matrix</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="op">=</span> df_school_reduced.corr(numeric_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the correlation matrix</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>plt.matshow(correlation_matrix, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, fignum<span class="op">=</span><span class="va">False</span>)  <span class="co"># fignum=False prevents new fig creation</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Correlation Matrix'</span>, pad<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add axis tick labels</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(correlation_matrix.columns)), correlation_matrix.columns, rotation<span class="op">=</span><span class="dv">90</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>plt.yticks(<span class="bu">range</span>(<span class="bu">len</span>(correlation_matrix.columns)), correlation_matrix.columns)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="week5_practical_files/figure-html/cell-11-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="week5_practical_files/figure-html/cell-11-output-1.png" width="618" height="566" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot shows pairwise correlation between the four continous variables, as the norminal variabels of <em>LNAME</em> and <em>SCHNAME.x</em> are excluded by the setting of <code>numeric_only=True</code> in corr().</p>
+<p>This matrix or heatmap is symmetric, since the Pearson correlation is symmetric between the two variables.</p>
+<p>The red colour on the diagonal line indicates correlation=1, which is perfect positive correlation.</p>
+<p>So, what does this matrix tell us about the variables’ correlation? - <em>Attainment 8 score</em> negatively correlates with <em>% overall absence</em>, <em>% disadvantaged pupils</em>, and <em>% pupils where English not first language</em>. - <em>% overall absence</em> positively correlates with <em>% disadvantaged pupils</em> and negatively correlates with <em>% pupils where English not first language</em>. The latter correlation seems to contradict the results of a study that reports primary school pupils who use EAL are more likely to be persistently absent for 10% or more of lessons than pupils who speak English as their first language (see <a href="https://www.bell-foundation.org.uk/app/uploads/2024/07/Addressing-School-Absences-Among-EAL-Pupils_briefing.pdf">link</a>). This needs to be confirmed by more investigation. - <em>% disadvantaged pupils</em> is positively associated with <em>% pupils where English not first language</em>.</p>
+<p>Interestingly, in the code above, we didn’t deal with the NaN values. The reason is that, using <code>DataFrame.corr()</code>, Pearson, Kendall, and Spearman correlation are currently computed using pairwise complete observations. In other words, this function deals with incomplete observations internally.</p>
+<p>A limitation of the code above is that it doesn’t calculate the p-value for each correlation. To calculate both correlation coefficients and p values in a batch, we can use a new package called <strong>pingouin</strong>.</p>
+<p>If you want to try out the code below, you would need to install pingouin using <code>pip install pingouin</code> on a terminal or <code>!pip install pingouin</code> in a Python notebook.</p>
+<div id="aeb53af3" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install pingouin</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate correlation matrix with p-values</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>corr_results <span class="op">=</span> pg.pairwise_corr(df_school_reduced, columns<span class="op">=</span>df_school_reduced.select_dtypes(<span class="bu">float</span>).columns, method<span class="op">=</span><span class="st">'pearson'</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(corr_results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             X            Y   method alternative     n         r  \
+0      ATT8SCR      PERCTOT  pearson   two-sided  2969 -0.716090   
+1      ATT8SCR  PTFSM6CLA1A  pearson   two-sided  2970 -0.586077   
+2      ATT8SCR      PNUMEAL  pearson   two-sided  2970  0.074745   
+3      PERCTOT  PTFSM6CLA1A  pearson   two-sided  2969  0.489657   
+4      PERCTOT      PNUMEAL  pearson   two-sided  3029 -0.120967   
+5  PTFSM6CLA1A      PNUMEAL  pearson   two-sided  2970  0.399959   
+
+             CI95          p_unc        BF10     power  
+0   [-0.73, -0.7]   0.000000e+00         inf  1.000000  
+1  [-0.61, -0.56]  1.537169e-273  2.454e+269  1.000000  
+2    [0.04, 0.11]   4.554293e-05      93.311  0.982981  
+3    [0.46, 0.52]  7.284291e-179  7.175e+174  1.000000  
+4  [-0.16, -0.09]   2.399714e-11   1.097e+08  0.999999  
+5    [0.37, 0.43]  1.654185e-114  4.269e+110  1.000000  </code></pre>
+</div>
+</div>
+</section>
+<section id="moving-to-anova---testing-difference-in-lads" class="level2">
+<h2 class="anchored" data-anchor-id="moving-to-anova---testing-difference-in-lads">Moving to ANOVA - testing difference in LADs</h2>
+<div id="c15110a3" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter dataframe</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df_filtered <span class="op">=</span> df_school_reduced[df_school_reduced[<span class="st">'LANAME'</span>].isin([<span class="st">'Camden'</span>, <span class="st">'Westminster'</span>, <span class="st">'Islington'</span>])]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># KDE plot for each group</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Camden'</span>][<span class="st">'ATT8SCR'</span>], label<span class="op">=</span><span class="st">'Camden'</span>, fill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Westminster'</span>][<span class="st">'ATT8SCR'</span>], label<span class="op">=</span><span class="st">'Westminster'</span>, fill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Islington'</span>][<span class="st">'ATT8SCR'</span>], label<span class="op">=</span><span class="st">'Islington'</span>, fill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'KDE Plot of ATT8SCR by LANAME'</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'ATT8SCR'</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Density'</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="week5_practical_files/figure-html/cell-13-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="week5_practical_files/figure-html/cell-13-output-1.png" width="672" height="523" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The KDE plots of ATT8SCR for Camden, Westminster, and Islington overlap considerably, which indicates similar score distributions.</p>
+<p>We will use ANOVA to formally test if they are different.</p>
+<div id="466f666e" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit ANOVA model</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ols(<span class="st">'ATT8SCR ~ C(LANAME)'</span>, data<span class="op">=</span>df_filtered).fit()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>anova_table <span class="op">=</span> sm.stats.anova_lm(model, typ<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"ANOVA Table:</span><span class="ch">\n</span><span class="st">"</span>, anova_table, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumption Tests</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Normality test – Shapiro-Wilk</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="op">=</span> stats.shapiro(model.resid)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shapiro-Wilk test for normality:"</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Statistic=</span><span class="sc">{</span>shapiro_test<span class="sc">.</span>statistic<span class="sc">:.4f}</span><span class="ss">, p-value=</span><span class="sc">{</span>shapiro_test<span class="sc">.</span>pvalue<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> shapiro_test.pvalue <span class="op">&gt;</span> <span class="fl">0.05</span>:</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Residuals appear normally distributed.</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Residuals may not be normally distributed.</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Homogeneity of variances – Levene's test</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>levene_test <span class="op">=</span> stats.levene(</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Camden'</span>][<span class="st">'ATT8SCR'</span>],</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Westminster'</span>][<span class="st">'ATT8SCR'</span>],</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    df_filtered[df_filtered[<span class="st">'LANAME'</span>] <span class="op">==</span> <span class="st">'Islington'</span>][<span class="st">'ATT8SCR'</span>]</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Levene’s test for homogeneity of variances:"</span>)</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Statistic=</span><span class="sc">{</span>levene_test<span class="sc">.</span>statistic<span class="sc">:.4f}</span><span class="ss">, p-value=</span><span class="sc">{</span>levene_test<span class="sc">.</span>pvalue<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> levene_test.pvalue <span class="op">&gt;</span> <span class="fl">0.05</span>:</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Variances appear homogeneous.</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Variances may not be homogeneous.</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="co"># QQ plot of residuals</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>sm.qqplot(model.resid, line<span class="op">=</span><span class="st">'45'</span>, fit<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'QQ Plot of Residuals'</span>)</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ANOVA Table:
+                 sum_sq    df         F    PR(&gt;F)
+C(LANAME)   335.630586   2.0  3.258313  0.054611
+Residual   1339.097000  26.0       NaN       NaN 
+
+Shapiro-Wilk test for normality:
+Statistic=0.9513, p-value=0.1976
+Residuals appear normally distributed.
+
+Levene’s test for homogeneity of variances:
+Statistic=0.6877, p-value=0.5117
+Variances appear homogeneous.
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 576x576 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="week5_practical_files/figure-html/cell-14-output-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="week5_practical_files/figure-html/cell-14-output-3.png" width="587" height="449" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The ANOVA tests <strong>C(LANAME)</strong>, which represent the difference in mean ATT8SCR scores between the three local authorities (Camden, Westminster, Islington).</li>
+<li>The F statistic = 3.26 is the ratio of variance between the group means to the variance within the groups.</li>
+<li>Degrees of Freedom
+<ul>
+<li>Between groups: df = 2 (because there are 3 groups: df = k−1).</li>
+<li>Within groups (residual): df = 26 (total sample size minus k = 29 - 3).</li>
+</ul></li>
+<li>p-value: PR(&gt;F) = 0.0546 means that under the null hypothesis (no difference in means), there is a 5.46% probability of obtaining an F statistic as large as or larger than 3.26. If we use a standard alpha level of 0.05, this p-value is on the margin.</li>
+<li>The Shapiro-Wilk test indicates that the residuals are normally distributed.</li>
+<li>The Levene test indicates the variances within each group are homogeneous.</li>
+<li>The QQ plot of residuals shows that the residuals follow a normal distribution and there are no obvious outliers.</li>
+</ul>
+<p>To visualise the distribution of F-statistic and the p-value, we can use the following plot:</p>
+<div id="37586e91" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract F statistic, p-value, and degrees of freedom from ANOVA table</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>F_stat <span class="op">=</span> anova_table[<span class="st">'F'</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> anova_table[<span class="st">'PR(&gt;F)'</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>df_between <span class="op">=</span> anova_table[<span class="st">'df'</span>].iloc[<span class="dv">0</span>]  <span class="co"># numerator degrees of freedom</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>df_within <span class="op">=</span> anova_table[<span class="st">'df'</span>].iloc[<span class="dv">1</span>]   <span class="co"># denominator degrees of freedom</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create range for F distribution</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="bu">max</span>(<span class="dv">6</span>, F_stat <span class="op">+</span> <span class="dv">2</span>), <span class="dv">500</span>)  <span class="co"># ensure range includes F_stat with padding</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> stats.f.pdf(x, df_between, df_within)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, <span class="st">'k-'</span>, label<span class="op">=</span><span class="ss">f'F-distribution (df=</span><span class="sc">{</span><span class="bu">int</span>(df_between)<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">int</span>(df_within)<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Set y-axis minimum to 0.0</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>plt.ylim(bottom<span class="op">=</span><span class="fl">0.0</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Shade the area corresponding to the p-value (upper tail)</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>x_fill <span class="op">=</span> np.linspace(F_stat, x.<span class="bu">max</span>(), <span class="dv">200</span>)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>y_fill <span class="op">=</span> stats.f.pdf(x_fill, df_between, df_within)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>plt.fill_between(x_fill, y_fill, color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="ss">f'p-value = </span><span class="sc">{</span>p_value<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Mark the F statistic</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>plt.axvline(F_stat, color<span class="op">=</span><span class="st">'blue'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="ss">f'F statistic = </span><span class="sc">{</span>F_stat<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Labels and title</span></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'F Distribution with Computed F Statistic and p-value Region'</span>)</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'F value'</span>)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Density'</span>)</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>plt.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="week5_practical_files/figure-html/cell-15-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="week5_practical_files/figure-html/cell-15-output-1.png" width="663" height="523" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also use <em>pingouin</em> to conduct ANOVA between <em>LANAME</em> and <em>ATT8SCR</em>. The grammar is much more concise than <em>statsmodels</em>.</p>
+<div id="0821aa09" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-way ANOVA using Pingouin</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>anova_results <span class="op">=</span> pg.anova(dv<span class="op">=</span><span class="st">'ATT8SCR'</span>, between<span class="op">=</span><span class="st">'LANAME'</span>, data<span class="op">=</span>df_filtered, detailed<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(anova_results.<span class="bu">round</span>(<span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Source       SS  DF      MS     F  p_unc  np2
+0  LANAME   335.63   2  167.82  3.26   0.05  0.2
+1  Within  1339.10  26   51.50   NaN    NaN  NaN</code></pre>
+</div>
+</div>
+<p>The results are aligned with ANOVA using <em>statsmodels</em>.</p>
+<p>Column meanings:</p>
+<ul>
+<li><strong>Source</strong>: Factor being tested (“LANAME”) or residual.</li>
+<li><strong>SS</strong>: Sum of squares. The SS of LANMAE (335.63) represents the between-group variation, while SS of Within (1339.10) represents the within-group variation.</li>
+<li><strong>DF</strong>: Degrees of freedom.</li>
+<li><strong>MS</strong>: Mean squares.</li>
+<li><strong>F</strong>: F-statistic, calculated as: $ [ F(2, 26) = = = ] $</li>
+<li><strong>p-unc</strong>: Uncorrected p-value.</li>
+<li><strong>np2</strong>: Partial eta-squared (effect size).</li>
+</ul>
+</section>
+<section id="youre-done" class="level2">
+<h2 class="anchored" data-anchor-id="youre-done">You’re Done!</h2>
+<p>Congratulations on completing the practical on correlation and ANOVA. You’ve also learnt how to debug when an error occurs.</p>
+<p>When you use Python (or R), it is common that a task can be completed by different packages. For example, <em>Pearson correlation</em> can be calculated using <em>scipy</em>, <em>pandas</em>, or <em>pingouin</em>. Choose the right tool for your purpose, and ensure you understand the underlying principles and limitations before using a package.</p>
+<p>It takes time to learn - remember practice makes perfect!</p>
+<p>If you have time, please think about applying the correlation to other variables in the school data, or your own datasets.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bea-taylor\.com\/quant_methods");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 2025–, Huanfa Chen, Adam Dennett, Bea Taylor</p>
+</div>   
+    <div class="nav-footer-center">
+<p><img src="../img/logo/logo_only_sm.png" height="25"> Quantitative Methods</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Bea-Taylor/Quant_Methods">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/huanfa-chen/">
+      <i class="bi bi-LinkedIn" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
