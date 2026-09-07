@@ -5,8 +5,7 @@ author:
 email: "beatrice.taylor@ucl.ac.uk"
 date-as-string: "8th October 2025"
 from: markdown+emoji
-format: revealjs 
-jupyter: python3
+format: revealjs
 ---
 
 ## Last week 

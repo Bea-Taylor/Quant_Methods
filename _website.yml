@@ -1,7 +1,8 @@
 website:
   title: "Quantitative Methods"
   image: "img/logo/full_sm.png"
-  repo-url: https://github.com/huanfachen/QM/
+  site-url: "https://bea-taylor.com/quant_methods"
+  repo-url: https://github.com/Bea-Taylor/Quant_Methods
   repo-actions: [issue]
   favicon: "/img/favicon.ico"
   open-graph: 
@@ -15,7 +16,7 @@ website:
     center: "![](/img/logo/logo_only_sm.png){height=25} Quantitative Methods"
     right: 
       - icon: github
-        href: https://github.com/huanfachen/QM
+        href: https://github.com/Bea-Taylor/Quant_Methods
       - icon: LinkedIn 
         href: https://www.linkedin.com/in/huanfa-chen/
   navbar:

@@ -1,6 +1,8 @@
 # Core scientific stack
 numpy
-pandas
+# Capped below 3.x: pandas 3.0 tightened string-dtype coercion and breaks
+# the .astype(str) patterns used throughout the practicals.
+pandas>=2.2.2,<3
 
 # Jupyter tooling
 jupyter
