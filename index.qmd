@@ -21,5 +21,6 @@ Therefore, this module guides students on a complete analytical journey, from fo
 
 We really appreciate the support from various people:
 
-1. [Jon](https://profiles.ucl.ac.uk/23068-jon-reades) for setting up this wonderful CASA-themed quarto template.
-1. [Ollie](https://profiles.ucl.ac.uk/86776-ollie-ballinger) and [Andy](https://www.ucl.ac.uk/bartlett/casa/people/dr-andrew-maclachlan) for inspiring us to pursue a Quarto-based module website.
+1. [Huanfa](https://profiles.ucl.ac.uk/45776-huanfa-chen) for setting up the Quarto website, and for his help in developing the module content.
+2. [Jon](https://profiles.ucl.ac.uk/23068-jon-reades) for setting up this wonderful CASA-themed quarto template.
+3. [Ollie](https://profiles.ucl.ac.uk/86776-ollie-ballinger) and [Andy](https://www.ucl.ac.uk/bartlett/casa/people/dr-andrew-maclachlan) for inspiring us to pursue a Quarto-based module website.

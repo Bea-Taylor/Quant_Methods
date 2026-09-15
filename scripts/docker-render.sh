@@ -32,6 +32,11 @@ export RETICULATE_PYTHON=/project/.venv-reticulate/bin/python
 export RETICULATE_AUTOCONFIGURE=FALSE
 
 echo "==> R packages (renv::restore)"
+# renv's actual package cache defaults to a path outside /project (e.g. inside
+# the container's home dir), so it doesn't survive `docker run --rm` between
+# invocations even though ./renv/library is bind-mounted. Point it at the
+# mounted project dir so restores are cached on the host and reused.
+export RENV_PATHS_CACHE=/project/renv/.cache
 Rscript -e 'if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv", repos = "https://cloud.r-project.org"); renv::restore(prompt = FALSE)'
 
 echo "==> casaviz (from setup/casaviz.zip)"

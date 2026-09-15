@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-This Assessment is worth 100% of the grade for this course.
+The assessment is worth 100% of the grade for this course.
 
 ## Assessment Aims
 
@@ -14,6 +14,8 @@ Using quantitative methods to contribute to public debates is vital if students,
 
 We are not testing your coding abilities – you may use either of the main coding languages taught this term (R or Python). We are not testing your ability to write a standard piece of academic writing. But we are testing your ability to use quantitative methods appropriately and with a clear connection between the data, methods and outputs, to help others understand a particular issue through a data lens.
 
+## Structure
+
 ### Part 1 - Article
 
 Your task is to write a short 800-1000-word piece of ‘public-facing scholarly writing’ in the style of an article that that could appear in [The Conversation](https://theconversation.com/uk) or the [Financial Times](https://www.ft.com/ft-data) in their data section. This piece could relate to a local, national or international topic which could be either serious or frivolous but ***must*** employ appropriate quantitative methods learned in this course to derive novel insights from a particular dataset (or range of datasets) associated with a particular topic of your choosing. Data analysis and the use of quantitative methods should be central to your piece, but outputs must be appropriate for a general (non-academic) audience with your piece illuminated by appropriate visual outputs – maps, graphs or other data visualisations. Your piece should contain a range of graphical or tabular elements.
@@ -22,19 +24,11 @@ Your task is to write a short 800-1000-word piece of ‘public-facing scholarly 
 
 Your 800-1000-word article should be accompanied by a max 1000-word technical appendix detailing the analysis you have carried out behind the scenes to allow you to make the observations you have in your article. Here you might want to include additional exploratory visualisations, tabular outputs, interpretations of those outputs, equations etc. and you could also include any observations about the dataset or the validity / statistical significance of any models you employ. The purpose of the appendix is to reassure anyone who wants to delve deeper, that the observations you made in your main article are valid and reliable and your interpretations valid.
 
-### Topic
+## Topic
 
 Your topic can be anything you like broadly related to human, urban or social issues, as long as you can find some suitable data to analyse. For inspiration on relevant topics, you might want to review some of the articles that John Burn-Murdoch has written for the Financial Times in recent years - <https://www.ft.com/john-burn-murdoch> (you can log-in via your UCL credentials) or some of the pieces in the Conversation - <https://theconversation.com/>.
 
 If you are struggling for inspiration, you are welcome to explore an educational topic using DfE schools data used in class, but you are encouraged to be creative in your data choices (as you are being partially marked on your originality), and you should not repeat analyses carried out on variables in any of the practical sessions. The only topic we will ***not*** permit in this assessment is anything related to AirBnB as this is the focus of CASA0013.
-
-### Article Content
-
-You will note that most of John Burn-Murdoch’s articles generally contain the sorts of analyses we would describe as exploratory. While your article should contain basic exploratory analysis in the form of visualisations, you should ***also*** use an appropriate method from the second half of the course (lectures 5-10) related to ***either*** more sophisticated exploratory analysis like multivariate statistical analysis (e.g. dimensionality reduction ***or*** cluster analysis) *or* some explanatory / predictive methods such as ANOVA, linear regression or some of the generalised linear models also introduced.
-
-### Style of Briefing
-
-You should write in plain English and avoid the use of jargon or technical language. For tips on how to write in this style, The Conversation has produced a guide: <https://socsci.web.ox.ac.uk/files/conversation-writing-public-why-and-how>
 
 ### Types of Data Permissible and Sources
 
@@ -56,17 +50,25 @@ Anything you like, but you should choose carefully so that you are able to demon
 
 You can probably find many more!
 
-### Referencing
+## Article Content
 
-We will not expect standard academic referencing in this piece, however, this doesn’t mean that you shouldn’t include references – you should. In this style of public facing scholarly writing, it is common to use hyperlinks and footnotes and you should make use of these to support your narrative.
+You will note that most of John Burn-Murdoch’s articles generally contain the sorts of analyses we would describe as exploratory. While your article should contain basic exploratory analysis in the form of visualisations, you should ***also*** use an appropriate method from the second half of the course (lectures 5-10) related to ***either*** more sophisticated exploratory analysis like multivariate statistical analysis (e.g. dimensionality reduction ***or*** cluster analysis) *or* some explanatory / predictive methods such as ANOVA, linear regression or some of the generalised linear models also introduced.
 
-### Format of the Piece
+## Style of Briefing
+
+You should write in plain English and avoid the use of jargon or technical language. For tips on how to write in this style, The Conversation has produced a guide: <https://socsci.web.ox.ac.uk/files/conversation-writing-public-why-and-how>
+
+## Format
 
 Examples – Here is just one example of the kind of article you might produce (minus the technical appendix), but read widely around the data journalism sites linked from publications like the Financial Times, New York Times, Guardian.
 
 <https://theconversation.com/constituency-level-data-reveals-which-parties-are-most-threatened-by-reform-264422>
 
-### Deadline and Handing In
+### Referencing
+
+We will not expect standard academic referencing in this piece, however, this doesn’t mean that you shouldn’t include references – you should. In this style of public facing scholarly writing, it is common to use hyperlinks and footnotes and you should make use of these to support your narrative.
+
+## Deadline
 
 The Deadline for the assessment is {{< var assess.deadline-date >}} \@ {{< var assess.deadline-time >}}.
 
@@ -105,32 +107,22 @@ The descriptor provided for this level of the Frameworks is for any master's deg
 
 Master's degrees are awarded to students who have demonstrated:
 
-•         a systematic understanding of knowledge, and a critical awareness of current problems and/or new insights, much of which is at, or informed by, the forefront of their academic discipline, field of study or area of professional practice
-
-•         a comprehensive understanding of techniques applicable to their own research or advanced scholarship
-
-•         originality in the application of knowledge, together with a practical understanding of how established techniques of research and enquiry are used to create and interpret knowledge in the discipline
-
-•         conceptual understanding that enables the student:
-
-•         to evaluate critically current research and advanced scholarship in the discipline
-
-•         to evaluate methodologies and develop critiques of them and, where appropriate, to propose new hypotheses.
+- a systematic understanding of knowledge, and a critical awareness of current problems and/or new insights, much of which is at, or informed by, the forefront of their academic discipline, field of study or area of professional practice
+- a comprehensive understanding of techniques applicable to their own research or advanced scholarship
+- originality in the application of knowledge, together with a practical understanding of how established techniques of research and enquiry are used to create and interpret knowledge in the discipline
+- conceptual understanding that enables the student:
+- to evaluate critically current research and advanced scholarship in the discipline
+- to evaluate methodologies and develop critiques of them and, where appropriate, to propose new hypotheses.
 
 Typically, holders of the qualification will be able to:
 
-•         deal with complex issues - both systematically and creatively, make sound judgements in the absence of complete data, and communicate their conclusions clearly to specialist and non-specialist audiences
-
-•         demonstrate self-direction and originality in tackling and solving problems, and act autonomously in planning and implementing tasks at a professional or equivalent level
-
-•         continue to advance their knowledge and understanding, and to develop new skills to a high level. 
+- deal with complex issues - both systematically and creatively, make sound judgements in the absence of complete data, and communicate their conclusions clearly to specialist and non-specialist audiences
+- demonstrate self-direction and originality in tackling and solving problems, and act autonomously in planning and implementing tasks at a professional or equivalent level
+- continue to advance their knowledge and understanding, and to develop new skills to a high level. 
 
 And holders will have:
 
-•         the qualities and transferable skills necessary for employment requiring:  
-
-•         the exercise of initiative and personal responsibility
-
-•         decision-making in complex and unpredictable situations
-
-•         the independent learning ability required for continuing professional development.
+- the qualities and transferable skills necessary for employment requiring:  
+- the exercise of initiative and personal responsibility
+- the ability to make decisions in complex and unpredictable situations
+- the independent learning ability required for continuing professional development.

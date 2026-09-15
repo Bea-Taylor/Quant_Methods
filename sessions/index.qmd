@@ -1,7 +1,7 @@
 ---
 format: html
 date: last-modified
-author: "Huanfa Chen"
+author: "Bea Taylor"
 title: "Overview"
 ---
 
@@ -11,25 +11,25 @@ title: "Overview"
 - Google/ChatGPT can make mistakes; detecting them is crucial.
 - Mathematics understanding is not always required.
 
-## Objectives
+<!-- ## Objectives
 1. Understand the structure and focus of the module.
 2. Develop a method for tackling quantitative problems.
-3. Formulate a research question and structure quantitative writing.
+3. Formulate a research question and structure quantitative writing. -->
 
 ## Course Objectives
 1. Understand a broad range of quantitative techniques.
 2. Apply these skills in research.
-3. Formulate a coherent quantitative argument.
+3. Formulate coherent quantitative argument.
 
 ## Prerequisites
 - No prerequisite of university-level maths/statistics.
 - No prerequisite of programming.
 - Python (or R) is required for practicals and assessments.
-- This module doesn't teach programming, so CASA0013 is strongly recommneded if you don't know Python before.
+- This module doesn't teach programming, so CASA0013 is strongly recommended if you don't know any Python.
 
 ## Course Structure
-- Lectures: Wednesdays 9:00–10:30; G13 Torrington Place (1-19).
-- Tutorials: Wednesdays 10:30–12:30; G13 Torrington Place (1-19).
+- Lectures: Tuesdays 9:00–10:30; G03 Bedford Way (26). 
+- Tutorials: Wednesdays 10:30–12:00; G03 Bedford Way (26).
 
 ## Platforms
 - **Email** for important notices and private questions.
@@ -40,18 +40,18 @@ title: "Overview"
 ## Weekly Schedule
 | Session | Topic                          | Lecturer |
 | ------- | ------------------------------ | -------- |
-| 1       | Introduction to data           | Huanfa   |
+| 1       | Introduction to data           | Adam     |
 | 2       | Probability and distribution   | Bea      |
 | 3       | Hypothesis testing             | Bea      |
 | 4       | Introduction to linear algebra | Bea      |
-| 5       | Correlation and regression     | Huanfa   |
+| 5       | Correlation and regression     | Adam     |
 | 6       | Intro to Regression            | Adam     |
 | 7       | Multiple Regression            | Adam     |
 | 8       | Multilevel regression          | Adam     |
-| 9       | Dimensionality reduction       | Huanfa   |
-| 10      | Clustering Analysis            | Huanfa   |
+| 9       | Dimensionality reduction       | Bea      |
+| 10      | Clustering Analysis            | Bea      |
 
-# Assessment
+# How will the module be assessed?
 
 ## Assessment
 - Written Investigation (summative): 100%
@@ -69,4 +69,4 @@ Please provide anonymous feedback on Moodle
 ![](L1_images/moodle_feedback.png)
 
 ## Github Feedback
-You can also give feedback on [Github issues](https://github.com/huanfachen/qm/issues).
+You can also give feedback on [Github issues](https://github.com/Bea-Taylor/Quant_Methods/issues).
