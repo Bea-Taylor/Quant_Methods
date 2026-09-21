@@ -1,35 +1,10 @@
 #!/usr/bin/env bash
 # Runs inside the `quant-methods-render` container (see Dockerfile / render-docker.sh).
-# Restores R + Python deps (cached on the host via bind mounts) then renders
-# the Quarto project. Any arguments are passed straight through to `quarto render`.
+# Restores R deps then renders the Quarto project. Python deps and the
+# `qmFork` Jupyter kernel are baked into the image (see Dockerfile).
+# Any arguments are passed straight through to `quarto render`.
 set -euo pipefail
 cd /project
-
-# Python here is only for `reticulate` calls from R chunks (mixed R+Python
-# practicals). Pure-Python/Jupyter pages render locally with the host's
-# `qmFork` conda env instead - see README.
-echo "==> Python venv (for reticulate)"
-if [ ! -x .venv-reticulate/bin/python ]; then
-  python3 -m venv .venv-reticulate
-fi
-PIP=.venv-reticulate/bin/pip
-$PIP install --quiet --upgrade pip
-
-# Mirrors .github/workflows/publish.yml's "CRITICAL FIX FOR pandas-flavor
-# ATTRIBUTEERROR": pyjanitor 0.26.0 needs pandas-flavor's pre-0.7.0 API
-# (register_groupby_method was removed in 0.7.0), and letting pip's resolver
-# pick versions independently pulls in incompatible combinations.
-cat > /tmp/constraints.txt <<'TXT'
-pandas-flavor==0.6.0
-pyjanitor==0.26.0
-pandas>=2.2.2,<3
-TXT
-$PIP uninstall -y pandas-flavor pyjanitor pandas >/dev/null 2>&1 || true
-$PIP install --quiet --no-deps 'pandas-flavor==0.6.0'
-$PIP install --quiet --no-deps 'pyjanitor==0.26.0'
-$PIP install --quiet -r requirements.txt --constraint /tmp/constraints.txt --upgrade-strategy only-if-needed
-export RETICULATE_PYTHON=/project/.venv-reticulate/bin/python
-export RETICULATE_AUTOCONFIGURE=FALSE
 
 echo "==> R packages (renv::restore)"
 # renv's actual package cache defaults to a path outside /project (e.g. inside
