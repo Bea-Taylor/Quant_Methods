@@ -76,19 +76,22 @@ This path needs the toolchain set up by hand — see **Gotchas** below.
 
 ## Gotchas
 
-**The Jupyter kernel name is case-sensitive.** `_quarto.yml` sets
-`jupyter: qmFork`, and Quarto matches that against the kernelspec *directory
-name*. Registering it with `ipykernel install --name qmFork` silently lowercases
-the directory to `qmfork`, and the render then fails with:
+**The Jupyter kernel name is case-sensitive, and must be lowercase.**
+`_quarto.yml` sets `jupyter: qmfork`, and Quarto matches that against the
+kernelspec *directory* name, case-sensitively. `ipykernel install` lowercases
+whatever you pass to `--name`, so the directory is always lowercase even if you
+ask for `qmFork` — it will even print "Installed kernelspec qmFork" while
+creating `qmfork`. Keep the yaml lowercase to match.
+
+If they ever drift apart the render fails before executing anything:
 
 ```
 ERROR: Jupyter kernel 'qmFork' not found. Known kernels: python3, qmfork
 ```
 
-Fix by renaming the directory to match exactly. On Windows the spec lives in
-`%APPDATA%\jupyter\kernels\`. Note `jupyter kernelspec list` lowercases its own
-output, so it will keep showing `qmfork` even once the directory is correct —
-trust the directory name, not the listing.
+Note `jupyter kernelspec list` lowercases its own output, so it cannot tell you
+whether the directory is correct — check the directory name itself. On Windows
+the specs live in `%APPDATA%\jupyter\kernels\`.
 
 **`pandas` is pinned `>=2.2.2,<3`.** pandas 3.0 tightened string-dtype coercion
 and breaks the `.astype(str)` patterns used throughout the practicals. The
