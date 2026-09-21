@@ -15,7 +15,10 @@ if ! Rscript -e 'quit(status = as.integer(!requireNamespace("casaviz", quietly =
   # Install into the renv project library, not the default site-library: renv's
   # sandbox trims .libPaths() to the project library plus its own sandbox, so a
   # plain `R CMD INSTALL` lands somewhere library(casaviz) cannot reach.
-  R CMD INSTALL -l "$(Rscript -e 'cat(.libPaths()[1])')" /tmp/casaviz
+  # The path goes via a file rather than $(...): renv writes some of its startup
+  # notices to stdout, so command substitution captures those too.
+  Rscript -e 'writeLines(.libPaths()[1], "/tmp/casaviz-lib")' >/dev/null 2>&1
+  R CMD INSTALL -l "$(cat /tmp/casaviz-lib)" /tmp/casaviz
   rm -rf /tmp/casaviz
 fi
 

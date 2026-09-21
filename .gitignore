@@ -39,6 +39,7 @@ render.err.log
 preview.log
 docker-build.log
 docker-restore*.log
+w6render.log
 
 # Quarto figure dirs written next to the source qmds (regenerated every render)
 sessions/*_files/
