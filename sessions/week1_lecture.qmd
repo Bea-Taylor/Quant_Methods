@@ -1,53 +1,208 @@
 ---
 title: "Exploratory Data Analysis #1"
 subtitle: "Understanding and describing data"
-author: 
-  - name: "Adam Dennett"
-email: "a.dennett@ucl.ac.uk"
-date-as-string: "18 September 2026"
+author:
+  - name: "Huanfa Chen"
+email: "huanfa.chen@ucl.ac.uk"
+date-as-string: "12 September 2025"
 from: markdown+emoji
-format: revealjs
+other: "CASA0007 Quantitative Methods"
+format:
+  revealjs:
+    template-partials:
+      - title-slide.html
+    transition: none
+    slide-number: TRUE
+    preview-links: auto
+    theme: ../css/casa-slides.scss
+lightbox: auto
 ---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+library(knitr)
+library(scales)
+library(patchwork)
+
+knitr::opts_chunk$set(dev = "ragg_png")
+
+# CASA palette, used explicitly so the deck does not depend on casaviz
+casa_purple <- "#4E3C56"
+casa_teal   <- "#2E6260"
+casa_yellow <- "#F9DD73"
+casa_pink   <- "#E16FCA"
+casa_green  <- "#9DBB65"
+casa_cols   <- c("#2E6260", "#658E62", "#9DBB65", "#E7D870",
+                 "#F3C486", "#E993AC", "#8F5289", "#4E3C56")
+
+base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
+
+# The DfE publishes suppressed / not-applicable values as codes, not blanks.
+# We read them as NA here and return to what they mean later in the lecture.
+na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
+
+# Key Stage 4 outcomes: one row per school
+ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
+                na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  # The DfE files carry LA and national summary rows with no URN. They are not
+  # schools, and because dplyr joins NA to NA they would also duplicate rows.
+  filter(!is.na(URN)) |>
+  select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
+         PTFSM6CLA1A, PTPRIORLO) |>
+  mutate(across(c(ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
+                  PTFSM6CLA1A, PTPRIORLO),
+                ~ parse_number(as.character(.x))))
+
+# Absence lives in a separate file, keyed on the same URN
+absence <- read_csv(file.path(base_path, "england_abs.csv"),
+                    na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  filter(!is.na(URN)) |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, PERCTOT) |>
+  mutate(PERCTOT = parse_number(as.character(PERCTOT)))
+
+# School characteristics: every school in England, not just secondaries
+school_info <- read_csv(file.path(base_path, "england_school_information.csv"),
+                        na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  select(URN, SCHNAME, LANAME, MINORGROUP, SCHOOLTYPE,
+         OFSTEDRATING, RELCHAR, ADMPOL, OFSTEDLASTINSP)
+
+# Everything with a KS4 result, INCLUDING special and independent schools.
+# Keeping them in is the point of several slides below.
+schools_all <- ks4 |>
+  left_join(school_info, by = "URN") |>
+  left_join(absence, by = "URN") |>
+  filter(!is.na(ATT8SCR)) |>
+  # raw head-count of disadvantaged pupils, for the counts-vs-rates slide
+  mutate(n_disadvantaged = round(TPUP * PTFSM6CLA1A / 100))
+
+# Ofsted is ordinal: set the order once so every plot agrees
+ofsted_order <- c("Special Measures", "Serious Weaknesses",
+                  "Requires improvement", "Good", "Outstanding")
+
+schools_all <- schools_all |>
+  mutate(OFSTEDRATING = factor(OFSTEDRATING, levels = ofsted_order))
+
+# Mainstream secondaries only - the subset used from week 6 onwards
+schools_mainstream <- schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"))
+```
 
 # This week
 
 ## Understanding and describing data
 
-- Quantitative methods describe the range of mathematical and statistical techniques we can apply to data in order that we can derive meaning from it
-- Data may arrive in many different forms
-  -  spreadsheets of numbers
-  -  pages of text
-  -  ridges on a vinyl record
-- Being able to identify the type of data you are dealing with will allow you to select the appropriate methods for making sense of it. 
+- Quantitative research is the process of collecting and analysing **numerical data** to describe, model, and predict variables of interest.
 
-## Understanding and describing data
+- Garbage in, garbage out.
 
-- Data may be gathered from a ***sample*** (e.g. the heights or eye colour of everyone in this room)
-- Or a ***population*** (e.g. the heights or eye colour of everyone living in the UK right now)
-- Samples may or may not be representative of the population they are drawn from (is the average height in this room a good representation of the average hight in the UK?)
-- Knowing our data types and how to summarise and explore their qualities for a sample or a population, is the first step in building an understanding of this data
-
-::: notes
+::: {.notes}
 This lecture focuses on understanding and describing data.
+
+Everything this week uses the dataset we will keep coming back to all term, so
+that by week 10 it is completely familiar.
 :::
 
 ## Learning Objectives
+By the end of this lecture you should:
 
-By the end of this lecture you will:
+1. Understand basic data types;
+2. Consider how to summarise and represent data;
+3. Know the course dataset well enough to start asking questions of it.
 
-1.  Understand the four main basic data types and;
-2.  Consider how to summarise and represent data.
+# Our dataset for the term
+
+## School performance in England, 2022/23 {.smaller}
+
+::::: columns
+::: {.column width="55%"}
+- Published every year by the **Department for Education**
+- A full census of every school in England — not a sample
+- Hundreds of variables on attainment, pupil characteristics and school characteristics
+- We will use it in almost every week of this course
+:::
+
+::: {.column width="45%"}
+```{r}
+#| label: dataset-size
+#| echo: false
+
+tibble(
+  ` ` = c("Schools with a KS4 result",
+          "Of which academies or maintained",
+          "Variables in the full release",
+          "Local authorities covered"),
+  `Count` = c(comma(nrow(schools_all)),
+              comma(nrow(schools_mainstream)),
+              "700+",
+              comma(n_distinct(schools_all$LANAME)))
+) |>
+  kable(align = "lr")
+```
+:::
+:::::
+
+::: footer
+DfE: <https://www.compare-school-performance.service.gov.uk/download-data>
+:::
+
+## What a row actually looks like {.smaller}
+
+```{r}
+#| label: dataset-peek
+#| echo: false
+
+schools_all |>
+  filter(LANAME == "Brighton and Hove", MINORGROUP == "Academy") |>
+  select(SCHNAME, MINORGROUP, OFSTEDRATING, TOTPUPS, ATT8SCR, PTFSM6CLA1A) |>
+  arrange(desc(ATT8SCR)) |>
+  head(6) |>
+  kable(
+    col.names = c("School", "Type", "Ofsted", "Pupils",
+                  "Attainment 8", "% disadvantaged"),
+    digits = 1
+  )
+```
+
+- Every row is a **school**. Remember that — it matters later.
+- We are never looking at individual pupils in this dataset.
+
+::: {.notes}
+Stress the unit of observation. Almost every mistake students make with this
+data comes from forgetting that a row is a school, not a child.
+:::
+
+## Attainment 8 — our main outcome variable
+
+- Sums each pupil's grades across **8 GCSEs**
+- Maths counted twice, English often twice
+- Maximum possible score is **90**; 40 is roughly a "standard pass" average
+- Averaged across all Year 11 pupils to give a **school-level** score
+
+. . .
+
+It is a *raw* score. It takes no account of who a school admits — which is
+exactly the problem we spend weeks 6 to 8 solving.
 
 # Data types
 
 ## Four levels of measurements
 
-|                                  | Nominal | Ordinal | Interval | Ratio |
-|----------------------------------|:-------:|:-------:|:--------:|:-----:|
-| Categorizes and labels variables |    ✔    |    ✔    |    ✔     |   ✔   |
-| Ranks categories in order        |         |    ✔    |    ✔     |   ✔   |
-| Has known, equal intervals       |         |         |    ✔     |   ✔   |
-| Has a true or meaningful zero    |         |         |          |   ✔   |
+|                          | Nominal | Ordinal | Interval | Ratio |
+|--------------------------|:-------:|:-------:|:--------:|:-----:|
+| Categorizes and labels variables | ✔ | ✔ | ✔ | ✔ |
+| Ranks categories in order        |   | ✔ | ✔ | ✔ |
+| Has known, equal intervals       |   |   | ✔ | ✔ |
+| Has a true or meaningful zero    |   |   |   | ✔ |
 
 - Developed by psychologist Stanley Smith Stevens (1906 - 1973)
 
@@ -55,103 +210,229 @@ By the end of this lecture you will:
 
 - Differentiates items based only on names; no order between them.
 - Also called **categorical data**
-- Example: colour, gender, country names
 - What can be said about them?
-  - *Equality*: ‘apple’ is not ‘pear’, ‘apple’ is ‘apple’
-  - *Mode*: the most common item
+  - *Equality*: an Academy is not a Special school
+  - *Mode*: the most common category
+
+. . .
+
+*In our data:* school type, religious character, region, admissions policy.
+
+## Nominal — school type
+
+```{r}
+#| label: nominal-plot
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+#| fig-align: center
+
+schools_all |>
+  count(MINORGROUP) |>
+  mutate(MINORGROUP = fct_reorder(replace_na(MINORGROUP, "Unknown"), n)) |>
+  ggplot(aes(x = n, y = MINORGROUP)) +
+  geom_col(fill = casa_purple, alpha = 0.85) +
+  geom_text(aes(label = comma(n)), hjust = -0.15, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15)), labels = comma) +
+  labs(x = "Number of schools", y = NULL,
+       title = "Schools in England with a Key Stage 4 result, by type") +
+  theme_minimal(base_size = 12)
+```
+
+- The bars can be reordered freely — **there is no natural order here**
+- All we can sensibly report is counts and the mode
 
 ## Ordinal
 
 - Allow for rank order, but not the relative degree of difference
-- Example: measurement of opinions
-  - *completely agree*
-  - *mostly agree*
-  - *neither degree nor disagree*
-  - *mostly disagree*
-  - *completely disagree*
+- Classic example: survey responses from *completely agree* to *completely disagree*
 - What can be said about them?
-  - :white_check_mark: Equality; mode
-  - :white_check_mark: Median: middle-ranked item
-  - :x: Differences between two levels; arithmetic mean
+  - ✅ Equality; mode
+  - ✅ Median: middle-ranked item
+  - ❌ Differences between two levels; arithmetic mean
+
+. . .
+
+*In our data:* **Ofsted rating** — Outstanding, Good, Requires improvement,
+Serious Weaknesses, Special Measures.
+
+## Ordinal — Ofsted rating
+
+```{r}
+#| label: ordinal-plot
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+#| fig-align: center
+
+schools_all |>
+  filter(!is.na(OFSTEDRATING)) |>
+  count(OFSTEDRATING) |>
+  ggplot(aes(x = OFSTEDRATING, y = n)) +
+  geom_col(fill = casa_teal, alpha = 0.85) +
+  geom_text(aes(label = comma(n)), vjust = -0.4, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12)), labels = comma) +
+  labs(x = NULL, y = "Number of schools",
+       title = "Ofsted rating — the order is meaningful, the spacing is not") +
+  theme_minimal(base_size = 12)
+```
+
+- The order **cannot** be shuffled: Good sits between Requires improvement and Outstanding
+- But is the gap Good → Outstanding the *same size* as Requires improvement → Good? We have no idea.
+- So: median yes, mean no.
 
 ## Interval
 
 - Allow for degree of difference between items, but not the ratio
 - The *zero* value is arbitrary
-- Example: Celsius temperature
-  - Definition: define 0°C & 100°C, and then separate them into 100 intervals.
-  - Depends on altitude/elevation
-- What can be said about them?
-  - :white_check_mark: equality, mode, median
-  - :white_check_mark: addition, arithmetic mean
-  - :x: ratio (*100°C is NOT twice 50°C*)
+- Classic example: Celsius temperature — 100°C is **not** twice as hot as 50°C
 
-## Interval
+. . .
 
-- Another example: longtitude & latitude coordinates
-- *The coordinate of 8 is twice as far as that of 4*? :x:
+*In our data:* **the date of a school's last Ofsted inspection.** The gap
+between 2015 and 2018 is the same as between 2018 and 2021, but "year zero" is
+a convention, so a school inspected in 2022 was not inspected "twice as
+recently" as one in 1011.
 
 ## Ratio
-
 - Allow for **ratio** between items
-- The zero value is unique and non-arbitrary.
-- Example: mass, length, energy
+- The zero value is unique and non-arbitrary
 - What can be said about them?
-  - :white_check_mark: Equality, mode, median, arithmetic mean
-  - :white_check_mark: Ratio (*2kg is twice as heavy as 1kg*)
+  - ✅ Equality, mode, median, arithmetic mean
+  - ✅ Ratio
+
+. . .
+
+*In our data:* **number of pupils**, **Attainment 8 score**, **% disadvantaged
+pupils**. A school with 1,200 pupils really does have twice as many as one with
+600.
+
+## A zero is not enough: Progress 8 {.smaller}
+
+::::: columns
+::: {.column width="55%"}
+**Progress 8** measures how much progress pupils made between arriving and
+leaving, compared with similar pupils nationally.
+
+- Zero means "average expected progress"
+- Positive means more than expected, negative less
+
+. . .
+
+The zero is **meaningful**. So is it ratio data?
+
+. . .
+
+**No.** A school scoring 1.0 has not made "twice the progress" of one scoring
+0.5 — the scale has no true zero point of *no progress at all*.
+:::
+
+::: {.column width="45%"}
+```{r}
+#| label: p8-plot
+#| echo: false
+#| fig-width: 5
+#| fig-height: 4.2
+
+schools_mainstream |>
+  filter(!is.na(P8MEA)) |>
+  ggplot(aes(x = P8MEA)) +
+  geom_histogram(binwidth = 0.1, fill = casa_purple, alpha = 0.6) +
+  geom_vline(xintercept = 0, colour = casa_pink, linewidth = 1) +
+  annotate("text", x = 0, y = Inf, label = "  zero = expected progress",
+           hjust = 0, vjust = 1.6, size = 3, colour = casa_pink) +
+  labs(x = "Progress 8", y = "Schools") +
+  theme_minimal(base_size = 11)
+```
+:::
+:::::
+
+::: {.notes}
+This is the slide that stops students assuming "has a zero" means "ratio".
+:::
 
 ## Notes
-
 - 'Encoding' does not change the nature of a measurement.
-- Gender variable (male, female, others) is NOMINAL.
-- If this variable is encodeded {male:0, female:1, others:2}, is it NOMINAL, or INTERVAL?
+- Ofsted rating is ORDINAL.
+- If we store it as {Special Measures:1, ..., Outstanding:5}, is it ORDINAL, or INTERVAL?
+
+. . .
+
+Still ordinal. Storing something as a number does not make the gaps equal.
 
 ## Another categorisation: numerical vs. categorical
-
-| Type | Category | Notes |
-|----------------------|----------------|----------------------------------|
-| Quantitative (numerical) data | Discrete data | Only in whole numbers, *e.g.* number of staffs |
-|  | Continuous data | *e.g.* temperature, 23°C, 23.4°C |
-| Qualitative (categorical) data | Nominal | Same as nominal in 'Levels of measurement' |
-|  | Ordinal | See above |
+| Type                           | Category        | In our data                                    |
+| ------------------------------ | --------------- | ---------------------------------------------- |
+| Quantitative (numerical) data  | Discrete data   | number of pupils on roll                       |
+|                                | Continuous data | Attainment 8 score, % disadvantaged            |
+| Qualitative (categorical) data | Nominal         | school type, region, religious character       |
+|                                | Ordinal         | Ofsted rating                                  |
 
 ## Quiz time
 
-::: notes
-Mentimeter quiz
+::: {.notes}
+Mentimeter quiz — classify a handful of DfE variables by level of measurement.
+Suggested items: TOTPUPS, OFSTEDRATING, LANAME, ATT8SCR, P8MEA, OFSTEDLASTINSP.
 :::
 
-# How do you descibe a ratio data?
+# How do you describe a ratio variable?
 
 ## Key metrics
+:::: {.columns}
 
-::::: columns
-:::: {.column width="50%"}
-::: incremental
+::: {.column width="50%"}
+
+::: {.incremental}
 - Quantity
 - The middle
 - The spread
 :::
-::::
-:::::
 
-## US city population
-
-::::: columns
-:::: {.column width="100%"}
-::: incremental
-- Quantity: 282 values
-- The middle: Mean 302869.3
-- The middle: Median 167744.5 (*Very different from mean*)
-- The middle: Mode 106433 (Useful? :x:)
-- Should use mean or median? median is better than mean, as data is unlikely normal distributed
 :::
+
 ::::
-:::::
+
+## Attainment 8 across all English schools {.smaller}
+
+```{r}
+#| label: att8-summary
+#| echo: false
+
+schools_all |>
+  summarise(
+    `Schools (n)` = comma(n()),
+    `Mean`        = sprintf("%.1f", mean(ATT8SCR)),
+    `Median`      = sprintf("%.1f", median(ATT8SCR)),
+    `Std. dev.`   = sprintf("%.1f", sd(ATT8SCR)),
+    `Minimum`     = sprintf("%.1f", min(ATT8SCR)),
+    `Maximum`     = sprintf("%.1f", max(ATT8SCR))
+  ) |>
+  kable(align = "r")
+```
+
+::: {.incremental}
+- Quantity: `r comma(nrow(schools_all))` schools
+- The middle: mean `r sprintf("%.1f", mean(schools_all$ATT8SCR))`, median `r sprintf("%.1f", median(schools_all$ATT8SCR))`
+- **The mean is *lower* than the median.** Why?
+:::
+
+::: {.notes}
+Do not resolve this yet — it is the hook for the visualisation section.
+:::
+
+## Mean, median, mode
+
+- **Mean** — add everything up, divide by how many
+- **Median** — line them all up, take the middle one
+- **Mode** — the most common value
+
+. . .
+
+For Attainment 8 the mode is close to useless: scores are near-continuous, so
+almost every school has its own value. Reporting it would be a mistake.
 
 ## Variance: quantifying spread
-
-Denote city population by $[y_1, y_2, ..., y_n]$ and variance by $\sigma^2$
+Denote each school's Attainment 8 by $[y_1, y_2, ..., y_n]$ and variance by $\sigma^2$
 
 $$
 \begin{aligned}
@@ -163,132 +444,357 @@ $$
 A large variance means considerable spreadedness in data.
 
 ## Standard deviation $\sigma$
-
 $$
 \begin{aligned}
 \text{Standard Deviation} = \sqrt{\text{Variance}}
 \end{aligned}
 $$
 
-- Unit: if $y$ is in unit of meter (m), then St. Dev is in unit of m, variance in unit of $\text{m}^2$
+- Unit: if $y$ is in GCSE points, then St. Dev is in GCSE points, variance in $\text{points}^2$
+- Which is why we almost always report the standard deviation, not the variance
+
+. . .
+
+For all English schools: $\sigma =$ `r sprintf("%.1f", sd(schools_all$ATT8SCR))` points.
+For mainstream secondaries only: $\sigma =$ `r sprintf("%.1f", sd(schools_mainstream$ATT8SCR))` points.
+
+**Same variable, very different spread.** Hold that thought.
 
 ## Summary of key metrics
+:::: {.columns}
 
-:::: columns
-::: incremental
+::: {.incremental}
 - Quantity
 - The middle: mean, median, mode
 - The spread: variance, standard deviation
 - *Visualising data is also important*: BOXPLOT!
 - *Please check two types of SPECIAL VALUES before computing these metrics.*
 :::
+
 ::::
 
 # Visualising data
-
 ![](L1_images/picture_worth_thousand_words.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
 
 ## FT visual vocabulary
+- https://ft-interactive.github.io/visual-vocabulary/
+![](L1_images/FT_visual_vocabulary.jpg){style="max-width:90%; max-height:90%; margin:auto;"}
 
-- https://ft-interactive.github.io/visual-vocabulary/ ![](L1_images/FT_visual_vocabulary.jpg){style="max-width:90%; max-height:90%; margin:auto;"}
+## So why is the mean below the median?
+
+```{r}
+#| label: att8-hist-all
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4.6
+#| fig-align: center
+
+mean_all   <- mean(schools_all$ATT8SCR)
+median_all <- median(schools_all$ATT8SCR)
+
+ggplot(schools_all, aes(x = ATT8SCR)) +
+  geom_histogram(binwidth = 1, fill = casa_purple, alpha = 0.55) +
+  geom_vline(xintercept = median_all, colour = "black",
+             linetype = "dotted", linewidth = 1) +
+  geom_vline(xintercept = mean_all, colour = casa_yellow, linewidth = 1) +
+  annotate("text", x = median_all, y = Inf,
+           label = paste0("Median = ", round(median_all, 1)),
+           hjust = -0.05, vjust = 2, size = 4) +
+  annotate("text", x = mean_all, y = Inf,
+           label = paste0("Mean = ", round(mean_all, 1)),
+           hjust = 1.05, vjust = 2, size = 4, colour = "#B89B10") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+  labs(title = "Attainment 8, all English schools with a KS4 result, 2022/23",
+       x = "Average Attainment 8 score", y = "Number of schools") +
+  theme_minimal(base_size = 13)
+```
+
+- One summary table told us mean < median. **One picture tells us why.**
+- There is a whole second population of schools down at the left.
+
+## The same data, split by school type
+
+```{r}
+#| label: att8-hist-bytype
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4.6
+#| fig-align: center
+
+schools_all |>
+  mutate(MINORGROUP = replace_na(MINORGROUP, "Unknown")) |>
+  ggplot(aes(x = ATT8SCR, fill = MINORGROUP)) +
+  geom_histogram(binwidth = 1, alpha = 0.85, position = "stack") +
+  scale_fill_manual(values = casa_cols) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+  labs(title = "The left-hand hump is special schools",
+       x = "Average Attainment 8 score", y = "Number of schools",
+       fill = "School type") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+- **Special schools** educate pupils with significant special educational needs
+- Attainment 8 was never designed to compare them with mainstream schools
+
+## What that does to the headline number {.smaller}
+
+```{r}
+#| label: att8-bytype-table
+#| echo: false
+
+schools_all |>
+  mutate(MINORGROUP = replace_na(MINORGROUP, "Unknown")) |>
+  group_by(`School type` = MINORGROUP) |>
+  summarise(
+    n        = n(),
+    Mean     = round(mean(ATT8SCR), 1),
+    Median   = round(median(ATT8SCR), 1),
+    `Std dev` = round(sd(ATT8SCR), 1),
+    .groups = "drop"
+  ) |>
+  arrange(Mean) |>
+  kable(align = "lrrrr")
+```
+
+::: {.incremental}
+- Mixing these together produces a mean that describes **no real school**
+- The fix is not statistical, it is *knowing what is in your data*
+- From week 6 onwards we work with mainstream secondaries only — now you know why
+:::
 
 ## Boxplot for a dataset
-
 - Showing distribution of a dataset
 
 ![](L1_images/Boxplot.jpg){style="width:70%; height:70%;"}
 
 ## Boxplot for comparing multiple datasets
 
-## When boxplot fails?
+```{r}
+#| label: att8-boxplot
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4.8
+#| fig-align: center
 
+schools_all |>
+  mutate(MINORGROUP = replace_na(MINORGROUP, "Unknown"),
+         MINORGROUP = fct_reorder(MINORGROUP, ATT8SCR, .fun = median)) |>
+  ggplot(aes(x = ATT8SCR, y = MINORGROUP, fill = MINORGROUP)) +
+  geom_boxplot(alpha = 0.6, outlier.alpha = 0.25, outlier.size = 0.8) +
+  scale_fill_manual(values = casa_cols, guide = "none") +
+  labs(title = "Attainment 8 by school type",
+       x = "Average Attainment 8 score", y = NULL) +
+  theme_minimal(base_size = 13)
+```
+
+- Side-by-side boxplots make the comparison immediate
+- Note how much **wider** the special school box is — not just lower
+
+## When boxplot fails?
 - When there are lots of 'outliers' in the data
 - What are 'Outliers'?
 
 # Special values: null and outliers
 
 ## *Null* values
-
-- Representing the absence of data or an unknow value
+- Representing the absence of data or an unknown value
 - Different from *zero* or *a blank space*
 - Null values should be excluded before computing mean or std
 
-## Null island in geography
+## Missing data is a decision someone made {.smaller}
 
+The DfE does not leave blanks — it publishes **codes**:
+
+| Code | Meaning |
+|------|---------|
+| `SUPP` | Suppressed, because the number of pupils is too small to publish safely |
+| `NP` | Not published |
+| `NE` | No entries |
+| `LOWCOV` | Low coverage — too few pupils for a reliable figure |
+| `NEW` | School too new to have results |
+
+. . .
+
+`SUPP` is **disclosure control**, not an error. A missing value here tells you
+the school is small — which is information, and it is not missing at random.
+
+::: {.notes}
+This is the single most useful practical thing in the lecture. It is also
+exactly what the na_values list in the practicals is doing.
+:::
+
+## How much is missing? {.smaller}
+
+```{r}
+#| label: missingness
+#| echo: false
+
+schools_all |>
+  summarise(
+    `Attainment 8`      = mean(is.na(ATT8SCR)),
+    `Progress 8`        = mean(is.na(P8MEA)),
+    `Pupils on roll`    = mean(is.na(TOTPUPS)),
+    `% disadvantaged`   = mean(is.na(PTFSM6CLA1A)),
+    `Ofsted rating`     = mean(is.na(OFSTEDRATING)),
+    `Overall absence`   = mean(is.na(PERCTOT))
+  ) |>
+  pivot_longer(everything(), names_to = "Variable", values_to = "share") |>
+  mutate(`Missing` = percent(share, accuracy = 0.1)) |>
+  select(Variable, Missing) |>
+  kable(align = "lr")
+```
+
+- Always check this **before** you compute anything
+- And ask *why* each one is missing, not just how many
+
+## Null island in geography
 - long=0, lat=0. Not even an island!
 - It became famous because some software assigned "0,0" for long-lat when location is missing
 - Many events were mapped to this one, including lots on Strava
 - Source: wikipedia.org
 
-::::: columns
+:::: {.columns}
 ::: {.column width="50%"}
-![](L1_images/map_null_island.jpg){height="300px"}
+![](L1_images/map_null_island.jpg){height=300px}
 :::
-
 ::: {.column width="50%"}
-![](L1_images/image_null_island_2017.jpg){height="300px"}
+![](L1_images/image_null_island_2017.jpg){height=300px}
 :::
-:::::
+::::
 
 ## Outliers
-
 - A data point that differs significantly from other observations
 - There are three types of outliers
 - Please explain the rationale for removing any identified outliers, including the criteria and methods used
 
-## Outliers
+## Three types of outlier {.smaller}
 
 | Type | Source | Handling |
-|-----------------|----------------------------|----------------------------|
-| **Error Outliers** | From mistakes in data collection/entry/measurement, e.g. a temperature sensor reading 500 °C | Should be corrected or removed |
-| **Irregular Pattern Outliers** |  |  |
-| **Influential Outliers** |  |  |
+| ---- | ------ | -------- |
+| **Error Outliers** | Mistakes in collection, entry or measurement — e.g. a temperature sensor reading 500 °C | Should be corrected or removed |
+| **Irregular Pattern Outliers** | Genuinely occur, but do not follow the general pattern — e.g. a spike in sales on Black Friday | May indicate events worth investigating. If studying the overall pattern, remove |
+| **Influential Outliers** | Appear extreme but are integral to the underlying pattern — e.g. a special school in our attainment data | Keep them; removing them distorts the analysis or hides something important |
 
-## Outliers
-
-| Type | Source | Handling |
-|-----------------|----------------------------|----------------------------|
-| **Error Outliers** |  |  |
-| **Irregular Pattern Outliers** | Genuinely occur, but do not follow general pattern or relationship in the dataset, e.g. sudden spikes in sales in Black Friday | They might indicate unusual events or anomalies worth investigating. If the purpose is to study overall pattern, they should be removed |
-| **Influential Outliers** |  |  |
-
-## Outliers
-
-| Type | Source | Handling |
-|-----------------|----------------------------|----------------------------|
-| **Error Outliers** |  |  |
-| **Irregular Pattern Outliers** |  |  |
-| **Influential Outliers** | Appear extreme but are integral to the underlying pattern or model, e.g. NYC in US city population data | Should keep them, as removing them could distort the analysis or overlook important features of the data |
+::: {.notes}
+Previously this was three near-identical slides revealing one row at a time.
+Consolidated. If you want the reveal back, wrap each row in a fragment.
+:::
 
 ## Detecting outlier: interquartile range (IQR)
-
 ![](L1_images/outlier_detection_Tukey_Fences.jpg)
 
-## Quiz: which type of outliers?
+## Tukey's fences on our data {.smaller}
 
+```{r}
+#| label: tukey
+#| echo: false
+
+tukey_flag <- function(x) {
+  q <- quantile(x, c(0.25, 0.75), na.rm = TRUE)
+  iqr <- q[2] - q[1]
+  list(lower = q[1] - 1.5 * iqr, upper = q[2] + 1.5 * iqr)
+}
+
+f_all  <- tukey_flag(schools_all$ATT8SCR)
+f_main <- tukey_flag(schools_mainstream$ATT8SCR)
+
+tibble(
+  Dataset = c("All schools", "Mainstream secondaries only"),
+  `Lower fence` = sprintf("%.1f", c(f_all$lower, f_main$lower)),
+  `Upper fence` = sprintf("%.1f", c(f_all$upper, f_main$upper)),
+  `Flagged as outliers` = c(
+    sum(schools_all$ATT8SCR < f_all$lower | schools_all$ATT8SCR > f_all$upper),
+    sum(schools_mainstream$ATT8SCR < f_main$lower | schools_mainstream$ATT8SCR > f_main$upper)
+  )
+) |>
+  kable(align = "lrrr")
+```
+
+::: {.incremental}
+- On the **full** dataset almost nothing is flagged — the special schools have stretched the quartiles so far that the fences swallow them
+- On **mainstream secondaries** the method starts behaving sensibly
+- A rule applied to the wrong population gives a confidently wrong answer
+:::
+
+## Quiz: which type of outliers?
 - error vs. irregular pattern vs. influential
 
-1.  In building height data, 10-storey building with 1m height
-2.  In gender ratios of countries data, Vatican City with gender ratio of 7:1
-3.  In UK city GDP data, GDP of Greater London
+1. A school recording an Attainment 8 score of 900
+1. A school whose results collapsed in the year its building flooded
+1. The special schools in the national attainment distribution
 
-## Summary: describing a dataset
+# One more trap: counts vs rates
 
-- Key metrics
-- Null values and outliers (and handle them!)
-- Visualising data
+## Big schools have big numbers
+
+```{r}
+#| label: counts-vs-rates
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.4
+#| fig-align: center
+
+cvr <- schools_mainstream |>
+  filter(!is.na(TPUP), !is.na(n_disadvantaged), TPUP > 0)
+
+r_count <- cor(cvr$TPUP, cvr$n_disadvantaged)
+r_rate  <- cor(cvr$TPUP, cvr$PTFSM6CLA1A)
+
+p_count <- ggplot(cvr, aes(x = TPUP, y = n_disadvantaged)) +
+  geom_point(alpha = 0.25, colour = casa_purple, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
+  labs(title = paste0("Raw count  (r = ", sprintf("%.2f", r_count), ")"),
+       x = "Pupils at end of KS4", y = "Disadvantaged pupils (count)") +
+  theme_minimal(base_size = 11)
+
+p_rate <- ggplot(cvr, aes(x = TPUP, y = PTFSM6CLA1A)) +
+  geom_point(alpha = 0.25, colour = casa_teal, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
+  labs(title = paste0("As a rate  (r = ", sprintf("%.2f", r_rate), ")"),
+       x = "Pupils at end of KS4", y = "% disadvantaged") +
+  theme_minimal(base_size = 11)
+
+patchwork::wrap_plots(p_count, p_rate, nrow = 1)
+```
+
+::: {.incremental}
+- The left panel is a **strong** relationship that tells you nothing: big schools have more of everything
+- The right panel divides by size, and the relationship all but vanishes
+- Raw counts mostly measure **how big a place is**. Almost always, you want a rate.
+:::
+
+::: {.notes}
+The most common mistake in student data journalism. One slide is enough to
+inoculate against it, and it pays off again in week 6.
+:::
+
+## A row is a school, not a pupil
+
+::: {.notes}
+PLACEHOLDER — new content needed.
+
+Intended point: the ecological fallacy. We can say "schools with more
+disadvantaged pupils have lower average attainment". We cannot say
+"disadvantaged pupils do worse" from this data — that is a statement about
+pupils, and we only have school averages.
+
+Weeks 6-8 are careful about this in practice but never name it. Naming it here
+would pay off across the whole term.
+:::
 
 # Overview
-
 We've covered:
 
-- Data types: levels of measurements; quantitative & qualitative
-- Key metrics
-- Null values and outliers
+- Our dataset for the term: DfE school performance, 2022/23
+- Data types: levels of measurement; quantitative & qualitative
+- Key metrics, and why the mean was below the median
+- Null values, DfE suppression codes, and outliers
 - Visualising data
 
 # Practical
-
 Practical will focus on setting up Python environment and describing a dataset.
 
 - Have questions prepared!
