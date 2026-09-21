@@ -1333,30 +1333,6 @@ zdat |>
 - That contrast is the question weeks 6 to 8 spend three weeks answering
 :::
 
-## Boxplot for comparing multiple datasets {.smaller}
-
-```{r}
-#| label: att8-boxplot
-#| echo: false
-#| fig-width: 10
-#| fig-height: 4.8
-#| fig-align: center
-
-schools_all |>
-  mutate(MINORGROUP = replace_na(MINORGROUP, "Unknown"),
-         MINORGROUP = fct_reorder(MINORGROUP, ATT8SCR, .fun = median)) |>
-  ggplot(aes(x = ATT8SCR, y = MINORGROUP, fill = MINORGROUP)) +
-  geom_boxplot(alpha = 0.6, outlier.alpha = 0.25, outlier.size = 0.8) +
-  scale_fill_manual(values = casa_cols, guide = "none") +
-  labs(title = "Attainment 8 by school type",
-       x = "Average Attainment 8 score", y = NULL) +
-  theme_minimal(base_size = 13)
-```
-- Side-by-side boxplots make the comparison immediate
-- Note how much **wider** the independent school box is — not just lower
-- When there are lots of 'outliers' in the data
-- What are 'Outliers'?
-
 # Special values: null and outliers
 
 ## *Null* values {.smaller}

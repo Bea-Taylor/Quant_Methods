@@ -1,338 +1,656 @@
 ---
 title: 'Practical 1: describing and representing data'
-subtitle: "Starting with the 'Basics'"
+subtitle: "Getting to know the schools data"
 format:
-  html: default
+  html:
+    code-fold: true
+    code-tools: true
   ipynb: default
 filters:
   - qna
-  - quarto
+  - multicode
+  - quarto # keep Quarto's built-ins as the last filter or it won't work
 ---
 
-This week is focussed on ensuring that you're able to access the teaching materials and to run Jupyter notebooks locally, as well as describing a dataset in Python.
+## Introduction
 
-## Learning Outcomes
+In the lecture you watched me explore the Department for Education's school
+performance data: what type each variable was, what shape it had, where the
+gaps were, and which schools sat a long way from everyone else.
 
--   You have familiarised yourself with how to access the lecture notes and Python notebook of this module.
--   You have familiarised yourself with running the Python notebooks locally.
--   You have familiarised yourself with describing a dataset in Python.
+This practical asks you to do the same thing yourself, on the same data, but
+**slicing it a different way**. By the end you should be able to open an
+unfamiliar dataset and work out — quickly, and mostly visually — what is in
+it and what might trip you up.
 
-# Starting the Practical
+## Learning outcomes
 
-The process for every week will be the same: download the notebook to your `QM` folder, switch over to `JupyterLab` (which will be running in Podman/Docker) and get to work. If you want to save the completed notebook to your Github repo, you can `add`, `commit`, and `push` the notebook in Git after you download it. When you're done for the day, save your changes to the file (This is very important!), then `add`, `commit`, and `push` your work to save the completed notebook.
+By the end of this practical you should be able to:
+
+1. Read a multi-file dataset into R or Python and join it together
+2. Identify the **type** of each variable and say what you can legitimately do with it
+3. Produce summary statistics and, more importantly, the plots that go with them
+4. Compare a continuous variable across the groups of a categorical one
+5. Spot missing values, work out whether they are missing at random, and spot outliers
+6. Say what your data can and cannot support a claim about
 
 ::: callout-note
-Suggestions for a Better Learning Experience:
-
--   **Set your operating system and software language to English**: this will make it easier to follow tutorials, search for solutions online, and understand error messages.
-
--   **Save all files to a cloud storage service**: use platforms like Google Drive, OneDrive, Dropbox, or Git to ensure your work is backed up and can be restored easily when the laptop gets stolen or broken.
-
--   **Avoid whitespace in file names and column names in datasets**
+Every code block below is given in **both R and Python** — click the tabs to
+switch. Pick whichever you are more comfortable with. You do not need to do
+both, though comparing them is instructive.
 :::
 
-## Set up the tools
+## Before you start
 
-Please follow [the Setup page of CASA0013](https://jreades.github.io/fsds/setup/) to install and configure the computing platform, and [this page](https://jreades.github.io/fsds/sessions/week1.html) to get started on using the container & JupyterLab.
+The data is already in the course repository, under
+`sessions/L6_data/Performancetables_130242/2022-2023/`. You do not need to
+download anything.
 
-## Download the Notebook
+We use three files:
 
-So for this week, visit the [Week 1 of QM page](https://huanfachen.github.io/QM/sessions/week1.html#practical), you'll see that there is a 'preview' link and a a 'download' link. If you click the `preview` link you will be taken to the GitHub page for the notebook where it has been 'rendered' as a web page, which is not editable. To make the notebook useable on *your* computer, you need to `download` the IPYNB file.
+| File | What it holds |
+|------|---------------|
+| `england_ks4final.csv` | Key Stage 4 outcomes: Attainment 8, Progress 8, pupil numbers |
+| `england_abs.csv` | Absence rates |
+| `england_school_information.csv` | School characteristics: type, Ofsted, admissions policy, religious character |
 
-So now:
+# Task 1 — Read the data in
 
-1.  Click on the `Download` link.
-2.  The file should download automatically, but *if* you see a page of raw code, select `File` then `Save Page As...`.
-3.  Make sure you know where to find the file (e.g. Downloads or Desktop).
-4.  Move the file to your Git repository folder (e.g. `~/Documents/CASA/QM/`)
-5.  Check to see if your browser has added `.txt` to the file name:
-    -   If no, then you can move to adding the file.
-    -   If yes, then you can either fix the name in the Finder/Windows Explore, or you can do this in the Terminal using `mv <name_of_practical>.ipynb.txt <name_of_practical>.ipynb` (you can even do this in JupyterLab's terminal if it's already running).
+Two things in this code are worth understanding rather than copying blindly.
 
-## Running notebooks on JupyterLab
+**The `na` values.** The DfE does not leave blanks. It writes `SUPP` when a
+figure has been suppressed because the cohort is too small to publish safely,
+`NE` for no entries, `LOWCOV` for low coverage, and so on. If you do not tell
+your software these mean "missing", it will read the whole column as text.
 
-I am assuming that most of you are already running JupyterLab via Podman using the command.
+**Dropping rows with no URN.** The files carry local authority and national
+summary rows that have no school reference number. They are not schools. They
+also cause silent duplication when you join, because a missing key matches
+another missing key.
 
-If you are a bit confused with *container*, *JupyterLab*, *terminal*, or *Git*, please feel free to ask any questions.
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
 
-## Loading data
+```{r}
+#| label: load-r
+#| message: false
+#| warning: false
 
-We are going to describe the population of local authorities in the UK.
+library(tidyverse)
+library(here)
 
-The data is sourced from [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/articles/howyourareahaschangedin10yearscensus2021/2022-11-08) and is donwloadable [here](https://www.ons.gov.uk/visualisations/censusareachanges/data/mapdatadownload.csv).
+base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
 
-We have saved a copy of this dataset to the Github repo, in case that the dataset is removed from the website.
+na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
+
+ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
+                na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  filter(!is.na(URN)) |>
+  select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, PTFSM6CLA1A, PTPRIORLO) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+absence <- read_csv(file.path(base_path, "england_abs.csv"),
+                    na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  filter(!is.na(URN)) |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, PERCTOT) |>
+  mutate(PERCTOT = parse_number(as.character(PERCTOT)))
+
+school_info <- read_csv(file.path(base_path, "england_school_information.csv"),
+                        na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  select(URN, SCHNAME, LANAME, MINORGROUP, OFSTEDRATING,
+         ADMPOL, RELCHAR, GENDER)
+
+schools <- ks4 |>
+  left_join(school_info, by = "URN") |>
+  left_join(absence, by = "URN")
+
+nrow(schools)
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
-import pandas as pd
+#| label: load-py
+#| message: false
+#| warning: false
 
-# Read CSV file, skipping first 5 rows, using row 6 as header, and handling comma as thousands separator
-df_pop = pd.read_csv(
-    'https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L1_data/UK_census_population.csv',
-    skiprows=5,        # Skip first 5 rows. Wnhy?
-    thousands=',',     # Interpret commas as thousands separators
-    header=0           # After skipping, the first row becomes the header
+import pandas as pd
+import numpy as np
+from pathlib import Path
+
+def find_qm_root(start_path: Path = Path.cwd(), anchor: str = "_quarto.yml") -> Path:
+    """Walk up from start_path until we find the folder holding _quarto.yml."""
+    for parent in [start_path] + list(start_path.parents):
+        if (parent / anchor).exists() or parent.name == anchor:
+            return parent
+    raise FileNotFoundError(f"Anchor '{anchor}' not found in path hierarchy.")
+
+base_path = (find_qm_root() / "sessions" / "L6_data"
+             / "Performancetables_130242" / "2022-2023")
+
+na_all = ["", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT"]
+
+ks4 = pd.read_csv(base_path / "england_ks4final.csv",
+                  na_values=na_all, dtype={"URN": str}, low_memory=False)
+ks4 = ks4[ks4["URN"].notna()]
+ks4 = ks4[["URN", "ATT8SCR", "P8MEA", "TOTPUPS", "TPUP", "PTFSM6CLA1A", "PTPRIORLO"]]
+for c in ks4.columns.drop("URN"):
+    ks4[c] = pd.to_numeric(ks4[c].astype(str).str.replace("%", "", regex=False),
+                           errors="coerce")
+
+absence = pd.read_csv(base_path / "england_abs.csv",
+                      na_values=na_all, dtype={"URN": str}, low_memory=False)
+absence = absence[absence["URN"].notna()].drop_duplicates("URN")
+absence = absence[["URN", "PERCTOT"]]
+absence["PERCTOT"] = pd.to_numeric(absence["PERCTOT"], errors="coerce")
+
+school_info = pd.read_csv(base_path / "england_school_information.csv",
+                          na_values=na_all, dtype={"URN": str}, low_memory=False)
+school_info = school_info[["URN", "SCHNAME", "LANAME", "MINORGROUP",
+                           "OFSTEDRATING", "ADMPOL", "RELCHAR", "GENDER"]]
+
+schools = ks4.merge(school_info, on="URN", how="left") \
+             .merge(absence, on="URN", how="left")
+
+len(schools)
+```
+:::
+
+# Task 2 — First look: what have you got?
+
+Before computing anything, find out how big the data is, what the columns are
+called, and what types your software thinks they are.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: look-r
+dim(schools)
+glimpse(schools)
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: look-py
+print(schools.shape)
+schools.info()
+```
+:::
+
+::: {.callout-tip title="Question"}
+How many rows are there, and how many of them actually have an Attainment 8
+score? Why might those two numbers differ?
+:::
+
+::: qna
+#### Question
+
+``` r
+# fill in the blanks
+nrow(schools)
+sum(??(schools$ATT8SCR))
+```
+
+#### Answer
+
+```{r}
+#| label: count-answer
+nrow(schools)
+sum(!is.na(schools$ATT8SCR))
+```
+
+Roughly a fifth of the rows have no Attainment 8 score at all. Some are
+schools that entered no pupils for KS4; some are schools whose results were
+suppressed. **We return to this in Task 7 — do not just delete them yet.**
+:::
+
+# Task 3 — What kind of variables are these?
+
+In the lecture we sorted variables two ways: Stevens' four **levels of
+measurement**, and the finer list of **statistical data types**.
+
+Work through this table for the columns in your data. The first row is done
+for you.
+
+| Variable | What it is | Level of measurement | Statistical type |
+|----------|-----------|---------------------|------------------|
+| `ATT8SCR` | Average Attainment 8 score | ratio | real-valued |
+| `TOTPUPS` | Pupils on roll | ? | ? |
+| `OFSTEDRATING` | Ofsted judgement | ? | ? |
+| `LANAME` | Local authority | ? | ? |
+| `P8MEA` | Progress 8 | ? | ? |
+| `PERCTOT` | % of sessions missed | ? | ? |
+
+::: qna
+#### Question
+
+Have a go before revealing. The trap is `P8MEA` — think about what its zero means.
+
+#### Answer
+
+| Variable | Level of measurement | Statistical type |
+|----------|---------------------|------------------|
+| `TOTPUPS` | ratio | count |
+| `OFSTEDRATING` | ordinal | ordinal |
+| `LANAME` | nominal | categorical |
+| `P8MEA` | **interval** | real-valued additive |
+| `PERCTOT` | ratio | real-valued multiplicative |
+
+`P8MEA` has a meaningful zero — average expected progress — but it is not a
+*true* zero, so ratios are meaningless. A school on 1.0 has not made twice
+the progress of a school on 0.5.
+:::
+
+# Task 4 — Describe one continuous variable
+
+Pick a continuous variable. `ATT8SCR` is the obvious one, but `PERCTOT`
+(absence) or `PTFSM6CLA1A` (% disadvantaged) are just as good, and it is more
+interesting if the room does not all pick the same one.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: describe-r
+schools |>
+  summarise(
+    n      = sum(!is.na(ATT8SCR)),
+    mean   = mean(ATT8SCR, na.rm = TRUE),
+    median = median(ATT8SCR, na.rm = TRUE),
+    sd     = sd(ATT8SCR, na.rm = TRUE),
+    min    = min(ATT8SCR, na.rm = TRUE),
+    max    = max(ATT8SCR, na.rm = TRUE)
+  )
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: describe-py
+schools["ATT8SCR"].describe()
+```
+:::
+
+::: {.callout-tip title="Question"}
+Is the mean above or below the median? What does that tell you before you
+have plotted anything?
+:::
+
+# Task 5 — Look at its shape
+
+A summary table can hide almost anything. Plot it.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: hist-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+ggplot(schools, aes(x = ATT8SCR)) +
+  geom_histogram(bins = 45, fill = "#4E3C56", alpha = 0.7) +
+  geom_vline(xintercept = mean(schools$ATT8SCR, na.rm = TRUE),
+             colour = "#E16FCA", linewidth = 1) +
+  geom_vline(xintercept = median(schools$ATT8SCR, na.rm = TRUE),
+             colour = "black", linetype = "dashed") +
+  labs(title = "Attainment 8, all schools with a KS4 result",
+       subtitle = "pink = mean, dashed = median",
+       x = "Average Attainment 8 score", y = "Number of schools") +
+  theme_minimal()
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: hist-py
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.histplot(data=schools, x="ATT8SCR", bins=45, color="#4E3C56",
+             alpha=0.7, ax=ax)
+ax.axvline(schools["ATT8SCR"].mean(), color="#E16FCA", linewidth=2)
+ax.axvline(schools["ATT8SCR"].median(), color="black", linestyle="--")
+ax.set_title("Attainment 8, all schools with a KS4 result\npink = mean, dashed = median")
+ax.set_xlabel("Average Attainment 8 score")
+ax.set_ylabel("Number of schools")
+sns.despine()
+plt.show()
+```
+:::
+
+::: {.callout-tip title="Questions"}
+1. Is this one distribution, or more than one stuck together?
+2. Which of the mean and the median is the better summary here, and why?
+3. What would you need to know about the schools to explain the shape?
+:::
+
+# Task 6 — Now split it up
+
+This is the heart of the practical.
+
+In the lecture I split Attainment 8 by **school type**, and the low hump
+turned out to be special schools. Your job is to split it by something
+**different** and see what you find.
+
+From here on we work only with mainstream state-funded secondaries, so that
+we are comparing like with like.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: mainstream-r
+mainstream <- schools |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"), !is.na(ATT8SCR))
+
+nrow(mainstream)
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: mainstream-py
+mainstream = schools[
+    schools["MINORGROUP"].isin(["Academy", "Maintained school"])
+    & schools["ATT8SCR"].notna()
+].copy()
+
+len(mainstream)
+```
+:::
+
+## A worked example: admissions policy
+
+`ADMPOL` records whether a school selects by ability. Here is the comparison
+done properly — a table *and* a plot, because neither is enough on its own.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: admpol-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+mainstream |>
+  filter(!is.na(ADMPOL)) |>
+  group_by(ADMPOL) |>
+  summarise(n = n(),
+            mean = round(mean(ATT8SCR), 1),
+            median = round(median(ATT8SCR), 1),
+            sd = round(sd(ATT8SCR), 1),
+            .groups = "drop") |>
+  arrange(desc(n))
+
+mainstream |>
+  filter(!is.na(ADMPOL)) |>
+  ggplot(aes(x = ATT8SCR, y = ADMPOL, fill = ADMPOL)) +
+  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
+  geom_boxplot(width = 0.12, fill = "white", alpha = 0.9,
+               outlier.size = 0.6, outlier.alpha = 0.4) +
+  scale_fill_manual(values = c("#2E6260", "#9DBB65", "#4E3C56"), guide = "none") +
+  labs(x = "Average Attainment 8 score", y = NULL,
+       title = "Attainment 8 by admissions policy") +
+  theme_minimal()
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: admpol-py
+sub = mainstream[mainstream["ADMPOL"].notna()]
+
+print(sub.groupby("ADMPOL")["ATT8SCR"]
+         .agg(n="size", mean="mean", median="median", sd="std")
+         .round(1)
+         .sort_values("n", ascending=False))
+
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.violinplot(data=sub, x="ATT8SCR", y="ADMPOL", scale="count",
+               inner=None, palette=["#2E6260", "#9DBB65", "#4E3C56"], ax=ax)
+sns.boxplot(data=sub, x="ATT8SCR", y="ADMPOL", width=0.12,
+            showfliers=True, boxprops={"facecolor": "white"}, ax=ax)
+ax.set_title("Attainment 8 by admissions policy")
+ax.set_xlabel("Average Attainment 8 score")
+ax.set_ylabel("")
+sns.despine()
+plt.show()
+```
+:::
+
+::: {.callout-important title="Why a violin and not just a boxplot"}
+The violin is scaled by **count**, so its width tells you how many schools
+are in each group. A boxplot alone would draw the 163 selective schools and
+the 2,815 non-selective ones at exactly the same size, which would badly
+mislead you about how much evidence sits behind each summary.
+:::
+
+::: {.callout-tip title="Questions"}
+1. How big is the gap in mean Attainment 8 between selective and non-selective schools?
+2. Is the **spread** different too, or only the middle?
+3. Does this tell you selective schools *teach* better? What else could explain it?
+:::
+
+## Your turn
+
+Repeat the table and the plot above using a **different** grouping variable.
+Choose one of:
+
+- `OFSTEDRATING` — the Ofsted judgement
+- `GENDER` — mixed, boys, or girls
+- `RELCHAR` — religious character
+- `LANAME` — local authority (pick a handful, there are 150)
+
+::: qna
+#### Question
+
+``` r
+# swap ADMPOL for your chosen variable throughout
+mainstream |>
+  filter(!is.na(??)) |>
+  group_by(??) |>
+  summarise(n = n(),
+            mean = round(mean(ATT8SCR), 1),
+            sd = round(sd(ATT8SCR), 1),
+            .groups = "drop") |>
+  arrange(desc(n))
+```
+
+#### Answer
+
+```{r}
+#| label: yourturn-answer
+mainstream |>
+  filter(!is.na(OFSTEDRATING)) |>
+  group_by(OFSTEDRATING) |>
+  summarise(n = n(),
+            mean = round(mean(ATT8SCR), 1),
+            sd = round(sd(ATT8SCR), 1),
+            .groups = "drop") |>
+  arrange(desc(n))
+```
+
+Note that the ordering here comes out alphabetically, not by how good the
+rating is. Ofsted rating is **ordinal**, and your software does not know
+that. Converting it to an ordered factor fixes every table and plot at once.
+:::
+
+::: {.callout-warning title="A trap worth falling into once"}
+Try `GENDER`. Single-sex schools look dramatically better than mixed ones.
+Now cross-tabulate `GENDER` against `ADMPOL` before you believe it.
+:::
+
+# Task 7 — Missing values
+
+Earlier you found that not every row has an Attainment 8 score. Now find out
+whether those gaps are random.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: missing-r
+# how much is missing, by column
+schools |>
+  summarise(across(c(ATT8SCR, P8MEA, PERCTOT, PTFSM6CLA1A, OFSTEDRATING),
+                   ~ round(100 * mean(is.na(.x)), 1))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "pct_missing")
+
+# are the missing ones different from the rest?
+schools |>
+  filter(!is.na(TOTPUPS)) |>
+  mutate(p8 = if_else(is.na(P8MEA), "Progress 8 missing", "Progress 8 present")) |>
+  group_by(p8) |>
+  summarise(schools = n(), median_pupils = median(TOTPUPS), .groups = "drop")
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: missing-py
+cols = ["ATT8SCR", "P8MEA", "PERCTOT", "PTFSM6CLA1A", "OFSTEDRATING"]
+print((schools[cols].isna().mean() * 100).round(1))
+
+tmp = schools[schools["TOTPUPS"].notna()].copy()
+tmp["p8"] = np.where(tmp["P8MEA"].isna(),
+                     "Progress 8 missing", "Progress 8 present")
+print(tmp.groupby("p8")["TOTPUPS"].agg(schools="size", median_pupils="median"))
+```
+:::
+
+::: {.callout-tip title="Questions"}
+1. Are schools with a missing Progress 8 score bigger or smaller than average?
+2. Look up what `SUPP` means in the DfE guidance. Does that explain the pattern?
+3. If you dropped every row with a missing value, which schools would you have quietly removed from your analysis?
+:::
+
+# Task 8 — Outliers
+
+Apply both of the rules from the lecture to your chosen variable and compare
+what they flag.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: outliers-r
+x  <- mainstream$ATT8SCR
+mu <- mean(x); sdv <- sd(x)
+q  <- quantile(x, c(0.25, 0.75)); iqr <- q[2] - q[1]
+
+tibble(
+  rule = c("|z| > 3", "Tukey 1.5 x IQR"),
+  flagged = c(sum(abs(x - mu) / sdv > 3),
+              sum(x < q[1] - 1.5 * iqr | x > q[2] + 1.5 * iqr))
 )
 
-print(df_pop.head())
+# who are they?
+mainstream |>
+  mutate(z = (ATT8SCR - mu) / sdv) |>
+  filter(abs(z) > 3) |>
+  arrange(desc(z)) |>
+  select(SCHNAME, LANAME, ADMPOL, ATT8SCR, z) |>
+  head(8)
 ```
 
-You might wonder why skipping the first 5 rows and setting *thousands=','*. I knew about this after opening this csv file in a text editor and lots of trial-and-errors.
-
-<!-- ![](%7B%7B%3C%20var%20module.web%20%3E%7D%7D/sessions/L1_images/uk_pop_csv_screenshot.jpg){width="600"} -->
-
-![](https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L1_images/uk_pop_csv_screenshot.jpg){width="600"}
-
-Then, we check the first few rows of this dataset using *df_pop.head()*.
-
-## Describing the dataframe
-
-### Which columns are included?
+#### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
-list(df_pop.columns)
+#| label: outliers-py
+x = mainstream["ATT8SCR"]
+mu, sdv = x.mean(), x.std()
+q1, q3 = x.quantile(0.25), x.quantile(0.75)
+iqr = q3 - q1
+
+print({"|z| > 3": int((abs(x - mu) / sdv > 3).sum()),
+       "Tukey 1.5 x IQR": int(((x < q1 - 1.5 * iqr) | (x > q3 + 1.5 * iqr)).sum())})
+
+out = mainstream.assign(z=(mainstream["ATT8SCR"] - mu) / sdv)
+print(out[out["z"].abs() > 3]
+        .sort_values("z", ascending=False)[["SCHNAME", "LANAME", "ADMPOL", "ATT8SCR", "z"]]
+        .head(8))
+```
+:::
+
+::: {.callout-tip title="Questions"}
+1. Do the two rules flag the same number of schools? Should they?
+2. Look at the `ADMPOL` column for the schools at the top. What do they have in common?
+3. Are these errors, or are they the most informative rows in the file?
+:::
+
+# Task 9 — Putting variables on the same scale
+
+Different variables are measured in different units, so you cannot compare
+"3 points above average on attainment" with "300 pupils above average in
+size". Standard scores fix that.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: zscore-r
+zvars <- c("ATT8SCR", "PERCTOT", "PTFSM6CLA1A", "PTPRIORLO", "TOTPUPS")
+
+mainstream |>
+  mutate(across(all_of(zvars), ~ as.numeric(scale(.x)), .names = "z_{.col}")) |>
+  filter(SCHNAME == "Longhill High School") |>
+  select(SCHNAME, starts_with("z_")) |>
+  pivot_longer(-SCHNAME, names_to = "variable", values_to = "z") |>
+  mutate(z = round(z, 2))
 ```
 
-It is a pain to deal with whitespaces in a column, so good practice is to replace the whitespaces (eg tabs, multiple spaces) within column names with *underscore*.
+#### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
-df_pop.columns = df_pop.columns.str.replace(r'\s+', '_', regex=True)
-print(list(df_pop.columns)) # check again
+#| label: zscore-py
+zvars = ["ATT8SCR", "PERCTOT", "PTFSM6CLA1A", "PTPRIORLO", "TOTPUPS"]
+
+z = mainstream.copy()
+for v in zvars:
+    z["z_" + v] = (z[v] - z[v].mean()) / z[v].std()
+
+row = z[z["SCHNAME"] == "Longhill High School"]
+print(row[["SCHNAME"] + ["z_" + v for v in zvars]].round(2).T)
 ```
+:::
 
-### How many rows & cols are included?
+::: {.callout-tip title="Your turn"}
+Pick a school you know — your own, or one in a local authority you are
+interested in — and produce its profile. Which variables is it unusual on?
+Plot the profile as a bar chart with zero as the centre line.
+:::
 
-```{python}
-rows, cols = df_pop.shape
-print(f"Rows: {rows}, Columns: {cols}")
-```
+# Task 10 — Write it down
 
-### Geography matters
+The point of all of the above is to be able to say something defensible. In
+a few sentences each:
 
-This dataset contains multiple geographies of UK and different geographies are incomparable. We can check the *Area_type* column:
-
-```{python}
-print(df_pop.Area_type.value_counts())
-```
-
-So there are 355 records of *Local Authority*， 9 records of *Region*, 2 of *Country*, and 1 of 'National'. For an introduction to these terms, see [this article on ONS](https://www.ons.gov.uk/methodology/geography/ukgeographies/administrativegeography/england).
-
-We will focus on the local authorities, so we apply a filter:
-
-```{python}
-df_pop_la = df_pop[df_pop['Area_type'] == 'Local Authority']
-```
-
-### Overview of the columns
-
-There are two pandas functions that give overview of a dataframe. - `info()`: shows column data types, non‑null counts, and memory usage. - `describe()`: shows summary statistics for numeric data (count, mean, std, min, quartiles, max) - `describe(include='all')`: for both numeric data and non‑numeric data (count, unique, top value, frequency).
-
-```{python}
-print(df_pop_la.info())
-print(df_pop_la.describe())
-```
-
-## Describing census 2021 population
-
-Now, we focus on describing the local authority population from census 2021. The first question is, what data type is this variable - *nominal*, *ordinal*, *interval*, or *ratio*？
+1. **What is in this dataset?** How many schools, over what period, measuring what?
+2. **What did you filter out, and what did that change?** You dropped special and independent schools. Which questions can you no longer answer?
+3. **What is the shape of your chosen variable, and is the mean a good summary of it?**
+4. **Which grouping variable did you use, and what did the comparison show?**
+5. **What is missing, and is it missing at random?**
+6. **What would you want to check before claiming that the difference you found is real?**
 
 ::: callout-note
-The *data type* of a variable is different from *how it’s stored in a computer*. For example, the *Area_type* variable can be encoded for convenience as 0 (“national”), 1 (“country”), and 2 (“local authority”). Although these are stored as numbers, Area_type is not truly numeric data — it’s an *nominal* variable.
+Question 6 is the one the rest of this course exists to answer. Keep your
+notes — we come back to this data in weeks 5 to 10.
 :::
 
-Does it make sense to say 'the population of LA AAA is twice of LA BBB'? Yes. So, this variable is of *ratio* type.
+## You're done
 
-### max and min
-
-What is the maximum population size in census 2021?
-
-```{Python}
-print("Max population: ", df_pop_la['Population_2021'].max(skipna=True))
-```
-
-Which LAs have the maximum population size? *The code below is a bit complicated*.
-
-```{python}
-print("{} have the maximum population of {}".format(
-    ", ".join(df_pop_la.loc[df_pop_la['Population_2021'] == df_pop_la['Population_2021'].max(skipna=True), 'Area_name']), 
-    df_pop_la['Population_2021'].max(skipna=True))
-    )
-```
-
-What it does:
-
--   Finds the *max* population while ignoring NaNs. *It is always safe to use skipna=True, even though there is no NA values.*
--   Selects all rows with that population.
--   Joins their Area_name values into a comma-separated string.
-
-Two new Python functions here:
-
--   *format()*: Inserts variables into a string by replacing {} placeholders in order with provided arguments.
-
--   *join()*: Combines the elements of an iterable into one string using the given separator before .join().
-
-Which LAs have the minimum population?
-
-```{python}
-print("{} have the minimum population of {}".format(
-    ", ".join(df_pop_la.loc[df_pop_la['Population_2021'] == df_pop_la['Population_2021'].min(skipna=True), 'Area_name']), 
-    df_pop_la['Population_2021'].min(skipna=True))
-    )
-```
-
-### Standard deviation
-
-The result from `df_pop_la.describe()` indicates that the standard deviation of Population_2021 is `2.245442e+05`.
-
-Another way to calculate this standard deviation and to reformat it is:
-
-```{python}
-std_dev = df_pop_la['Population_2021'].std()
-# plain notation
-print("The standard deviation of Population_2021 is: {}".format(std_dev)) 
-# scientific notation
-print("Using scientific notation: {:.3e}".format(std_dev)) 
-# thousands separator notation + 2 decimal places
-print("Using thousands separator notation: {:,.2f}".format(std_dev))
-```
-
-There are several ways to represent numbers, and which one you choose depends on the situation.
-
-Equally important is to ensure the numbers are meaningful, or to use proper **significant figures**. For example, reporting a population’s standard deviation with 10 decimal places does not make sense.
-
-### Null value and outliers?
-
-Are there Null values or outliers in this variable? From results of `info()`, there are no NA values.
-
-To detect outliers, we will implement the Tukey Fences method using pandas function, as pandas does not provide a built-in function for this method.
-
-```{python}
-# Calculate Q1, Q3, and IQR
-Q1 = df_pop_la['Population_2021'].quantile(0.25)
-Q3 = df_pop_la['Population_2021'].quantile(0.75)
-IQR = Q3 - Q1
-
-# Tukey's fences
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-
-# Detect outliers
-outliers = df_pop_la[
-    (df_pop_la['Population_2021'] < lower_bound) |
-    (df_pop_la['Population_2021'] > upper_bound)
-]
-
-print("Lower bound:", lower_bound)
-print("Upper bound:", upper_bound)
-print("How many outliers?", outliers.shape[0])
-print("Outliers:\n", outliers)
-```
-
-There are 33 outliers in this dataset. Think about the three types of outliers that we discussed. Which type do these 33 outliers beloong to?
-
--   **Error Outlier**
--   **Irregular Pattern Outlier**
--   **Influential Outlier**
-
-### Boxplot
-
-To create a boxplot of this variable:
-
-```{python}
-import matplotlib.pyplot as plt
-
-# Create boxplot
-df_pop_la['Population_2021'].plot(kind='box', title='LA Population 2021 Boxplot')
-
-plt.ylabel('Population')
-plt.grid(axis='y', linestyle='--', alpha=0.6)
-plt.show()
-```
-
-What do you observe from this boxplot? There are lots of values above the
-
-## Exploring Percentage_change
-
-*Now*, we turn to explore the variable *Percentage_change*, which represents the relative change from the 2011 census to 2021 census.
-
-Try completing the code below on your own. Practice makes perfect!
-
-### Which LAs experienced the largest population percentage change? To what extent?
-
-::: qna
-#### Question
-
-``` python
-print("{} have the largest population percentage change of {}%".format(
-    ", ".join(df_pop_la.loc[??['??'] == ??['??'].max(skipna=True), 'Area_name']), 
-    df_pop_la['Population_2021'].??(skipna=True))
-    )
-```
-
-#### Answer
-
-```{python}
-print("{} have the largest population percentage change of {}%".format(
-    ", ".join(df_pop_la.loc[df_pop_la['Percentage_change'] == df_pop_la['Percentage_change'].max(skipna=True), 'Area_name']), 
-    df_pop_la['Percentage_change'].max(skipna=True))
-    )
-```
-:::
-
-### Which LAs experienced the smallest population percentage change? To what extent?
-
-::: qna
-#### Question
-
-``` python
-print("{} have the smallest population percentage change of {}%".format(
-    ", ".??(df_pop_la.loc[df_pop_la[??] == ??['Percentage_change'].??(skipna=True), 'Area_name']), 
-    df_pop_la['Percentage_change'].??(skipna=True))
-    )
-```
-
-#### Answer
-
-```{python}
-print("{} have the smallest population percentage change of {}%".format(
-    ", ".join(df_pop_la.loc[df_pop_la['Percentage_change'] == df_pop_la['Percentage_change'].min(skipna=True), 'Area_name']), 
-    df_pop_la['Percentage_change'].min(skipna=True))
-    )
-```
-:::
-
-### Making a boxplot of Percentage_change
-
-::: qna
-#### Question
-
-``` python
-import matplotlib.pyplot as plt
-
-# Create boxplot
-df_pop_la[??].plot(kind=??, title='LA Population Percentage Change Boxplot')
-
-plt.??('Percentage change')
-plt.grid(axis='y', linestyle='--', alpha=0.6)
-plt.show()
-```
-
-#### Answer
-
-```{python}
-import matplotlib.pyplot as plt
-
-# Create boxplot
-df_pop_la['Percentage_change'].plot(kind='box', title='LA Population Percentage Change Boxplot')
-
-plt.ylabel('Percentage change')
-plt.grid(axis='y', linestyle='--', alpha=0.6)
-plt.show()
-```
-:::
-
-## You're Done!
-
-Congratulations on completing the first QM practical session! If you are still working on it, take you time.
-
-Don’t worry about understanding every detail of the Python code — what matters most is knowing which functions to use for a specific task, like checking minimum and maximum values or generating boxplots, and knowing how to debug when it goes wrong. Remember, practice makes perfect.
+Do not worry if some of the syntax is unfamiliar. What matters is the habit:
+look at the data before you model it, plot it before you summarise it, and
+find out what is missing before you decide it does not matter.
