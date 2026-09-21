@@ -506,21 +506,26 @@ Stevens says these are the same kind of thing. Let's look at them.
 two <- schools_mainstream |> filter(!is.na(TOTPUPS), !is.na(PERCTOT))
 skw <- function(x) mean((x - mean(x))^3) / sd(x)^3
 
-t1 <- ggplot(two, aes(x = TOTPUPS)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 35,
-                 fill = casa_purple, alpha = 0.4) +
-  geom_density(colour = casa_purple, linewidth = 1) +
-  labs(title = paste0("Pupils on roll  (skew ", sprintf("%.2f", skw(two$TOTPUPS)), ")"),
-       x = NULL, y = "Density") +
-  theme_minimal(base_size = 13) + theme(axis.text.y = element_blank())
+shape_panel <- function(d, v, fill_col, ttl, ylab) {
+  x <- d[[v]]
+  ggplot(d, aes(x = .data[[v]])) +
+    geom_histogram(aes(y = after_stat(density)), bins = 35,
+                   fill = fill_col, alpha = 0.4) +
+    geom_density(colour = fill_col, linewidth = 1) +
+    geom_vline(xintercept = mean(x), colour = casa_pink, linewidth = 1) +
+    geom_vline(xintercept = median(x), colour = "black",
+               linetype = "dashed", linewidth = 0.8) +
+    labs(title = paste0(ttl, "  (skew ", sprintf("%.2f", skw(x)), ")"),
+         subtitle = paste0("mean ", sprintf("%.1f", mean(x)),
+                           " | median ", sprintf("%.1f", median(x))),
+         x = NULL, y = ylab) +
+    theme_minimal(base_size = 13) +
+    theme(axis.text.y = element_blank(),
+          plot.subtitle = element_text(size = 9, colour = "grey30"))
+}
 
-t2 <- ggplot(two, aes(x = PERCTOT)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 35,
-                 fill = casa_teal, alpha = 0.4) +
-  geom_density(colour = casa_teal, linewidth = 1) +
-  labs(title = paste0("% sessions missed  (skew ", sprintf("%.2f", skw(two$PERCTOT)), ")"),
-       x = NULL, y = NULL) +
-  theme_minimal(base_size = 13) + theme(axis.text.y = element_blank())
+t1 <- shape_panel(two, "TOTPUPS", casa_purple, "Pupils on roll", "Density")
+t2 <- shape_panel(two, "PERCTOT", casa_teal, "% sessions missed", NULL)
 
 patchwork::wrap_plots(t1, t2, nrow = 1)
 ```
@@ -528,7 +533,8 @@ patchwork::wrap_plots(t1, t2, nrow = 1)
 ::: {.incremental}
 - Left: roughly symmetric, a lump in the middle with tails either side
 - Right: a hard floor near zero and a long tail to the right — **skewed**
-- **Skew** measures that asymmetry: 0 is symmetric, positive means a right tail
+- **Skew** measures that asymmetry — it is built from *cubed* deviations from the mean, so unlike variance it keeps the sign and can tell you *which* tail is longer. 0 is symmetric, positive means a right tail
+- Note where the mean sits relative to the median in each panel
 :::
 
 . . .
@@ -536,46 +542,6 @@ patchwork::wrap_plots(t1, t2, nrow = 1)
 Same level of measurement. Different shapes, different distributions, and
 different models. Stevens cannot see the difference — so we need something
 more specific.
-
-## How skew is calculated {.smaller}
-
-::::: columns
-::: {.column width="48%"}
-**Variance** uses *squared* deviations:
-
-$$\sigma^2 = \frac{\sum (y_i - \bar{y})^2}{n}$$
-
-Squaring throws the sign away. Variance tells you **how far** values sit from
-the mean, never **which side** they sit on.
-:::
-
-::: {.column width="52%"}
-**Skew** uses *cubed* deviations:
-
-$$g_1 = \frac{\frac{1}{n}\sum (y_i - \bar{y})^3}{\sigma^3}$$
-
-Cubing **keeps** the sign — a value below the mean stays negative.
-:::
-:::::
-
-. . .
-
-::: {.incremental}
-- If the large deviations sit mostly to the **right**, the cubes sum to a positive number
-- Dividing by $\sigma^3$ cancels the units, so skew is comparable across variables
-- Rough guide: below 0.5 is near-symmetric, above 1 is strongly skewed
-:::
-
-::: {.notes}
-Worth linking back explicitly: we said earlier that squaring makes outliers
-count heavily in the variance. Cubing makes them count even more heavily, and
-lets them pull in a direction. Skew is essentially "which tail is doing the
-damage".
-
-Small print if anyone asks: R's sd() divides by n-1 while the textbook
-population formula divides by n, so the figure on the previous slide differs
-from the strict definition in about the fourth decimal place.
-:::
 
 ## Simple statistical data types {.smaller}
 
@@ -900,13 +866,6 @@ sensible order because OFSTEDRATING was converted to an ordered factor in the
 setup chunk.
 :::
 
-## Quiz time
-
-::: {.notes}
-Mentimeter quiz — classify a handful of DfE variables by level of measurement.
-Suggested items: TOTPUPS, OFSTEDRATING, LANAME, ATT8SCR, P8MEA, OFSTEDLASTINSP.
-:::
-
 # How do you describe a ratio variable?
 
 ## Key metrics
@@ -1147,11 +1106,9 @@ $$\sigma^2 = \frac{\sum_{i=1}^{n} (y_i - \bar{y})^2}{n}$$
 
 $$\sigma = \sqrt{\sigma^2}$$
 
-. . .
-
-Squaring is what makes variance awkward to talk about: if $y$ is in GCSE
-points, the variance is in **points²**. The standard deviation is back in
-points, which is why we almost always report that instead.
+Squaring is what makes variance awkward to talk about: 
+- if $y$ is in GCSE points, the variance is in **points²**. 
+- The standard deviation is back in points, which is why we almost always report that instead.
 :::
 
 ::: {.column width="48%"}
@@ -1258,6 +1215,7 @@ ggplot(cmpg, aes(x = ATT8SCR)) +
 ```
 
 ::: {.incremental}
+- Mean a better summary when variance is small and distribution normal
 - If the data are roughly normal, about **two thirds** of observations sit inside the shaded band
 - For maintained schools that band is ~16 points wide — the mean tells you a lot
 - For independent schools it is ~38 points — more than a third of the whole 0–90 scale
