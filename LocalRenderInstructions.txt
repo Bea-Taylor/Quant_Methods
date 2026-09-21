@@ -1,7 +1,0 @@
-To the localhost preview: everything is already installed in the saved image, so it goes straight to rendering. Run this from the Quant_Methods folder in PowerShell:
-
-docker run --rm --name qm-preview -v "${PWD}:/project" -v /project/.venv-reticulate -p 4200:4200 -w /project -e QUARTO_PYTHON=/opt/venv/bin/python -e RETICULATE_PYTHON=/opt/venv/bin/python quant-methods-render:ready quarto preview --no-browser --host 0.0.0.0 --port 4200
-
-To stop the preview:
-
-docker stop qm-preview

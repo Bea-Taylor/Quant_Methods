@@ -17,7 +17,13 @@ Rscript -e 'if (!requireNamespace("renv", quietly = TRUE)) install.packages("ren
 echo "==> casaviz (from setup/casaviz.zip)"
 if ! Rscript -e 'quit(status = as.integer(!requireNamespace("casaviz", quietly = TRUE)))'; then
   rm -rf /tmp/casaviz && unzip -q setup/casaviz.zip -d /tmp/casaviz
-  R CMD INSTALL /tmp/casaviz
+  # Install into the renv project library, not the default site-library: renv's
+  # sandbox trims .libPaths() to the project library plus its own sandbox, so a
+  # plain `R CMD INSTALL` lands somewhere library(casaviz) cannot reach.
+  # The path goes via a file rather than $(...): renv writes some of its startup
+  # notices to stdout, so command substitution captures those too.
+  Rscript -e 'writeLines(.libPaths()[1], "/tmp/casaviz-lib")' >/dev/null 2>&1
+  R CMD INSTALL -l "$(cat /tmp/casaviz-lib)" /tmp/casaviz
   rm -rf /tmp/casaviz
 fi
 
@@ -27,9 +33,6 @@ pkgs <- c("magick", "eurostat", "downlit", "xml2", "giscoR", "ggimage", "see", "
 missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) install.packages(missing, repos = "https://cloud.r-project.org")
 '
-
-echo "==> Custom revealjs theme"
-cp css/casa-slides.scss /opt/quarto/share/formats/revealjs/themes/ 2>/dev/null || true
 
 if [ "${1:-}" = "preview" ]; then
   shift
