@@ -726,25 +726,54 @@ ggplot(p8, aes(x = P8MEA)) +
 abs_pos <- schools_mainstream |> filter(!is.na(PERCTOT), PERCTOT > 0)
 sk <- function(x) mean((x - mean(x))^3) / sd(x)^3
 
+mu_abs  <- mean(abs_pos$PERCTOT)
+med_abs <- median(abs_pos$PERCTOT)
+
+# Both panels plot the same variable and mark the same two statistics, so the
+# lines sit at identical values. Only the spacing of the axis differs.
+abs_lines <- list(
+  geom_vline(xintercept = mu_abs,  colour = casa_pink, linewidth = 1),
+  geom_vline(xintercept = med_abs, colour = "black",
+             linetype = "dashed", linewidth = 0.8)
+)
+
 p_raw <- ggplot(abs_pos, aes(x = PERCTOT)) +
   geom_histogram(bins = 40, fill = casa_purple, alpha = 0.65) +
+  abs_lines +
   labs(title = paste0("As published  (skew = ", sprintf("%.2f", sk(abs_pos$PERCTOT)), ")"),
+       subtitle = paste0("mean ", sprintf("%.1f", mu_abs),
+                         " | median ", sprintf("%.1f", med_abs)),
        x = "% sessions missed", y = "Schools") +
-  theme_minimal(base_size = 11)
+  theme_minimal(base_size = 11) +
+  theme(plot.subtitle = element_text(size = 8, colour = "grey30"))
 
-p_log <- ggplot(abs_pos, aes(x = log(PERCTOT))) +
+p_log <- ggplot(abs_pos, aes(x = PERCTOT)) +
   geom_histogram(bins = 40, fill = casa_teal, alpha = 0.65) +
-  labs(title = paste0("Logged  (skew = ", sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
-       x = "log(% sessions missed)", y = "Schools") +
-  theme_minimal(base_size = 11)
+  abs_lines +
+  scale_x_log10(breaks = c(3, 5, 10, 20, 30)) +
+  labs(title = paste0("On a log scale  (skew = ",
+                      sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
+       subtitle = "same mean, same median, same data",
+       x = "% sessions missed (log scale)", y = "Schools") +
+  theme_minimal(base_size = 11) +
+  theme(plot.subtitle = element_text(size = 8, colour = "grey30"))
 
 patchwork::wrap_plots(p_raw, p_log, nrow = 1)
 ```
 
 - Strictly positive, and **skewed** — a long tail of high-absence schools
-- Taking the logarithm makes it very nearly symmetric
+- Both panels show the same percentages, the same mean and the same median. Only the **spacing of the axis** changes: equal distances now mean equal *multiples* rather than equal *amounts*
+- On that spacing the distribution is very nearly symmetric, and the mean sits close to the middle of it
 - This is not a trick. It is what the data type tells us to do — and it is
   exactly what we do in **week 6** when we fit a log-log model.
+
+::: {.notes}
+If someone asks: the pink line is the ordinary arithmetic mean of the
+percentages, plotted at the same value on both panels. The natural centre of
+a multiplicative variable is really the geometric mean - exp of the mean of
+the logs - which lands closer to the median. Not worth opening up here, but
+it is the reason logged models are quoted as percentage changes.
+:::
 
 ## Why any of this matters {.smaller}
 
