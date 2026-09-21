@@ -1,7 +1,7 @@
 ---
 format: html
 date: last-modified
-author: "Beatrice Taylor"
+author: "Bea Taylor"
 title: "Week 2"
 subtitle: "Exploratory Data Analysis 2"
 ---
@@ -41,6 +41,6 @@ To save a copy of notebook to your own GitHub Repo: follow the GitHub link, clic
 
 ## Further resources
 
-- If you want to brush up on probability and statistics check out this Khan Academy course: [https://www.khanacademy.org/math/statistics-probability](https://www.khanacademy.org/math/statistics-probability). In particular I'd recommend unit 9 on 'Random variables' and unit 10 on 'Sampling distributions'. 
+- If you want to brush up on probability and statistics check out this Khan Academy course: [https://www.khanacademy.org/math/statistics-probability](https://www.khanacademy.org/math/statistics-probability). In particular unit 9 on 'Random variables' and unit 10 on 'Sampling distributions'. 
 - If you're interested in reading a bit more about the risks of biased data: [https://plus.maths.org/content/ai-be-judge-use-algorithms-criminal-justice-system](https://plus.maths.org/content/ai-be-judge-use-algorithms-criminal-justice-system)
 - If you're interested in reading more generally/casually about statistics I'd recommend 'The Art of Statistics: Learning from Data' by David Spielgelhalter. 

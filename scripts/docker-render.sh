@@ -1,33 +1,10 @@
 #!/usr/bin/env bash
-# Runs inside the `quant-methods-render` container (see Dockerfile / render-docker.sh).
-# Restores R deps then renders the Quarto project. Python deps and the
-# `qmFork` Jupyter kernel are baked into the image (see Dockerfile).
+# Runs inside the `quant-methods-render` container (see Dockerfile /
+# scripts/render.sh). R and Python packages are baked into the image at
+# build time (see Dockerfile) - there's nothing to restore here, just render.
 # Any arguments are passed straight through to `quarto render`.
 set -euo pipefail
 cd /project
-
-echo "==> R packages (renv::restore)"
-Rscript -e 'if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv", repos = "https://cloud.r-project.org"); renv::restore(prompt = FALSE)'
-
-echo "==> casaviz (from setup/casaviz.zip)"
-if ! Rscript -e 'quit(status = as.integer(!requireNamespace("casaviz", quietly = TRUE)))'; then
-  rm -rf /tmp/casaviz && unzip -q setup/casaviz.zip -d /tmp/casaviz
-  # Install into the renv project library, not the default site-library: renv's
-  # sandbox trims .libPaths() to the project library plus its own sandbox, so a
-  # plain `R CMD INSTALL` lands somewhere library(casaviz) cannot reach.
-  # The path goes via a file rather than $(...): renv writes some of its startup
-  # notices to stdout, so command substitution captures those too.
-  Rscript -e 'writeLines(.libPaths()[1], "/tmp/casaviz-lib")' >/dev/null 2>&1
-  R CMD INSTALL -l "$(cat /tmp/casaviz-lib)" /tmp/casaviz
-  rm -rf /tmp/casaviz
-fi
-
-echo "==> Extra R packages installed ad hoc in CI but not pinned in renv.lock"
-Rscript -e '
-pkgs <- c("magick", "eurostat", "downlit", "xml2", "giscoR", "ggimage", "see", "huxtable")
-missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
-if (length(missing)) install.packages(missing, repos = "https://cloud.r-project.org")
-'
 
 if [ "${1:-}" = "preview" ]; then
   shift

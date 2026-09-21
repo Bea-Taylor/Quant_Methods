@@ -1,37 +1,22 @@
 # Rendering the site locally
 
-Three ways to build or preview the site. All serve at <http://localhost:4200>.
+Two ways to build or preview the site. Both serve at <http://localhost:4200>.
 
 | Path | Needs | Use when |
 |---|---|---|
-| [A. Prebuilt image](#a-prebuilt-image) | Docker + the saved `quant-methods-render:ready` image | Day-to-day previewing, fastest start |
-| [B. Build from the Dockerfile](#b-build-from-the-dockerfile) | Docker | Fresh clone, new machine, or after `requirements.txt` changes |
-| [C. Host toolchain](#c-host-toolchain-local-only) | R + Python installed on the machine | You have no Docker, or want the fastest incremental renders |
+| [A. Docker](#a-docker) | Docker | Default. Fresh clone, new machine, day-to-day previewing |
+| [B. Host toolchain](#b-host-toolchain-local-only) | R + Python installed on the machine | You have no Docker, or want the fastest incremental renders |
 
 > **Copy commands from this file, not from a rendered Markdown preview.**
 > Rendered views escape underscores and ampersands as `\_` and `\&\&`, and
 > bash rejects those with `cd: too many arguments`.
 
-## A. Prebuilt image
+## A. Docker
 
-Everything is already installed in the saved image, so this goes straight to
-rendering. Run from the `Quant_Methods` folder in **PowerShell**:
-
-```powershell
-docker run --rm --name qm-preview -v "${PWD}:/project" -v renv-cache:/root/.cache/R/renv -v /project/.venv-reticulate -p 4200:4200 -w /project -e QUARTO_PYTHON=/opt/venv/bin/python -e RETICULATE_PYTHON=/opt/venv/bin/python quant-methods-render:ready quarto preview --no-browser --host 0.0.0.0 --port 4200
-```
-
-Stop it with:
-
-```powershell
-docker stop qm-preview
-```
-
-## B. Build from the Dockerfile
-
-Builds the image, then restores the R packages into the bind-mounted
-`renv/library` so later runs reuse them. First run is slow (~216 R packages);
-later runs are not.
+R and Python packages are both baked into the image at **build** time (see
+`Dockerfile`), outside `/project`, so a container never restores anything at
+`docker run` time - it goes straight to rendering. Rebuild after changing
+`renv.lock` or `requirements.txt`; otherwise the image is reused as-is.
 
 ```bash
 scripts/render.sh                     # render the whole site
@@ -39,11 +24,23 @@ scripts/render.sh sessions/week1.qmd  # render a single file
 scripts/render.sh preview             # live preview
 ```
 
-What the container does on each run is in `scripts/docker-render.sh`: restore
-renv, install `casaviz` from `setup/casaviz.zip`, add the CRAN packages that CI
-installs ad hoc but `renv.lock` does not pin, then render.
+`docker build` is the slow step the first time (~216 R packages via prebuilt
+binaries, a couple of minutes) or after a lockfile/requirements change; every
+render after that starts immediately.
 
-## C. Host toolchain (local only)
+There used to be a separate "prebuilt image" path referencing a
+`quant-methods-render:ready` tag. That tag was never produced by anything in
+this repo (no commit touching the `Dockerfile` created it) - it looks like a
+one-off local `docker commit` snapshot, not something `git clone` reproduces.
+`scripts/render.sh` above **is** the reproducible equivalent now: `docker
+build` alone produces a fully ready image.
+
+This also shrinks what Quarto has to crawl inside the bind mount before
+rendering anything (see the Windows gotcha in **Gotchas** below):
+`renv/library` and `.venv-reticulate` no longer exist under `/project` at
+all, since the packages they used to hold now live in the image instead.
+
+## B. Host toolchain (local only)
 
 Uses R and Python installed directly on the machine. This is driven by
 `render-local.sh`, which is **gitignored and not in the clone** — it hardcodes
@@ -100,9 +97,20 @@ mirroring the CI workflow — `register_groupby_method` was removed in
 pandas-flavor 0.7.0.
 
 **Quarto versions differ between paths.** The Dockerfile pins 1.9.37; whatever
-is installed on the host drives path C. Output can differ between them.
+is installed on the host drives path B. Output can differ between them.
 
 **Re-rendering rewrites files under `sessions/`.** Figure directories
 (`sessions/*_files/`) and the maps written by `week6_practical.qmd` are
 gitignored precisely because every render regenerates them. If `git status`
 looks noisy after a render, that is why.
+
+**Docker Desktop on Windows can be slow to start rendering.** Quarto crawls
+the whole bind-mounted `/project` over the host file share (WSL2's
+cross-filesystem tax) before running anything, which can take minutes on a
+large project. Baking R/Python packages into the image (path A) removes a lot
+of what used to sit in that mount (`renv/library`, `.venv-reticulate`), which
+should help, but hasn't been verified against the original ~8-minute report.
+If it's still slow: either keep the project inside WSL2's own filesystem
+rather than `/mnt/c/...`, or exclude the remaining large dirs (`_freeze`,
+`sessions/*_files`) from the mount with anonymous volumes. Not verified on
+macOS, where bind mounts have a smaller but nonzero version of the same tax.

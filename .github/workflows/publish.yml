@@ -88,8 +88,9 @@ jobs:
           # Pin pyjanitor to a compatible version that relies on the pandas-flavor API
           pyjanitor==0.26.0
 
-          # Ensure compatibility with pandas >= 2.2.2
-          pandas>=2.2.2
+          # pandas 3.0 tightened string-dtype coercion and breaks the
+          # .astype(str) patterns used throughout the practicals.
+          pandas>=2.2.2,<3
           TXT
           cat constraints.txt
 
