@@ -1269,6 +1269,69 @@ the first place, which is why we looked at the shape before computing
 anything.
 :::
 
+## Counts, rates and the denominator {.smaller}
+
+A **count** answers "how many?" — and mostly tells you how big the place is.
+
+A **rate** divides that count by something that makes it comparable:
+
+$$\text{rate} = \frac{\text{numerator}}{\text{denominator}}$$
+
+::: {.incremental}
+- The **numerator** is what you are counting — disadvantaged pupils in a school
+- The **denominator** is what you are counting it *out of* — all pupils in that school's cohort
+- Our data ships both: `TFSM6CLA1A` is the count, `TPUP` is the denominator, and `PTFSM6CLA1A` is the rate they produce
+:::
+
+. . .
+
+Choosing the denominator is a **decision about what you mean**, not an
+administrative detail. Per pupil, per school, per head of population and per
+square kilometre answer different questions.
+
+## Big schools have big numbers {.smaller}
+
+```{r}
+#| label: counts-vs-rates
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.4
+#| fig-align: center
+
+cvr <- schools_mainstream |>
+  filter(!is.na(TPUP), !is.na(n_disadvantaged), TPUP > 0)
+
+r_count <- cor(cvr$TPUP, cvr$n_disadvantaged)
+r_rate  <- cor(cvr$TPUP, cvr$PTFSM6CLA1A)
+
+p_count <- ggplot(cvr, aes(x = TPUP, y = n_disadvantaged)) +
+  geom_point(alpha = 0.25, colour = casa_purple, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
+  labs(title = paste0("Raw count  (r = ", sprintf("%.2f", r_count), ")"),
+       x = "Pupils at end of KS4", y = "Disadvantaged pupils (count)") +
+  theme_minimal(base_size = 11)
+
+p_rate <- ggplot(cvr, aes(x = TPUP, y = PTFSM6CLA1A)) +
+  geom_point(alpha = 0.25, colour = casa_teal, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
+  labs(title = paste0("As a rate  (r = ", sprintf("%.2f", r_rate), ")"),
+       x = "Pupils at end of KS4", y = "% disadvantaged") +
+  theme_minimal(base_size = 11)
+
+patchwork::wrap_plots(p_count, p_rate, nrow = 1)
+```
+
+- The left panel is a **strong** relationship that tells you nothing: big schools have more of everything
+- The right panel divides by size, and the relationship all but vanishes
+- Raw counts mostly measure **how big a place is**. Almost always, you want a rate.
+- A rate removes the effect of **size**. It does not make different variables comparable with *each other* — a percentage and a head-count still live on different scales. That needs one more step.
+
+::: {.notes}
+The most common mistake in student data journalism. One slide is enough to inoculate against it, and it pays off again in week 6.
+:::
+
 ## Comparing things measured on different scales {.smaller}
 
 ```{r}
@@ -1623,50 +1686,6 @@ tibble(
 1. A school recording an Attainment 8 score of 900
 1. A school whose results collapsed in the year its building flooded
 1. The special schools in the national attainment distribution
-
-# One more trap: counts vs rates
-
-## Big schools have big numbers {.smaller}
-
-```{r}
-#| label: counts-vs-rates
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 10
-#| fig-height: 4.4
-#| fig-align: center
-
-cvr <- schools_mainstream |>
-  filter(!is.na(TPUP), !is.na(n_disadvantaged), TPUP > 0)
-
-r_count <- cor(cvr$TPUP, cvr$n_disadvantaged)
-r_rate  <- cor(cvr$TPUP, cvr$PTFSM6CLA1A)
-
-p_count <- ggplot(cvr, aes(x = TPUP, y = n_disadvantaged)) +
-  geom_point(alpha = 0.25, colour = casa_purple, size = 1) +
-  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
-  labs(title = paste0("Raw count  (r = ", sprintf("%.2f", r_count), ")"),
-       x = "Pupils at end of KS4", y = "Disadvantaged pupils (count)") +
-  theme_minimal(base_size = 11)
-
-p_rate <- ggplot(cvr, aes(x = TPUP, y = PTFSM6CLA1A)) +
-  geom_point(alpha = 0.25, colour = casa_teal, size = 1) +
-  geom_smooth(method = "lm", se = FALSE, colour = casa_pink) +
-  labs(title = paste0("As a rate  (r = ", sprintf("%.2f", r_rate), ")"),
-       x = "Pupils at end of KS4", y = "% disadvantaged") +
-  theme_minimal(base_size = 11)
-
-patchwork::wrap_plots(p_count, p_rate, nrow = 1)
-```
-
-- The left panel is a **strong** relationship that tells you nothing: big schools have more of everything
-- The right panel divides by size, and the relationship all but vanishes
-- Raw counts mostly measure **how big a place is**. Almost always, you want a rate.
-
-::: {.notes}
-The most common mistake in student data journalism. One slide is enough to inoculate against it, and it pays off again in week 6.
-:::
 
 ## A row is a school, not a pupil
 
