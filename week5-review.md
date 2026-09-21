@@ -492,9 +492,318 @@ that one line needs editing.
 
 ---
 
-## 8. Decisions to work through
+## 8. Predicting Ofsted — what the logistic models actually do
 
-Roughly in the order they would need settling:
+Flipping Ofsted round to be the *outcome* works, and it is a good idea: the
+same variable the ANOVA section uses as a grouping becomes the thing being
+predicted. All four models below are fitted, 70/30 train-test split, seed 42,
+mainstream secondaries with complete data (**n = 3,170**).
+
+Predictors throughout: Progress 8, % disadvantaged, overall absence, persistent
+absence, log(cohort), % high prior attainers, academy vs maintained.
+
+Collapsing to four ordered categories (serious weaknesses and special measures
+are both "inadequate" in Ofsted's own scheme) gives usable group sizes:
+
+| Rating | n |
+|---|---|
+| Outstanding | 464 |
+| Good | 2,231 |
+| Requires improvement | 404 |
+| Inadequate | 71 |
+
+### 8.1 Binary logistic — below Good vs Good or better
+
+```
+                  coef      p        odds ratio
+P8MEA           −2.253   <0.001      0.105  per +1 Progress 8 point
+PTFSM6CLA1A     −0.019    0.002
+PPERSABS10      +0.048    0.056      1.612  per +10pp persistent absence
+PERCTOT         +0.072    0.369      n.s.
+log(TPUP)       +0.266    0.131      n.s.
+PTPRIORHI       −0.006    0.571      n.s.
+Maintained      −0.041    0.812      n.s.
+```
+
+**One extra Progress 8 point cuts the odds of being rated below Good by about
+90%.** That is a striking, quotable number.
+
+**And then the trap, which is the best teaching moment in the whole thing:**
+
+```
+test accuracy                                86.2%
+baseline (always predict "not below Good")   85.3%
+AUC                                          0.818
+
+confusion:          predicted
+actual            not-below   below
+  not below Good       788      23
+  below Good           108      32
+```
+
+The model is **0.9 percentage points better than a model that never predicts
+anything**. It catches 32 of 140 struggling schools and misses 108. Yet the AUC
+is 0.818, which is respectably good — the model *does* rank schools well, it
+just never crosses 0.5 for most of them because the class is rare.
+
+This single slide teaches: accuracy is a useless metric on imbalanced classes;
+the 0.5 threshold is a choice, not a law; and you must always compare against
+the majority-class baseline. Students will carry that into their assessments.
+
+### 8.2 Binary logistic — Outstanding vs everything else
+
+```
+test accuracy 88.3%   baseline 85.6%   AUC 0.896
+catches 52 of 137 actual Outstanding schools at a 0.5 cutoff
+```
+
+Same lesson, higher AUC. Worth running both so the pattern is visible rather
+than looking like a quirk of one model.
+
+### 8.3 Ordinal logistic (proportional odds)
+
+```
+                     Value    p
+P8MEA                2.748   <0.001
+PTFSM6CLA1A          0.019   <0.001
+PTPRIORHI            0.013    0.001
+PPERSABS10          −0.041    0.029
+PERCTOT             −0.048    0.459   n.s.
+log(TPUP)            0.045    0.730   n.s.
+Maintained          −0.131    0.300   n.s.
+
+cutpoints:  Inadequate|RI  −5.57    RI|Good  −3.14    Good|Outstanding  +2.04
+```
+
+```
+test accuracy 73.0%   baseline 70.9%
+within one category:  98.4%
+
+confusion:                    predicted
+actual                Inad    RI   Good   Outst
+  Inadequate             0     5     13       0
+  Requires improvement   3    21     98       0
+  Good                   2    25    628      19
+  Outstanding            0     0     92      45
+```
+
+**It never once correctly predicts "Inadequate"** — 0 out of 18. But it is
+within one category 98.4% of the time. That contrast is the honest answer to
+"can we predict Ofsted?": *roughly, yes; precisely, no; and the rare categories
+not at all.*
+
+The three cutpoints are worth a slide in their own right — they are the thing
+that makes an ordinal model ordinal, and they are easy to show graphically as
+cuts on a latent scale.
+
+### 8.4 Multinomial logistic
+
+```
+test accuracy 73.7%   baseline 70.9%
+parameters:  ordinal 10   vs   multinomial 24
+AIC:         ordinal 2921 vs   multinomial 2877
+```
+
+A 0.7-point accuracy gain for **more than twice the parameters**. The AIC
+mildly prefers the multinomial, which says the proportional odds assumption is
+not perfectly met — but the ordinal model gets nearly the same performance from
+a third of the coefficients, and its output is interpretable.
+
+That comparison is the whole argument for using the structure in your data when
+you have it, and it is much more persuasive than asserting it.
+
+### 8.5 Poisson with an offset — counts at local authority level
+
+Staying with Ofsted but moving up a level: **how many below-Good schools does
+each local authority have?** That is a count, with a natural exposure (how many
+schools the LA has), so it needs an offset — which pays off week 1's
+counts-vs-rates material directly.
+
+150 LAs with 5+ schools, 3,221 schools. Counts run 0 to 22, mean 3.20, and 24
+LAs have none at all.
+
+```
+glm(n_below ~ mean_fsm + mean_absence + offset(log(n_schools)),
+    family = poisson)
+
+mean_absence   +0.283   p < 0.001
+mean_fsm       −0.002   p = 0.751   n.s.
+
+residual deviance 192.1 on 147 df  ->  dispersion 1.31
+```
+
+Once average absence is in the model, **average disadvantage adds nothing** — a
+genuinely interesting result and a natural confounding discussion.
+
+The dispersion check matters and **comes out differently from the destinations
+model in §7.4**, which is why having both is worth it:
+
+| Model | dispersion | verdict |
+|---|---|---|
+| Destinations, binomial (§7.4) | 2.7 | overdispersed — use quasibinomial |
+| LA below-Good counts, Poisson | 1.31 | mild — Poisson is adequate |
+
+Negative binomial on the LA counts gives θ = 19.4 and AIC 575 against Poisson's
+577 — essentially tied. So students see the check performed twice with two
+different answers, which teaches the check rather than a rule of thumb.
+
+**And the output is genuinely fun.** Comparing observed against expected:
+
+| Local authority | schools | observed below-Good | model expects |
+|---|---|---|---|
+| Bolton | 20 | 8 | 2.1 |
+| Lancashire | 78 | 22 | 10.5 |
+| Bury | 13 | 6 | 1.8 |
+| *…* | | | |
+| Birmingham | 85 | 6 | 11.0 |
+| Leeds | 45 | 3 | 8.0 |
+| West Sussex | 40 | 1 | 5.1 |
+
+Birmingham and Leeds have far fewer struggling schools than their intake
+predicts; Bolton and Lancashire far more. That is a Conversation-style article
+sitting right there, and it shows students what a count model is *for*.
+
+### 8.6 Two caveats that are teaching material, not problems
+
+- **Circularity.** Ofsted inspectors read Progress 8 before they visit. It is by
+  far the strongest predictor in every model. So we are partly recovering
+  Ofsted's own inputs rather than predicting an independent judgement. Worth a
+  slide — it is exactly the kind of thing students should be asking of their own
+  models.
+- **Timing.** Inspection dates in this file run from **2011 to 2024**, median
+  2022. Some ratings predate the 2022-23 results by a decade; others postdate
+  them. So the "predictors" sometimes describe a school years after, or before,
+  it was judged. A good, concrete lesson in checking that your data actually
+  lines up in time.
+
+### 8.7 How big is this content?
+
+As a full session, roughly **34 slides / one 2-hour lecture**:
+
+| Block | slides |
+|---|---|
+| Framing + the week 1 data-types → distributions table | 3 |
+| Binary logistic: model, odds ratios, the accuracy trap, AUC | 8 |
+| Ordinal logistic + cutpoints | 5 |
+| Multinomial + the comparison with ordinal | 4 |
+| Poisson, offsets, overdispersion, NB | 7 |
+| Binomial proportions (destinations, §7.3–7.4) | 5 |
+| Where to go next (GAMs, spatial, glmer) | 2 |
+
+A trimmed version — **binary logistic plus Poisson only, about 20 slides** —
+would still cover both GLM families the assessment names, and would fit inside
+a single session with a practical.
+
+---
+
+## 9. Does week 5 need a whole week? — honest answer
+
+**No, I don't think it does, and I think your instinct is right.** Here is the
+case, including the parts that cut against it.
+
+### 9.1 Why week 5 does not earn a full session
+
+**Correlation is already most of week 6.** Week 6 opens "Linear Regression —
+It's just a scatter plot!", then line of best fit, residuals, R². If the
+standardised-slope identity from §5 is the punchline, then correlation is
+*literally* a special case of what week 6 teaches in its first twenty minutes.
+Teaching r properly takes maybe 15 minutes at the top of the regression block
+and loses almost nothing.
+
+**ANOVA is already in weeks 7 and 8, twice, better motivated.** Week 7 spends
+seven slides on dummy variables — and a regression with dummy variables *is*
+ANOVA; I verified the F statistics are identical to four significant figures
+(351.03 both ways). Week 8 then does within- and between-group variance and the
+ICC explicitly, which is the same decomposition again with more purpose.
+
+**Covariance is a stepping stone nobody uses.** No one reports a covariance.
+Its only job is to motivate r, and §2's rectangles do that in four slides.
+
+**Week 5 is also the weakest-taught hour in the course as it stands** — toy
+data, no worked ANOVA example — so it is the most expensive to bring up to the
+standard of the rest.
+
+### 9.2 The sequencing problem, and the restructure that solves it
+
+You cannot simply put logistic regression in slot 5: it needs OLS first. So the
+change has to be a shift, not a swap:
+
+| | Now | Proposed |
+|---|---|---|
+| 5 | Measuring Relationship | **Regression Vol 1** (correlation folded into the opening) |
+| 6 | Regression Vol 1 | **Regression Vol 2** (ANOVA revealed in the dummy-variables section) |
+| 7 | Regression Vol 2 | **Regression Vol 3** — mixed effects |
+| 8 | Regression Vol 3 | **Generalised Linear Models** ← the freed slot |
+| 9 | Dimensionality Reduction | unchanged |
+| 10 | Clustering | unchanged |
+
+Everything shifts up one and the freed slot lands exactly where GLMs need to
+be: after OLS is established, before the unsupervised methods.
+
+The good material from this document does not die, it relocates — and in two
+cases it lands somewhere **better**:
+
+- **Galton opens the regression block instead of a correlation lecture.** He
+  invented *regression*. That is a more natural home than where I had put it.
+- **The Ofsted ANOVA example becomes the Ofsted logistic example**, so the
+  material gets more use, not less.
+- The covariance rectangles (§2) compress to four slides at the top of Vol 1.
+- The standardised-slope identity (§5) stops being a bridge between lectures and
+  becomes the opening move of the one that follows it.
+
+### 9.3 What it actually costs — the honest part
+
+This is a substantially bigger job than reworking week 5, and I would not want
+that hidden:
+
+1. **Three lectures need editing instead of one.** Weeks 6 and 7 are 80 and 70
+   slides and would each need to absorb new material while losing some. They are
+   yours, so no negotiation — but it is real work.
+2. **It deletes a colleague's lecture.** Week 5 is Huanfa's material. Reworking
+   it is one conversation; removing it from the course is a different one.
+3. **Renumbering breaks cross-references.** Weeks 9 and 10 open with "Last week"
+   slides, the practicals are numbered to match, and `_website.yml`'s sidebar is
+   ordered. All mechanical, all needs doing carefully.
+4. **Check the week 3 handoff.** Hypothesis testing is Bea's week 3, and week 5
+   is currently where p-values get applied to something. Weeks 6–7 do apply them
+   to coefficients, so I think it is fine — but worth confirming with her rather
+   than assuming.
+5. **Module documentation.** Whether the published syllabus names ANOVA or
+   correlation as topics is worth checking before committing.
+
+### 9.4 What I would actually recommend
+
+**Do the restructure, but not this year.** Specifically:
+
+- **This year:** keep ten weeks as they are. Rebuild week 5 per §1–6 — it is a
+  day or two of work and it turns the weakest hour into a good one. Put GLMs in
+  the optional extension session per §7.5, using §8's content. Fix the
+  assessment brief's one line. Low risk, nothing to renegotiate, and you find
+  out whether the GLM material draws an audience.
+- **Next year:** if the extension session is well attended — which would be
+  evidence students need it — promote it to the timetable and do the shift in
+  §9.2, with Huanfa and Bea in the conversation from the start.
+
+The reason for sequencing it that way is not caution for its own sake. It is
+that the optional session is a **cheap experiment that generates the evidence**
+for the expensive change, and you would be making the structural argument to
+colleagues from attendance data rather than from a hunch.
+
+**If you would rather do it now**, the version I would back is §9.2 exactly as
+written — it is coherent, the sequencing works, and the GLM slot lands in the
+right place. I would just not do it in the same term as rebuilding weeks 1
+and 5.
+
+---
+
+## 10. Decisions to work through
+
+**Decision zero, which governs everything below: does week 5 survive as a
+week?** See §9. If the §9.2 restructure goes ahead, items 1–8 still all need
+answering — they just get answered inside weeks 5–7 of the new running order
+rather than in a standalone week 5. Nothing in §1–6 is wasted either way.
+
+Then, roughly in the order they would need settling:
 
 1. **Retitle** to "Measuring Relationships" — and CASA theme
    (`../css/casa-slides.scss`), which weeks 6–10 use and this deck does not.
@@ -520,7 +829,7 @@ Roughly in the order they would need settling:
 
 ---
 
-## 8. The practical
+## 11. The practical
 
 Already on the schools data — it plots `PERCTOT` against `ATT8SCR`, does
 Pearson and Spearman, builds a correlation matrix and runs an ANOVA across
@@ -541,7 +850,7 @@ local authorities. So it needs far less work than week 1's did. Three things:
 
 ---
 
-## 9. Smaller fixes
+## 12. Smaller fixes
 
 - Typos: "Assuem" (Crisis of covariance), "ourliers" (twice, Spearman section
   headings), "Motivated continued".
