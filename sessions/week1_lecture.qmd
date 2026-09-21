@@ -129,7 +129,8 @@ that by week 10 it is completely familiar.
 
 By the end of this lecture you will:
 
-1.  Understand the four main basic data types and;
+1.  Understand the four basic levels of measurement, and the finer statistical
+    data types that build on them;
 2.  Consider how to summarise and represent data;
 3.  Know the course dataset well enough to start asking questions of it.
 
@@ -220,154 +221,124 @@ exactly the problem we spend weeks 6 to 8 solving.
 
 - Developed by psychologist Stanley Smith Stevens (1906 - 1973)
 
-## Nominal
+. . .
 
-- Differentiates items based only on names; no order between them.
+This is the classic starting point, and it is where most courses stop. We will
+come back after it and sharpen it up.
+
+## Nominal {.smaller}
+
+::::: columns
+::: {.column width="42%"}
+- Differentiates items based only on names; no order between them
 - Also called **categorical data**
 - What can be said about them?
   - *Equality*: an Academy is not a Special school
   - *Mode*: the most common category
 
-. . .
-
 *In our data:* school type, religious character, region, admissions policy.
+:::
 
-## Nominal — school type
-
+::: {.column width="58%"}
 ```{r}
 #| label: nominal-plot
 #| echo: false
-#| fig-width: 9
-#| fig-height: 4
-#| fig-align: center
+#| fig-width: 5.6
+#| fig-height: 4.2
 
 schools_all |>
   count(MINORGROUP) |>
   mutate(MINORGROUP = fct_reorder(replace_na(MINORGROUP, "Unknown"), n)) |>
   ggplot(aes(x = n, y = MINORGROUP)) +
   geom_col(fill = casa_purple, alpha = 0.85) +
-  geom_text(aes(label = comma(n)), hjust = -0.15, size = 3.5) +
-  scale_x_continuous(expand = expansion(mult = c(0, 0.15)), labels = comma) +
-  labs(x = "Number of schools", y = NULL,
-       title = "Schools in England with a Key Stage 4 result, by type") +
-  theme_minimal(base_size = 12)
+  geom_text(aes(label = comma(n)), hjust = -0.15, size = 3) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.2)), labels = comma) +
+  labs(x = "Number of schools", y = NULL) +
+  theme_minimal(base_size = 10)
 ```
 
-- The bars can be reordered freely — **there is no natural order here**
-- All we can sensibly report is counts and the mode
+[The bars can be reordered freely — there is no natural order here]{style="font-size:0.7em;"}
+:::
+:::::
 
-## Ordinal
+## Ordinal {.smaller}
 
+::::: columns
+::: {.column width="42%"}
 - Allow for rank order, but not the relative degree of difference
-- Classic example: survey responses from *completely agree* to *completely disagree*
 - What can be said about them?
   - :white_check_mark: Equality; mode
   - :white_check_mark: Median: middle-ranked item
   - :x: Differences between two levels; arithmetic mean
 
-. . .
+*In our data:* **Ofsted rating**.
+:::
 
-*In our data:* **Ofsted rating** — Outstanding, Good, Requires improvement,
-Serious Weaknesses, Special Measures.
-
-## Ordinal — Ofsted rating
-
+::: {.column width="58%"}
 ```{r}
 #| label: ordinal-plot
 #| echo: false
-#| fig-width: 9
-#| fig-height: 4
-#| fig-align: center
+#| fig-width: 5.6
+#| fig-height: 4.2
 
 schools_all |>
   filter(!is.na(OFSTEDRATING)) |>
   count(OFSTEDRATING) |>
   ggplot(aes(x = OFSTEDRATING, y = n)) +
   geom_col(fill = casa_teal, alpha = 0.85) +
-  geom_text(aes(label = comma(n)), vjust = -0.4, size = 3.5) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.12)), labels = comma) +
-  labs(x = NULL, y = "Number of schools",
-       title = "Ofsted rating — the order is meaningful, the spacing is not") +
-  theme_minimal(base_size = 12)
+  geom_text(aes(label = comma(n)), vjust = -0.4, size = 3) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)), labels = comma) +
+  labs(x = NULL, y = "Number of schools") +
+  theme_minimal(base_size = 10) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
-- The order **cannot** be shuffled: Good sits between Requires improvement and Outstanding
-- But is the gap Good → Outstanding the *same size* as Requires improvement → Good? We have no idea.
-- So: median yes, mean no.
+[The order cannot be shuffled — but is Good → Outstanding the same size a step as Requires improvement → Good?]{style="font-size:0.7em;"}
+:::
+:::::
 
-## Interval
+## Interval and ratio
 
-- Allow for degree of difference between items, but not the ratio
-- The *zero* value is arbitrary
-- Classic example: Celsius temperature — 100°C is **not** twice as hot as 50°C
+**Interval** — differences are meaningful, but the zero is arbitrary
 
-. . .
-
-*In our data:* **the date of a school's last Ofsted inspection.** The gap
-between 2015 and 2018 is the same as between 2018 and 2021, but "year zero" is
-a convention, so a school inspected in 2022 was not inspected "twice as
-recently" as one in 1011.
-
-## Ratio
-- Allow for **ratio** between items
-- The zero value is unique and non-arbitrary
-- What can be said about them?
-  - :white_check_mark: Equality, mode, median, arithmetic mean
-  - :white_check_mark: Ratio
+- 100°C is **not** twice as hot as 50°C
+- *In our data:* the **date of the last Ofsted inspection**. 2015 → 2018 is the
+  same gap as 2018 → 2021, but "year zero" is a convention.
 
 . . .
 
-*In our data:* **number of pupils**, **Attainment 8 score**, **% disadvantaged
-pupils**. A school with 1,200 pupils really does have twice as many as one with
-600.
+**Ratio** — a true, non-arbitrary zero, so ratios are meaningful
+
+- :white_check_mark: Equality, mode, median, arithmetic mean, **and ratio**
+- *In our data:* **pupils on roll**, **Attainment 8**, **% disadvantaged**. A
+  school with 1,200 pupils really does have twice as many as one with 600.
 
 ## A zero is not enough: Progress 8 {.smaller}
 
-::::: columns
-::: {.column width="55%"}
 **Progress 8** measures how much progress pupils made between arriving and
 leaving, compared with similar pupils nationally.
 
-- Zero means "average expected progress"
-- Positive means more than expected, negative less
+- Zero means "average expected progress"; positive is more, negative is less
 
 . . .
 
-The zero is **meaningful**. So is it ratio data?
+The zero is **meaningful**, and the scale runs either side of it. So is it
+ratio data?
 
 . . .
 
 **No.** A school scoring 1.0 has not made "twice the progress" of one scoring
-0.5 — the scale has no true zero point of *no progress at all*.
-:::
-
-::: {.column width="45%"}
-```{r}
-#| label: p8-plot
-#| echo: false
-#| fig-width: 5
-#| fig-height: 4.2
-
-schools_mainstream |>
-  filter(!is.na(P8MEA)) |>
-  ggplot(aes(x = P8MEA)) +
-  geom_histogram(binwidth = 0.1, fill = casa_purple, alpha = 0.6) +
-  geom_vline(xintercept = 0, colour = casa_pink, linewidth = 1) +
-  annotate("text", x = 0, y = Inf, label = "  zero = expected progress",
-           hjust = 0, vjust = 1.6, size = 3, colour = casa_pink) +
-  labs(x = "Progress 8", y = "Schools") +
-  theme_minimal(base_size = 11)
-```
-:::
-:::::
+0.5 — there is no true zero point of *no progress at all*. It is an
+**interval** measure.
 
 ::: {.notes}
 This is the slide that stops students assuming "has a zero" means "ratio".
+We plot P8MEA later, in the finer taxonomy, where its symmetry is the point.
 :::
 
-## Notes
-- 'Encoding' does not change the nature of a measurement.
-- Ofsted rating is ORDINAL.
+## Encoding does not change the measurement
+
+- Ofsted rating is ORDINAL
 - If we store it as {Special Measures:1, ..., Outstanding:5}, is it ORDINAL, or INTERVAL?
 
 . . .
