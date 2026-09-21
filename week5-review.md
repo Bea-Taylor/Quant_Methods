@@ -1,8 +1,26 @@
 # Week 5 — "Measuring Relationships" — rework plan
 
+> **DECIDED, 22 September 2026.** Going with the §9.2 restructure, starting
+> 23 September. The key parts of this document — covariance, correlation,
+> ANOVA — get folded into the regression lectures rather than keeping their own
+> week. The regression block shifts up to start at **week 5**, and the freed
+> slot becomes a **new week 8 lecture on Generalised Linear Models covering
+> both Poisson and Logistic regression** (§8 has the fitted models and sizing).
+>
+> This is the faster of the two options in §9.4, which recommended an optional
+> session this year and the restructure next. Taking it now.
+>
+> Still to handle: renumbering breaks the "Last week" slides in weeks 9–10, the
+> practical filenames and the `_website.yml` sidebar; week 8's conclusions slide
+> still says GLMs are "not yet covered in this course"; and the week 3 → week 5
+> hypothesis-testing handoff is worth confirming with Bea. Week 5 is Huanfa's
+> material being removed rather than edited.
+
 Working document. Nothing in `sessions/week5_lecture.qmd` has been changed yet.
 Every number below is computed from the DfE files in this repo, so anything
-here can go straight onto a slide.
+here can go straight onto a slide. Sections 1–6 remain the source for the
+correlation and ANOVA material — it relocates into the regression lectures
+rather than being discarded.
 
 Agreed direction:
 
