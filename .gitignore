@@ -41,6 +41,7 @@ preview.log
 docker-build.log
 docker-restore*.log
 w1build.log
+w1p.log
 w6render.log
 
 # Quarto figure dirs written next to the source qmds (regenerated every render)
