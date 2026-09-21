@@ -27,6 +27,7 @@ cloud-config.yml
 .Rhistory
 *.Rproj
 *.quarto_ipynb*
+sessions/*.rmarkdown
 
 /.luarc.json
 
