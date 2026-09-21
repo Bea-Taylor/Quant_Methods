@@ -381,20 +381,117 @@ rather than its zero is the point.
 
 ## Why four levels are not enough
 
-Stevens tells us what **operations** are permitted. It does not tell us which
+Stevens tells us which **operations** are permitted. It does not tell us which
 **distribution** a variable follows, or which **model** to fit.
 
 . . .
 
-Consider two variables from our data, both on a **ratio** scale:
+Take two variables from our data. Both are on a **ratio** scale — both have a
+true zero, both support ratios:
 
-- the **number of pupils** at a school — whole numbers, cannot be negative
-- the **percentage of sessions missed** through absence — continuous, strictly positive, heavily skewed
+| | Pupils on roll | % of sessions missed |
+|---|---|---|
+| Values | whole numbers | continuous |
+| Can be negative? | no | no |
+| Upper limit | none in principle | 100 |
+| Typical value | ~1,050 | ~9 |
 
 . . .
 
-Same level of measurement. Completely different distributions, and completely
-different models. We need something more specific.
+Stevens says these are the same kind of thing. Let's look at them.
+
+## What is a distribution?
+
+::: {style="font-size:0.8em;"}
+A **distribution** is just the answer to "how are the values spread out?" —
+how many observations fall where.
+:::
+
+```{r}
+#| label: what-is-a-distribution
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 3.7
+#| fig-align: center
+
+dpl <- schools_mainstream |> filter(!is.na(TOTPUPS))
+
+set.seed(1)
+d1 <- ggplot(dpl, aes(x = TOTPUPS, y = runif(nrow(dpl)))) +
+  geom_point(alpha = 0.12, colour = casa_purple, size = 0.7) +
+  labs(title = "1. Every school is a point", x = "Pupils on roll", y = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.y = element_blank(), panel.grid.major.y = element_blank())
+
+d2 <- ggplot(dpl, aes(x = TOTPUPS)) +
+  geom_histogram(bins = 35, fill = casa_purple, alpha = 0.7) +
+  labs(title = "2. Count them into bins", x = "Pupils on roll", y = "Schools") +
+  theme_minimal(base_size = 12)
+
+d3 <- ggplot(dpl, aes(x = TOTPUPS)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 35,
+                 fill = casa_purple, alpha = 0.35) +
+  geom_density(colour = casa_pink, linewidth = 1) +
+  labs(title = "3. That shape is the distribution", x = "Pupils on roll",
+       y = "Density") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.y = element_blank())
+
+patchwork::wrap_plots(d1, d2, d3, nrow = 1)
+```
+
+::: {.incremental}
+- The **histogram** is the workhorse: bin the values, count how many land in each bin
+- The smooth curve is the same information with the bins taken away
+- Almost everything else in this course starts by asking what shape a variable has
+:::
+
+## Two ratio variables, two different shapes
+
+```{r}
+#| label: two-shapes
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.0
+#| fig-align: center
+
+two <- schools_mainstream |> filter(!is.na(TOTPUPS), !is.na(PERCTOT))
+skw <- function(x) mean((x - mean(x))^3) / sd(x)^3
+
+t1 <- ggplot(two, aes(x = TOTPUPS)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 35,
+                 fill = casa_purple, alpha = 0.4) +
+  geom_density(colour = casa_purple, linewidth = 1) +
+  labs(title = paste0("Pupils on roll  (skew ", sprintf("%.2f", skw(two$TOTPUPS)), ")"),
+       x = NULL, y = "Density") +
+  theme_minimal(base_size = 13) + theme(axis.text.y = element_blank())
+
+t2 <- ggplot(two, aes(x = PERCTOT)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 35,
+                 fill = casa_teal, alpha = 0.4) +
+  geom_density(colour = casa_teal, linewidth = 1) +
+  labs(title = paste0("% sessions missed  (skew ", sprintf("%.2f", skw(two$PERCTOT)), ")"),
+       x = NULL, y = NULL) +
+  theme_minimal(base_size = 13) + theme(axis.text.y = element_blank())
+
+patchwork::wrap_plots(t1, t2, nrow = 1)
+```
+
+::: {.incremental}
+- Left: roughly symmetric, a lump in the middle with tails either side
+- Right: a hard floor near zero and a long tail to the right — **skewed**
+- **Skew** measures that asymmetry: 0 is symmetric, positive means a right tail
+:::
+
+. . .
+
+Same level of measurement. Different shapes, different distributions, and
+different models. Stevens cannot see the difference — so we need something
+more specific.
 
 ## Simple statistical data types {.smaller}
 
