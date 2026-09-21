@@ -374,18 +374,6 @@ This is the slide that stops students assuming "has a zero" means "ratio".
 
 Still ordinal. Storing something as a number does not make the gaps equal.
 
-## The everyday shorthand: numerical vs. categorical
-| Type                           | Category        | In our data                                    |
-| ------------------------------ | --------------- | ---------------------------------------------- |
-| Quantitative (numerical) data  | Discrete data   | number of pupils on roll                       |
-|                                | Continuous data | Attainment 8 score, % disadvantaged            |
-| Qualitative (categorical) data | Nominal         | school type, region, religious character       |
-|                                | Ordinal         | Ofsted rating                                  |
-
-. . .
-
-Useful, but too coarse to tell you what to actually *do* with a variable.
-
 # A finer-grained decomposition
 
 ## Why four levels are not enough
@@ -1041,7 +1029,7 @@ would pay off across the whole term.
 We've covered:
 
 - Our dataset for the term: DfE school performance, 2022/23
-- Data types: levels of measurement; quantitative & qualitative
+- Data types: Stevens' levels of measurement, and the finer statistical types
 - Key metrics, and why the mean was below the median
 - Null values, DfE suppression codes, and outliers
 - Visualising data
