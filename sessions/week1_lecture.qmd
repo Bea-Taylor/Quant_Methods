@@ -2,9 +2,9 @@
 title: "Exploratory Data Analysis #1"
 subtitle: "Understanding and describing data"
 author:
-  - name: "Huanfa Chen"
-email: "huanfa.chen@ucl.ac.uk"
-date-as-string: "12 September 2025"
+  - name: "Adam Dennett"
+email: "a.dennett@ucl.ac.uk"
+date-as-string: "18 September 2026"
 from: markdown+emoji
 other: "CASA0007 Quantitative Methods"
 format:
@@ -101,11 +101,21 @@ schools_mainstream <- schools_all |>
 
 ## Understanding and describing data
 
-- Quantitative research is the process of collecting and analysing **numerical data** to describe, model, and predict variables of interest.
+- Quantitative methods describe the range of mathematical and statistical techniques we can apply to data in order that we can derive meaning from it
+- Data may arrive in many different forms
+  -  spreadsheets of numbers
+  -  pages of text
+  -  ridges on a vinyl record
+- Being able to identify the type of data you are dealing with will allow you to select the appropriate methods for making sense of it.
 
-- Garbage in, garbage out.
+## Understanding and describing data
 
-::: {.notes}
+- Data may be gathered from a ***sample*** (e.g. the heights or eye colour of everyone in this room)
+- Or a ***population*** (e.g. the heights or eye colour of everyone living in the UK right now)
+- Samples may or may not be representative of the population they are drawn from (is the average height in this room a good representation of the average hight in the UK?)
+- Knowing our data types and how to summarise and explore their qualities for a sample or a population, is the first step in building an understanding of this data
+
+::: notes
 This lecture focuses on understanding and describing data.
 
 Everything this week uses the dataset we will keep coming back to all term, so
@@ -113,11 +123,12 @@ that by week 10 it is completely familiar.
 :::
 
 ## Learning Objectives
-By the end of this lecture you should:
 
-1. Understand basic data types;
-2. Consider how to summarise and represent data;
-3. Know the course dataset well enough to start asking questions of it.
+By the end of this lecture you will:
+
+1.  Understand the four main basic data types and;
+2.  Consider how to summarise and represent data;
+3.  Know the course dataset well enough to start asking questions of it.
 
 # Our dataset for the term
 
@@ -247,9 +258,9 @@ schools_all |>
 - Allow for rank order, but not the relative degree of difference
 - Classic example: survey responses from *completely agree* to *completely disagree*
 - What can be said about them?
-  - ✅ Equality; mode
-  - ✅ Median: middle-ranked item
-  - ❌ Differences between two levels; arithmetic mean
+  - :white_check_mark: Equality; mode
+  - :white_check_mark: Median: middle-ranked item
+  - :x: Differences between two levels; arithmetic mean
 
 . . .
 
@@ -298,8 +309,8 @@ recently" as one in 1011.
 - Allow for **ratio** between items
 - The zero value is unique and non-arbitrary
 - What can be said about them?
-  - ✅ Equality, mode, median, arithmetic mean
-  - ✅ Ratio
+  - :white_check_mark: Equality, mode, median, arithmetic mean
+  - :white_check_mark: Ratio
 
 . . .
 
