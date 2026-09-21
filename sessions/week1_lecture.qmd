@@ -224,8 +224,8 @@ We will start with this - but then go a little further later in the lecture
 - Differentiates items based only on names; no order between them
 - Also called **categorical data**
 - What can be said about them?
-  - *Equality*: an Academy is not a Special school
-  - *Mode*: the most common category
+  - :white_check_mark:*Equality*: an Academy is not a Special school
+  - :white_check_mark:*Mode*: the most common category
 
 *In our data:* school type, religious character, region, admissions policy.
 :::
@@ -261,6 +261,7 @@ schools_all |>
   - :white_check_mark: Equality; mode
   - :white_check_mark: Median: middle-ranked item
   - :x: Differences between two levels; arithmetic mean
+- Ordinal can be sub-divided into *weak* (Amazon star ratings on a product) and *strong* (1st, 2nd, 3rd finisher in a race)
 
 *In our data:* **Ofsted rating**.
 :::
@@ -535,6 +536,46 @@ patchwork::wrap_plots(t1, t2, nrow = 1)
 Same level of measurement. Different shapes, different distributions, and
 different models. Stevens cannot see the difference — so we need something
 more specific.
+
+## How skew is calculated {.smaller}
+
+::::: columns
+::: {.column width="48%"}
+**Variance** uses *squared* deviations:
+
+$$\sigma^2 = \frac{\sum (y_i - \bar{y})^2}{n}$$
+
+Squaring throws the sign away. Variance tells you **how far** values sit from
+the mean, never **which side** they sit on.
+:::
+
+::: {.column width="52%"}
+**Skew** uses *cubed* deviations:
+
+$$g_1 = \frac{\frac{1}{n}\sum (y_i - \bar{y})^3}{\sigma^3}$$
+
+Cubing **keeps** the sign — a value below the mean stays negative.
+:::
+:::::
+
+. . .
+
+::: {.incremental}
+- If the large deviations sit mostly to the **right**, the cubes sum to a positive number
+- Dividing by $\sigma^3$ cancels the units, so skew is comparable across variables
+- Rough guide: below 0.5 is near-symmetric, above 1 is strongly skewed
+:::
+
+::: {.notes}
+Worth linking back explicitly: we said earlier that squaring makes outliers
+count heavily in the variance. Cubing makes them count even more heavily, and
+lets them pull in a direction. Skew is essentially "which tail is doing the
+damage".
+
+Small print if anyone asks: R's sd() divides by n-1 while the textbook
+population formula divides by n, so the figure on the previous slide differs
+from the strict definition in about the fourth decimal place.
+:::
 
 ## Simple statistical data types {.smaller}
 
