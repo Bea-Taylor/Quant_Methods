@@ -6,6 +6,8 @@ cloud-config.yml
 /_freeze/
 /docs/
 /venv/
+/.venv/
+/.venv-reticulate/
 
 
 

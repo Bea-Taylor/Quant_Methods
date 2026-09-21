@@ -15,7 +15,8 @@ project:
 
 execute:
   freeze: auto
-  kernel: qmFork
+
+jupyter: qmFork
 
 metadata-files:
   - _website.yml

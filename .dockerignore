@@ -1,0 +1,4 @@
+# The image only needs requirements.txt; the project itself is bind-mounted
+# at run time. Keeps `docker build` from uploading _site, venvs, data, etc.
+*
+!requirements.txt
