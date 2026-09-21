@@ -317,7 +317,182 @@ last of the synthetic examples.
 
 ---
 
-## 7. Decisions to work through
+## 7. Can GLMs be fitted in anywhere?
+
+Short answer: **they have to be, because the assessment brief already says they
+were taught.** This turned out to be less a curriculum question than a live
+discrepancy.
+
+### 7.1 The brief promises them and week 8 disclaims them
+
+The assessment brief tells students to use a second-half method, and lists:
+
+> "…some explanatory / predictive methods such as ANOVA, linear regression or
+> some of the **generalised linear models also introduced**."
+
+The only mention of GLMs anywhere in ten lectures is a bullet list on week 8's
+final "Conclusions" slide, under the heading:
+
+> "Other regression variants (**not yet covered in this course**) might be more
+> appropriate in other situations: Generalised Linear Models — Logistic
+> Regression… Poisson Regression / Negative Binomial Regression…"
+
+Students read both documents. One says the GLMs were introduced; the other says
+they were not covered. That needs resolving either way, and it is a small piece
+of work compared with the rest of this plan.
+
+There is also a practical reason beyond tidiness: students choose their own
+dataset. A good proportion of social-science outcomes are binary or counts. If
+the only modelling tools on offer are OLS, ANOVA, PCA and clustering, a student
+whose outcome is "did this happen or not" either mis-applies OLS or abandons
+the topic.
+
+### 7.2 Week 1 has already built most of the machinery
+
+This is the piece of luck. The week 1 rebuild now teaches the statistical data
+types taxonomy *and* the binomial, Poisson and negative binomial distributions,
+including overdispersion. Nothing in the rest of the course ever uses any of
+it — every model in weeks 6–8 has a continuous, roughly normal outcome
+(Attainment 8 or Progress 8), so OLS is never put under strain.
+
+A GLM is precisely the payoff for that week 1 material, and it fits in one
+table:
+
+| Week 1 data type | Distribution | Model |
+|---|---|---|
+| Real-valued | Normal | OLS — weeks 6–8 |
+| Binary / proportion | Binomial | Logistic regression |
+| Count | Poisson / negative binomial | Poisson / NB regression |
+
+That single slide *is* the concept. Everything else is worked example.
+
+### 7.3 There is a genuine non-normal outcome already in the repo
+
+`england_ks4-pupdest.csv` — pupil destinations — is sitting in the data folder
+unused by any lecture. It gives, for each school, how many of the cohort went
+on to a sustained education, employment or training destination. That is a
+count out of a known total: a textbook binomial outcome, and a far more
+policy-relevant one than anything invented.
+
+Fitted on mainstream secondaries (n = 3,131, median cohort 175):
+
+```
+glm(cbind(OVERALL_DEST, not_sustained) ~ PTFSM6CLA1A,
+    family = binomial)
+
+logit slope  = −0.0266
+odds ratio per +10pp disadvantage = 0.766
+```
+
+**Every 10 percentage points more disadvantage is associated with a 23% fall in
+the odds of a pupil sustaining a destination.** That is a quotable sentence of
+exactly the kind the assessment asks students to produce.
+
+### 7.4 What the comparison actually shows — and what it doesn't
+
+I had expected OLS on the percentage to fail visibly by predicting above 100%.
+**It doesn't** — no fitted value exceeds 100 in this sample, so that hook is
+not available. What is true is more interesting:
+
+| % disadvantaged | OLS predicts | Binomial GLM predicts |
+|---|---|---|
+| 0 | 98.3% | 97.0% |
+| 25 | 93.8% | 94.3% |
+| 50 | 89.3% | 89.5% |
+| 75 | 84.8% | 81.4% |
+| **100** | **80.4%** | **69.3%** |
+
+The two models agree almost exactly through the middle and diverge by 11
+percentage points at the top — in precisely the schools that policy is about.
+OLS is not obviously broken; it is quietly wrong at the edges, and nothing in
+its output says so. That is a better lesson than a model that falls over,
+and it matches the course's existing habit of showing assumptions bending
+rather than snapping.
+
+Two further things fall straight out of week 1:
+
+- **49 schools (1.6%) sit at exactly 100%.** A ceiling, which is why a
+  straight-line model was always going to struggle up there.
+- **The residual deviance is 8,465 on 3,129 df — a ratio of 2.7.** That is
+  overdispersion, the exact phenomenon week 1's negative binomial slide now
+  introduces. Ignoring it makes the standard errors **1.6× too narrow**, so
+  the model reports more confidence than it has earned. Switching to
+  `quasibinomial` fixes it in one word. This is the single best payoff
+  available for the week 1 distributions material.
+
+### 7.5 Recommendation: an optional extension session, plus two cheap signposts
+
+**This is the better answer**, and it is better than squeezing slides into
+week 8, for a reason worth stating plainly: everything in §7.3 and §7.4 above
+is good material, and cramming it into the last five minutes of an already
+60-slide lecture would waste it. An optional session has no time pressure, so
+it can be taught properly — the distributions, the worked example, the
+interpretation of an odds ratio, and the overdispersion check, at a pace that
+actually lands.
+
+Three further advantages, one of which matters more than the teaching:
+
+- **It touches nobody else's material.** Weeks 2–4 are Bea's and weeks 9–10 are
+  Huanfa's. A new standalone session is the only version of this that needs no
+  negotiation with anyone.
+- **It can absorb the rest of week 8's orphan list.** That conclusions slide
+  also names Generalised Additive Models, spatial and geographically weighted
+  regression, and ridge/lasso. All of them currently dead-end. An extension
+  session turns that slide from a list of things you were not taught into a
+  door.
+- **It is where "what do I do about *my* data" lives.** Students choose their
+  own topic. The session can be framed around the question they will actually
+  arrive with — *my outcome is a yes/no, or a count, and week 6's recipe does
+  not fit it* — which is a much better hook than "here is another model family".
+
+**Assessment fairness works out fine here**, which is the thing I would have
+worried about. The brief offers a *menu* — dimensionality reduction, or
+clustering, or ANOVA, or regression, or a GLM. Nobody is compelled to use a
+GLM, so an optional session that unlocks one more option disadvantages no one.
+That would not be true if GLMs were the only route to a good mark.
+
+**But it does not fix the brief on its own.** "Generalised linear models also
+introduced" still implies core taught content, and a student who skipped an
+optional session could reasonably feel the brief had misled them. What the
+optional session does is make the brief edit *honest and easy* instead of a
+retreat — something like:
+
+> "…or one of the generalised linear models covered in the optional extension
+> session."
+
+That is a one-line change, it is now true, and it doubles as advertising for
+the session.
+
+**Keep one signpost in the core material.** The week 5 slide from the spine
+table (§1) is free and worth having regardless: *we have been decomposing the
+variation in a continuous outcome; when the outcome is a count or a yes/no,
+the same logic holds but the arithmetic changes — see the extension session.*
+One sentence, no method taught. And week 8's conclusions slide changes from
+"not yet covered in this course" to a link.
+
+**Where it goes in the repo.** `_website.yml`'s schedule sidebar is already
+sectioned ("Part 1: Basics", "Part 2: Correlation and Regression"), so this is
+a new section — "Extension material" or similar — below the ten weeks. No
+structural change, and it reads correctly as sitting outside the taught course.
+
+**The one risk** is that optional material gets no engagement. Three things
+help: signpost it from week 8's conclusions slide at the moment students are
+told these methods exist; signpost it from the brief where they are choosing a
+method; and give it the destinations example rather than a toy, so the first
+slide answers a real question.
+
+### 7.6 What I would not do
+
+Squeeze GLMs into weeks 6 or 7. They are 80 and 70 slides already, they are
+building one continuous argument towards the Brighton policy conclusion, and
+interrupting that to change outcome types would cost more than it teaches.
+
+Leave the brief and week 8 contradicting each other. Whichever route is taken,
+that one line needs editing.
+
+---
+
+## 8. Decisions to work through
 
 Roughly in the order they would need settling:
 
