@@ -23,9 +23,6 @@ missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) install.packages(missing, repos = "https://cloud.r-project.org")
 '
 
-echo "==> Custom revealjs theme"
-cp css/casa-slides.scss /opt/quarto/share/formats/revealjs/themes/ 2>/dev/null || true
-
 if [ "${1:-}" = "preview" ]; then
   shift
   echo "==> quarto preview $*"
