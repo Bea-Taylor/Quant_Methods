@@ -111,26 +111,17 @@ schools_mainstream <- schools_all |>
   -  ridges on a vinyl record
 - Being able to identify the type of data you are dealing with will allow you to select the appropriate methods for making sense of it.
 
-## Understanding and describing data
-
-- Data may be gathered from a ***sample*** (e.g. the heights or eye colour of everyone in this room)
-- Or a ***population*** (e.g. the heights or eye colour of everyone living in the UK right now)
-- Samples may or may not be representative of the population they are drawn from (is the average height in this room a good representation of the average hight in the UK?)
-- Knowing our data types and how to summarise and explore their qualities for a sample or a population, is the first step in building an understanding of this data
-
 ::: notes
 This lecture focuses on understanding and describing data.
 
-Everything this week uses the dataset we will keep coming back to all term, so
-that by week 10 it is completely familiar.
+Everything this week uses the dataset we will keep coming back to all term, so that by week 10 it is completely familiar.
 :::
 
 ## Learning Objectives
 
 By the end of this lecture you will:
 
-1.  Understand the four basic levels of measurement, and the finer statistical
-    data types that build on them;
+1.  Understand the four basic levels of measurement, and the finer statistical data types that build on them;
 2.  Consider how to summarise and represent data;
 3.  Know the course dataset well enough to start asking questions of it.
 
@@ -1027,11 +1018,11 @@ schools_all |>
 
 ::: {.incremental}
 - We began with a **population**: every school in England with a KS4 result
-- Filtering to academies and maintained schools leaves a **subset** — and it is not a random one
+- Filtering to academies and maintained schools leaves a **subset** — or a **sample** and it is not a random one
 - Anything we now conclude is about **mainstream state-funded secondaries**, not "schools"
 :::
 
-## Dropping cases is a decision, not a technicality
+## Dropping cases is a decision, not a technicality {.smaller}
 
 ::: {.incremental}
 - **Special schools** are excluded because Attainment 8 was never designed to describe them — defensible, but it removes the lowest-attaining pupils in the country from view
@@ -1041,13 +1032,10 @@ schools_all |>
 
 . . .
 
-Recall the first slides: a sample only tells you about the population it was
-drawn from. The moment you filter, you have redefined that population — so
-say which one you mean.
+Recall the first slides: a sample only tells you about the population it was drawn from. The moment you filter, you have redefined that population — so say which one you mean.
 
 ::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.85em;"}
-**Next week.** Representative data, selection bias, and what happens to your
-conclusions when the cases you dropped are not like the ones you kept.
+**Next week.** Representative data, selection bias, and what happens to your conclusions when the cases you dropped are not like the ones you kept.
 :::
 
 ::: {.notes}
@@ -1256,7 +1244,7 @@ the first place, which is why we looked at the shape before computing
 anything.
 :::
 
-## Boxplot for comparing multiple datasets
+## Boxplot for comparing multiple datasets {.smaller}
 
 ```{r}
 #| label: att8-boxplot
@@ -1275,10 +1263,8 @@ schools_all |>
        x = "Average Attainment 8 score", y = NULL) +
   theme_minimal(base_size = 13)
 ```
-
 - Side-by-side boxplots make the comparison immediate
 - Note how much **wider** the special school box is — not just lower
-
 - When there are lots of 'outliers' in the data
 - What are 'Outliers'?
 
@@ -1333,20 +1319,73 @@ schools_all |>
 - Always check this **before** you compute anything
 - And ask *why* each one is missing, not just how many
 
-## Null island in geography
-- long=0, lat=0. Not even an island!
-- It became famous because some software assigned "0,0" for long-lat when location is missing
-- Many events were mapped to this one, including lots on Strava
-- Source: wikipedia.org
+## Missing values have a distribution too {.smaller}
 
-:::: {.columns}
-::: {.column width="50%"}
-![](L1_images/map_null_island.jpg){height=300px}
+```{r}
+#| label: missingness-not-random
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10.5
+#| fig-height: 3.8
+#| fig-align: center
+
+miss <- schools_all |>
+  filter(!is.na(TOTPUPS)) |>
+  mutate(status = if_else(is.na(P8MEA),
+                          "Progress 8 missing", "Progress 8 present"))
+
+m_size <- ggplot(miss, aes(x = TOTPUPS, fill = status, colour = status)) +
+  geom_density(alpha = 0.35, linewidth = 0.9) +
+  scale_fill_manual(values = c(casa_pink, casa_teal)) +
+  scale_colour_manual(values = c(casa_pink, casa_teal)) +
+  labs(title = "Size of school", x = "Pupils on roll", y = "Density",
+       fill = NULL, colour = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.y = element_blank(), legend.position = "bottom")
+
+m_type <- schools_all |>
+  filter(!is.na(MINORGROUP)) |>
+  group_by(MINORGROUP) |>
+  summarise(pct = 100 * mean(is.na(P8MEA)), .groups = "drop") |>
+  mutate(MINORGROUP = fct_reorder(MINORGROUP, pct)) |>
+  ggplot(aes(x = pct, y = MINORGROUP)) +
+  geom_col(fill = casa_purple, alpha = 0.8) +
+  geom_text(aes(label = sprintf("%.1f%%", pct)), hjust = -0.12, size = 3) +
+  scale_x_continuous(limits = c(0, 118), expand = expansion(mult = c(0, 0))) +
+  labs(title = "Missing, by school type", x = "% with no Progress 8", y = NULL) +
+  theme_minimal(base_size = 11)
+
+patchwork::wrap_plots(m_size, m_type, nrow = 1, widths = c(1, 1.1))
+```
+
+::: {.incremental}
+- If values went missing at random, the two curves on the left would sit on top of each other
+- Median size where Progress 8 is missing: **247** pupils. Where it is present: **1,019**
+- Independent schools are missing it **99.6%** of the time; maintained schools **0.0%**
 :::
-::: {.column width="50%"}
-![](L1_images/image_null_island_2017.jpg){height=300px}
+
+## So the gaps are data
+
+::: {.incremental}
+- `SUPP` means *suppressed because the numbers are small* — so a gap is telling you the school is **small**
+- Independent schools sit outside the state accountability system, so a gap can also mean **"not measured here"**
+- Drop every incomplete row and you have quietly deleted small schools and independent schools from your analysis
+- **Which is a decision, exactly like the filtering we did earlier**
 :::
-::::
+
+. . .
+
+Always look at *which* cases are missing before you decide what to do about them.
+
+::: {.notes}
+This is the replacement for the Null Island slide. The point is stronger with
+our own data: missingness here is structured, predictable, and informative,
+rather than being an absence of information.
+
+Ties directly back to the population-to-sample slides, and forward to next
+week's treatment of representativeness.
+:::
 
 ## Outliers {.smaller}
 - A data point that differs significantly from other observations
@@ -1364,8 +1403,94 @@ Previously this was three near-identical slides revealing one row at a time.
 Consolidated. If you want the reveal back, wrap each row in a fragment.
 :::
 
-## Detecting outlier: interquartile range (IQR)
-![](L1_images/outlier_detection_Tukey_Fences.jpg)
+## What counts as an outlier?
+
+Two standard rules, and they are just conventions:
+
+:::: {.columns}
+::: {.column width="50%"}
+**Standard deviations from the mean**
+
+$$z = \frac{y_i - \bar{y}}{\sigma}$$
+
+Flag anything with $|z| > 3$ — or 2, or 2.5, depending on who you ask.
+:::
+
+::: {.column width="50%"}
+**Tukey's fences**
+
+Flag anything below $Q_1 - 1.5 \times IQR$ or above $Q_3 + 1.5 \times IQR$.
+
+Widen to $3 \times IQR$ for "far out" values.
+:::
+::::
+
+```{r}
+#| label: outlier-rules
+#| echo: false
+
+orx <- schools_mainstream$ATT8SCR
+orx <- orx[!is.na(orx)]
+mu <- mean(orx); sdv <- sd(orx)
+qq <- quantile(orx, c(0.25, 0.75)); iq <- qq[2] - qq[1]
+
+tibble(
+  Rule = c("|z| > 2", "|z| > 3", "Tukey 1.5 x IQR", "Tukey 3 x IQR"),
+  `Schools flagged` = c(sum(abs(orx - mu) / sdv > 2),
+                        sum(abs(orx - mu) / sdv > 3),
+                        sum(orx < qq[1] - 1.5 * iq | orx > qq[2] + 1.5 * iq),
+                        sum(orx < qq[1] - 3 * iq | orx > qq[2] + 3 * iq))
+) |>
+  mutate(`% of schools` = sprintf("%.1f%%", 100 * `Schools flagged` / length(orx)),
+         `Schools flagged` = comma(`Schools flagged`)) |>
+  kable(align = "lrr")
+```
+
+. . .
+
+Four rules, four answers, on the same 3,250 schools. **"Outlier" is a choice, not a fact** — so say which rule you used.
+
+## Error, or the most interesting thing in your data? {.smaller}
+
+```{r}
+#| label: outlier-who
+#| echo: false
+
+ow <- schools_mainstream |> filter(!is.na(ATT8SCR))
+muw <- mean(ow$ATT8SCR); sdw <- sd(ow$ATT8SCR)
+ow <- ow |> mutate(z = (ATT8SCR - muw) / sdw)
+
+ow |>
+  filter(abs(z) > 3) |>
+  arrange(desc(z)) |>
+  transmute(School = SCHNAME, `Local authority` = LANAME,
+            `Attainment 8` = sprintf("%.1f", ATT8SCR), z = sprintf("%+.2f", z)) |>
+  head(5) |>
+  kable(align = "llrr")
+```
+
+::: {.incremental}
+- `r sum(abs((schools_mainstream$ATT8SCR - mean(schools_mainstream$ATT8SCR, na.rm=TRUE))/sd(schools_mainstream$ATT8SCR, na.rm=TRUE)) > 3, na.rm = TRUE)` schools are beyond 3 standard deviations, and almost all of them are at the **top**
+- Every school in that table is a **selective grammar school**
+- These are not data errors. They are the single most informative cases in the file
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.9em;"}
+Delete your outliers and you would have deleted the evidence that **selection
+matters enormously** — which is exactly the question weeks 6 to 8 are about.
+:::
+
+::: {.notes}
+This is the point to labour. An outlier is a case that does not fit the
+pattern you assumed. Sometimes that means the measurement is wrong.
+Just as often it means the assumption is wrong, and the case is the finding.
+
+Contrast with the low end: Stephenson Studio School at 12.0 is a studio
+school with a tiny cohort, which is closer to the "different kind of thing"
+category we saw with special schools.
+:::
 
 ## Tukey's fences on our data {.smaller}
 
