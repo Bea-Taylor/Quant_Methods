@@ -55,9 +55,9 @@ ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
   # schools, and because dplyr joins NA to NA they would also duplicate rows.
   filter(!is.na(URN)) |>
   select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
-         PTFSM6CLA1A, PTPRIORLO) |>
+         PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO) |>
   mutate(across(c(ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
-                  PTFSM6CLA1A, PTPRIORLO),
+                  PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO),
                 ~ parse_number(as.character(.x))))
 
 # Absence lives in a separate file, keyed on the same URN
@@ -73,7 +73,7 @@ absence <- read_csv(file.path(base_path, "england_abs.csv"),
 school_info <- read_csv(file.path(base_path, "england_school_information.csv"),
                         na = na_all, show_col_types = FALSE) |>
   mutate(URN = as.character(URN)) |>
-  select(URN, SCHNAME, LANAME, MINORGROUP, SCHOOLTYPE,
+  select(URN, SCHNAME, LANAME, MINORGROUP, SCHOOLTYPE, GENDER,
          OFSTEDRATING, RELCHAR, ADMPOL, OFSTEDLASTINSP)
 
 # Everything with a KS4 result, INCLUDING special and independent schools.
@@ -83,7 +83,10 @@ schools_all <- ks4 |>
   left_join(absence, by = "URN") |>
   filter(!is.na(ATT8SCR)) |>
   # raw head-count of disadvantaged pupils, for the counts-vs-rates slide
-  mutate(n_disadvantaged = round(TPUP * PTFSM6CLA1A / 100))
+  mutate(n_disadvantaged = round(TPUP * PTFSM6CLA1A / 100),
+         # a genuine binary variable: single-sex or not
+         single_sex = if_else(GENDER %in% c("Boys", "Girls"),
+                              "Single sex", "Mixed"))
 
 # Ofsted is ordinal: set the order once so every plot agrees
 ofsted_order <- c("Special Measures", "Serious Weaknesses",
@@ -371,13 +374,251 @@ This is the slide that stops students assuming "has a zero" means "ratio".
 
 Still ordinal. Storing something as a number does not make the gaps equal.
 
-## Another categorisation: numerical vs. categorical
+## The everyday shorthand: numerical vs. categorical
 | Type                           | Category        | In our data                                    |
 | ------------------------------ | --------------- | ---------------------------------------------- |
 | Quantitative (numerical) data  | Discrete data   | number of pupils on roll                       |
 |                                | Continuous data | Attainment 8 score, % disadvantaged            |
 | Qualitative (categorical) data | Nominal         | school type, region, religious character       |
 |                                | Ordinal         | Ofsted rating                                  |
+
+. . .
+
+Useful, but too coarse to tell you what to actually *do* with a variable.
+
+# A finer-grained decomposition
+
+## Why four levels are not enough
+
+Stevens tells us what **operations** are permitted. It does not tell us which
+**distribution** a variable follows, or which **model** to fit.
+
+. . .
+
+Consider two variables from our data, both on a **ratio** scale:
+
+- the **number of pupils** at a school — whole numbers, cannot be negative
+- the **percentage of sessions missed** through absence — continuous, strictly positive, heavily skewed
+
+. . .
+
+Same level of measurement. Completely different distributions, and completely
+different models. We need something more specific.
+
+## Simple statistical data types {.smaller}
+
+| Data type | Possible values | Level of measurement | Common distributions | Common model |
+|-----------|-----------------|:--------------------:|----------------------|--------------|
+| **binary** | 0, 1 | nominal | Bernoulli | logistic, probit |
+| **categorical** | "name1" … "nameK" | nominal | categorical | multinomial logit / probit |
+| **ordinal** | ordered categories | ordinal | categorical | ordered logit / probit |
+| **binomial** | 0, 1, …, N | interval | binomial, beta-binomial | binomial regression |
+| **real-valued additive** | any real number | interval | normal — symmetric | standard linear regression |
+| **count** | 0, 1, 2, … | ratio | Poisson, negative binomial | Poisson / neg. binomial regression |
+| **real-valued multiplicative** | positive real | ratio | log-normal, gamma, exponential — skewed | GLM with a logarithmic link |
+
+[Adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
+
+::: {.notes}
+The two columns worth dwelling on are the last two. The whole point of this
+table is that the data type determines the distribution, and the distribution
+determines the model. Everything in weeks 5 to 10 is an instance of this.
+:::
+
+## Every one of these is in our dataset {.smaller}
+
+```{r}
+#| label: types-mapping
+#| echo: false
+
+tibble(
+  `Data type` = c("binary", "categorical", "ordinal", "binomial",
+                  "real-valued additive", "count", "real-valued multiplicative"),
+  `Variable` = c("single sex / mixed", "MINORGROUP", "OFSTEDRATING",
+                 "TFSM6CLA1A out of TPUP", "P8MEA", "TOTPUPS", "PERCTOT"),
+  `What it is` = c("Is the school single sex?",
+                   "School type",
+                   "Ofsted rating",
+                   "Disadvantaged pupils out of the cohort",
+                   "Progress 8",
+                   "Pupils on roll",
+                   "% of sessions missed")
+) |>
+  kable(align = "lll")
+```
+
+We will meet the model in the right-hand column of the previous slide for
+almost all of these before the course ends.
+
+## Binary
+
+```{r}
+#| label: type-binary
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+
+schools_all |>
+  filter(!is.na(single_sex)) |>
+  count(single_sex) |>
+  ggplot(aes(x = n, y = single_sex)) +
+  geom_col(fill = casa_teal, alpha = 0.85) +
+  geom_text(aes(label = comma(n)), hjust = -0.15, size = 4) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15)), labels = comma) +
+  labs(x = "Number of schools", y = NULL) +
+  theme_minimal(base_size = 12)
+```
+
+- Exactly two outcomes, so the whole variable is described by **one number**: the proportion
+- Distribution: **Bernoulli**
+- If this were the thing we wanted to *predict*, we would need **logistic regression**
+
+## Count
+
+```{r}
+#| label: type-count
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.6
+#| fig-align: center
+
+schools_mainstream |>
+  filter(!is.na(TOTPUPS)) |>
+  ggplot(aes(x = TOTPUPS)) +
+  geom_histogram(bins = 40, fill = casa_purple, alpha = 0.7) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+  labs(x = "Pupils on roll", y = "Schools") +
+  theme_minimal(base_size = 12)
+```
+
+- Whole numbers, never negative, no upper limit in principle
+- A mean of `r sprintf("%.0f", mean(schools_mainstream$TOTPUPS, na.rm = TRUE))` pupils is meaningful; a school with 1,204.7 pupils is not
+- Distribution: **Poisson** or **negative binomial**, not normal
+
+## Binomial
+
+```{r}
+#| label: type-binomial
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.6
+#| fig-align: center
+
+schools_mainstream |>
+  filter(!is.na(TFSM6CLA1A), !is.na(TPUP), TPUP > 0) |>
+  ggplot(aes(x = TPUP, y = TFSM6CLA1A)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_point(alpha = 0.2, colour = casa_teal, size = 1) +
+  labs(x = "Pupils in the cohort (N)",
+       y = "Disadvantaged pupils (successes)") +
+  theme_minimal(base_size = 12)
+```
+
+- A count **bounded above** by the size of the cohort — it cannot exceed N
+- The dashed line is the ceiling: every pupil disadvantaged
+- Distribution: **binomial**. This is why a percentage is the natural summary.
+
+## Real-valued additive
+
+```{r}
+#| label: type-additive
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.4
+#| fig-align: center
+
+p8 <- schools_mainstream |> filter(!is.na(P8MEA))
+
+ggplot(p8, aes(x = P8MEA)) +
+  geom_histogram(bins = 50, fill = casa_purple, alpha = 0.65) +
+  geom_vline(xintercept = mean(p8$P8MEA), colour = casa_pink, linewidth = 1) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+  labs(x = "Progress 8", y = "Schools") +
+  theme_minimal(base_size = 12)
+```
+
+- Can be **negative**. Symmetric about its mean.
+- Mean `r sprintf("%.3f", mean(p8$P8MEA))`, median `r sprintf("%.3f", median(p8$P8MEA))` — almost identical
+- Distribution: **normal**. Model: **ordinary linear regression** — weeks 6 and 7.
+
+## Real-valued multiplicative {.smaller}
+
+```{r}
+#| label: type-multiplicative
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.6
+#| fig-align: center
+
+abs_pos <- schools_mainstream |> filter(!is.na(PERCTOT), PERCTOT > 0)
+sk <- function(x) mean((x - mean(x))^3) / sd(x)^3
+
+p_raw <- ggplot(abs_pos, aes(x = PERCTOT)) +
+  geom_histogram(bins = 40, fill = casa_purple, alpha = 0.65) +
+  labs(title = paste0("As published  (skew = ", sprintf("%.2f", sk(abs_pos$PERCTOT)), ")"),
+       x = "% sessions missed", y = "Schools") +
+  theme_minimal(base_size = 11)
+
+p_log <- ggplot(abs_pos, aes(x = log(PERCTOT))) +
+  geom_histogram(bins = 40, fill = casa_teal, alpha = 0.65) +
+  labs(title = paste0("Logged  (skew = ", sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
+       x = "log(% sessions missed)", y = "Schools") +
+  theme_minimal(base_size = 11)
+
+patchwork::wrap_plots(p_raw, p_log, nrow = 1)
+```
+
+- Strictly positive, and **skewed** — a long tail of high-absence schools
+- Taking the logarithm makes it very nearly symmetric
+- This is not a trick. It is what the data type tells us to do — and it is
+  exactly what we do in **week 6** when we fit a log-log model.
+
+## Why any of this matters {.smaller}
+
+| If your outcome is… | …the model you need is | Covered in |
+|---------------------|------------------------|------------|
+| real-valued additive | linear regression | weeks 6, 7 |
+| real-valued multiplicative | linear regression on logged data | weeks 6, 7 |
+| grouped / nested | linear mixed effects | week 8 |
+| binary | logistic regression | not covered — but you will meet it |
+| count | Poisson regression | not covered — but you will meet it |
+
+. . .
+
+**Choosing the wrong one does not usually throw an error.** It quietly gives
+you a plausible, wrong answer. Knowing your data type is the defence.
+
+## Statistical types and programming types {.smaller}
+
+| Statistical type | Programming type | In R | In Python / pandas |
+|------------------|------------------|------|--------------------|
+| real-valued (interval or ratio) | floating point | `numeric` / `double` | `float64` |
+| count | integer | `integer` | `int64` |
+| binary | Boolean | `logical` | `bool` |
+| categorical | enumerated type | `factor` | `category` |
+| ordinal | ordered enumerated type | `ordered factor` | `Categorical(ordered=True)` |
+| random vector | list or array | `vector` | `ndarray` / `Series` |
+| random matrix | two-dimensional array | `matrix` | 2-D `ndarray` |
+
+[Left two columns adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
+
+## Storing it wrong has consequences
+
+::: {.incremental}
+- Read Ofsted rating as plain text and R will order it **alphabetically** — Good, Inadequate, Outstanding, Requires improvement
+- That is not a ranking, it is the alphabet
+- Store it as an **ordered factor** and every table, plot and model respects the real order
+- We set exactly this up in the code behind these slides
+:::
+
+::: {.notes}
+Tie back to the Ofsted plot earlier in the lecture, which only came out in a
+sensible order because OFSTEDRATING was converted to an ordered factor in the
+setup chunk.
+:::
 
 ## Quiz time
 
