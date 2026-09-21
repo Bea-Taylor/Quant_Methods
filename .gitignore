@@ -36,6 +36,7 @@ cloud-config.yml
 render-local.sh
 render.log
 render.err.log
+preview.log
 
 # Quarto figure dirs written next to the source qmds (regenerated every render)
 sessions/*_files/
