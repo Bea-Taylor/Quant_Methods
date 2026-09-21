@@ -1687,28 +1687,44 @@ tibble(
 1. A school whose results collapsed in the year its building flooded
 1. The special schools in the national attainment distribution
 
-## A row is a school, not a pupil
+<!-- ## A row is a school, not a pupil -->
 
-::: {.notes}
-PLACEHOLDER — new content needed.
+<!-- ::: {.notes} -->
+<!-- PLACEHOLDER — new content needed. -->
 
-Intended point: the ecological fallacy. We can say "schools with more
-disadvantaged pupils have lower average attainment". We cannot say
-"disadvantaged pupils do worse" from this data — that is a statement about pupils, and we only have school averages.
+<!-- Intended point: the ecological fallacy. We can say "schools with more -->
+<!-- disadvantaged pupils have lower average attainment". We cannot say -->
+<!-- "disadvantaged pupils do worse" from this data — that is a statement about pupils, and we only have school averages. -->
 
-Weeks 6-8 are careful about this in practice but never name it. Naming it here would pay off across the whole term.
-:::
+<!-- Weeks 6-8 are careful about this in practice but never name it. Naming it here would pay off across the whole term. -->
+<!-- ::: -->
 
 # Overview
+
 We've covered:
 
-- Our dataset for the term: DfE school performance, 2022/23
-- Data types: Stevens' levels of measurement, and the finer statistical types
-- Key metrics, and why the mean was below the median
-- Null values, DfE suppression codes, and outliers
-- Visualising data
+- **Our dataset for the term** — DfE school performance, 2022/23
+- **Data types** — Stevens' four levels, and the finer statistical types that tell you which distribution and which model
+- **Distributions** — what one is, and how to read a histogram and a boxplot
+- **The middle and the spread** — why the mean sat below the median, and why a mean without a standard deviation is half a number
+- **Making things comparable** — counts, rates and standard scores
+- **Special values** — DfE suppression codes, missingness that is not random, and outliers
 
 # Practical
-Practical will focus on setting up Python environment and describing a dataset.
 
-- Have questions prepared!
+You will do all of that again yourself, on the same data, **slicing it a
+different way**.
+
+::: {.incremental}
+- Every step is given in **both R and Python** — pick whichever you prefer
+- Read and join the three DfE files, and handle the suppression codes properly
+- Classify the variables, then describe and plot one of them
+- **Choose your own grouping variable** — Ofsted rating, gender, religious character, local authority — and compare across its groups
+- Find what is missing, work out whether it is missing at random, and flag the outliers
+- Finish by writing down what your data can and cannot support a claim about
+:::
+
+. . .
+
+Bring questions. The last task is the one the rest of this course exists to
+answer.
