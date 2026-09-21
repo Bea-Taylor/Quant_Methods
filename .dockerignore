@@ -1,4 +1,17 @@
-# The image only needs requirements.txt; the project itself is bind-mounted
-# at run time. Keeps `docker build` from uploading _site, venvs, data, etc.
+# The image only needs these files to bake R/Python packages at build time;
+# the project itself is bind-mounted at run time. Keeps `docker build` from
+# uploading _site, venvs, data, etc.
+#
+# A file under an excluded directory can't be re-included by naming it
+# directly (Docker never walks into an excluded dir to find it) - so the
+# directories themselves have to be un-ignored, with their unwanted contents
+# re-excluded afterwards.
 *
 !requirements.txt
+!renv.lock
+!renv
+renv/library
+renv/.cache
+!setup
+setup/casaviz.zip.backup
+setup/index.qmd
