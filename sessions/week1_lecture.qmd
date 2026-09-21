@@ -456,9 +456,9 @@ patchwork::wrap_plots(h_top, b_bot, ncol = 1, heights = c(3, 1))
 ```
 
 ::: {.incremental}
-- Same data, same axis. The dashed lines are the **quartiles**
-- The **box** holds the middle 50% of schools; the line inside it is the **median**
-- The whiskers reach the furthest point within 1.5 × the box width; anything beyond is drawn as an outlier
+- A **boxplot** or a *box and whisker* plot - same data, same axis. The dashed lines are the **quartiles**
+- The **box** holds the middle 50% of schools (the **inter-quartile range or IQR)**; the line inside it is the **median**
+- The **whiskers** reach the furthest point within 1.5 × the box width; anything beyond it (the dots) are known as **outliers** - more later
 - A boxplot is a histogram with the shape thrown away and **five numbers kept**
 :::
 
@@ -1244,6 +1244,95 @@ the first place, which is why we looked at the shape before computing
 anything.
 :::
 
+## Comparing things measured on different scales {.smaller}
+
+```{r}
+#| label: raw-scales
+#| echo: false
+
+zvars <- c(ATT8SCR = "Attainment 8", PERCTOT = "% sessions missed",
+           PTFSM6CLA1A = "% disadvantaged", PTPRIORLO = "% low prior attainment",
+           TOTPUPS = "Pupils on roll")
+
+schools_mainstream |>
+  summarise(across(all_of(names(zvars)),
+                   list(mean = ~mean(.x, na.rm = TRUE), sd = ~sd(.x, na.rm = TRUE)))) |>
+  pivot_longer(everything(), names_to = c("var", "stat"), names_sep = "_(?=[^_]+$)") |>
+  pivot_wider(names_from = stat, values_from = value) |>
+  transmute(Variable = zvars[var],
+            Mean = sprintf("%.1f", mean),
+            `Std dev` = sprintf("%.1f", sd)) |>
+  kable(align = "lrr")
+```
+
+. . .
+
+A school is 3 points above average on Attainment 8 and 300 pupils above
+average in size. **Which is the more unusual?** On the raw numbers the
+question is meaningless — the units are different.
+
+## The standard score (z-score)
+
+$$z = \frac{x - \bar{x}}{\sigma}$$
+
+Subtract the mean, divide by the standard deviation.
+
+::: {.incremental}
+- The result is measured in **standard deviations**, so every variable lands on the same scale
+- $z = 0$ is exactly average, $z = +1$ is one standard deviation above, and the sign gives the direction
+- After standardising, every variable has mean 0 and standard deviation 1
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.85em;"}
+You will meet this again. **Week 5** uses z-scores to check for outliers
+before ANOVA. **Weeks 9 and 10** standardise every variable before PCA and
+clustering — otherwise "pupils on roll", with a standard deviation of 398,
+would drown out "% sessions missed", with a standard deviation of 2.6.
+:::
+
+## One school, five variables {.smaller}
+
+```{r}
+#| label: z-profile
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.9
+#| fig-align: center
+
+zdat <- schools_mainstream |>
+  mutate(across(all_of(names(zvars)), ~ as.numeric(scale(.x)), .names = "z_{.col}"))
+
+picks <- c("Longhill High School", "Dorothy Stringer School")
+
+zdat |>
+  filter(SCHNAME %in% picks) |>
+  select(SCHNAME, starts_with("z_")) |>
+  pivot_longer(-SCHNAME, names_to = "var", values_to = "z") |>
+  mutate(var = zvars[sub("^z_", "", var)],
+         var = fct_rev(factor(var, levels = unname(zvars))),
+         SCHNAME = factor(SCHNAME, levels = picks)) |>
+  ggplot(aes(x = z, y = var)) +
+  geom_vline(xintercept = 0, colour = "grey40") +
+  geom_segment(aes(x = 0, xend = z, yend = var), colour = "grey70") +
+  geom_point(aes(colour = z > 0), size = 3.5, show.legend = FALSE) +
+  scale_colour_manual(values = c(`TRUE` = casa_pink, `FALSE` = casa_teal)) +
+  facet_wrap(~ SCHNAME) +
+  labs(x = "Standard deviations from the national average", y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(strip.text = element_text(face = "bold"))
+```
+
+::: {.incremental}
+- Five variables, five different units, **one readable picture**
+- Two schools three miles apart in Brighton, with mirror-image profiles
+- Longhill sits well above average on absence and below it on attainment — while its disadvantage is only just above average
+- That contrast is the question weeks 6 to 8 spend three weeks answering
+:::
+
 ## Boxplot for comparing multiple datasets {.smaller}
 
 ```{r}
@@ -1264,7 +1353,7 @@ schools_all |>
   theme_minimal(base_size = 13)
 ```
 - Side-by-side boxplots make the comparison immediate
-- Note how much **wider** the special school box is — not just lower
+- Note how much **wider** the independent school box is — not just lower
 - When there are lots of 'outliers' in the data
 - What are 'Outliers'?
 
@@ -1403,17 +1492,19 @@ Previously this was three near-identical slides revealing one row at a time.
 Consolidated. If you want the reveal back, wrap each row in a fragment.
 :::
 
-## What counts as an outlier?
+## What counts as an outlier? {.smaller}
 
 Two standard rules, and they are just conventions:
 
 :::: {.columns}
 ::: {.column width="50%"}
-**Standard deviations from the mean**
+**The standard score**
 
-$$z = \frac{y_i - \bar{y}}{\sigma}$$
+Use the $z$ we met earlier, and flag anything with $|z| > 3$ — or 2, or 2.5,
+depending on who you ask.
 
-Flag anything with $|z| > 3$ — or 2, or 2.5, depending on who you ask.
+$z$ measures *how far from average* a value is. The **threshold** is what
+turns that into a claim about outliers.
 :::
 
 ::: {.column width="50%"}
@@ -1534,7 +1625,7 @@ tibble(
 
 # One more trap: counts vs rates
 
-## Big schools have big numbers
+## Big schools have big numbers {.smaller}
 
 ```{r}
 #| label: counts-vs-rates
@@ -1568,15 +1659,12 @@ p_rate <- ggplot(cvr, aes(x = TPUP, y = PTFSM6CLA1A)) +
 patchwork::wrap_plots(p_count, p_rate, nrow = 1)
 ```
 
-::: {.incremental}
 - The left panel is a **strong** relationship that tells you nothing: big schools have more of everything
 - The right panel divides by size, and the relationship all but vanishes
 - Raw counts mostly measure **how big a place is**. Almost always, you want a rate.
-:::
 
 ::: {.notes}
-The most common mistake in student data journalism. One slide is enough to
-inoculate against it, and it pays off again in week 6.
+The most common mistake in student data journalism. One slide is enough to inoculate against it, and it pays off again in week 6.
 :::
 
 ## A row is a school, not a pupil
@@ -1586,11 +1674,9 @@ PLACEHOLDER — new content needed.
 
 Intended point: the ecological fallacy. We can say "schools with more
 disadvantaged pupils have lower average attainment". We cannot say
-"disadvantaged pupils do worse" from this data — that is a statement about
-pupils, and we only have school averages.
+"disadvantaged pupils do worse" from this data — that is a statement about pupils, and we only have school averages.
 
-Weeks 6-8 are careful about this in practice but never name it. Naming it here
-would pay off across the whole term.
+Weeks 6-8 are careful about this in practice but never name it. Naming it here would pay off across the whole term.
 :::
 
 # Overview
