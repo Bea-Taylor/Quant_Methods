@@ -900,34 +900,131 @@ Do not resolve this yet — it is the hook for the visualisation section.
 For Attainment 8 the mode is close to useless: scores are near-continuous, so
 almost every school has its own value. Reporting it would be a mistake.
 
-## Variance: quantifying spread
-Denote each school's Attainment 8 by $[y_1, y_2, ..., y_n]$ and variance by $\sigma^2$
+## The middle is not enough
 
-$$
-\begin{aligned}
-\sigma^2 &= \frac{\sum_{i=1}^{n} (y_i - \bar{y})^2}{n} \\
-&= \frac{(y_1 - \bar{y})^2 + (y_2 - \bar{y})^2 + \dots + (y_n - \bar{y})^2}{n}
-\end{aligned}
-$$
+```{r}
+#| label: same-mean-diff-spread
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 9
+#| fig-height: 3.9
+#| fig-align: center
 
-A large variance means considerable spreadedness in data.
+pair <- schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"))
 
-## Standard deviation $\sigma$
-$$
-\begin{aligned}
-\text{Standard Deviation} = \sqrt{\text{Variance}}
-\end{aligned}
-$$
+pair_stats <- pair |>
+  group_by(MINORGROUP) |>
+  summarise(n = n(), mean = mean(ATT8SCR), sd = sd(ATT8SCR), .groups = "drop")
 
-- Unit: if $y$ is in GCSE points, then St. Dev is in GCSE points, variance in $\text{points}^2$
-- Which is why we almost always report the standard deviation, not the variance
+ggplot(pair, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
+  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
+  geom_boxplot(width = 0.10, outlier.size = 0.5, outlier.alpha = 0.35,
+               fill = "white", alpha = 0.9) +
+  geom_point(data = pair_stats, aes(x = MINORGROUP, y = mean),
+             inherit.aes = FALSE, colour = casa_pink, size = 3) +
+  geom_text(data = pair_stats,
+            aes(x = MINORGROUP, y = 5,
+                label = paste0("n = ", comma(n),
+                               "
+mean = ", sprintf("%.2f", mean),
+                               "
+sd = ", sprintf("%.2f", sd))),
+            inherit.aes = FALSE, size = 3.2, colour = "grey25") +
+  scale_fill_manual(values = c(casa_purple, casa_teal), guide = "none") +
+  coord_flip() +
+  labs(x = NULL, y = "Attainment 8") +
+  theme_minimal(base_size = 12)
+```
+
+::: {.incremental}
+- The two means differ by **0.04 of a point** — for practical purposes, identical
+- The **spread** does not: academies are noticeably wider
+- Report only the mean and these two look like the same story. They are not.
+:::
+
+## Variance and standard deviation {.smaller}
+
+::::: columns
+::: {.column width="52%"}
+**Variance** is the average squared distance from the mean:
+
+$$\sigma^2 = \frac{\sum_{i=1}^{n} (y_i - \bar{y})^2}{n}$$
+
+**Standard deviation** is its square root:
+
+$$\sigma = \sqrt{\sigma^2}$$
 
 . . .
 
-For all English schools: $\sigma =$ `r sprintf("%.1f", sd(schools_all$ATT8SCR))` points.
-For mainstream secondaries only: $\sigma =$ `r sprintf("%.1f", sd(schools_mainstream$ATT8SCR))` points.
+Squaring is what makes variance awkward to talk about: if $y$ is in GCSE
+points, the variance is in **points²**. The standard deviation is back in
+points, which is why we almost always report that instead.
+:::
 
-**Same variable, very different spread.** Hold that thought.
+::: {.column width="48%"}
+```{r}
+#| label: var-sd-table
+#| echo: false
+
+schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school")) |>
+  group_by(`School type` = MINORGROUP) |>
+  summarise(
+    Mean       = sprintf("%.2f", mean(ATT8SCR)),
+    `Variance` = sprintf("%.0f", var(ATT8SCR)),
+    `Std dev`  = sprintf("%.2f", sd(ATT8SCR)),
+    .groups = "drop"
+  ) |>
+  kable(align = "lrrr")
+```
+
+[Same mean. The variance of academy scores is close to half again as large.]{style="font-size:0.75em;"}
+
+[Squaring also means **outliers count heavily** — a school 30 points from the mean contributes 900, not 30.]{style="font-size:0.75em;"}
+:::
+:::::
+
+## Spread across all four school types
+
+```{r}
+#| label: spread-all-types
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.3
+#| fig-align: center
+
+types <- schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school",
+                           "Independent school", "Special school")) |>
+  mutate(MINORGROUP = fct_reorder(MINORGROUP, ATT8SCR, .fun = median))
+
+type_lab <- types |>
+  group_by(MINORGROUP) |>
+  summarise(n = n(), sd = sd(ATT8SCR), .groups = "drop")
+
+ggplot(types, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
+  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
+  geom_boxplot(width = 0.11, outlier.size = 0.5, outlier.alpha = 0.35,
+               fill = "white", alpha = 0.9) +
+  geom_text(data = type_lab,
+            aes(x = MINORGROUP, y = -7,
+                label = paste0("n = ", comma(n), "   sd = ", sprintf("%.1f", sd))),
+            inherit.aes = FALSE, size = 3.1, colour = "grey25") +
+  scale_fill_manual(values = c(casa_teal, casa_green, casa_pink, casa_purple),
+                    guide = "none") +
+  labs(x = NULL, y = "Attainment 8") +
+  theme_minimal(base_size = 12)
+```
+
+::: {.incremental}
+- The **box** gives you the median, the quartiles and the outliers
+- The **width of the violin** is proportional to how many schools are in that group — a boxplot alone would hide that
+- Independent schools: widest spread by far (sd 18.9), and the only group where the box spans more than 30 points
+:::
 
 ## Summary of key metrics
 :::: {.columns}
