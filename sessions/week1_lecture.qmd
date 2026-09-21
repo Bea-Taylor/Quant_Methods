@@ -732,23 +732,17 @@ p_raw <- ggplot(abs_pos, aes(x = PERCTOT)) +
        x = "% sessions missed", y = "Schools") +
   theme_minimal(base_size = 11)
 
-# Same data, same units on the axis - only the SCALE is logged. ggplot applies
-# a position scale transformation before the stat, so the bins are computed in
-# log space, giving exactly the shape of a histogram of log(PERCTOT).
-p_log <- ggplot(abs_pos, aes(x = PERCTOT)) +
+p_log <- ggplot(abs_pos, aes(x = log(PERCTOT))) +
   geom_histogram(bins = 40, fill = casa_teal, alpha = 0.65) +
-  scale_x_log10(breaks = c(3, 5, 10, 20, 30)) +
-  labs(title = paste0("On a log scale  (skew = ",
-                      sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
-       x = "% sessions missed (log scale)", y = "Schools") +
+  labs(title = paste0("Logged  (skew = ", sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
+       x = "log(% sessions missed)", y = "Schools") +
   theme_minimal(base_size = 11)
 
 patchwork::wrap_plots(p_raw, p_log, nrow = 1)
 ```
 
 - Strictly positive, and **skewed** — a long tail of high-absence schools
-- Both panels show the same percentages. Only the **spacing of the axis** changes: on the right, equal distances mean equal *multiples* rather than equal *amounts*
-- On that scale the distribution is very nearly symmetric
+- Taking the logarithm makes it very nearly symmetric
 - This is not a trick. It is what the data type tells us to do — and it is
   exactly what we do in **week 6** when we fit a log-log model.
 
