@@ -377,30 +377,14 @@ P8MEA appears again later under real-valued additive, where its symmetry
 rather than its zero is the point.
 :::
 
-# A finer-grained decomposition
+# Visualising data
+![](L1_images/picture_worth_thousand_words.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
 
-## Why four levels are not enough
+## FT visual vocabulary
+- https://ft-interactive.github.io/visual-vocabulary/
+![](L1_images/FT_visual_vocabulary.jpg){style="max-width:90%; max-height:90%; margin:auto;"}
 
-Stevens tells us which **operations** are permitted. It does not tell us which
-**distribution** a variable follows, or which **model** to fit.
-
-. . .
-
-Take two variables from our data. Both are on a **ratio** scale — both have a
-true zero, both support ratios:
-
-| | Pupils on roll | % of sessions missed |
-|---|---|---|
-| Values | whole numbers | continuous |
-| Can be negative? | no | no |
-| Upper limit | none in principle | 100 |
-| Typical value | ~1,050 | ~9 |
-
-. . .
-
-Stevens says these are the same kind of thing. Let's look at them.
-
-## What is a distribution?{.smaller}
+## What is a distribution? {.smaller}
 
 ::: {style="font-size:0.8em;"}
 A **distribution** is just the answer to "how are the values spread out?" —
@@ -447,6 +431,74 @@ patchwork::wrap_plots(d1, d2, d3, nrow = 1)
 - The smooth curve is the same information with the bins taken away
 - Almost everything else in this course starts by asking what shape a variable has
 :::
+
+## A boxplot is a summarised histogram {.smaller}
+
+```{r}
+#| label: hist-to-boxplot
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 9.5
+#| fig-height: 4.2
+#| fig-align: center
+
+hb <- schools_mainstream |> filter(!is.na(ATT8SCR))
+q  <- quantile(hb$ATT8SCR, c(0.25, 0.5, 0.75))
+
+h_top <- ggplot(hb, aes(x = ATT8SCR)) +
+  geom_histogram(bins = 45, fill = casa_purple, alpha = 0.55) +
+  geom_vline(xintercept = q, colour = casa_pink, linetype = "dashed") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+  labs(x = NULL, y = "Schools") +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_blank())
+
+b_bot <- ggplot(hb, aes(x = ATT8SCR, y = "")) +
+  geom_boxplot(fill = casa_purple, alpha = 0.55, outlier.alpha = 0.3,
+               outlier.size = 0.7) +
+  geom_vline(xintercept = q, colour = casa_pink, linetype = "dashed") +
+  labs(x = "Attainment 8", y = NULL) +
+  theme_minimal(base_size = 11)
+
+patchwork::wrap_plots(h_top, b_bot, ncol = 1, heights = c(3, 1))
+```
+
+::: {.incremental}
+- Same data, same axis. The dashed lines are the **quartiles**
+- The **box** holds the middle 50% of schools; the line inside it is the **median**
+- The whiskers reach the furthest point within 1.5 × the box width; anything beyond is drawn as an outlier
+- A boxplot is a histogram with the shape thrown away and **five numbers kept**
+:::
+
+::: {.notes}
+Which is the trade. You lose the shape entirely - a boxplot cannot show you
+two humps - but you gain the ability to put many of them side by side, which we
+do later in this lecture.
+:::
+
+# A finer-grained decomposition
+
+## Why four levels are not enough
+
+Stevens tells us which **operations** are permitted. It does not tell us which
+**distribution** a variable follows, or which **model** to fit.
+
+. . .
+
+Take two variables from our data. Both are on a **ratio** scale — both have a
+true zero, both support ratios:
+
+| | Pupils on roll | % of sessions missed |
+|---|---|---|
+| Values | whole numbers | continuous |
+| Can be negative? | no | no |
+| Upper limit | none in principle | 100 |
+| Typical value | ~1,050 | ~9 |
+
+. . .
+
+Stevens says these are the same kind of thing. Let's look at them.
 
 ## Two ratio variables, two different shapes {.smaller}
 
@@ -537,30 +589,6 @@ tibble(
 
 We will meet the model in the right-hand column of the previous slide for
 almost all of these before the course ends.
-
-## Binary
-
-```{r}
-#| label: type-binary
-#| echo: false
-#| fig-width: 9
-#| fig-height: 3.4
-#| fig-align: center
-
-schools_all |>
-  filter(!is.na(single_sex)) |>
-  count(single_sex) |>
-  ggplot(aes(x = n, y = single_sex)) +
-  geom_col(fill = casa_teal, alpha = 0.85) +
-  geom_text(aes(label = comma(n)), hjust = -0.15, size = 4) +
-  scale_x_continuous(expand = expansion(mult = c(0, 0.15)), labels = comma) +
-  labs(x = "Number of schools", y = NULL) +
-  theme_minimal(base_size = 12)
-```
-
-- Exactly two outcomes, so the whole variable is described by **one number**: the proportion
-- Distribution: **Bernoulli**
-- If this were the thing we wanted to *predict*, we would need **logistic regression**
 
 ## Count
 
@@ -847,19 +875,27 @@ Suggested items: TOTPUPS, OFSTEDRATING, LANAME, ATT8SCR, P8MEA, OFSTEDLASTINSP.
 # How do you describe a ratio variable?
 
 ## Key metrics
+
 :::: {.columns}
-
-::: {.column width="50%"}
-
+::: {.column width="45%"}
 ::: {.incremental}
 - Quantity
 - The middle
 - The spread
 :::
-
 :::
 
+::: {.column width="55%"}
+- **Mean** — add everything up, divide by how many
+- **Median** — line them all up, take the middle one
+- **Mode** — the most common value
+:::
 ::::
+
+. . .
+
+For Attainment 8 the mode is close to useless: scores are near-continuous, so
+almost every school has its own value. Reporting it would be a mistake.
 
 ## Attainment 8 across all English schools {.smaller}
 
@@ -888,234 +924,6 @@ schools_all |>
 ::: {.notes}
 Do not resolve this yet — it is the hook for the visualisation section.
 :::
-
-## Mean, median, mode
-
-- **Mean** — add everything up, divide by how many
-- **Median** — line them all up, take the middle one
-- **Mode** — the most common value
-
-. . .
-
-For Attainment 8 the mode is close to useless: scores are near-continuous, so
-almost every school has its own value. Reporting it would be a mistake.
-
-## The middle is not enough
-
-```{r}
-#| label: same-mean-diff-spread
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 9
-#| fig-height: 3.9
-#| fig-align: center
-
-pair <- schools_all |>
-  filter(MINORGROUP %in% c("Academy", "Maintained school"))
-
-pair_stats <- pair |>
-  group_by(MINORGROUP) |>
-  summarise(n = n(), mean = mean(ATT8SCR), sd = sd(ATT8SCR), .groups = "drop")
-
-ggplot(pair, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
-  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
-  geom_boxplot(width = 0.10, outlier.size = 0.5, outlier.alpha = 0.35,
-               fill = "white", alpha = 0.9) +
-  geom_point(data = pair_stats, aes(x = MINORGROUP, y = mean),
-             inherit.aes = FALSE, colour = casa_pink, size = 3) +
-  geom_text(data = pair_stats,
-            aes(x = MINORGROUP, y = 5,
-                label = paste0("n = ", comma(n),
-                               "
-mean = ", sprintf("%.2f", mean),
-                               "
-sd = ", sprintf("%.2f", sd))),
-            inherit.aes = FALSE, size = 3.2, colour = "grey25") +
-  scale_fill_manual(values = c(casa_purple, casa_teal), guide = "none") +
-  coord_flip() +
-  labs(x = NULL, y = "Attainment 8") +
-  theme_minimal(base_size = 12)
-```
-
-::: {.incremental}
-- The two means differ by **0.04 of a point** — for practical purposes, identical
-- The **spread** does not: academies are noticeably wider
-- Report only the mean and these two look like the same story. They are not.
-:::
-
-## Variance and standard deviation {.smaller}
-
-::::: columns
-::: {.column width="52%"}
-**Variance** is the average squared distance from the mean:
-
-$$\sigma^2 = \frac{\sum_{i=1}^{n} (y_i - \bar{y})^2}{n}$$
-
-**Standard deviation** is its square root:
-
-$$\sigma = \sqrt{\sigma^2}$$
-
-. . .
-
-Squaring is what makes variance awkward to talk about: if $y$ is in GCSE
-points, the variance is in **points²**. The standard deviation is back in
-points, which is why we almost always report that instead.
-:::
-
-::: {.column width="48%"}
-```{r}
-#| label: var-sd-table
-#| echo: false
-
-schools_all |>
-  filter(MINORGROUP %in% c("Academy", "Maintained school")) |>
-  group_by(`School type` = MINORGROUP) |>
-  summarise(
-    Mean       = sprintf("%.2f", mean(ATT8SCR)),
-    `Variance` = sprintf("%.0f", var(ATT8SCR)),
-    `Std dev`  = sprintf("%.2f", sd(ATT8SCR)),
-    .groups = "drop"
-  ) |>
-  kable(align = "lrrr")
-```
-
-[Same mean. The variance of academy scores is close to half again as large.]{style="font-size:0.75em;"}
-
-[Squaring also means **outliers count heavily** — a school 30 points from the mean contributes 900, not 30.]{style="font-size:0.75em;"}
-:::
-:::::
-
-## Spread across all four school types
-
-```{r}
-#| label: spread-all-types
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 10
-#| fig-height: 4.3
-#| fig-align: center
-
-types <- schools_all |>
-  filter(MINORGROUP %in% c("Academy", "Maintained school",
-                           "Independent school", "Special school")) |>
-  mutate(MINORGROUP = fct_reorder(MINORGROUP, ATT8SCR, .fun = median))
-
-type_lab <- types |>
-  group_by(MINORGROUP) |>
-  summarise(n = n(), sd = sd(ATT8SCR), .groups = "drop")
-
-ggplot(types, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
-  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
-  geom_boxplot(width = 0.11, outlier.size = 0.5, outlier.alpha = 0.35,
-               fill = "white", alpha = 0.9) +
-  geom_text(data = type_lab,
-            aes(x = MINORGROUP, y = -7,
-                label = paste0("n = ", comma(n), "   sd = ", sprintf("%.1f", sd))),
-            inherit.aes = FALSE, size = 3.1, colour = "grey25") +
-  scale_fill_manual(values = c(casa_teal, casa_green, casa_pink, casa_purple),
-                    guide = "none") +
-  labs(x = NULL, y = "Attainment 8") +
-  theme_minimal(base_size = 12)
-```
-
-::: {.incremental}
-- The **box** gives you the median, the quartiles and the outliers
-- The **width of the violin** is proportional to how many schools are in that group — a boxplot alone would hide that
-- Independent schools: widest spread by far (sd 18.9), and the only group where the box spans more than 30 points
-:::
-
-## When is the mean a good summary?
-
-```{r}
-#| label: mean-usefulness
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 10
-#| fig-height: 3.8
-#| fig-align: center
-
-cmpg <- schools_all |>
-  filter(MINORGROUP %in% c("Maintained school", "Independent school")) |>
-  mutate(MINORGROUP = factor(MINORGROUP,
-                             levels = c("Maintained school", "Independent school")))
-
-band <- cmpg |>
-  group_by(MINORGROUP) |>
-  summarise(mean = mean(ATT8SCR), sd = sd(ATT8SCR), .groups = "drop") |>
-  mutate(lo = mean - sd, hi = mean + sd)
-
-ggplot(cmpg, aes(x = ATT8SCR)) +
-  geom_rect(data = band, aes(xmin = lo, xmax = hi, ymin = -Inf, ymax = Inf),
-            inherit.aes = FALSE, fill = casa_yellow, alpha = 0.35) +
-  geom_density(aes(colour = MINORGROUP), linewidth = 1, show.legend = FALSE) +
-  geom_vline(data = band, aes(xintercept = mean), colour = casa_pink, linewidth = 1) +
-  geom_text(data = band,
-            aes(x = mean, y = Inf,
-                label = paste0("mean ", sprintf("%.1f", mean),
-                               "\nsd ", sprintf("%.1f", sd),
-                               "\n±1 sd spans ", sprintf("%.0f", hi - lo), " points")),
-            inherit.aes = FALSE, vjust = 1.3, size = 3.2, colour = "grey20") +
-  scale_colour_manual(values = c(casa_teal, casa_green)) +
-  facet_wrap(~ MINORGROUP) +
-  labs(x = "Attainment 8", y = "Density") +
-  theme_minimal(base_size = 11) +
-  theme(axis.text.y = element_blank(),
-        strip.text = element_text(face = "bold"))
-```
-
-::: {.incremental}
-- If the data are roughly normal, about **two thirds** of observations sit inside the shaded band
-- For maintained schools that band is ~16 points wide — the mean tells you a lot
-- For independent schools it is ~38 points — more than a third of the whole 0–90 scale
-- **Same statistic. Very different amount of information.**
-:::
-
-## A mean without a spread is half a number
-
-::: {.incremental}
-- A large standard deviation means individual cases sit far from the mean, so the mean describes **no one in particular**
-- A small standard deviation means the mean is a good stand-in for a typical case
-- This is why you should never report a mean on its own
-:::
-
-. . .
-
-::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px;"}
-**Coming up in week 5.** This intuition becomes a formal test. **ANOVA** asks
-whether the differences *between* group means are large compared with the
-spread *within* the groups — precisely the comparison your eye is making
-across these two panels.
-:::
-
-::: {.notes}
-The caveat to state out loud: the two-thirds rule assumes roughly normal data.
-For the skewed variables we saw earlier the mean is a questionable choice in
-the first place, which is why we looked at the shape before computing
-anything.
-:::
-
-## Summary of key metrics
-:::: {.columns}
-
-::: {.incremental}
-- Quantity
-- The middle: mean, median, mode
-- The spread: variance, standard deviation
-- *Visualising data is also important*: BOXPLOT!
-- *Please check two types of SPECIAL VALUES before computing these metrics.*
-:::
-
-::::
-
-# Visualising data
-![](L1_images/picture_worth_thousand_words.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
-
-## FT visual vocabulary
-- https://ft-interactive.github.io/visual-vocabulary/
-![](L1_images/FT_visual_vocabulary.jpg){style="max-width:90%; max-height:90%; margin:auto;"}
 
 ## So why is the mean below the median?
 
@@ -1251,10 +1059,202 @@ The assessment asks them to justify their data choices — this is what that
 means in practice.
 :::
 
-## Boxplot for a dataset
-- Showing distribution of a dataset
+## The middle is not enough
 
-![](L1_images/Boxplot.jpg){style="width:70%; height:70%;"}
+```{r}
+#| label: same-mean-diff-spread
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 9
+#| fig-height: 3.9
+#| fig-align: center
+
+pair <- schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"))
+
+pair_stats <- pair |>
+  group_by(MINORGROUP) |>
+  summarise(n = n(), mean = mean(ATT8SCR), sd = sd(ATT8SCR), .groups = "drop")
+
+ggplot(pair, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
+  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
+  geom_boxplot(width = 0.10, outlier.size = 0.5, outlier.alpha = 0.35,
+               fill = "white", alpha = 0.9) +
+  geom_point(data = pair_stats, aes(x = MINORGROUP, y = mean),
+             inherit.aes = FALSE, colour = casa_pink, size = 3) +
+  geom_text(data = pair_stats,
+            aes(x = MINORGROUP, y = 5,
+                label = paste0("n = ", comma(n),
+                               "
+mean = ", sprintf("%.2f", mean),
+                               "
+sd = ", sprintf("%.2f", sd))),
+            inherit.aes = FALSE, size = 3.2, colour = "grey25") +
+  scale_fill_manual(values = c(casa_purple, casa_teal), guide = "none") +
+  coord_flip() +
+  labs(x = NULL, y = "Attainment 8") +
+  theme_minimal(base_size = 12)
+```
+
+::: {.incremental}
+- The two means differ by **0.04 of a point** — for practical purposes, identical
+- The **spread** does not: academies are noticeably wider
+- Report only the mean and these two look like the same story. They are not.
+:::
+
+## Variance and standard deviation {.smaller}
+
+::::: columns
+::: {.column width="52%"}
+**Variance** is the average squared distance from the mean:
+
+$$\sigma^2 = \frac{\sum_{i=1}^{n} (y_i - \bar{y})^2}{n}$$
+
+**Standard deviation** is its square root:
+
+$$\sigma = \sqrt{\sigma^2}$$
+
+. . .
+
+Squaring is what makes variance awkward to talk about: if $y$ is in GCSE
+points, the variance is in **points²**. The standard deviation is back in
+points, which is why we almost always report that instead.
+:::
+
+::: {.column width="48%"}
+```{r}
+#| label: var-sd-table
+#| echo: false
+
+schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school")) |>
+  group_by(`School type` = MINORGROUP) |>
+  summarise(
+    Mean       = sprintf("%.2f", mean(ATT8SCR)),
+    `Variance` = sprintf("%.0f", var(ATT8SCR)),
+    `Std dev`  = sprintf("%.2f", sd(ATT8SCR)),
+    .groups = "drop"
+  ) |>
+  kable(align = "lrrr")
+```
+
+[Same mean. The variance of academy scores is close to half again as large.]{style="font-size:0.75em;"}
+
+[Squaring also means **outliers count heavily** — a school 30 points from the mean contributes 900, not 30.]{style="font-size:0.75em;"}
+:::
+:::::
+
+## Spread across all four school types {.smaller}
+
+```{r}
+#| label: spread-all-types
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.3
+#| fig-align: center
+
+types <- schools_all |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school",
+                           "Independent school", "Special school")) |>
+  mutate(MINORGROUP = fct_reorder(MINORGROUP, ATT8SCR, .fun = median))
+
+type_lab <- types |>
+  group_by(MINORGROUP) |>
+  summarise(n = n(), sd = sd(ATT8SCR), .groups = "drop")
+
+ggplot(types, aes(x = MINORGROUP, y = ATT8SCR, fill = MINORGROUP)) +
+  geom_violin(scale = "count", alpha = 0.45, colour = NA) +
+  geom_boxplot(width = 0.11, outlier.size = 0.5, outlier.alpha = 0.35,
+               fill = "white", alpha = 0.9) +
+  geom_text(data = type_lab,
+            aes(x = MINORGROUP, y = -7,
+                label = paste0("n = ", comma(n), "   sd = ", sprintf("%.1f", sd))),
+            inherit.aes = FALSE, size = 3.1, colour = "grey25") +
+  scale_fill_manual(values = c(casa_teal, casa_green, casa_pink, casa_purple),
+                    guide = "none") +
+  labs(x = NULL, y = "Attainment 8") +
+  theme_minimal(base_size = 12)
+```
+
+::: {.incremental}
+- The **box** gives you the median, the quartiles and the outliers
+- The **width of the violin** is proportional to how many schools are in that group — a boxplot alone would hide that
+- Independent schools: widest spread by far (sd 18.9), and the only group where the box spans more than 30 points
+:::
+
+## When is the mean a good summary? {.smaller}
+
+```{r}
+#| label: mean-usefulness
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.8
+#| fig-align: center
+
+cmpg <- schools_all |>
+  filter(MINORGROUP %in% c("Maintained school", "Independent school")) |>
+  mutate(MINORGROUP = factor(MINORGROUP,
+                             levels = c("Maintained school", "Independent school")))
+
+band <- cmpg |>
+  group_by(MINORGROUP) |>
+  summarise(mean = mean(ATT8SCR), sd = sd(ATT8SCR), .groups = "drop") |>
+  mutate(lo = mean - sd, hi = mean + sd)
+
+ggplot(cmpg, aes(x = ATT8SCR)) +
+  geom_rect(data = band, aes(xmin = lo, xmax = hi, ymin = -Inf, ymax = Inf),
+            inherit.aes = FALSE, fill = casa_yellow, alpha = 0.35) +
+  geom_density(aes(colour = MINORGROUP), linewidth = 1, show.legend = FALSE) +
+  geom_vline(data = band, aes(xintercept = mean), colour = casa_pink, linewidth = 1) +
+  geom_text(data = band,
+            aes(x = mean, y = Inf,
+                label = paste0("mean ", sprintf("%.1f", mean),
+                               "\nsd ", sprintf("%.1f", sd),
+                               "\n±1 sd spans ", sprintf("%.0f", hi - lo), " points")),
+            inherit.aes = FALSE, vjust = 1.3, size = 3.2, colour = "grey20") +
+  scale_colour_manual(values = c(casa_teal, casa_green)) +
+  facet_wrap(~ MINORGROUP) +
+  labs(x = "Attainment 8", y = "Density") +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.y = element_blank(),
+        strip.text = element_text(face = "bold"))
+```
+
+::: {.incremental}
+- If the data are roughly normal, about **two thirds** of observations sit inside the shaded band
+- For maintained schools that band is ~16 points wide — the mean tells you a lot
+- For independent schools it is ~38 points — more than a third of the whole 0–90 scale
+- **Same statistic. Very different amount of information.**
+:::
+
+## A mean without a spread is half a number
+
+::: {.incremental}
+- A large standard deviation means individual cases sit far from the mean, so the mean describes **no one in particular**
+- A small standard deviation means the mean is a good stand-in for a typical case
+- This is why you should never report a mean on its own
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px;"}
+**Coming up in week 5.** This intuition becomes a formal test. **ANOVA** asks
+whether the differences *between* group means are large compared with the
+spread *within* the groups — precisely the comparison your eye is making
+across these two panels.
+:::
+
+::: {.notes}
+The caveat to state out loud: the two-thirds rule assumes roughly normal data.
+For the skewed variables we saw earlier the mean is a questionable choice in
+the first place, which is why we looked at the shape before computing
+anything.
+:::
 
 ## Boxplot for comparing multiple datasets
 
@@ -1279,18 +1279,15 @@ schools_all |>
 - Side-by-side boxplots make the comparison immediate
 - Note how much **wider** the special school box is — not just lower
 
-## When boxplot fails?
 - When there are lots of 'outliers' in the data
 - What are 'Outliers'?
 
 # Special values: null and outliers
 
-## *Null* values
+## *Null* values {.smaller}
 - Representing the absence of data or an unknown value
 - Different from *zero* or *a blank space*
 - Null values should be excluded before computing mean or std
-
-## Missing data is a decision someone made {.smaller}
 
 The DfE does not leave blanks — it publishes **codes**:
 
@@ -1351,12 +1348,10 @@ schools_all |>
 :::
 ::::
 
-## Outliers
+## Outliers {.smaller}
 - A data point that differs significantly from other observations
 - There are three types of outliers
 - Please explain the rationale for removing any identified outliers, including the criteria and methods used
-
-## Three types of outlier {.smaller}
 
 | Type | Source | Handling |
 | ---- | ------ | -------- |
