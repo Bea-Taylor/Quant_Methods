@@ -223,8 +223,8 @@ exactly the problem we spend weeks 6 to 8 solving.
 
 . . .
 
-This is the classic starting point, and it is where most courses stop. We will
-come back after it and sharpen it up.
+This is the classic starting point, and it is where most courses stop. 
+We will start with this - but then go a little further later in the lecture
 
 ## Nominal {.smaller}
 
@@ -272,6 +272,11 @@ schools_all |>
   - :x: Differences between two levels; arithmetic mean
 
 *In our data:* **Ofsted rating**.
+
+. . .
+
+Store it as {Special Measures:1, ... Outstanding:5} and it is **still ordinal** —
+writing something as a number does not make the gaps equal.
 :::
 
 ::: {.column width="58%"}
@@ -299,11 +304,10 @@ schools_all |>
 
 ## Interval and ratio
 
-**Interval** — differences are meaningful, but the zero is arbitrary
+**Interval** — differences are meaningful, but the **zero is arbitrary**
 
 - 100°C is **not** twice as hot as 50°C
-- *In our data:* the **date of the last Ofsted inspection**. 2015 → 2018 is the
-  same gap as 2018 → 2021, but "year zero" is a convention.
+- *In our data:* the **date of the last Ofsted inspection**. 2015 → 2018 is the same gap as 2018 → 2021, but "year zero" is a convention.
 
 . . .
 
@@ -315,35 +319,68 @@ schools_all |>
 
 ## A zero is not enough: Progress 8 {.smaller}
 
-**Progress 8** measures how much progress pupils made between arriving and
-leaving, compared with similar pupils nationally.
+::::: columns
+::: {.column width="40%"}
+**Progress 8** compares the progress pupils made with similar pupils nationally.
 
-- Zero means "average expected progress"; positive is more, negative is less
-
-. . .
-
-The zero is **meaningful**, and the scale runs either side of it. So is it
-ratio data?
+- Zero means "average expected progress"
+- Positive is more, negative is less
 
 . . .
 
-**No.** A school scoring 1.0 has not made "twice the progress" of one scoring
-0.5 — there is no true zero point of *no progress at all*. It is an
-**interval** measure.
+The zero is **meaningful**. So is it ratio data?
 
-::: {.notes}
-This is the slide that stops students assuming "has a zero" means "ratio".
-We plot P8MEA later, in the finer taxonomy, where its symmetry is the point.
+. . .
+
+**No.** King's scores 0.57 and Blatchington Mill 0.03 — a ratio of **19:1**.
+Nobody would claim 19 times the progress. And Longhill is **negative**, so no
+ratio is possible at all.
 :::
 
-## Encoding does not change the measurement
+::: {.column width="60%"}
+```{r}
+#| label: p8-ratio
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 6
+#| fig-height: 4.6
 
-- Ofsted rating is ORDINAL
-- If we store it as {Special Measures:1, ..., Outstanding:5}, is it ORDINAL, or INTERVAL?
+btn <- schools_mainstream |>
+  filter(LANAME == "Brighton and Hove", !is.na(P8MEA), !is.na(ATT8SCR)) |>
+  mutate(SCHNAME = str_trunc(SCHNAME, 26),
+         SCHNAME = fct_reorder(SCHNAME, P8MEA))
 
-. . .
+p_att <- ggplot(btn, aes(x = ATT8SCR, y = SCHNAME)) +
+  geom_col(fill = casa_teal, alpha = 0.85) +
+  scale_x_continuous(limits = c(0, 60), expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "Attainment 8 — ratio", subtitle = "zero is a real floor: no marks at all",
+       x = NULL, y = NULL) +
+  theme_minimal(base_size = 9)
 
-Still ordinal. Storing something as a number does not make the gaps equal.
+p_p8 <- ggplot(btn, aes(x = P8MEA, y = SCHNAME)) +
+  geom_col(aes(fill = P8MEA > 0), alpha = 0.85, show.legend = FALSE) +
+  geom_vline(xintercept = 0, colour = "black", linewidth = 0.6) +
+  scale_fill_manual(values = c(`TRUE` = casa_purple, `FALSE` = casa_pink)) +
+  labs(title = "Progress 8 — interval", subtitle = "zero sits mid-scale: average progress",
+       x = NULL, y = NULL) +
+  theme_minimal(base_size = 9) +
+  theme(axis.text.y = element_blank())
+
+patchwork::wrap_plots(p_att, p_p8, nrow = 1, widths = c(1.35, 1))
+```
+:::
+:::::
+
+::: {.notes}
+Same ten Brighton schools on both panels. Left: bars start at a true zero, so
+"school A has 1.1 times the attainment of school B" is a sensible sentence.
+Right: bars straddle zero, so the same sentence is meaningless.
+
+This is the slide that stops students assuming "has a zero" means "ratio".
+P8MEA appears again later under real-valued additive, where its symmetry
+rather than its zero is the point.
+:::
 
 # A finer-grained decomposition
 
@@ -564,10 +601,13 @@ you a plausible, wrong answer. Knowing your data type is the defence.
 
 [Left two columns adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
 
-## Storing it wrong has consequences
+## Getting the type wrong, in code
+
+We said earlier that Ofsted rating is ordinal. Here is what happens if your
+**code** does not know that:
 
 ::: {.incremental}
-- Read Ofsted rating as plain text and R will order it **alphabetically** — Good, Inadequate, Outstanding, Requires improvement
+- Read it as plain text and R orders it **alphabetically** — Good, Inadequate, Outstanding, Requires improvement
 - That is not a ranking, it is the alphabet
 - Store it as an **ordered factor** and every table, plot and model respects the real order
 - We set exactly this up in the code behind these slides
