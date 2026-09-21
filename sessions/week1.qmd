@@ -1,7 +1,7 @@
 ---
 format: html
 date: last-modified
-author: "Huanfa Chen"
+author: "Adam Dennett"
 title: "Week 1"
 ---
 
