@@ -26,7 +26,7 @@ cloud-config.yml
 .Rprofile
 .Rhistory
 *.Rproj
-*.quarto_ipynb
+*.quarto_ipynb*
 
 /.luarc.json
 
@@ -38,6 +38,7 @@ render.log
 render.err.log
 preview.log
 docker-build.log
+docker-restore*.log
 
 # Quarto figure dirs written next to the source qmds (regenerated every render)
 sessions/*_files/

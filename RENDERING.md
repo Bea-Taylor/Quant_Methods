@@ -18,7 +18,7 @@ Everything is already installed in the saved image, so this goes straight to
 rendering. Run from the `Quant_Methods` folder in **PowerShell**:
 
 ```powershell
-docker run --rm --name qm-preview -v "${PWD}:/project" -v /project/.venv-reticulate -p 4200:4200 -w /project -e QUARTO_PYTHON=/opt/venv/bin/python -e RETICULATE_PYTHON=/opt/venv/bin/python quant-methods-render:ready quarto preview --no-browser --host 0.0.0.0 --port 4200
+docker run --rm --name qm-preview -v "${PWD}:/project" -v renv-cache:/root/.cache/R/renv -v /project/.venv-reticulate -p 4200:4200 -w /project -e QUARTO_PYTHON=/opt/venv/bin/python -e RETICULATE_PYTHON=/opt/venv/bin/python quant-methods-render:ready quarto preview --no-browser --host 0.0.0.0 --port 4200
 ```
 
 Stop it with:

@@ -12,7 +12,10 @@ Rscript -e 'if (!requireNamespace("renv", quietly = TRUE)) install.packages("ren
 echo "==> casaviz (from setup/casaviz.zip)"
 if ! Rscript -e 'quit(status = as.integer(!requireNamespace("casaviz", quietly = TRUE)))'; then
   rm -rf /tmp/casaviz && unzip -q setup/casaviz.zip -d /tmp/casaviz
-  R CMD INSTALL /tmp/casaviz
+  # Install into the renv project library, not the default site-library: renv's
+  # sandbox trims .libPaths() to the project library plus its own sandbox, so a
+  # plain `R CMD INSTALL` lands somewhere library(casaviz) cannot reach.
+  R CMD INSTALL -l "$(Rscript -e 'cat(.libPaths()[1])')" /tmp/casaviz
   rm -rf /tmp/casaviz
 fi
 
