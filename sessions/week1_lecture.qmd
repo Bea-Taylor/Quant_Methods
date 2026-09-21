@@ -272,11 +272,6 @@ schools_all |>
   - :x: Differences between two levels; arithmetic mean
 
 *In our data:* **Ofsted rating**.
-
-. . .
-
-Store it as {Special Measures:1, ... Outstanding:5} and it is **still ordinal** —
-writing something as a number does not make the gaps equal.
 :::
 
 ::: {.column width="58%"}
@@ -600,6 +595,73 @@ you a plausible, wrong answer. Knowing your data type is the defence.
 | random matrix | two-dimensional array | `matrix` | 2-D `ndarray` |
 
 [Left two columns adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
+
+## Encoding does not change the measurement
+
+- Ofsted rating is ORDINAL
+- If we store it as {Special Measures:1, ..., Outstanding:5}, is it ORDINAL, or INTERVAL?
+
+. . .
+
+Still ordinal. Storing something as a number does not make the gaps equal.
+
+## ...and this is a common analysis error
+
+::: {.incremental}
+- Categorical or ordinal data often arrives **already coded as numbers**
+- Software cannot tell. `read_csv` sees 1, 2, 3, 4, 5 and hands you a numeric column
+- **Nothing errors.** Every summary works. Every model runs.
+- So people put it into a regression as a continuous predictor and report
+  "each additional unit of Ofsted is worth *x* points"
+:::
+
+. . .
+
+That claim assumes every step on the scale is the same size. Let's check.
+
+## What the data says about those steps {.smaller}
+
+```{r}
+#| label: ordinal-as-numeric
+#| echo: false
+#| message: false
+#| warning: false
+
+ofs <- schools_mainstream |>
+  filter(!is.na(OFSTEDRATING), !is.na(ATT8SCR)) |>
+  mutate(ofsted_n = as.numeric(OFSTEDRATING))
+
+step_tbl <- ofs |>
+  group_by(OFSTEDRATING) |>
+  summarise(n = n(), mean_att8 = mean(ATT8SCR), .groups = "drop") |>
+  mutate(step = c(NA, diff(mean_att8)))
+
+slope <- coef(lm(ATT8SCR ~ ofsted_n, data = ofs))[2]
+
+step_tbl |>
+  transmute(
+    `Ofsted rating` = as.character(OFSTEDRATING),
+    Schools = comma(n),
+    `Mean Attainment 8` = sprintf("%.1f", mean_att8),
+    `Step up from the one below` = if_else(is.na(step), "—", sprintf("%+.2f", step))
+  ) |>
+  kable(align = "lrrr")
+```
+
+::: {.incremental}
+- Treated as a number, the model says every step is worth **`r sprintf("%.2f", slope)`** points
+- The real steps run from **+0.07** to **+11.79** — the middle one is essentially nothing
+- The software will also happily tell you the mean Ofsted rating is
+  **`r sprintf("%.2f", mean(ofs$ofsted_n))`**, which is not a rating
+:::
+
+::: {.notes}
+The fix is to enter it as a factor, so the model estimates each level
+separately. Exactly what weeks 6 to 8 do with school type and region.
+
+Note we are excluding the 21 "Inadequate" schools here, as the rest of this
+deck does, because that label sits outside the five-point scale used above.
+:::
 
 ## Getting the type wrong, in code
 
