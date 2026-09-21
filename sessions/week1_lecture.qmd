@@ -400,7 +400,7 @@ true zero, both support ratios:
 
 Stevens says these are the same kind of thing. Let's look at them.
 
-## What is a distribution?
+## What is a distribution?{.smaller}
 
 ::: {style="font-size:0.8em;"}
 A **distribution** is just the answer to "how are the values spread out?" —
@@ -448,7 +448,7 @@ patchwork::wrap_plots(d1, d2, d3, nrow = 1)
 - Almost everything else in this course starts by asking what shape a variable has
 :::
 
-## Two ratio variables, two different shapes
+## Two ratio variables, two different shapes {.smaller}
 
 ```{r}
 #| label: two-shapes
@@ -603,9 +603,67 @@ schools_mainstream |>
   theme_minimal(base_size = 12)
 ```
 
-- A count **bounded above** by the size of the cohort — it cannot exceed N
-- The dashed line is the ceiling: every pupil disadvantaged
+- A count **bounded above** by the size of the cohort — it cannot exceed an upper ceiling - **N**
+- The dashed line is the ceiling: where every pupil would be disadvantaged
 - Distribution: **binomial**. This is why a percentage is the natural summary.
+
+## Negative binomial {.smaller}
+
+::::: columns
+::: {.column width="45%"}
+The name is misleading — it is **not** the opposite of binomial.
+
+- **Binomial:** fix the number of trials, count the successes. Bounded by N.
+- **Negative binomial:** fix the number of successes, count the trials needed. **Unbounded.**
+
+So it produces a *count*, which is why the taxonomy lists it beside Poisson
+rather than beside binomial.
+
+. . .
+
+**Why you actually meet it.** Poisson assumes the variance *equals* the mean.
+
+Disadvantaged pupils per school: mean **`r sprintf("%.1f", mean(schools_mainstream$TFSM6CLA1A, na.rm = TRUE))`**,
+variance **`r sprintf("%.0f", var(schools_mainstream$TFSM6CLA1A, na.rm = TRUE))`** — a ratio of
+**`r sprintf("%.0f", var(schools_mainstream$TFSM6CLA1A, na.rm = TRUE) / mean(schools_mainstream$TFSM6CLA1A, na.rm = TRUE))`:1**
+where Poisson demands 1:1. That is **overdispersion**, and it is the norm.
+:::
+
+::: {.column width="55%"}
+```{r}
+#| label: negbin
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 5.8
+#| fig-height: 3.9
+
+nb <- schools_mainstream |> filter(!is.na(TFSM6CLA1A))
+set.seed(1)
+cmp <- bind_rows(
+  tibble(value = nb$TFSM6CLA1A,                        src = "What we observe"),
+  tibble(value = rpois(nrow(nb), mean(nb$TFSM6CLA1A)), src = "If it were Poisson")
+)
+
+ggplot(cmp, aes(x = value, fill = src)) +
+  geom_histogram(bins = 45, alpha = 0.65, position = "identity") +
+  scale_fill_manual(values = c("What we observe" = casa_teal,
+                               "If it were Poisson" = casa_pink)) +
+  labs(x = "Disadvantaged pupils per school", y = "Schools", fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom")
+```
+:::
+:::::
+
+::: {.notes}
+The pink histogram is a genuine Poisson draw with the same mean. If these
+counts were Poisson, every school in England would have between roughly 22 and
+73 disadvantaged pupils. The real range is 0 to 263.
+
+The negative binomial adds a second parameter that lets the variance exceed
+the mean, which is why it is the usual fallback for count regression.
+:::
 
 ## Real-valued additive
 
@@ -626,6 +684,7 @@ ggplot(p8, aes(x = P8MEA)) +
   theme_minimal(base_size = 12)
 ```
 
+- A real number can be placed anywhere on a line - i.e. can have a decimal
 - Can be **negative**. Symmetric about its mean.
 - Mean `r sprintf("%.3f", mean(p8$P8MEA))`, median `r sprintf("%.3f", median(p8$P8MEA))` — almost identical
 - Distribution: **normal**. Model: **ordinary linear regression** — weeks 6 and 7.
