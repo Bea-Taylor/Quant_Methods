@@ -3,9 +3,18 @@ title: "Exploratory Data Analysis 2"
 author: 
   - name: "Beatrice Taylor"
 email: "beatrice.taylor@ucl.ac.uk"
-date-as-string: "8th October 2025"
+date-as-string: "13th October 2026"
 from: markdown+emoji
-format: revealjs
+format:
+  revealjs: 
+    # logo: "L6_images/CASA_logo.svg"
+    template-partials: 
+      - title-slide.html
+    transition: none
+    slide-number: TRUE
+    preview-links: auto
+    theme: ../css/casa-slides.scss
+    chalkboard: true
 ---
 
 ## Last week 
@@ -27,8 +36,9 @@ different types of data outliers: caused by measurement error, or irregular patt
 :::
 
 # This week 
+Introducing statistical concepts and probability distributions.
 
-## The scientific method 
+<!-- ## The scientific method 
 
 <div style="text-align:center;">
   <img src="L3_images/scientific_method.png" alt="The scientific method" style="max-width:60%">
@@ -36,9 +46,9 @@ different types of data outliers: caused by measurement error, or irregular patt
 
 ::: {.notes}
 A specific research model - quite formal - been around from the 19th century. Typifies how scientific research is done in the classical sciences like biology. Link to scientific process and how we test and then iterate over ideas and concepts. Something we will talk about more next lecture. 
-:::
+::: -->
 
-## Exploratory data analysis 
+<!-- ## Exploratory data analysis 
 
 When we're working with large datasets, exploratory data analysis is the first step in the scientific method. 
 
@@ -50,9 +60,9 @@ When we're working with large datasets, exploratory data analysis is the first s
 
 ::: {.notes}
 More modern approach approach devloped by computer scientist John Turkey in the 1970s - whilst at Princeton. 'Father of data science'. rather than being driven by more classical statistical analyses (something we'll look at next week) - the idea was to have a more flexible approach. 
-:::
+::: -->
 
-## Introducing statistical concepts 
+<!-- ## Introducing statistical concepts 
 
 ::: {.incremental}
 - Data science is about using ideas from statistics to describe large datasets 
@@ -62,18 +72,18 @@ More modern approach approach devloped by computer scientist John Turkey in the 
 
 ::: {.notes}
 In large datasets its not practical to describe every data point - instead interested in the overall pattern. Moreover maybe that general pattern is more interetsing
-:::
+::: -->
 
 ## Learning objectives
 By the end of this lecture you should be able to:
 
 ::: {.incremental}
 1. Describe the characteristic features of common probability distributions. 
-2. Calculate exponentials and logarithms. 
+2. Apply exponentials and logarithms to transform data. 
 3. Evaluate whether a dataset is representative. 
 :::
 
-# Motivation
+<!-- # Motivation
 **How do we understand how likely events are to occur?** 
 
 *Question*
@@ -99,181 +109,12 @@ This week thinking about the distribution of data.
 How do we understand the spread of height data, how to we calculate important features of this data, how can we describe this data using mathematical equations? 
 
 Next week, thinking about formulating and answering the research question. 
-:::
+::: -->
 
-# Representative data
-**Before we try to describe the data, it's important to know where the data came from.**
 
-## The dream vs reality 
-Ideally, we would like all the relevant data.
+<!-- # Exploring the data -->
 
-. . .
-
-... in reality we normally only have some. 
-
-<div style="text-align:center;">
-  <img src="L2_images/stickfigures.gif" alt="Random Sampling" style="max-width:80%;">
-</div>
-
-::: {.notes}
-It would be great if I knew the height of everyone at UCL, but unrealistic to collect – however maybe I could collect all students in this lecture theatre.  
-:::
-
-## Approximating 
-Hence, we sample a subset of the data. 
-We need to choose our sample carefully - we want what happens in the sample to approximate what happens in the whole population. 
-
-. . .
-
-**In practise** we might try different sampling approaches such as:
-
-::: {.incremental}
-- random sampling 
-- systematic sampling 
-:::
-
-::: {.notes}
-I might assign everyone a number and then choose 100 random numbers and measure them. Or I might choose a specific subset, for exampel just everyone in this lecture theatre. 
-:::
-
-## Bias
-It's important to understand if your dataset is unrepresentative or biased. 
-
-<div style="text-align:center;">
-  <img src="L2_images/stickfigures_biased.gif" alt="Random Sampling" style="max-width:80%;">
-</div>
-
-::: {.notes}
-Bias is the idea that there is an unrepresentative pattern in your data.
-:::
-
-## Cognitive bias 
-[*Systematic patterns in how we think about, and perceive, the world.*]{style="color:#49a0c4"} 
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-Our cognitive biases can impact:
-
-::: {.incremental}
-- data collection 
-- data selection 
-- data processing 
-- modelling choices
-:::
-
-:::
-
-::: {.column width="50%"}
-
-<br>
-
-<div style="text-align:center;">
-  <img src="L2_images/human_brain_2.png" alt="Human Brain" style="max-width:60%">
-</div>
-
-:::
-
-::::
-
-::: {.notes}
-
-We all have our own cognitive biases - shaped around our values and our backgrounds. 
-Example of cognitive bias - confirmation bias, whereby I favour information that agrees with my existing beliefs. I'm writing a report on the spatial impact of a new railway line. Suppose I hate the idea of a new railway line, and then I see some data, fact a: 60% of residents living near the railline don't want it due to noise. fact b: 75% of residents in the UK do want the railway line. i might only include fact a in my report as it confirms my existing beliefs. 
-:::
-
-## Why is this important? 
-
-If we're not careful we can propagate bias to the research, and hence results. 
-
-. . .
-
-This can lead to incorrect conclusions. 
-
-::: {.notes}
-As scientists we should try and present an accurate and fair balance of information. If we're more aware of our biases it can be easier to try and actively avoid them. 
-:::
-
-## Dataset bias
-
-- Particularly important when thinking about analysing large datasets as there could be non-obvious patterns reflecting biases. 
-- More important in the era of large AI models 
-
-. . .
-
-Types of dataset bias include: 
-  - Historical bias 
-  - Selection bias 
-
-::: {.notes}
-Already talked about the idea of cognitive bias. There are lots and lots of different types of biases - going to talk a little about different ways they can bias the dataset. 
-
-Dataset bias has become a more prevalent topic of concern on the era of large AI models. These models are really good at learnign patterns which aren't obvious to the human eye - but the pattern might reflect a bias. For example generative AI models learn that scientists are white men, even though if I asked you you'd tell me anyone can be a scientist. 
-
-- [Hungry judges](https://daniellakens.blogspot.com/2017/07/impossibly-hungry-judges.html)
-:::
-
-## Historical bias
-[*Reflects existing, real world, inequalities*]{style="color:#49a0c4"} 
-
-Examples: 
-
-- [Police profiling](https://www.amnesty.org.uk/press-releases/uk-police-forces-supercharging-racism-crime-predicting-tech-new-report) 
-  - Automated tools to detect 'criminals'. 
-  - Trained on datasets which reflect current racist practises. 
-
-::: {.notes}
-Police profiling models - meant to make easy to spot criminals - but use exisitng crime data - which reflect racist prejudices in society - and the model learns to pick out people of certain ethnic backgrounds. 
-
-Tools also used to help the sentnecing of criminals in courts of law - observe the hungry judges effect, where they sentnece differently based on how hungry they are - tend to be harsher just before lunch and more lenient after lunch. 
-:::
-
-## Selection bias 
-[*When the sample chosen doesn’t represent the whole population of interest*]{style="color:#49a0c4"} 
-
-Examples: 
-
-- Self selection [Roy Model](https://en.wikipedia.org/wiki/Roy_model) 
-  - Underlying characteristics of people who self select into certain groups. 
-- [WEIRD people](https://oecs.mit.edu/pub/spow8trw/release/1) 
-  - Commonly sampled in behavioural sciences. 
-  - Reflects a very small proportion of global population. 
-
-::: {.notes}
-Roy model - example from economics - basically there's not a random selection of people in a specific job - thye have chosen that job based on underlying unobserved characterisitcs. For example suppose I'm interested in wages of workers in different occupations - but they have self-selected into that occupation based on their unique skill set - so it's a biased representation. 
-
-WEIRD = western, educated, industrialised, rich, democratic
-:::
-
-## Can data ever be truly representative? 
-
-Probably not. 
-
-::: {.notes}
-Even when we think we have really good data, someone has made the choice to collect this data. Why that data over other data? Does that data reflect their underlying cognitive biases? For example the choice to collect information of peoples opnion about a new trainline might be driven by a political goal of understanding public support for a new government infrastructure project. 
-
-Not necessarilly a bad thing, but important to keep in mind. And if the bias is noticeable then it should be acknowledged and reported. 
-:::
-
-. . .
-
-**Failing that...**
-.. we can acknowledge our biases!
-
-<div style="text-align:center;">
-  <img 
-    src="https://imgs.xkcd.com/comics/flawed_data.png" 
-    alt="XKCD - Flawed Data" 
-    style="width:800px">
-  <div style="font-size:0.8em; color: #555; margin-top:4px;">
-    Image credit: [xkcd](https://xkcd.com/2494/)
-  </div>
-</div>
-
-# Exploring the data - descriptive statistics 
-
-## What to declare 
+<!-- ## What to declare 
 
 Descriptive statistics refers to the most basic statistical information about the dataset. 
 
@@ -320,10 +161,10 @@ height_df.describe().round(2)
 ```
 
 :::
-:::
+::: -->
 
-## Example 2 
-Sometimes we need more information. 
+## When descriptive statistics aren't enough
+Last week we talked about descriptive statistics - but what about when this doesn't tell the whole story? 
 
 ```{python}
 #| echo: true
@@ -352,6 +193,69 @@ These all have mean x = 9, variance x = 11. mean y = 7.5, variance y =4.1.
 But we can see from the diagrams that the distribution of the data is very different, some is linear, some is elliptic etc... So we need more advanced ways of describing the data. 
 :::
 
+# Histograms 
+
+Histograms are a way to visualise the distribution of a dataset. They show the frequency of each value or range of values in the dataset.
+
+::: {.notes}
+Need a slide to show how to make a histogram in Python.
+:::
+
+
+# Probability distributions
+Allow us to describe the distribution of data, and allow us to describe the probability of events occurring.
+
+
+## Continuous vs. Discrete 
+**Continuous data** 
+Measurable data which can take any value within a given range.  
+
+[*example*: foot length]{style="color:#abc766"}
+[*example*: the number of minutes between tube stops]{style="color:#abc766"}
+
+**Discrete data**
+Measurable data which can take seperate, countable values. 
+
+[*example*: shoe size]{style="color:#abc766"} 
+[*example*: the number of tube arrivals in an hour]{style="color:#abc766"}
+
+::: {.notes}
+Suppose I have someone who is x cm tall, and someone who is y cm tall, I can find someone in between whose x.5cm tall. 
+
+But shoe sizes are discrete (not the length of your foot). 
+:::
+
+## Back to the probability function 
+
+```{=tex}
+\begin{align}
+p(x)
+\end{align}
+```
+
+Having a function for the distribution allows us to evaluate the probability of events, and hence evaluate hypotheses. 
+
+. . .
+
+
+- continusous distirbutions - have probability density functions (PDFs)
+- discrete distributions - have probability mass functions (PMFs). 
+
+<!-- . . .
+
+**Sampling distributions**
+
+As for the normal distribution, in the general case we should be aware of the sampling distribution.  -->
+
+## Key distributions
+
+| | Normal | Binomial | Poisson | Exponential |
+|:--|:--|:--|:--|:--|
+| **Type** | Continuous | Discrete | Discrete | Continuous |
+| **Shape** | Symmetric, one peak | Depends on $p$; symmetric if $p=0.5$ | Right-skewed (more symmetric as $\lambda$ grows) | Right-skewed, highest at zero |
+| **Parameters** | $\mu$, $\sigma$ | $n$, $p$ | $\lambda$ | $\lambda$ |
+| **Probability function** | PDF | PMF | PMF | PDF |
+
 # Normal distribution
 The most fundamental distribution
 
@@ -374,7 +278,6 @@ The shape is known as the bell curve.
 :::
 
 ## Key features
-**You've seen it all before**  
 
 ::: {.incremental}
 - Data is continuous 
@@ -387,7 +290,7 @@ The shape is known as the bell curve.
   - smooth tails on both sides
 :::
 
----
+## See it in histograms
 
 <div style="text-align:center;">
   <img src="L2_images/height_histogram.png" alt="Normal distribution" style="max-width:90%">
@@ -491,7 +394,7 @@ p(x=0.5) = \frac{1}{\sqrt{2 \pi \times 1^2}} e^{-\frac{(0.5-0)^2}{(2\times 1)^2}
 
 Area under the curve. -->
 
-## Not everything is normal 
+<!-- ## Not everything is normal 
 Many real world datasets are *approximately* normally distributed.
 
 . . .
@@ -500,46 +403,8 @@ But not all
 
 - not continuous 
 - no characteristic size 
-- not symmetric  
+- not symmetric   -->
 
-# More generally, what is a probability distribution? 
-
-## Continuous vs. Discrete 
-**Continuous data** 
-Measurable data which can take any value within a given range.  
-
-[*example*: height]{style="color:#abc766"}
-
-**Discrete data**
-Measurable data which can take seperate, countable values. 
-
-[*example*: shoe size]{style="color:#abc766"} 
-
-::: {.notes}
-Suppose I have someone who is x cm tall, and someone who is y cm tall, I can find someone in between whose x.5cm tall. 
-
-But shoe sizes are discrete (not the length of your foot). 
-:::
-
-## Back to the probability function 
-
-```{=tex}
-\begin{align}
-p(x)
-\end{align}
-```
-
-Having a function for the distribution allows us to evaluate the probability of events, and hence evaluate hypotheses. 
-
-. . .
-
-For discrete distributions we have the probability mass function. 
-
-. . .
-
-**Sampling distributions**
-
-As for the normal distribution, in the general case we should be aware of the sampling distribution. 
 
 # Binomial distribution 
 
@@ -599,7 +464,7 @@ Note the combination here.
   <img src="L2_images/binomial_distribution.png" alt="Binomial distribution" style="max-width:90%">
 </div>
 
-## Example 
+<!-- ## Example 
 
 ::: {.incremental}
 - I flip a coin 10 times 
@@ -618,7 +483,35 @@ P(X \geq 7) &= P(X=7) + P(X=8) + P(X=9) + P(X=10)
 \\
 &= 0.1719
 \end{align}
+``` -->
+
+## Example: a council survey 
+
+::: {.incremental}
+- A council asks 20 randomly chosen residents whether they support a new cycle lane 
+- Suppose residents are *really* split 50/50 
+  - **$n=20$, $p=0.5$**
+- How likely is it that 15 or more say yes, just by chance? 
+  - **$k \geq 15$**
+:::
+
+. . .
+
+```{python}
+#| echo: true
+#| output: true
+from scipy.stats import binom
+
+print(round(binom.sf(14, n=20, p=0.5), 4))    # P(X >= 15) = P(X > 14)
 ```
+
+. . .
+
+About 2%. A result like this would be surprising if opinion really were 50/50. 
+
+::: {.notes}
+Urban-flavoured transfer example. This is also the logic of hypothesis testing (next week): compute a tail probability under an assumed model, and ask whether the observed result would be surprising.
+:::
 
 # Poisson distribution 
 
@@ -677,7 +570,7 @@ Where $\lambda$ is the expected number of events in a given interval.
   <img src="L2_images/poisson_distribution.png" alt="Poisson distribution" style="max-width:90%">
 </div>
 
-## Example 
+<!-- ## Example 
 
 ::: {.incremental}
 - Between 1883 and 1893 there were an average of 2 deaths from horse kicks a year. 
@@ -692,7 +585,39 @@ Where $\lambda$ is the expected number of events in a given interval.
 P(X = 10) = \frac{2^{10} e^{-2}}{10!}
 \\ = 0.000038
 \end{align}
+``` -->
+
+## Example: bike-share arrivals 
+
+::: {.incremental}
+- A docking station receives on average 0.5 lime bikes per minute 
+  - so **$\lambda=5$** per 10 minutes 
+- How likely is it that **no** bikes arrive in the next 10 minutes? 
+- How likely is it that **8 or more** arrive? 
+:::
+
+. . .
+
+```{python}
+#| echo: true
+#| output: true
+from scipy.stats import poisson
+
+print(round(poisson.pmf(0, mu=5), 4))   # P(X = 0)
+print(round(poisson.sf(7, mu=5), 4))    # P(X >= 8)
 ```
+
+. . .
+
+<div style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; margin-top:10px;"> <em>Check the assumptions</em>
+
+Are arrivals independent? Is the rate constant across the day? Are events clustered in time or space? </div>
+
+::: {.notes}
+Note that lambda scales with the interval: 0.5 per minute is 5 per ten minutes. The assumptions box is a seed for spatial dependence later in the course (events in space are often not independent).
+:::
+
+
 
 # Exponentials and Logarithms 
 
@@ -999,7 +924,7 @@ Read the equation as log of 8 base 2 equals 3.
   <img src="L2_images/natural_logarithm.png" alt="Natural logarithm" style="max-width:90%;">
 </div>
 
-## Log rules 
+<!-- ## Log rules 
 
 There are some general rules for how we apply logarithms:
 
@@ -1011,9 +936,23 @@ log_a(b \times c) &= log_a(b) + log_a(c)
 \\ log_a(1)&=0
 \\ log_a(a)&=1
 \end{align}
-```
+``` -->
 
-## Transforming data 
+## Probability distributions
+
+| | Normal | Binomial | Poisson | Exponential |
+|:--|:--|:--|:--|:--|
+| **Type** | Continuous | Discrete | Discrete | Continuous |
+| **Shape** | Symmetric, one peak | Depends on $p$; symmetric if $p=0.5$ | Right-skewed (more symmetric as $\lambda$ grows) | Right-skewed, highest at zero |
+| **Parameters** | $\mu$, $\sigma$ | $n$, $p$ | $\lambda$ | $\lambda$ |
+| **Probability function** | PDF | PMF | PMF | PDF |
+| **Urban example** | Heights; measurement error | Yes/no answers in a survey | Bike arrivals per 10 minutes | Wait until the next bike arrives |
+
+::: {.notes}
+Replaces the bare "we've covered" list. This is the same table as the "Four distributions, four questions" slide with more columns.
+:::
+
+# Transforming data 
 
 Some of the most important rules: 
 
@@ -1023,32 +962,253 @@ log_a(a^x) = x
 \\ ln(e^x) = x
 \end{align}
 ```
-
 . . .
 
-When we have exponential data we can take the logarithm of it - and hence simplify it. 
+Because logarithms undo exponentials, they give us two very useful tools for data: 
+
+::: {.incremental}
+1. **Straighten** exponential growth 
+2. **Tame** long right tails 
+:::
 
 ::: {.notes}
 We will return to the idea of taking the log of data in future weeks - especially in the context of regression analyses. 
 :::
 
-<!-- ## Log it 
+## *Log it!* to straighten growth 
 
-NOTE - need to add plot here of what happens to exponential data after taking the logarithm of it.  -->
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+squares = np.arange(1, 65)
+grains = 2.0 ** (squares - 1)
+fig, axes = plt.subplots(1, 2, figsize=(9, 3.3))
+axes[0].plot(squares, grains, color="#49a0c4")
+axes[0].set(title="Grains on each square", xlabel="Square", ylabel="Grains")
+axes[1].plot(squares, np.log(grains), color="#2e6260")
+axes[1].set(title="ln(grains): a straight line", xlabel="Square", ylabel="ln(grains)")
+fig.tight_layout()
+plt.show()
+```
+
+```{=tex}
+\begin{align}
+\ln(2^{k-1}) = (k-1)\ln(2)
+\end{align}
+```
+
+::: {.notes}
+Fills the placeholder that was commented out in the original ("need to add plot here of what happens to exponential data after taking the logarithm"). The chess rice comes back: growth by a constant factor becomes a straight line with slope ln 2.
+:::
+
+## *Log it!* to tame long tails 
+
+```{python}
+#| echo: false
+#| fig-align: center
+import numpy as np
+import matplotlib.pyplot as plt
+rng = np.random.default_rng(7)
+prices = rng.lognormal(mean=12.5, sigma=0.5, size=5000)      # simulated house prices (GBP)
+fig, axes = plt.subplots(1, 2, figsize=(9, 3.3))
+axes[0].hist(prices / 1000, bins=50, color="#49a0c4")
+axes[0].set(title="Simulated house prices", xlabel="Price (£000s)", ylabel="Count")
+axes[1].hist(np.log(prices), bins=50, color="#2e6260")
+axes[1].set(title="ln(price)", xlabel="ln(price in £)")
+fig.tight_layout()
+plt.show()
+```
+
+Long right tail, no typical size: after the log it looks approximately normal. 
+
+::: {.notes}
+Pays off the third bullet of "Not everything is normal". A variable whose log is normal is called log-normal. The data here are simulated; swap in a real dataset (house prices, incomes, city populations) from the practical if you prefer.
+:::
+
+# Representative data
+**Before we try to describe the data, it's important to know where the data came from.**
+
+## The dream vs reality 
+Ideally, we would like all the relevant data.
+
+. . .
+
+... in reality we normally only have some. 
+
+<div style="text-align:center;">
+  <img src="L2_images/stickfigures.gif" alt="Random Sampling" style="max-width:80%;">
+</div>
+
+::: {.notes}
+It would be great if I knew the height of everyone at UCL, but unrealistic to collect – however maybe I could collect all students in this lecture theatre.  
+:::
+
+## Approximating 
+Hence, we sample a subset of the data. 
+We need to choose our sample carefully - we want what happens in the sample to approximate what happens in the whole population. 
+
+. . .
+
+**In practise** we might try different sampling approaches such as:
+
+::: {.incremental}
+- random sampling 
+- systematic sampling 
+:::
+
+::: {.notes}
+I might assign everyone a number and then choose 100 random numbers and measure them. Or I might choose a specific subset, for exampel just everyone in this lecture theatre. 
+:::
+
+## Bias
+It's important to understand if your dataset is unrepresentative or biased. 
+
+<div style="text-align:center;">
+  <img src="L2_images/stickfigures_biased.gif" alt="Random Sampling" style="max-width:80%;">
+</div>
+
+::: {.notes}
+Bias is the idea that there is an unrepresentative pattern in your data.
+:::
+
+## Where does bias creep in? 
+Three places, three questions: 
+
+::: {.incremental}
+- **In the sample**: *selection bias*. Who ended up in the data, and who didn't? 
+- **In the world**: *historical bias*. What existing inequalities does the data reflect? 
+- **In the analyst**: *cognitive bias*. What did we choose to collect, keep and report? 
+:::
+
+. . .
+
+Particularly important for large datasets and AI models, where patterns that aren't obvious to us can reflect these biases. 
+
+::: {.notes}
+Already talked about the idea of cognitive bias. There are lots and lots of different types of biases - going to talk a little about different ways they can bias the dataset. 
+
+Dataset bias has become a more prevalent topic of concern on the era of large AI models. These models are really good at learnign patterns which aren't obvious to the human eye - but the pattern might reflect a bias. For example generative AI models learn that scientists are white men, even though if I asked you you'd tell me anyone can be a scientist. 
+
+- [Hungry judges](https://daniellakens.blogspot.com/2017/07/impossibly-hungry-judges.html)
+:::
+
+
+## Selection bias 
+[*When the sample chosen doesn’t represent the whole population of interest*]{style="color:#49a0c4"} 
+
+Examples: 
+
+- Self selection [Roy Model](https://en.wikipedia.org/wiki/Roy_model) 
+  - Underlying characteristics of people who self select into certain groups. 
+- [WEIRD people](https://oecs.mit.edu/pub/spow8trw/release/1) 
+  - Commonly sampled in behavioural sciences. 
+  - Reflects a very small proportion of global population. 
+
+::: {.notes}
+Roy model - example from economics - basically there's not a random selection of people in a specific job - thye have chosen that job based on underlying unobserved characterisitcs. For example suppose I'm interested in wages of workers in different occupations - but they have self-selected into that occupation based on their unique skill set - so it's a biased representation. 
+
+WEIRD = western, educated, industrialised, rich, democratic
+:::
+
+## Historical bias
+[*Reflects existing, real world, inequalities*]{style="color:#49a0c4"} 
+
+Examples: 
+
+- [Police profiling](https://www.amnesty.org.uk/press-releases/uk-police-forces-supercharging-racism-crime-predicting-tech-new-report) 
+  - Automated tools to detect 'criminals'. 
+  - Trained on datasets which reflect current racist practises. 
+
+::: {.notes}
+Police profiling models - meant to make easy to spot criminals - but use exisitng crime data - which reflect racist prejudices in society - and the model learns to pick out people of certain ethnic backgrounds. 
+
+Tools also used to help the sentnecing of criminals in courts of law - observe the hungry judges effect, where they sentnece differently based on how hungry they are - tend to be harsher just before lunch and more lenient after lunch. 
+:::
+
+
+## Cognitive bias 
+[*Systematic patterns in how we think about, and perceive, the world.*]{style="color:#49a0c4"} 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Our cognitive biases can impact:
+
+::: {.incremental}
+- data collection 
+- data selection 
+- data processing 
+- modelling choices
+:::
+
+:::
+
+::: {.column width="50%"}
+
+<br>
+
+<div style="text-align:center;">
+  <img src="L2_images/human_brain_2.png" alt="Human Brain" style="max-width:60%">
+</div>
+
+:::
+
+::::
+
+::: {.notes}
+
+We all have our own cognitive biases - shaped around our values and our backgrounds. 
+Example of cognitive bias - confirmation bias, whereby I favour information that agrees with my existing beliefs. I'm writing a report on the spatial impact of a new railway line. Suppose I hate the idea of a new railway line, and then I see some data, fact a: 60% of residents living near the railline don't want it due to noise. fact b: 75% of residents in the UK do want the railway line. i might only include fact a in my report as it confirms my existing beliefs. 
+:::
+
+## Why is this important? 
+
+If we're not careful we can propagate bias to the research, and hence results. 
+
+. . .
+
+This can lead to incorrect conclusions. 
+
+::: {.notes}
+As scientists we should try and present an accurate and fair balance of information. If we're more aware of our biases it can be easier to try and actively avoid them. 
+:::
+
+## Can data ever be truly representative? 
+
+Probably not. 
+
+::: {.notes}
+Even when we think we have really good data, someone has made the choice to collect this data. Why that data over other data? Does that data reflect their underlying cognitive biases? For example the choice to collect information of peoples opnion about a new trainline might be driven by a political goal of understanding public support for a new government infrastructure project. 
+
+Not necessarilly a bad thing, but important to keep in mind. And if the bias is noticeable then it should be acknowledged and reported. 
+:::
+
+. . .
+
+**Failing that...**
+.. we can acknowledge our biases!
+
+<div style="text-align:center;">
+  <img 
+    src="https://imgs.xkcd.com/comics/flawed_data.png" 
+    alt="XKCD - Flawed Data" 
+    style="width:800px">
+  <div style="font-size:0.8em; color: #555; margin-top:4px;">
+    Image credit: [xkcd](https://xkcd.com/2494/)
+  </div>
+</div>
 
 # Overview 
 We've covered: 
 
-- Representative data 
 - Normal distribution
 - Binomial distribution 
 - Poisson distribution 
 - Exponentials 
 - Logarithms 
+- Representative data 
 
-# Practical 
-The practical will focus on exploratory data analysis for a variety of different datasets.
-
-. . .
-
-Have questions prepared!
+The practical will focus on exploratory data analysis for a variety of different datasets. Have questions prepared!
