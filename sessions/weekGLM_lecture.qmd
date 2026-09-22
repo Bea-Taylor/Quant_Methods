@@ -1,0 +1,1108 @@
+---
+title: "Prof D's Regression Sessions - Vol 4"
+subtitle: "Breaking the mould - generalised linear models"
+author:
+  - name: "Adam Dennett"
+email: "a.dennett@ucl.ac.uk"
+date-as-string: "Week GLM"
+other: "CASA0007 Quantitative Methods"
+from: markdown+emoji
+format:
+  revealjs:
+    template-partials:
+      - title-slide.html
+    transition: none
+    slide-number: TRUE
+    preview-links: auto
+    theme: ../css/casa-slides.scss
+    chalkboard: true
+filters:
+ - code-visibility
+lightbox: auto
+title-slide-attributes:
+    data-background-image: "L6_images/regression.png"
+    data-background-size: stretch
+    data-background-opacity: "0.08"
+    data-background-color: "#4e3c56"
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+library(knitr)
+library(scales)
+library(patchwork)
+library(MASS)
+library(nnet)
+
+# MASS::select masks dplyr's, and we want dplyr's everywhere below
+select <- dplyr::select
+
+knitr::opts_chunk$set(dev = "ragg_png")
+
+# CASA palette, stated explicitly so the deck does not depend on casaviz
+casa_purple <- "#4E3C56"
+casa_teal   <- "#2E6260"
+casa_yellow <- "#F9DD73"
+casa_pink   <- "#E16FCA"
+casa_green  <- "#9DBB65"
+casa_red    <- "#C94C4C"
+casa_cols   <- c("#2E6260", "#658E62", "#9DBB65", "#E7D870",
+                 "#F3C486", "#E993AC", "#8F5289", "#4E3C56")
+
+theme_set(theme_minimal(base_size = 16))
+
+base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
+
+# The DfE publishes suppressed / not-applicable values as codes, not blanks
+na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
+
+# Every file is keyed on URN. The LA and national summary rows carry no URN,
+# and because dplyr joins NA to NA they would duplicate rows as well as not
+# being schools - so they go before anything else happens.
+read_dfe <- function(f) {
+  suppressWarnings(
+    read_csv(file.path(base_path, f), na = na_all, show_col_types = FALSE)
+  ) |>
+    mutate(URN = as.character(URN)) |>
+    filter(!is.na(URN))
+}
+
+ks4 <- read_dfe("england_ks4final.csv") |>
+  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, PTPRIORHI) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+absence <- read_dfe("england_abs.csv") |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, PERCTOT, PPERSABS10) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+school_info <- read_dfe("england_school_information.csv") |>
+  select(URN, SCHNAME, LANAME, MINORGROUP, OFSTEDRATING, OFSTEDLASTINSP)
+
+destinations <- read_dfe("england_ks4-pupdest.csv") |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, COHORT, OVERALL_DEST) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+# Mainstream secondaries with an Ofsted judgement. Ofsted's five published
+# grades collapse to four analytical ones: "serious weaknesses" and "special
+# measures" are both categories of inadequate in Ofsted's own scheme, and
+# separately they are far too small to model.
+schools <- ks4 |>
+  inner_join(absence, by = "URN") |>
+  inner_join(school_info, by = "URN") |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"),
+         OFSTEDRATING %in% c("Outstanding", "Good", "Requires improvement",
+                             "Serious Weaknesses", "Special Measures")) |>
+  mutate(
+    rating4 = case_when(
+      OFSTEDRATING == "Outstanding"           ~ "Outstanding",
+      OFSTEDRATING == "Good"                  ~ "Good",
+      OFSTEDRATING == "Requires improvement"  ~ "Requires improvement",
+      TRUE                                    ~ "Inadequate"),
+    rating4 = factor(rating4,
+                     levels = c("Inadequate", "Requires improvement",
+                                "Good", "Outstanding"),
+                     ordered = TRUE),
+    below_good  = as.integer(rating4 %in% c("Inadequate", "Requires improvement")),
+    outstanding = as.integer(rating4 == "Outstanding"),
+    insp_year   = suppressWarnings(as.integer(substr(OFSTEDLASTINSP, 7, 10)))
+  )
+
+model_data <- schools |>
+  drop_na(P8MEA, PTFSM6CLA1A, PERCTOT, PPERSABS10, TPUP, PTPRIORHI)
+
+# One split, used by every classification model in the deck
+set.seed(42)
+train_idx <- sample(nrow(model_data), floor(0.7 * nrow(model_data)))
+train <- model_data[train_idx, ]
+test  <- model_data[-train_idx, ]
+
+# AUC by the rank identity, so the deck needs no extra package
+auc_of <- function(scores, actual) {
+  r  <- rank(scores)
+  n1 <- sum(actual == 1); n0 <- sum(actual == 0)
+  (sum(r[actual == 1]) - n1 * (n1 + 1) / 2) / (n1 * n0)
+}
+
+predictors <- ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+                log(TPUP) + PTPRIORHI + MINORGROUP
+```
+
+## Recap {transition="convex-in none-out" transition-speed="fast"}
+
+-   Over three weeks we built a regression model up from a single scatter plot to a linear mixed effects model with random intercepts and random slopes
+-   We learned a **recipe** - understand your data, start simple, add complexity only when it earns its place, and check your assumptions at every step
+-   Last week we relaxed one particular assumption: that our observations were **independent**. Schools sit inside local authorities, and that grouping matters
+
+## But one thing never changed {transition="convex-in none-out" transition-speed="fast"}
+
+-   Every single model we have fitted has had a **continuous outcome variable**
+-   Attainment 8. Progress 8. Numbers that can take any value, that are roughly bell-shaped, and that happily sit on either side of a straight line
+-   That was not an accident - it was a choice, and it let us use Ordinary Least Squares throughout
+-   **This week we break that.** What happens when the thing you want to explain is a *yes/no*, a *category*, or a *count*?
+
+## This week's session aims {transition="convex-in none-out" transition-speed="fast"}
+
+-   Understand why OLS fails when the outcome is not continuous, and see it fail
+-   Meet the **Generalised Linear Model** - one framework, three moving parts
+-   **Logistic regression** for binary outcomes, then ordinal and multinomial versions for categories
+-   **Poisson regression** for counts, offsets for rates, and what to do about overdispersion
+-   Throughout: can we predict a school's Ofsted rating from everything else we know about it?
+
+# Back to Week 1 {background-color="#4e3c56"}
+
+## Remember these? {transition="convex-in none-out" transition-speed="fast"}
+
+In week 1 we spent a long time on **types of data**, and on the **distributions** that go with them.
+
+| Data type | Example from our data | Distribution |
+|---|---|---|
+| Real-valued | Attainment 8 | Normal |
+| Binary | Is this school single-sex? | Bernoulli / Binomial |
+| Count | How many pupils on free school meals? | Poisson |
+| Count, overdispersed | ... when the variance exceeds the mean | Negative binomial |
+| Ordinal | Ofsted rating | *(no single answer)* |
+
+. . .
+
+We then spent three weeks modelling **only the first row**.
+
+## The whole idea of a GLM, in one table {transition="convex-in none-out" transition-speed="fast"}
+
+| If your outcome is... | ...its distribution is | ...the model is |
+|---|---|---|
+| A continuous number | Normal | **OLS** - weeks 5, 6, 7 |
+| A yes/no | Binomial | **Logistic regression** |
+| A proportion out of a known total | Binomial | **Logistic regression** |
+| An ordered category | - | **Ordinal logistic** |
+| An unordered category | - | **Multinomial logistic** |
+| A count | Poisson | **Poisson regression** |
+| A count that is too variable | Negative binomial | **Negative binomial regression** |
+
+. . .
+
+**This is not seven new methods.** It is one method, with a slot you fill differently depending on what you are trying to explain.
+
+## What actually changes {transition="convex-in none-out" transition-speed="fast"}
+
+Every GLM has exactly three pieces. You already know the middle one.
+
+::: incremental
+1.  **The random component** - what distribution does the outcome follow? (Normal, binomial, Poisson...)
+2.  **The linear predictor** - $\beta_0 + \beta_1x_1 + \beta_2x_2 + ...$ . This is *identical* to everything we have done for three weeks
+3.  **The link function** - the bit of maths that connects the two, so that a straight line on one scale becomes a sensible prediction on the other
+:::
+
+. . .
+
+OLS is just the GLM where the distribution is Normal and the link function does nothing at all.
+
+# Can we predict Ofsted? {background-color="#4e3c56"}
+
+## Our question for today {transition="convex-in none-out" transition-speed="fast"}
+
+-   We have used Ofsted ratings as a **predictor** and as a **grouping variable** already
+-   Today we turn it around and make it the **outcome**
+-   *Given everything else we know about a school - its results, its intake, its absence rates, its size - can we predict what Ofsted said about it?*
+-   And if we can, what does that tell us about what Ofsted is actually measuring?
+
+## The outcome variable {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.5
+#| out-width: 95%
+
+model_data |>
+  count(rating4) |>
+  ggplot(aes(x = rating4, y = n, fill = rating4)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = comma(n)), vjust = -0.4, size = 5) +
+  scale_fill_manual(values = c(casa_red, casa_pink, casa_teal, casa_green)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = NULL, y = "Schools",
+       title = "Ofsted ratings, mainstream secondaries in England") +
+  theme(legend.position = "none")
+```
+
+::: {style="font-size: 0.8em"}
+`r comma(nrow(model_data))` schools with complete data. Note immediately how **lopsided** this is - we will come back to that, because it causes more trouble than anything else today.
+:::
+
+## First attempt: just use OLS? {transition="convex-in none-out" transition-speed="fast"}
+
+Let's code "below Good" as **1** and "Good or better" as **0**, and regress it on Progress 8 exactly as we have been doing for three weeks.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+lpm <- lm(below_good ~ P8MEA, data = model_data)
+```
+
+```{r}
+#| echo: false
+lpm_range <- range(fitted(lpm))
+lpm_neg   <- sum(fitted(lpm) < 0)
+```
+
+. . .
+
+::: {style="font-size: 0.9em"}
+The model runs. It produces coefficients. It produces an R². Nothing errors.
+
+**And its fitted values run from `r round(lpm_range[1], 3)` to `r round(lpm_range[2], 3)`.**
+:::
+
+## A probability of minus fifty percent {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.8
+#| out-width: 95%
+
+grid <- tibble(P8MEA = seq(min(model_data$P8MEA), max(model_data$P8MEA), length.out = 300))
+grid$lpm <- predict(lpm, newdata = grid)
+glm1 <- glm(below_good ~ P8MEA, data = model_data, family = binomial)
+grid$glm <- predict(glm1, newdata = grid, type = "response")
+
+ggplot() +
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1, ymax = Inf,
+           fill = casa_red, alpha = 0.08) +
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = 0,
+           fill = casa_red, alpha = 0.08) +
+  geom_jitter(data = model_data, aes(P8MEA, below_good),
+              height = 0.03, alpha = 0.10, colour = casa_purple, size = 0.9) +
+  geom_line(data = grid, aes(P8MEA, lpm, colour = "Straight line (OLS)"), linewidth = 1.3) +
+  geom_line(data = grid, aes(P8MEA, glm, colour = "Logistic curve"), linewidth = 1.3) +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", linewidth = 0.4) +
+  scale_colour_manual(values = c("Straight line (OLS)" = casa_red,
+                                 "Logistic curve" = casa_teal), name = NULL) +
+  labs(x = "Progress 8 score", y = "P(rated below Good)",
+       title = "The shaded bands are impossible probabilities") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.8em"}
+The straight line gives **`r comma(lpm_neg)` schools a negative probability**. At a Progress 8 of +1 it predicts a probability of about **−13%**. The logistic curve cannot do this - it is bounded at 0 and 1 by construction.
+:::
+
+## Where the curve comes from {transition="convex-in none-out" transition-speed="fast"}
+
+We need something that takes a straight line, which runs from $-\infty$ to $+\infty$, and squashes it into $[0,1]$.
+
+::: incremental
+-   Start with the **probability** $p$ - bounded at 0 and 1, awkward
+-   Turn it into **odds**, $\frac{p}{1-p}$ - now bounded at 0 and $+\infty$, better
+-   Take the **log** of that - now unbounded in both directions :tada:
+:::
+
+. . .
+
+$$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
+
+That left-hand side is the **logit**, and it is the link function. The right-hand side is exactly the model we have been fitting since week 5.
+
+## Odds are not probabilities {transition="convex-in none-out" transition-speed="fast"}
+
+Worth pausing, because this trips people up all term.
+
+| Probability | Odds | In words |
+|---|---|---|
+| 0.5 | 1.0 | Evens |
+| 0.75 | 3.0 | Three to one on |
+| 0.9 | 9.0 | Nine to one on |
+| 0.1 | 0.11 | Nine to one against |
+
+. . .
+
+Probabilities are bounded above. **Odds are not.** That is the whole reason we work with them.
+
+# Binary logistic regression {background-color="#4e3c56"}
+
+## Running the model {transition="convex-in none-out" transition-speed="fast"}
+
+Same formula interface you have used for three weeks. Two differences: `glm()` not `lm()`, and a `family` argument.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+logit_below <- glm(update(predictors, below_good ~ .),
+                   data   = train,
+                   family = binomial)
+```
+
+. . .
+
+```{r}
+#| echo: false
+ct <- summary(logit_below)$coefficients
+tibble(
+  Term        = rownames(ct),
+  Coefficient = round(ct[, 1], 3),
+  `Std. error`= round(ct[, 2], 3),
+  `p`         = ifelse(ct[, 4] < 0.001, "<0.001", as.character(round(ct[, 4], 3)))
+) |> kable()
+```
+
+## These coefficients are on the log-odds scale {transition="convex-in none-out" transition-speed="fast"}
+
+-   A coefficient of `r round(coef(logit_below)["P8MEA"], 2)` on Progress 8 does **not** mean "the probability falls by `r abs(round(coef(logit_below)["P8MEA"], 2))`"
+-   It means the **log-odds** fall by that much, for every one-point increase in Progress 8
+-   Nobody thinks in log-odds. So we exponentiate, and get an **odds ratio**
+
+. . .
+
+```{r}
+#| echo: true
+exp(coef(logit_below)["P8MEA"])
+```
+
+. . .
+
+::: {style="font-size: 0.9em"}
+**One extra Progress 8 point multiplies the odds of being rated below Good by about `r round(exp(coef(logit_below)["P8MEA"]), 2)`** - that is, it cuts them by roughly `r round(100 * (1 - exp(coef(logit_below)["P8MEA"])))`%.
+:::
+
+## Reading odds ratios {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.5
+#| out-width: 92%
+
+or_tbl <- tibble(
+  term = names(coef(logit_below)),
+  est  = coef(logit_below),
+  se   = summary(logit_below)$coefficients[, 2]
+) |>
+  filter(term != "(Intercept)") |>
+  mutate(or = exp(est), lo = exp(est - 1.96 * se), hi = exp(est + 1.96 * se),
+         term = recode(term,
+           "P8MEA" = "Progress 8",
+           "PTFSM6CLA1A" = "% disadvantaged",
+           "PERCTOT" = "% overall absence",
+           "PPERSABS10" = "% persistently absent",
+           "log(TPUP)" = "log(cohort size)",
+           "PTPRIORHI" = "% high prior attainers",
+           "MINORGROUPMaintained school" = "Maintained (vs academy)"))
+
+ggplot(or_tbl, aes(x = or, y = fct_reorder(term, or))) +
+  geom_vline(xintercept = 1, linetype = "dashed", colour = casa_red, linewidth = 0.8) +
+  geom_errorbarh(aes(xmin = lo, xmax = hi), height = 0.25, colour = casa_purple) +
+  geom_point(size = 3.4, colour = casa_teal) +
+  scale_x_log10() +
+  labs(x = "Odds ratio (log scale)", y = NULL,
+       title = "Odds of being rated below Good",
+       subtitle = "Left of the dashed line = protective; right = raises the odds")
+```
+
+::: {style="font-size: 0.8em"}
+Anything whose interval crosses **1** is doing nothing detectable. Note how much work Progress 8 is doing compared with everything else.
+:::
+
+## So how good is it? {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+p_below <- predict(logit_below, newdata = test, type = "response")
+accuracy <- mean((p_below > 0.5) == test$below_good)
+```
+
+```{r}
+#| echo: false
+baseline <- max(mean(test$below_good), 1 - mean(test$below_good))
+auc_below <- auc_of(p_below, test$below_good)
+```
+
+::: {style="font-size: 1.1em"}
+**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`**
+:::
+
+. . .
+
+::: {style="font-size: 1.1em"}
+Not bad! Nearly nine schools in ten classified correctly.
+:::
+
+. . .
+
+::: {.fragment style="font-size: 1.15em; color: #C94C4C"}
+**Now watch.**
+:::
+
+## The single most important slide today {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10.5
+#| fig-height: 4.2
+#| out-width: 90%
+
+tibble(
+  model = c("Our logistic model", "A model that always\nsays 'not below Good'"),
+  acc   = c(accuracy, baseline)
+) |>
+  ggplot(aes(x = fct_rev(model), y = 100 * acc, fill = model)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.1f%%", 100 * acc)), hjust = -0.15, size = 6) +
+  coord_flip(ylim = c(0, 100)) +
+  scale_fill_manual(values = c(casa_teal, casa_red)) +
+  labs(x = NULL, y = "Test-set accuracy (%)",
+       title = "Our model versus a model that does nothing at all") +
+  theme(legend.position = "none")
+```
+
+::: {style="font-size: 0.95em"}
+A model that makes **the same prediction every single time**, with no data at all, scores `r sprintf("%.1f%%", 100 * baseline)`. Our model beats it by **`r sprintf("%.1f", 100 * (accuracy - baseline))` percentage points**.
+:::
+
+## Why accuracy lied to us {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+cm <- table(Actual = ifelse(test$below_good == 1, "Below Good", "Good or better"),
+            Predicted = ifelse(p_below > 0.5, "Below Good", "Good or better"))
+kable(cm)
+```
+
+::: incremental
+-   Only **`r comma(sum(test$below_good))`** of the `r comma(nrow(test))` test schools are actually below Good - the class is **rare**
+-   The model catches **`r cm["Below Good", "Below Good"]`** of them and misses **`r cm["Below Good", "Good or better"]`**
+-   If you were Ofsted, trying to decide which schools to visit, this model would be close to useless *at this threshold*
+:::
+
+. . .
+
+**Always, always compare your accuracy against the majority-class baseline.** On imbalanced data, accuracy on its own is not evidence of anything.
+
+## But the model is not useless {transition="convex-in none-out" transition-speed="fast"}
+
+Accuracy asks "did you get it right?" at one arbitrary cut-off. A better question is "**do you rank schools sensibly?**"
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.3
+#| out-width: 95%
+
+thr <- seq(0.001, 0.999, length.out = 300)
+roc <- map_dfr(thr, function(t) {
+  tibble(tpr = mean(p_below[test$below_good == 1] > t),
+         fpr = mean(p_below[test$below_good == 0] > t))
+})
+
+p_roc <- ggplot(roc, aes(fpr, tpr)) +
+  geom_abline(linetype = "dashed", colour = "grey60") +
+  geom_line(colour = casa_teal, linewidth = 1.3) +
+  labs(x = "False positive rate", y = "True positive rate",
+       title = sprintf("ROC curve - AUC = %.3f", auc_below))
+
+p_box <- tibble(p = p_below,
+                actual = ifelse(test$below_good == 1, "Below Good", "Good or better")) |>
+  ggplot(aes(x = actual, y = p, fill = actual)) +
+  geom_boxplot(alpha = 0.75, outlier.alpha = 0.25) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", colour = casa_red) +
+  scale_fill_manual(values = c(casa_pink, casa_teal)) +
+  labs(x = NULL, y = "Predicted probability",
+       title = "Predictions, by what actually happened") +
+  theme(legend.position = "none")
+
+p_roc + p_box
+```
+
+::: {style="font-size: 0.8em"}
+**AUC = `r sprintf("%.3f", auc_below)`** - pick a below-Good school and a Good-or-better school at random, and the model gives the below-Good one a higher score `r sprintf("%.0f%%", 100 * auc_below)` of the time. That is genuinely useful. The problem was never the model - it was the **0.5 threshold**, which is a choice, not a law.
+:::
+
+## Moving the threshold {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.3
+#| out-width: 95%
+
+sweep <- map_dfr(seq(0.02, 0.9, by = 0.01), function(t) {
+  pred <- p_below > t
+  tibble(threshold = t,
+         `Caught (recall)`   = mean(pred[test$below_good == 1]),
+         `Correct when flagged (precision)` =
+            ifelse(sum(pred) == 0, NA, mean(test$below_good[pred] == 1)))
+}) |>
+  pivot_longer(-threshold)
+
+ggplot(sweep, aes(threshold, value, colour = name)) +
+  geom_line(linewidth = 1.2, na.rm = TRUE) +
+  geom_vline(xintercept = 0.5, linetype = "dashed", colour = "grey50") +
+  scale_y_continuous(labels = percent) +
+  scale_colour_manual(values = c(casa_purple, casa_teal), name = NULL) +
+  labs(x = "Classification threshold", y = NULL,
+       title = "There is no free lunch here") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.8em"}
+Drop the threshold and you catch more struggling schools, but more of your flags are false alarms. **Which error is worse is a policy question, not a statistical one** - and that is the right way round.
+:::
+
+## A second outcome, same story {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+logit_out <- glm(update(predictors, outstanding ~ .), data = train, family = binomial)
+p_out <- predict(logit_out, newdata = test, type = "response")
+acc_out <- mean((p_out > 0.5) == test$outstanding)
+base_out <- max(mean(test$outstanding), 1 - mean(test$outstanding))
+auc_out <- auc_of(p_out, test$outstanding)
+
+tibble(
+  Model = c("Below Good vs Good+", "Outstanding vs rest"),
+  Accuracy = sprintf("%.1f%%", 100 * c(accuracy, acc_out)),
+  Baseline = sprintf("%.1f%%", 100 * c(baseline, base_out)),
+  AUC = sprintf("%.3f", c(auc_below, auc_out)),
+  `Caught at p > 0.5` = c(
+    sprintf("%d of %d", cm["Below Good", "Below Good"], sum(test$below_good)),
+    sprintf("%d of %d", sum(p_out > 0.5 & test$outstanding == 1), sum(test$outstanding)))
+) |> kable()
+```
+
+. . .
+
+-   Higher AUC, so the ranking is even better
+-   Barely above baseline on accuracy, and still catching well under half the Outstanding schools
+-   **Not a quirk of one model.** This is what rare outcomes do, and you will meet it in your own data
+
+## An uncomfortable question {transition="convex-in none-out" transition-speed="fast"}
+
+Progress 8 is by far the strongest predictor in both models. So what have we actually built?
+
+::: incremental
+-   Ofsted inspectors **read a school's Progress 8 score before they visit**
+-   So we are not independently predicting a judgement - we are partly **recovering one of Ofsted's own inputs**
+-   That is circularity, and it makes the model much less interesting than it first looked
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+And a second problem: inspection dates in this file run from **`r min(model_data$insp_year, na.rm = TRUE)` to `r max(model_data$insp_year, na.rm = TRUE)`**, median `r median(model_data$insp_year, na.rm = TRUE)`. Some of these ratings were handed out a decade before the results we are using to "predict" them.
+
+**Ask these questions of your own models.** They matter more than another decimal place of AUC.
+:::
+
+# Categories with an order {background-color="#4e3c56"}
+
+## We threw information away {transition="convex-in none-out" transition-speed="fast"}
+
+-   To fit a binary model, we collapsed four ratings into two
+-   But Ofsted ratings have an obvious **order**: Inadequate < Requires improvement < Good < Outstanding
+-   Treating them as a number (1, 2, 3, 4) is the mistake we warned about in week 1 - it assumes the gaps are equal
+-   Treating them as unordered throws away real information
+
+. . .
+
+**Ordinal logistic regression** uses the order without assuming the spacing.
+
+## The idea: cut points on a hidden scale {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4
+#| out-width: 95%
+
+ord <- polr(update(predictors, rating4 ~ .), data = train, Hess = TRUE)
+cuts <- ord$zeta
+
+x <- seq(-9, 7, length.out = 600)
+tibble(x = x, y = dlogis(x)) |>
+  ggplot(aes(x, y)) +
+  geom_area(fill = casa_teal, alpha = 0.18) +
+  geom_line(colour = casa_teal, linewidth = 1.1) +
+  geom_vline(xintercept = cuts, colour = casa_red, linewidth = 1, linetype = "dashed") +
+  annotate("text", x = c(-7.5, -4.3, -0.5, 4.5), y = 0.27,
+           label = c("Inadequate", "Requires\nimprovement", "Good", "Outstanding"),
+           size = 4.6, colour = casa_purple) +
+  annotate("text", x = cuts, y = 0.02, label = sprintf("%.2f", cuts),
+           size = 3.6, colour = casa_red, vjust = -0.3) +
+  labs(x = "Latent 'school quality' scale", y = NULL,
+       title = "One underlying scale, three estimated cut points") +
+  theme(axis.text.y = element_blank())
+```
+
+::: {style="font-size: 0.85em"}
+We imagine a single continuous scale we cannot observe. The predictors move a school along it, and the **cut points** decide which rating it comes out as. Three cut points for four categories - and the model estimates them from the data rather than assuming them.
+:::
+
+## Running it {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+library(MASS)
+ord <- polr(update(predictors, rating4 ~ .), data = train, Hess = TRUE)
+```
+
+```{r}
+#| echo: false
+oc <- coef(summary(ord))
+op <- 2 * pnorm(abs(oc[, 3]), lower.tail = FALSE)
+tibble(
+  Term  = rownames(oc),
+  Value = round(oc[, 1], 3),
+  `t`   = round(oc[, 3], 2),
+  `p`   = ifelse(op < 0.001, "<0.001", as.character(round(op, 3)))
+) |> kable()
+```
+
+::: {style="font-size: 0.8em"}
+The last three rows are the cut points, not predictors. Everything above them reads like a logistic model: positive means *more likely to be rated higher*.
+:::
+
+## Did it work? {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+pred_ord <- predict(ord, newdata = test)
+acc_ord  <- mean(as.character(pred_ord) == as.character(test$rating4))
+base_ord <- max(prop.table(table(test$rating4)))
+within1  <- mean(abs(as.integer(pred_ord) - as.integer(test$rating4)) <= 1)
+cm_ord   <- table(Actual = test$rating4, Predicted = pred_ord)
+kable(cm_ord)
+```
+
+::: {style="font-size: 0.95em"}
+-   Accuracy **`r sprintf("%.1f%%", 100 * acc_ord)`** against a baseline of `r sprintf("%.1f%%", 100 * base_ord)`
+-   It **never once** correctly predicts Inadequate - `r cm_ord["Inadequate", "Inadequate"]` out of `r sum(cm_ord["Inadequate", ])`
+-   But it is within one category **`r sprintf("%.1f%%", 100 * within1)`** of the time
+:::
+
+## So: can we predict Ofsted? {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 1.15em"}
+**Roughly, yes. Precisely, no. And the rare categories, not at all.**
+:::
+
+. . .
+
+-   The model knows the difference between a likely-Outstanding school and a likely-struggling one
+-   It cannot tell you which side of a single grade boundary a school will land
+-   And it has essentially never seen enough Inadequate schools to learn what they look like
+
+. . .
+
+That is an honest, useful answer - and a far better one than a single accuracy figure would have given you.
+
+# Categories without an order {background-color="#4e3c56"}
+
+## When there is no natural ordering {transition="convex-in none-out" transition-speed="fast"}
+
+-   Ofsted ratings are ordered, so ordinal logistic is the right tool
+-   But plenty of categorical outcomes are not: which region a school is in, which type of school a pupil moves to, which of five clusters a neighbourhood falls into
+-   **Multinomial logistic regression** handles those - it fits a separate set of coefficients for every category against a reference
+
+. . .
+
+Let's fit it to Ofsted anyway, *deliberately ignoring the order*, to see what ignoring the order costs us.
+
+## The comparison {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| results: hide
+library(nnet)
+multi <- multinom(update(predictors, factor(rating4, ordered = FALSE) ~ .),
+                  data = train, trace = FALSE)
+```
+
+```{r}
+#| echo: false
+pred_multi <- predict(multi, newdata = test)
+acc_multi  <- mean(as.character(pred_multi) == as.character(test$rating4))
+
+tibble(
+  Model = c("Ordinal (proportional odds)", "Multinomial"),
+  `Parameters` = c(length(coef(ord)) + length(ord$zeta), length(as.vector(coef(multi)))),
+  `Test accuracy` = sprintf("%.1f%%", 100 * c(acc_ord, acc_multi)),
+  AIC = round(c(AIC(ord), AIC(multi)))
+) |> kable()
+```
+
+::: incremental
+-   The multinomial buys about **`r sprintf("%.1f", 100 * (acc_multi - acc_ord))` of a percentage point** of accuracy
+-   It spends **more than twice as many parameters** to get it
+-   AIC mildly prefers it, which tells us the proportional-odds assumption is not perfectly met
+:::
+
+. . .
+
+**Use the structure in your data when you have it.** The ordinal model gets almost the same performance from a third of the coefficients, and you can actually interpret it.
+
+# Counting things {background-color="#4e3c56"}
+
+## A different kind of outcome {transition="convex-in none-out" transition-speed="fast"}
+
+Let's change the question and move up a level.
+
+::: {style="font-size: 1.05em"}
+*How many below-Good schools does each local authority have?*
+:::
+
+::: incremental
+-   That is a **count**: 0, 1, 2, 3... never negative, never fractional
+-   Most LAs have a few; some have none at all; a couple have a lot
+-   A straight line will happily predict minus two struggling schools, which is not a thing
+:::
+
+## What counts look like {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.2
+#| out-width: 95%
+
+la <- schools |>
+  group_by(LANAME) |>
+  summarise(n_schools = n(),
+            n_below   = sum(below_good),
+            mean_fsm  = mean(PTFSM6CLA1A, na.rm = TRUE),
+            mean_abs  = mean(PERCTOT, na.rm = TRUE),
+            .groups = "drop") |>
+  filter(n_schools >= 5)
+
+ggplot(la, aes(n_below)) +
+  geom_histogram(binwidth = 1, fill = casa_teal, colour = "white") +
+  labs(x = "Schools rated below Good", y = "Local authorities",
+       title = sprintf("%d local authorities; mean %.2f, variance %.2f",
+                       nrow(la), mean(la$n_below), var(la$n_below)))
+```
+
+::: {style="font-size: 0.85em"}
+Discrete, non-negative, right-skewed, with a pile-up at the low end - **`r sum(la$n_below == 0)`** LAs have no below-Good schools at all. This is a Poisson-shaped problem, exactly as week 1 described.
+:::
+
+## But first - counts or rates? {transition="convex-in none-out" transition-speed="fast"}
+
+Straight from week 1. Lancashire has `r la$n_below[la$LANAME == "Lancashire"]` below-Good schools and Bury has `r la$n_below[la$LANAME == "Bury"]`.
+
+. . .
+
+**Is Lancashire worse?** It has `r la$n_schools[la$LANAME == "Lancashire"]` secondary schools. Bury has `r la$n_schools[la$LANAME == "Bury"]`.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+We need to account for how many schools each LA had the *opportunity* to get wrong. In a count model that is called an **offset** - a term we force into the model with a coefficient fixed at 1:
+
+$$\log(\text{expected count}) = \beta_0 + \beta_1x_1 + \dots + \log(\text{number of schools})$$
+
+Move it to the other side and you are modelling a **rate**, not a count.
+:::
+
+## Running a Poisson model {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+pois <- glm(n_below ~ mean_fsm + mean_abs + offset(log(n_schools)),
+            data = la, family = poisson)
+```
+
+```{r}
+#| echo: false
+pc <- summary(pois)$coefficients
+tibble(
+  Term = c("(Intercept)", "Mean % disadvantaged", "Mean % absence"),
+  Coefficient = round(pc[, 1], 4),
+  `Rate ratio` = round(exp(pc[, 1]), 3),
+  `p` = ifelse(pc[, 4] < 0.001, "<0.001", as.character(round(pc[, 4], 3)))
+) |> kable()
+```
+
+. . .
+
+::: {style="font-size: 0.9em"}
+The link function here is $\log$, so exponentiating gives a **rate ratio**. And note the result: once average absence is in the model, **average disadvantage adds nothing detectable** - a confounding story of exactly the kind we met in week 6.
+:::
+
+## Checking the Poisson assumption {transition="convex-in none-out" transition-speed="fast"}
+
+The Poisson distribution assumes something quite strong: that the **variance equals the mean**. Real data often disagrees.
+
+```{r}
+#| echo: true
+dispersion <- pois$deviance / pois$df.residual
+dispersion
+```
+
+. . .
+
+::: {style="font-size: 0.95em"}
+A value near **1** means the assumption holds. Much above 1 means **overdispersion** - the data are more variable than Poisson allows, your standard errors are too small, and you will think results are significant when they are not.
+
+Here we get **`r sprintf("%.2f", dispersion)`**, which is mild. So Poisson is adequate - but we should check rather than assume.
+:::
+
+## When it is not adequate {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+nb <- MASS::glm.nb(n_below ~ mean_fsm + mean_abs + offset(log(n_schools)), data = la)
+
+tibble(
+  Model = c("Poisson", "Negative binomial"),
+  AIC = round(c(AIC(pois), AIC(nb))),
+  `SE on absence` = sprintf("%.4f", c(summary(pois)$coefficients["mean_abs", 2],
+                                      summary(nb)$coefficients["mean_abs", 2]))
+) |> kable()
+```
+
+-   The **negative binomial** is the Poisson's more forgiving cousin - it adds a parameter that lets the variance exceed the mean
+-   This is exactly the distribution we met in week 1, and this is what it is for
+-   Here the two models are essentially tied, so we keep the simpler one
+
+. . .
+
+**Fit the Poisson, check the dispersion, escalate only if you need to.**
+
+## The fun bit: who beats their own odds? {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.4
+#| out-width: 95%
+
+la <- la |>
+  mutate(expected = fitted(pois),
+         resid    = (n_below - expected) / sqrt(expected))
+
+plot_la <- bind_rows(
+  la |> slice_max(resid, n = 6) |> mutate(grp = "More than expected"),
+  la |> slice_min(resid, n = 6) |> mutate(grp = "Fewer than expected")
+)
+
+plot_la |>
+  pivot_longer(c(n_below, expected), names_to = "what", values_to = "val") |>
+  mutate(what = recode(what, n_below = "Observed", expected = "Model expects")) |>
+  ggplot(aes(x = val, y = fct_reorder(LANAME, resid), colour = what)) +
+  geom_line(aes(group = LANAME), colour = "grey70", linewidth = 1) +
+  geom_point(size = 3.4) +
+  facet_wrap(~grp, scales = "free_y") +
+  scale_colour_manual(values = c("Observed" = casa_red, "Model expects" = casa_teal),
+                      name = NULL) +
+  labs(x = "Schools rated below Good", y = NULL,
+       title = "Where the model is wrong, and in which direction") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.8em"}
+Given their intake, some LAs have far **more** struggling schools than expected and some far **fewer**. The residuals of a count model are not a diagnostic afterthought here - they are the finding.
+:::
+
+# One more outcome type {background-color="#4e3c56"}
+
+## Proportions out of a known total {transition="convex-in none-out" transition-speed="fast"}
+
+Back down to school level, and to a file we have not touched yet: **what happens to pupils after Year 11?**
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+dest <- destinations |>
+  inner_join(schools, by = "URN") |>
+  filter(!is.na(COHORT), COHORT > 0, !is.na(OVERALL_DEST), !is.na(PTFSM6CLA1A)) |>
+  mutate(not_sust = COHORT - OVERALL_DEST,
+         prop     = OVERALL_DEST / COHORT) |>
+  filter(not_sust >= 0)
+
+tibble(
+  ` ` = c("Schools", "Median cohort", "Median % sustaining a destination",
+          "Schools at exactly 100%"),
+  Value = c(comma(nrow(dest)), comma(median(dest$COHORT)),
+            sprintf("%.1f%%", 100 * median(dest$prop)),
+            sprintf("%d (%.1f%%)", sum(dest$prop == 1), 100 * mean(dest$prop == 1)))
+) |> kable()
+```
+
+-   Each school gives us "**x** of **n** pupils went on to education, employment or training"
+-   That is not really a percentage - it is a **count out of a known total**, which is exactly what the binomial distribution describes
+
+## Modelling it properly {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+dest_glm <- glm(cbind(OVERALL_DEST, not_sust) ~ PTFSM6CLA1A,
+                data = dest, family = binomial)
+```
+
+```{r}
+#| echo: false
+or10 <- exp(coef(dest_glm)["PTFSM6CLA1A"] * 10)
+```
+
+::: {style="font-size: 1.05em"}
+Note the `cbind()` - we hand the model **successes and failures**, not a proportion, so it knows a school of 30 carries less weight than a school of 300.
+:::
+
+. . .
+
+::: {style="font-size: 1.05em"}
+**Every 10 percentage points more disadvantage is associated with a `r sprintf("%.0f%%", 100 * (1 - or10))` fall in the odds of a pupil sustaining a destination.**
+:::
+
+## Does it matter? Compare the predictions {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.3
+#| out-width: 95%
+
+dest_ols <- lm(I(prop * 100) ~ PTFSM6CLA1A, data = dest)
+gd <- tibble(PTFSM6CLA1A = seq(0, 100, length.out = 200))
+gd$OLS <- predict(dest_ols, newdata = gd)
+gd$GLM <- 100 * predict(dest_glm, newdata = gd, type = "response")
+
+ggplot() +
+  geom_point(data = dest, aes(PTFSM6CLA1A, 100 * prop),
+             alpha = 0.10, colour = casa_purple, size = 0.8) +
+  geom_line(data = gd, aes(PTFSM6CLA1A, OLS, colour = "Straight line (OLS)"), linewidth = 1.3) +
+  geom_line(data = gd, aes(PTFSM6CLA1A, GLM, colour = "Binomial GLM"), linewidth = 1.3) +
+  scale_colour_manual(values = c("Straight line (OLS)" = casa_red,
+                                 "Binomial GLM" = casa_teal), name = NULL) +
+  labs(x = "% disadvantaged pupils", y = "% sustaining a destination",
+       title = "Same data, two models") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.85em"}
+They agree almost exactly through the middle and **diverge at the top end** - the schools policy cares about most. Here OLS is not obviously broken. It is quietly wrong at the edges, and **nothing in its output tells you so**.
+:::
+
+## And check the dispersion again {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+disp_dest <- dest_glm$deviance / dest_glm$df.residual
+tibble(
+  Model = c("LA below-Good counts (Poisson)", "Destinations (binomial)"),
+  Dispersion = sprintf("%.2f", c(dispersion, disp_dest)),
+  Verdict = c("Mild - Poisson is fine",
+              "Overdispersed - use quasibinomial")
+) |> kable()
+```
+
+. . .
+
+-   **Two models, two different answers.** The check is not a formality you tick off
+-   For the destinations model, switching to `family = quasibinomial` widens the standard errors by about 60% - the coefficients are unchanged, but our confidence in them was overstated
+
+# Wrapping up {background-color="#4e3c56"}
+
+## The family, in one slide {transition="convex-in none-out" transition-speed="fast"}
+
+| Outcome | `family =` | Link | Interpret coefficients as |
+|---|---|---|---|
+| Continuous | `gaussian` | identity | Units of y per unit of x |
+| Yes / no | `binomial` | logit | Odds ratios |
+| x out of n | `binomial` | logit | Odds ratios |
+| Ordered categories | `MASS::polr()` | logit | Odds of being in a higher category |
+| Unordered categories | `nnet::multinom()` | logit | Odds vs a reference category |
+| Count | `poisson` | log | Rate ratios |
+| Overdispersed count | `MASS::glm.nb()` | log | Rate ratios |
+
+. . .
+
+**One framework.** Change the family, change the link, and everything you learned about building and interpreting a linear model still applies.
+
+## What carried over, and what didn't {transition="convex-in none-out" transition-speed="fast"}
+
+::: {.columns}
+::: {.column width="50%"}
+**Still true**
+
+-   The recipe: start simple, add complexity that earns its place
+-   Confounding, mediation, interactions
+-   Multicollinearity and VIF
+-   Thinking hard about what belongs in the model
+:::
+::: {.column width="50%"}
+**Different now**
+
+-   No R² - use AIC, deviance, or predictive performance
+-   Coefficients need exponentiating before they mean anything
+-   Residual plots look strange and need different diagnostics
+-   Accuracy is a trap on imbalanced outcomes
+:::
+:::
+
+## Where you can go next {transition="convex-in none-out" transition-speed="fast"}
+
+-   **Generalised additive models (GAMs)** - when the relationship is smooth but not a straight line
+-   **`glmer()`** - the intersection of this week and last week: a GLM with random effects, for grouped non-normal data
+-   **Spatial and geographically weighted regression** - when the relationship itself varies over space
+-   **Ridge and lasso** - when you have too many predictors and need the model to choose
+
+. . .
+
+You now have the two big extensions to OLS: last week we relaxed **independence**, this week we relaxed **normality**. Almost everything else is a combination of the two.
+
+## Conclusions {transition="convex-in none-out" transition-speed="fast"}
+
+-   **Look at your outcome variable before you choose a model.** Week 1's data types were not an academic exercise - they determine what you are allowed to do
+-   A GLM is not a new method, it is the same linear predictor with a different distribution and a link function bolted on
+-   **Always compare against a baseline.** A model that beats "predict the majority every time" by half a percentage point has not learned much
+-   Check your assumptions - dispersion for counts, and the threshold question for classification
+-   And ask where your predictors came from. Our best one turned out to be something Ofsted had already read
+
+## Today's Practical {transition="convex-in none-out" transition-speed="fast"}
+
+-   Building and interpreting your own logistic and Poisson models on the schools data
+-   Practice at the bit that matters most: **interpreting odds ratios and rate ratios** in plain English
+-   And deciding, for an outcome of your own choosing, which member of the family you actually need

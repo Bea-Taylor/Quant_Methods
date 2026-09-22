@@ -1,0 +1,144 @@
+---
+title: "Generalised Linear Models"
+subtitle: "Practical - logistic and Poisson regression on the schools data"
+author: "Adam Dennett"
+date: "Week GLM"
+format:
+  html:
+    code-fold: true
+    code-tools: true
+  ipynb: default
+filters:
+  - qna
+  - multicode
+  - quarto # keep Quarto's built-ins as the last filter or it won't work
+---
+
+<!--
+SKELETON ONLY - nothing below is written yet.
+
+Structure mirrors weekGLM_lecture.qmd so the two can be built in parallel.
+Follow the week 1 / week 6-8 pattern: every task gets an R tab and a Python
+tab via the multicode filter, i.e.
+
+::: {.panel-tabset}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+```{r}
+```
+#### ![](L6_images/python-logo-only.png){width="30"}
+```{python}
+```
+:::
+
+Python side: statsmodels covers all of this -
+  smf.glm(..., family=sm.families.Binomial())     binary / proportions
+  smf.glm(..., family=sm.families.Poisson())      counts, with offset=
+  OrderedModel(...)                               ordinal
+  smf.mnlogit(...)                                multinomial
+Read the data locally with find_qm_root(anchor="_quarto.yml"), NOT from a
+GitHub raw URL.
+-->
+
+## Learning outcomes
+
+By the end of this practical you should be able to:
+
+-   Recognise from an outcome variable alone which member of the GLM family you need
+-   Fit and interpret a binary logistic regression, and explain an odds ratio in plain English
+-   Judge a classifier honestly, against a majority-class baseline rather than on accuracy alone
+-   Fit a Poisson regression with an offset, and check it for overdispersion
+-   Decide when a negative binomial or quasi-likelihood model is warranted
+
+## Setup
+
+::: {.callout-note}
+TODO - data loading, R and Python. Same DfE files as the lecture, read locally.
+:::
+
+# Part 1: Choosing a model
+
+## Task 1 - Look at your outcome first
+
+::: {.callout-note}
+TODO - give students several candidate outcome variables from the DfE files and
+have them classify each one (binary / count / proportion / ordered category /
+continuous) before any modelling happens. This is the week 1 callback and it is
+the point of the whole practical.
+:::
+
+# Part 2: Binary logistic regression
+
+## Task 2 - Why not just use OLS?
+
+::: {.callout-note}
+TODO - fit the linear probability model, plot the fitted values, find the
+impossible predictions. Students should discover the problem, not be told it.
+:::
+
+## Task 3 - Your first logistic model
+
+::: {.callout-note}
+TODO - `glm(..., family = binomial)`. Build up from one predictor.
+:::
+
+## Task 4 - Interpreting odds ratios
+
+::: {.callout-note}
+TODO - exponentiate, and write one sentence per coefficient in plain English.
+The writing is the exercise; the code is two lines.
+:::
+
+## Task 5 - Is it any good?
+
+::: {.callout-note}
+TODO - confusion matrix, baseline comparison, AUC, and moving the threshold.
+Students should reproduce the accuracy trap from the lecture on their own
+choice of outcome.
+:::
+
+# Part 3: Ordered and unordered categories
+
+## Task 6 - Ordinal logistic
+
+::: {.callout-note}
+TODO - `MASS::polr()` / `OrderedModel`. Interpret the cut points.
+:::
+
+## Task 7 - Multinomial, and what the order was worth
+
+::: {.callout-note}
+TODO - refit ignoring the order, compare parameter counts and AIC.
+:::
+
+# Part 4: Counts
+
+## Task 8 - Aggregating to local authority level
+
+::: {.callout-note}
+TODO - group_by / summarise to build the LA-level count dataset.
+:::
+
+## Task 9 - Poisson regression with an offset
+
+::: {.callout-note}
+TODO - the offset is the counts-vs-rates idea from week 1. Make them fit it
+both with and without, and compare.
+:::
+
+## Task 10 - Overdispersion
+
+::: {.callout-note}
+TODO - compute the dispersion statistic, then fit the negative binomial and
+decide whether it was needed. Contrast with the destinations model, which is
+overdispersed.
+:::
+
+# Part 5: On your own
+
+## Task 11 - Pick an outcome and justify the family
+
+::: {.callout-note}
+TODO - open-ended, assessment-shaped. Choose any outcome from the DfE files,
+state which GLM family it needs and why, fit it, interpret it, and say what you
+would not claim on the basis of it.
+:::
