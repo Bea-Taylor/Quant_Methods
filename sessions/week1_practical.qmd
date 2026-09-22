@@ -247,6 +247,127 @@ Have a go before revealing. The trap is `P8MEA` — think about what its zero me
 the progress of a school on 0.5.
 :::
 
+## Getting the type wrong, in code
+
+Knowing `OFSTEDRATING` is ordinal is not enough. **Your code has to know it
+too**, and by default it does not.
+
+Read that column in and ask for its categories in order:
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: type-wrong-r
+# As it arrives: just text
+sort(unique(schools$OFSTEDRATING))
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: type-wrong-py
+# As it arrives: just text
+sorted(schools["OFSTEDRATING"].dropna().unique())
+```
+:::
+
+::: {.callout-important title="Look at that order"}
+**Good, Inadequate, Outstanding, Requires improvement.**
+
+That is not a ranking — it is the **alphabet**. Every table you group by it,
+every plot you facet by it, and every axis you draw will come out in that
+order, and none of them will warn you.
+:::
+
+The fix is to store it as an **ordered** type, stating the order yourself. But
+there is a trap inside the fix, so we check as we go:
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: type-right-r
+rating_order <- c("Special Measures", "Serious Weaknesses", "Inadequate",
+                  "Requires improvement", "Good", "Outstanding")
+
+# How many are missing BEFORE we touch anything?
+before <- sum(is.na(schools$OFSTEDRATING))
+
+schools <- schools |>
+  mutate(OFSTEDRATING = factor(OFSTEDRATING,
+                               levels  = rating_order,
+                               ordered = TRUE))
+
+# Anything not named in rating_order has silently become NA. Did it?
+c(missing_before = before, missing_after = sum(is.na(schools$OFSTEDRATING)))
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: type-right-py
+import pandas as pd
+
+rating_order = ["Special Measures", "Serious Weaknesses", "Inadequate",
+                "Requires improvement", "Good", "Outstanding"]
+
+before = schools["OFSTEDRATING"].isna().sum()
+
+schools["OFSTEDRATING"] = pd.Categorical(schools["OFSTEDRATING"],
+                                         categories=rating_order,
+                                         ordered=True)
+
+print({"missing_before": int(before),
+       "missing_after": int(schools["OFSTEDRATING"].isna().sum())})
+```
+:::
+
+::: {.callout-warning title="Why we counted"}
+Both `factor()` and `pd.Categorical()` turn **any value you did not list**
+into a missing value, without a word of warning.
+
+Leave one real category out of `rating_order` — `Inadequate` is easy to
+forget, because most schools in that state are labelled with the more
+specific *Serious Weaknesses* or *Special Measures* — and those schools
+silently vanish from every table and plot that follows.
+
+If the two numbers above are not identical, you have just deleted data.
+:::
+
+Now every table, plot and model respects the real order.
+
+::: qna
+#### Question
+
+Plot mean Attainment 8 by Ofsted rating **before** and **after** setting the
+order. What changes, and what does *not*?
+
+#### Answer
+
+The numbers do not change at all — the same schools are in the same groups,
+and each group's mean is identical either way.
+
+What changes is the **order the categories come out in**, and therefore what
+the chart appears to say. Alphabetically ordered, the bars rise and fall with
+no pattern and the chart looks like noise. Correctly ordered, you see a clean
+monotonic climb from Special Measures to Outstanding.
+
+This is the part worth remembering: **nothing errored, and no number was
+wrong.** The only thing that was wrong was the story the chart told.
+:::
+
+::: {.callout-tip title="Why this matters beyond plots"}
+The same trap has teeth in modelling. Ordinal data frequently arrives
+**already coded as numbers** — Ofsted as 1 to 5, a Likert scale as 1 to 7.
+Software cannot tell the difference between that and a genuine measurement,
+so it will happily let you put it into a regression as a continuous predictor
+and report "each additional unit is worth *x* points".
+
+That claim assumes every step on the scale is the same size. As the lecture
+showed, the Ofsted steps are nowhere near equal.
+:::
+
 # Task 4 — Describe one continuous variable
 
 Pick a continuous variable. `ATT8SCR` is the obvious one, but `PERCTOT`
