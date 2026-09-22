@@ -123,24 +123,16 @@ Everything this week uses the dataset we will keep coming back to all term, so t
 ![](L1_images/Why_EDA.jpg){style="max-width:82%; max-height:82%; margin:auto; display:block;"}
 
 ::: {style="font-size:0.75em; text-align:center;"}
-Nobody pours concrete without surveying the ground first. The same logic
-applies to everything we do this term — **the model is only ever as sound as
-what it is built on**.
+Nobody pours concrete without surveying the ground first. The same logic applies to everything we do this term — **the model is only ever as sound as what it is built on**.
 :::
 
 ## Exploratory data analysis
 
-Before you test anything, model anything, or claim anything, you look at what
-you have got. That is **exploratory data analysis**, and it takes two weeks.
+Survey before you build in statistics is more formally known as **exploratory data analysis** - we'll cover it in two weeks.
 
 ::: {.incremental}
--   **This week — what have I actually got?** What type is each variable, what
-    shape does it take, where is its middle, how spread out is it, and what is
-    odd or missing about it. All of it *descriptive*: statements about the data
-    in front of us.
--   **Next week — what lies behind it?** The probability distributions those
-    shapes are drawn from, how to transform data that misbehaves, and the
-    harder question of whether your data represents anything at all.
+-   **This week — what have I actually got?** What type is each variable, what shape does it take, where is its middle, how spread out is it, and what is odd or missing about it. All of it *descriptive*: statements about the data in front of us.
+-   **Next week — what lies behind it?** The probability distributions those shapes are drawn from, how to transform data that misbehaves, and the harder question of whether your data represents anything at all.
 :::
 
 . . .
@@ -346,7 +338,7 @@ schools_all |>
 
 ::::: columns
 ::: {.column width="40%"}
-**Progress 8** compares the progress pupils made with similar pupils nationally.
+**Progress 8** compares the progress pupils made with similar pupils nationally, each year.
 
 - Zero means "average expected progress" - sits in the middle
 - Positive is more, negative is less
@@ -476,24 +468,81 @@ rather than its zero is the point.
 <!-- different models. Stevens cannot see the difference — so we need something -->
 <!-- more specific. -->
 
+## One more cut: discrete or continuous? {.smaller}
+
+There is a second question you can ask of any variable, and it is the one Bea
+builds on next week.
+
+::: {.columns}
+::: {.column width="50%"}
+**Discrete** — separate, countable values, with nothing in between
+
+- Pupils on roll: a school has 1,204 or 1,205, never 1,204.6
+- Number of disadvantaged pupils
+- Ofsted rating
+:::
+::: {.column width="50%"}
+**Continuous** — any value in a range; between any two you can always find another
+
+- Attainment 8 score
+- % of sessions missed
+- Progress 8
+:::
+:::
+
+. . .
+
+::: {style="font-size:0.85em;"}
+**It cuts across everything we have just done.** A count is discrete and sits
+on a ratio scale. Progress 8 is continuous and sits on an interval scale.
+Neither question answers the other — you need both.
+:::
+
+::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.8em;"}
+**Next week.** This is the distinction that decides which *kind* of
+distribution you get — a probability **mass** function for discrete data, a
+probability **density** function for continuous. Bea takes it from here.
+:::
+
+::: {.notes}
+Deliberately placed just before the statistical data types table so the extra
+column there has already been explained.
+
+Bea's week 2 slide uses foot length (continuous) against shoe size (discrete),
+which is the clearest version of the idea - worth using the same pairing out
+loud so students hear it twice in the same words.
+
+Strictly the discrete/continuous split is a distinction among *numeric*
+variables. Nominal and ordinal data are countable and separate, so they behave
+as discrete, but nobody would call a local authority name "discrete data" - it
+is simply not on a numeric scale at all. Worth saying if asked, not worth a
+slide.
+:::
+
 ## Simple statistical data types {.smaller}
 
-| Data type | Possible values | Level of measurement | Common distributions | Common model |
-|-----------|-----------------|:--------------------:|----------------------|--------------|
-| **binary** | 0, 1 | nominal | Bernoulli | logistic, probit |
-| **categorical** | "name1" … "nameK" | nominal | categorical | multinomial logit / probit |
-| **ordinal** | ordered categories | ordinal | categorical | ordered logit / probit |
-| **binomial** | 0, 1, …, N | interval | binomial, beta-binomial | binomial regression |
-| **real-valued additive** | any real number | interval | normal — symmetric | standard linear regression |
-| **count** | 0, 1, 2, … | ratio | Poisson, negative binomial | Poisson / neg. binomial regression |
-| **real-valued multiplicative** | positive real | ratio | log-normal, gamma, exponential — skewed | GLM with a logarithmic link |
+| Data type | Values | Stevens | D/C | Distributions | Model |
+|-----------|--------|:-------:|:---:|---------------|-------|
+| **binary** | 0, 1 | nominal | disc. | Bernoulli | logistic |
+| **categorical** | "name1" … "nameK" | nominal | disc. | categorical | multinomial logit |
+| **ordinal** | ordered categories | ordinal | disc. | categorical | ordered logit |
+| **binomial** | 0, 1, …, N | interval | disc. | binomial | binomial regression |
+| **real-valued additive** | any real number | interval | **cont.** | normal | linear regression |
+| **count** | 0, 1, 2, … | ratio | disc. | Poisson, neg. binomial | Poisson regression |
+| **real-valued multiplicative** | positive real | ratio | **cont.** | log-normal, gamma | GLM, log link |
+
+[**D/C** = discrete or continuous]{style="font-size:0.6em; color:#666;"}
 
 [Adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
 
 ::: {.notes}
-The two columns worth dwelling on are the last two. The whole point of this
+The columns worth dwelling on are the last two. The whole point of this
 table is that the data type determines the distribution, and the distribution
 determines the model. Everything in weeks 5 to 10 is an instance of this.
+
+The discrete/continuous column is the hook into Bea's lecture next week: only
+two of these seven types are continuous, which is worth pointing at, because
+students arrive assuming the normal distribution is the default case.
 :::
 
 ## Every one of these is in our dataset {.smaller}
