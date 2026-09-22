@@ -204,6 +204,57 @@ Every GLM has exactly three pieces. You already know the middle one.
 
 OLS is just the GLM where the distribution is Normal and the link function does nothing at all.
 
+## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The right-hand side of any regression is a straight line, and a straight line will cheerfully produce **any number at all**. The thing we are trying to predict usually cannot.
+
+::: {style="font-size: 0.95em"}
+| Outcome | Its natural range | Link stretches it with | To get back, apply |
+|---|---|---|---|
+| A continuous number | $-\infty$ to $+\infty$ | *nothing needed* | *nothing* |
+| A probability | 0 to 1 | $\log\left(\frac{p}{1-p}\right)$ | the logistic curve |
+| A count | 0 to $+\infty$ | $\log$ | $\exp$ |
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**The link is a translator.** It stretches a squashed scale out onto the whole number line, so the straight line has somewhere sensible to live. The top row needs no stretching - which is exactly why OLS is a GLM with the boring link.
+:::
+
+## Careful - this is not the same as logging your data {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Back in **Vol 1** we fixed a curved relationship by taking logs of Attainment 8 and of % disadvantaged, then fitting OLS to the transformed values.
+
+::: {.columns}
+::: {.column width="50%"}
+**Transforming the data**
+
+$$\log(y_i) = \beta_0 + \beta_1x_i + \epsilon_i$$
+
+-   We change **every observation**
+-   Then fit an ordinary model to the new numbers
+-   Errors are assumed Normal *on the logged scale*
+:::
+::: {.column width="50%"}
+**A GLM**
+
+$$\log\big(E[y_i]\big) = \beta_0 + \beta_1x_i$$
+
+-   The data are left **completely alone**
+-   The link is applied to the **expected value**
+-   The distribution does the work the transformation used to
+:::
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Which matters, because you *cannot* transform a binary outcome. A school is rated below Good or it is not - and $\log\left(\frac{0}{1-0}\right)$ is undefined. There is nothing to take the log of.
+
+**The GLM never asks you to.** It models the probability behind the 0s and 1s, and leaves your data exactly as you found them.
+:::
+
 # Can we predict School Ofsted ratings? {background-color="#4e3c56"}
 
 ## Our question for today {transition="convex-in none-out" transition-speed="fast"}
@@ -272,7 +323,7 @@ The model runs. It produces coefficients. It produces an R². Nothing errors.
 **And its fitted values run from `r round(lpm_range[1], 3)` to `r round(lpm_range[2], 3)`.**
 :::
 
-## A probability of minus fifty percent {.smaller transition="convex-in none-out" transition-speed="fast"}
+## A probability of minus fifty percent? {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: false
@@ -317,28 +368,33 @@ ggplot() +
 ```
 
 ::: {style="font-size: 0.8em"}
-The straight line gives **`r comma(lpm_neg)` schools a negative probability**. At a Progress 8 of +1 it predicts a probability of about **`r sprintf("%.0f%%", 100 * p8_one)`**. The logistic curve cannot do this - it is bounded at 0 and 1 by construction.
+-  The straight line gives **`r comma(lpm_neg)` schools a negative probability** of being rated below good. 
+-  At a Progress 8 of +1 it predicts a probability of being rated below good of about **`r sprintf("%.0f%%", 100 * p8_one)`** (impossible). 
+-  The logistic curve cannot do this - it is bounded at 0 and 1 by construction.
 :::
 
-## Where the curve comes from {transition="convex-in none-out" transition-speed="fast"}
+## Where the curve comes from {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 We need something that takes a straight line, which runs from $-\infty$ to $+\infty$, and squashes it into $[0,1]$.
 
 ::: incremental
--   Start with the **probability** $p$ - bounded at 0 and 1, awkward
--   Turn it into **odds**, $\frac{p}{1-p}$ - now bounded at 0 and $+\infty$, better
--   Take the **log** of that - now unbounded in both directions :tada:
+-   Start with the **probability** $p$ - bounded at 0 and 1, e.g. 0.4 (40%), awkward
+-   Turn it into **odds**, $\frac{p}{1-p} = \frac{probability of happening}{probability of NOT happening}$ or $\frac{0.4}{0.6} = 0.67$ - now bounded at 0 and $+\infty$, better
+-   Take the **log** of that ($\log\left(\frac{0.4}{0.6}\right) = -0.40$) - now unbounded in both directions :tada:
 :::
 
 . . .
 
 $$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
 
-That left-hand side is the **logit**, and it is the link function. The right-hand side is exactly the model we have been fitting since week 5.
+-   That left-hand side is the **logit**, and it ***is*** the link function. The right-hand side is exactly the model we have been fitting since week 5.
+-   A **logit** simply is a mathematical function that converts a probability (between 0 and 1) into a log-odds value that can range from $-\infty$ to $+\infty$
+-   The link-function converts the expected value of the outcome (the mean) into something a straight line can cope with
+
 
 ## Odds are not probabilities {transition="convex-in none-out" transition-speed="fast"}
 
-Worth pausing, because this trips people up all term.
+Worth pausing, because this trips people (including me!) up all the time.
 
 | Probability | Odds | In words |
 |---|---|---|
@@ -350,6 +406,83 @@ Worth pausing, because this trips people up all term.
 . . .
 
 Probabilities are bounded above. **Odds are not.** That is the whole reason we work with them.
+
+## And odds are not odds *ratios* {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {.columns}
+::: {.column width="48%"}
+**Odds** describe **one** situation
+
+$$\text{odds} = \frac{p}{1-p}$$
+
+*"This school's odds of being rated below Good are 0.10"*
+:::
+::: {.column width="52%"}
+**An odds ratio** compares **two**
+
+$$\text{OR} = \frac{\text{odds}_A}{\text{odds}_B}$$
+
+*"...which is 0.07 times the odds of a school one Progress 8 point worse"*
+:::
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+-   Easily the most common mistake in reading logistic output. 
+-   The odds are the raw ingredient; 
+-   the **ratio** is what you get when you put two of them side by side -   and the **odds-ratio** is what a regression coefficient hands you.
+:::
+
+## Why the coefficient *is* a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Our model says the log-odds are a straight line:
+
+$$\log(\text{odds}) = \beta_0 + \beta_1 x$$
+
+::: incremental
+-   At $x$, the log-odds are $\beta_0 + \beta_1x$
+-   At $x+1$, they are $\beta_0 + \beta_1x + \beta_1$
+-   So the **difference in log-odds is just** $\beta_1$
+-   And subtracting logs is the same as dividing...
+:::
+
+. . .
+
+$$e^{\beta_1} = \frac{\text{odds at } x+1}{\text{odds at } x}$$
+
+**A ratio of two odds** - because the coefficient was a difference of two log-odds all along.
+
+## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# Single-predictor model, so the arithmetic is visible. glm1 is already fitted
+# on the "minus fifty percent" slide.
+odds_at <- function(x) {
+  p <- predict(glm1, newdata = data.frame(P8MEA = x), type = "response")
+  as.numeric(p / (1 - p))
+}
+b1 <- as.numeric(coef(glm1)["P8MEA"])
+
+tibble(
+  `Progress 8`  = c(-1, 0, 1, 2),
+  Probability   = sprintf("%.3f", map_dbl(c(-1, 0, 1, 2),
+                    ~ as.numeric(predict(glm1, data.frame(P8MEA = .x), type = "response")))),
+  Odds          = sprintf("%.4f", map_dbl(c(-1, 0, 1, 2), odds_at)),
+  `Odds ÷ the row above` = c("-", sprintf("%.3f", map_dbl(c(0, 1, 2),
+                    ~ odds_at(.x) / odds_at(.x - 1))))
+) |> kable(align = "rrrr")
+```
+
+::: {style="font-size: 0.9em"}
+The coefficient on Progress 8 is **`r sprintf("%.2f", b1)`**, and $e^{`r sprintf("%.2f", b1)`}$ = **`r sprintf("%.3f", exp(b1))`**.
+
+That is the last column, every time. **One coefficient, one odds ratio, valid wherever you start from.** Now look at the probabilities - they fall `r sprintf("%.2f", as.numeric(predict(glm1, data.frame(P8MEA=-1), type="response")))` → `r sprintf("%.2f", as.numeric(predict(glm1, data.frame(P8MEA=0), type="response")))` → `r sprintf("%.3f", as.numeric(predict(glm1, data.frame(P8MEA=1), type="response")))`, doing nothing so tidy. Which is exactly why *"the probability falls by X"* is never a safe reading of a logistic coefficient.
+:::
 
 # Binary logistic regression {background-color="#4e3c56"}
 
