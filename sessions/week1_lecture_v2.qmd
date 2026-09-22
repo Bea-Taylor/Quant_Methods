@@ -118,6 +118,16 @@ This lecture focuses on understanding and describing data.
 Everything this week uses the dataset we will keep coming back to all term, so that by week 10 it is completely familiar.
 :::
 
+## Survey before you build {.smaller}
+
+![](L1_images/Why_EDA.jpg){style="max-width:82%; max-height:82%; margin:auto; display:block;"}
+
+::: {style="font-size:0.75em; text-align:center;"}
+Nobody pours concrete without surveying the ground first. The same logic
+applies to everything we do this term — **the model is only ever as sound as
+what it is built on**.
+:::
+
 ## Exploratory data analysis
 
 Before you test anything, model anything, or claim anything, you look at what
@@ -157,6 +167,12 @@ By the end of this lecture you will:
 - A full census of every school in England — not a sample
 - Hundreds of variables on attainment, pupil characteristics and school characteristics
 - We will use it in almost every week of this course
+**Terminology**
+-  **GCSE** - The exam everyone takes at age 16
+-  **Ofsted** - the Government Office for Standards in Education (quality assurance - they grade schools on how good they are)
+-  **Academy** - A type of state school outside of local authority control
+-  **Maintained** - A type of state school run by the local authority
+-  **Attainment 8** and **Progress 8** - Overall GCSE exam scores bundled together into a single exam performance metric
 :::
 
 ::: {.column width="45%"}
@@ -166,7 +182,7 @@ By the end of this lecture you will:
 
 tibble(
   ` ` = c("Schools with a KS4 result",
-          "Of which academies or maintained",
+          "Of which state-run",
           "Variables in the full release",
           "Local authorities covered"),
   `Count` = c(comma(nrow(schools_all)),
@@ -236,8 +252,8 @@ exactly the problem we spend weeks 6 to 8 solving.
 
 . . .
 
-This is the classic starting point, and it is where most courses stop. 
-We will start with this - but then go a little further later in the lecture
+-  This is the classic starting point, and it is where most courses stop. 
+-  We will start with this - but extend it later
 
 ## Nominal {.smaller}
 
@@ -326,24 +342,19 @@ schools_all |>
 - *In our data:* **pupils on roll**, **Attainment 8**, **% disadvantaged**. A
   school with 1,200 pupils really does have twice as many as one with 600.
 
-## A zero is not enough: Progress 8 {.smaller}
+## Confusing Ratios: Progress 8 {.smaller}
 
 ::::: columns
 ::: {.column width="40%"}
 **Progress 8** compares the progress pupils made with similar pupils nationally.
 
-- Zero means "average expected progress"
+- Zero means "average expected progress" - sits in the middle
 - Positive is more, negative is less
-
-. . .
-
 The zero is **meaningful**. So is it ratio data?
-
-. . .
-
-**No.** King's scores 0.57 and Blatchington Mill 0.03 — a ratio of **19:1**.
-Nobody would claim 19 times the progress. And Longhill is **negative**, so no
-ratio is possible at all.
+**No.** 
+-   King's scores 0.57 and Blatchington Mill 0.03 — a ratio of **19:1**.
+-   Not 19 times the progress! 
+-   And Longhill is **negative**, so no ratio is possible at all.
 :::
 
 ::: {.column width="60%"}
@@ -390,6 +401,125 @@ This is the slide that stops students assuming "has a zero" means "ratio".
 P8MEA appears again later under real-valued additive, where its symmetry
 rather than its zero is the point.
 :::
+
+# Data types - extended
+
+<!-- ## Why four levels are not enough -->
+
+<!-- Stevens tells us which **operations** are permitted. It does not tell us which -->
+<!-- **distribution** a variable follows, or which **model** to fit. -->
+
+<!-- . . . -->
+
+<!-- Take two variables from our data. Both are on a **ratio** scale — both have a -->
+<!-- true zero, both support ratios: -->
+
+<!-- | | Pupils on roll | % of sessions missed | -->
+<!-- |---|---|---| -->
+<!-- | Values | whole numbers | continuous | -->
+<!-- | Can be negative? | no | no | -->
+<!-- | Upper limit | none in principle | 100 | -->
+<!-- | Typical value | ~1,050 | ~9 | -->
+
+<!-- . . . -->
+
+<!-- Stevens says these are the same kind of thing. Let's look at them. -->
+
+<!-- ## Two ratio variables, two different shapes {.smaller} -->
+
+<!-- ```{r} -->
+<!-- #| label: two-shapes -->
+<!-- #| echo: false -->
+<!-- #| message: false -->
+<!-- #| warning: false -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 4.0 -->
+<!-- #| fig-align: center -->
+
+<!-- two <- schools_mainstream |> filter(!is.na(TOTPUPS), !is.na(PERCTOT)) -->
+<!-- skw <- function(x) mean((x - mean(x))^3) / sd(x)^3 -->
+
+<!-- shape_panel <- function(d, v, fill_col, ttl, ylab) { -->
+<!--   x <- d[[v]] -->
+<!--   ggplot(d, aes(x = .data[[v]])) + -->
+<!--     geom_histogram(aes(y = after_stat(density)), bins = 35, -->
+<!--                    fill = fill_col, alpha = 0.4) + -->
+<!--     geom_density(colour = fill_col, linewidth = 1) + -->
+<!--     geom_vline(xintercept = mean(x), colour = casa_pink, linewidth = 1) + -->
+<!--     geom_vline(xintercept = median(x), colour = "black", -->
+<!--                linetype = "dashed", linewidth = 0.8) + -->
+<!--     labs(title = paste0(ttl, "  (skew ", sprintf("%.2f", skw(x)), ")"), -->
+<!--          subtitle = paste0("mean ", sprintf("%.1f", mean(x)), -->
+<!--                            " | median ", sprintf("%.1f", median(x))), -->
+<!--          x = NULL, y = ylab) + -->
+<!--     theme_minimal(base_size = 13) + -->
+<!--     theme(axis.text.y = element_blank(), -->
+<!--           plot.subtitle = element_text(size = 9, colour = "grey30")) -->
+<!-- } -->
+
+<!-- t1 <- shape_panel(two, "TOTPUPS", casa_purple, "Pupils on roll", "Density") -->
+<!-- t2 <- shape_panel(two, "PERCTOT", casa_teal, "% sessions missed", NULL) -->
+
+<!-- patchwork::wrap_plots(t1, t2, nrow = 1) -->
+<!-- ``` -->
+
+<!-- ::: {.incremental} -->
+<!-- - Left: roughly symmetric, a lump in the middle with tails either side -->
+<!-- - Right: a hard floor near zero and a long tail to the right — **skewed** -->
+<!-- - **Skew** measures that asymmetry — it is built from *cubed* deviations from the mean, so unlike variance it keeps the sign and can tell you *which* tail is longer. 0 is symmetric, positive means a right tail -->
+<!-- - Note where the mean sits relative to the median in each panel -->
+<!-- ::: -->
+
+<!-- . . . -->
+
+<!-- Same level of measurement. Different shapes, different distributions, and -->
+<!-- different models. Stevens cannot see the difference — so we need something -->
+<!-- more specific. -->
+
+## Simple statistical data types {.smaller}
+
+| Data type | Possible values | Level of measurement | Common distributions | Common model |
+|-----------|-----------------|:--------------------:|----------------------|--------------|
+| **binary** | 0, 1 | nominal | Bernoulli | logistic, probit |
+| **categorical** | "name1" … "nameK" | nominal | categorical | multinomial logit / probit |
+| **ordinal** | ordered categories | ordinal | categorical | ordered logit / probit |
+| **binomial** | 0, 1, …, N | interval | binomial, beta-binomial | binomial regression |
+| **real-valued additive** | any real number | interval | normal — symmetric | standard linear regression |
+| **count** | 0, 1, 2, … | ratio | Poisson, negative binomial | Poisson / neg. binomial regression |
+| **real-valued multiplicative** | positive real | ratio | log-normal, gamma, exponential — skewed | GLM with a logarithmic link |
+
+[Adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
+
+::: {.notes}
+The two columns worth dwelling on are the last two. The whole point of this
+table is that the data type determines the distribution, and the distribution
+determines the model. Everything in weeks 5 to 10 is an instance of this.
+:::
+
+## Every one of these is in our dataset {.smaller}
+
+```{r}
+#| label: types-mapping
+#| echo: false
+
+tibble(
+  `Data type` = c("binary", "categorical", "ordinal", "binomial",
+                  "real-valued additive", "count", "real-valued multiplicative"),
+  `Variable` = c("single sex / mixed", "MINORGROUP", "OFSTEDRATING",
+                 "TFSM6CLA1A out of TPUP", "P8MEA", "TOTPUPS", "PERCTOT"),
+  `What it is` = c("Is the school single sex?",
+                   "School type",
+                   "Ofsted rating",
+                   "Disadvantaged pupils out of the cohort",
+                   "Progress 8",
+                   "Pupils on roll",
+                   "% of sessions missed")
+) |>
+  kable(align = "lll")
+```
+
+-  Bea will explain more about distributions next week
+-  And We will meet the model in the right-hand column of the previous slide for almost all of these before the course ends.
 
 # Descriptive statistics: the shape of the data
 ![](L1_images/picture_worth_thousand_words.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
@@ -487,124 +617,6 @@ two humps - but you gain the ability to put many of them side by side, which we
 do later in this lecture.
 :::
 
-# Data types, more precisely
-
-## Why four levels are not enough
-
-Stevens tells us which **operations** are permitted. It does not tell us which
-**distribution** a variable follows, or which **model** to fit.
-
-. . .
-
-Take two variables from our data. Both are on a **ratio** scale — both have a
-true zero, both support ratios:
-
-| | Pupils on roll | % of sessions missed |
-|---|---|---|
-| Values | whole numbers | continuous |
-| Can be negative? | no | no |
-| Upper limit | none in principle | 100 |
-| Typical value | ~1,050 | ~9 |
-
-. . .
-
-Stevens says these are the same kind of thing. Let's look at them.
-
-## Two ratio variables, two different shapes {.smaller}
-
-```{r}
-#| label: two-shapes
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 10
-#| fig-height: 4.0
-#| fig-align: center
-
-two <- schools_mainstream |> filter(!is.na(TOTPUPS), !is.na(PERCTOT))
-skw <- function(x) mean((x - mean(x))^3) / sd(x)^3
-
-shape_panel <- function(d, v, fill_col, ttl, ylab) {
-  x <- d[[v]]
-  ggplot(d, aes(x = .data[[v]])) +
-    geom_histogram(aes(y = after_stat(density)), bins = 35,
-                   fill = fill_col, alpha = 0.4) +
-    geom_density(colour = fill_col, linewidth = 1) +
-    geom_vline(xintercept = mean(x), colour = casa_pink, linewidth = 1) +
-    geom_vline(xintercept = median(x), colour = "black",
-               linetype = "dashed", linewidth = 0.8) +
-    labs(title = paste0(ttl, "  (skew ", sprintf("%.2f", skw(x)), ")"),
-         subtitle = paste0("mean ", sprintf("%.1f", mean(x)),
-                           " | median ", sprintf("%.1f", median(x))),
-         x = NULL, y = ylab) +
-    theme_minimal(base_size = 13) +
-    theme(axis.text.y = element_blank(),
-          plot.subtitle = element_text(size = 9, colour = "grey30"))
-}
-
-t1 <- shape_panel(two, "TOTPUPS", casa_purple, "Pupils on roll", "Density")
-t2 <- shape_panel(two, "PERCTOT", casa_teal, "% sessions missed", NULL)
-
-patchwork::wrap_plots(t1, t2, nrow = 1)
-```
-
-::: {.incremental}
-- Left: roughly symmetric, a lump in the middle with tails either side
-- Right: a hard floor near zero and a long tail to the right — **skewed**
-- **Skew** measures that asymmetry — it is built from *cubed* deviations from the mean, so unlike variance it keeps the sign and can tell you *which* tail is longer. 0 is symmetric, positive means a right tail
-- Note where the mean sits relative to the median in each panel
-:::
-
-. . .
-
-Same level of measurement. Different shapes, different distributions, and
-different models. Stevens cannot see the difference — so we need something
-more specific.
-
-## Simple statistical data types {.smaller}
-
-| Data type | Possible values | Level of measurement | Common distributions | Common model |
-|-----------|-----------------|:--------------------:|----------------------|--------------|
-| **binary** | 0, 1 | nominal | Bernoulli | logistic, probit |
-| **categorical** | "name1" … "nameK" | nominal | categorical | multinomial logit / probit |
-| **ordinal** | ordered categories | ordinal | categorical | ordered logit / probit |
-| **binomial** | 0, 1, …, N | interval | binomial, beta-binomial | binomial regression |
-| **real-valued additive** | any real number | interval | normal — symmetric | standard linear regression |
-| **count** | 0, 1, 2, … | ratio | Poisson, negative binomial | Poisson / neg. binomial regression |
-| **real-valued multiplicative** | positive real | ratio | log-normal, gamma, exponential — skewed | GLM with a logarithmic link |
-
-[Adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
-
-::: {.notes}
-The two columns worth dwelling on are the last two. The whole point of this
-table is that the data type determines the distribution, and the distribution
-determines the model. Everything in weeks 5 to 10 is an instance of this.
-:::
-
-## Every one of these is in our dataset {.smaller}
-
-```{r}
-#| label: types-mapping
-#| echo: false
-
-tibble(
-  `Data type` = c("binary", "categorical", "ordinal", "binomial",
-                  "real-valued additive", "count", "real-valued multiplicative"),
-  `Variable` = c("single sex / mixed", "MINORGROUP", "OFSTEDRATING",
-                 "TFSM6CLA1A out of TPUP", "P8MEA", "TOTPUPS", "PERCTOT"),
-  `What it is` = c("Is the school single sex?",
-                   "School type",
-                   "Ofsted rating",
-                   "Disadvantaged pupils out of the cohort",
-                   "Progress 8",
-                   "Pupils on roll",
-                   "% of sessions missed")
-) |>
-  kable(align = "lll")
-```
-
-We will meet the model in the right-hand column of the previous slide for
-almost all of these before the course ends.
 
 ## Count
 
