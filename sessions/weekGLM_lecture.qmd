@@ -145,20 +145,20 @@ predictors <- ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
 
 -   Every single model we have fitted has had a **continuous outcome variable**
 -   Attainment 8. Progress 8. Numbers that can take any value, that are roughly bell-shaped, and that happily sit on either side of a straight line
--   That was not an accident - it was a choice, and it let us use Ordinary Least Squares throughout
--   **This week we break that.** What happens when the thing you want to explain is a *yes/no*, a *category*, or a *count*?
+-   This choice let us use Ordinary Least Squares throughout - but we know that our data don't always look like this
+-   What happens when the thing you want to explain is a *yes/no*, a *category*, or a *count*?
 
 ## This week's session aims {transition="convex-in none-out" transition-speed="fast"}
 
 -   Understand why OLS fails when the outcome is not continuous, and see it fail
--   Meet the **Generalised Linear Model** - one framework, three moving parts
+-   Meet the **Generalised Linear Model (GLM)** - one framework, three moving parts
 -   **Logistic regression** for binary outcomes, then ordinal and multinomial versions for categories
 -   **Poisson regression** for counts, offsets for rates, and what to do about overdispersion
 -   Throughout: can we predict a school's Ofsted rating from everything else we know about it?
 
 # Back to Week 1 {background-color="#4e3c56"}
 
-## Remember these? {transition="convex-in none-out" transition-speed="fast"}
+## Remember these? {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 In week 1 we spent a long time on **types of data**, and on the **distributions** that go with them.
 
@@ -172,9 +172,9 @@ In week 1 we spent a long time on **types of data**, and on the **distributions*
 
 . . .
 
-We then spent three weeks modelling **only the first row**.
+We then spent three weeks modelling **only the first row**!
 
-## The whole idea of a GLM, in one table {transition="convex-in none-out" transition-speed="fast"}
+## The whole idea of a GLM, in one table {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 | If your outcome is... | ...its distribution is | ...the model is |
 |---|---|---|
@@ -204,7 +204,7 @@ Every GLM has exactly three pieces. You already know the middle one.
 
 OLS is just the GLM where the distribution is Normal and the link function does nothing at all.
 
-# Can we predict Ofsted? {background-color="#4e3c56"}
+# Can we predict School Ofsted ratings? {background-color="#4e3c56"}
 
 ## Our question for today {transition="convex-in none-out" transition-speed="fast"}
 
@@ -212,6 +212,8 @@ OLS is just the GLM where the distribution is Normal and the link function does 
 -   Today we turn it around and make it the **outcome**
 -   *Given everything else we know about a school - its results, its intake, its absence rates, its size - can we predict what Ofsted said about it?*
 -   And if we can, what does that tell us about what Ofsted is actually measuring?
+
+-   **Note**, *Ofsted has changed how it rates schools now, so single-word ratings are no longer given*
 
 ## The outcome variable {transition="convex-in none-out" transition-speed="fast"}
 
@@ -239,21 +241,27 @@ model_data |>
 `r comma(nrow(model_data))` schools with complete data. Note immediately how **lopsided** this is - we will come back to that, because it causes more trouble than anything else today.
 :::
 
-## First attempt: just use OLS? {transition="convex-in none-out" transition-speed="fast"}
+## First attempt: just use OLS? {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Let's code "below Good" as **1** and "Good or better" as **0**, and regress it on Progress 8 exactly as we have been doing for three weeks.
+-  Let's re-code our ratings: "below Good" as **1** and "Good or better" as **0**
+-  We can regress it on Progress 8 exactly as we have been doing for the last three weeks.
 
 ```{r}
 #| echo: true
 #| message: false
 #| warning: false
 lpm <- lm(below_good ~ P8MEA, data = model_data)
+summary(lpm)
 ```
 
 ```{r}
 #| echo: false
 lpm_range <- range(fitted(lpm))
 lpm_neg   <- sum(fitted(lpm) < 0)
+# What the straight line predicts for a solidly above-average school, used in
+# the caption on the next slide. Computed rather than typed so it cannot drift
+# if the filters on model_data ever change.
+p8_one    <- as.numeric(predict(lpm, newdata = data.frame(P8MEA = 1)))
 ```
 
 . . .
@@ -264,7 +272,7 @@ The model runs. It produces coefficients. It produces an R². Nothing errors.
 **And its fitted values run from `r round(lpm_range[1], 3)` to `r round(lpm_range[2], 3)`.**
 :::
 
-## A probability of minus fifty percent {transition="convex-in none-out" transition-speed="fast"}
+## A probability of minus fifty percent {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: false
@@ -289,15 +297,27 @@ ggplot() +
   geom_line(data = grid, aes(P8MEA, lpm, colour = "Straight line (OLS)"), linewidth = 1.3) +
   geom_line(data = grid, aes(P8MEA, glm, colour = "Logistic curve"), linewidth = 1.3) +
   geom_hline(yintercept = c(0, 1), linetype = "dashed", linewidth = 0.4) +
+  # Mark the single point the caption talks about, so it can be found on the
+  # graph rather than taken on trust
+  annotate("point", x = 1, y = p8_one, colour = casa_red, size = 3.2) +
+  annotate("segment", x = 1, xend = 1.45, y = p8_one, yend = p8_one - 0.18,
+           colour = casa_red, linewidth = 0.4) +
+  annotate("text", x = 1.5, y = p8_one - 0.21, hjust = 0, size = 4,
+           colour = casa_red,
+           label = sprintf("Progress 8 = +1\npredicts %.0f%%", 100 * p8_one)) +
   scale_colour_manual(values = c("Straight line (OLS)" = casa_red,
                                  "Logistic curve" = casa_teal), name = NULL) +
+  # The caption talks in percentages, so the axis does too - a probability
+  # axis labelled 0.00-1.00 against a caption saying "-13%" invites exactly
+  # the question of where the -13% is supposed to be
+  scale_y_continuous(labels = percent) +
   labs(x = "Progress 8 score", y = "P(rated below Good)",
        title = "The shaded bands are impossible probabilities") +
   theme(legend.position = "top")
 ```
 
 ::: {style="font-size: 0.8em"}
-The straight line gives **`r comma(lpm_neg)` schools a negative probability**. At a Progress 8 of +1 it predicts a probability of about **−13%**. The logistic curve cannot do this - it is bounded at 0 and 1 by construction.
+The straight line gives **`r comma(lpm_neg)` schools a negative probability**. At a Progress 8 of +1 it predicts a probability of about **`r sprintf("%.0f%%", 100 * p8_one)`**. The logistic curve cannot do this - it is bounded at 0 and 1 by construction.
 :::
 
 ## Where the curve comes from {transition="convex-in none-out" transition-speed="fast"}
