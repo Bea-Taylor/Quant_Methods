@@ -56,9 +56,9 @@ ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
   # schools, and because dplyr joins NA to NA they would also duplicate rows.
   filter(!is.na(URN)) |>
   select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
-         PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO) |>
+         PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO, PTEALGRP2) |>
   mutate(across(c(ATT8SCR, P8MEA, TOTPUPS, TPUP, NUMBOYS, NUMGIRLS,
-                  PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO),
+                  PTFSM6CLA1A, TFSM6CLA1A, PTPRIORLO, PTEALGRP2),
                 ~ parse_number(as.character(.x))))
 
 # Absence lives in a separate file, keyed on the same URN
@@ -468,81 +468,25 @@ rather than its zero is the point.
 <!-- different models. Stevens cannot see the difference — so we need something -->
 <!-- more specific. -->
 
-## One more cut: discrete or continuous? {.smaller}
-
-There is a second question you can ask of any variable, and it is the one Bea
-builds on next week.
-
-::: {.columns}
-::: {.column width="50%"}
-**Discrete** — separate, countable values, with nothing in between
-
-- Pupils on roll: a school has 1,204 or 1,205, never 1,204.6
-- Number of disadvantaged pupils
-- Ofsted rating
-:::
-::: {.column width="50%"}
-**Continuous** — any value in a range; between any two you can always find another
-
-- Attainment 8 score
-- % of sessions missed
-- Progress 8
-:::
-:::
-
-. . .
-
-::: {style="font-size:0.85em;"}
-**It cuts across everything we have just done.** A count is discrete and sits
-on a ratio scale. Progress 8 is continuous and sits on an interval scale.
-Neither question answers the other — you need both.
-:::
-
-::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.8em;"}
-**Next week.** This is the distinction that decides which *kind* of
-distribution you get — a probability **mass** function for discrete data, a
-probability **density** function for continuous. Bea takes it from here.
-:::
-
-::: {.notes}
-Deliberately placed just before the statistical data types table so the extra
-column there has already been explained.
-
-Bea's week 2 slide uses foot length (continuous) against shoe size (discrete),
-which is the clearest version of the idea - worth using the same pairing out
-loud so students hear it twice in the same words.
-
-Strictly the discrete/continuous split is a distinction among *numeric*
-variables. Nominal and ordinal data are countable and separate, so they behave
-as discrete, but nobody would call a local authority name "discrete data" - it
-is simply not on a numeric scale at all. Worth saying if asked, not worth a
-slide.
-:::
 
 ## Simple statistical data types {.smaller}
 
-| Data type | Values | Stevens | D/C | Distributions | Model |
-|-----------|--------|:-------:|:---:|---------------|-------|
-| **binary** | 0, 1 | nominal | disc. | Bernoulli | logistic |
-| **categorical** | "name1" … "nameK" | nominal | disc. | categorical | multinomial logit |
-| **ordinal** | ordered categories | ordinal | disc. | categorical | ordered logit |
-| **binomial** | 0, 1, …, N | interval | disc. | binomial | binomial regression |
-| **real-valued additive** | any real number | interval | **cont.** | normal | linear regression |
-| **count** | 0, 1, 2, … | ratio | disc. | Poisson, neg. binomial | Poisson regression |
-| **real-valued multiplicative** | positive real | ratio | **cont.** | log-normal, gamma | GLM, log link |
-
-[**D/C** = discrete or continuous]{style="font-size:0.6em; color:#666;"}
+| Data type | Possible values | Level of measurement | Common distributions | Common model |
+|-----------|-----------------|:--------------------:|----------------------|--------------|
+| **binary** | 0, 1 | nominal | Bernoulli | logistic, probit |
+| **categorical** | "name1" … "nameK" | nominal | categorical | multinomial logit / probit |
+| **ordinal** | ordered categories | ordinal | categorical | ordered logit / probit |
+| **binomial** | 0, 1, …, N | interval | binomial, beta-binomial | binomial regression |
+| **real-valued additive** | any real number | interval | normal — symmetric | standard linear regression |
+| **count** | 0, 1, 2, … | ratio | Poisson, negative binomial | Poisson / neg. binomial regression |
+| **real-valued multiplicative** | positive real | ratio | log-normal, gamma, exponential — skewed | GLM with a logarithmic link |
 
 [Adapted from [Statistical data type](https://en.wikipedia.org/wiki/Statistical_data_type), Wikipedia (CC BY-SA)]{style="font-size:0.5em; color:#666;"}
 
 ::: {.notes}
-The columns worth dwelling on are the last two. The whole point of this
+The two columns worth dwelling on are the last two. The whole point of this
 table is that the data type determines the distribution, and the distribution
 determines the model. Everything in weeks 5 to 10 is an instance of this.
-
-The discrete/continuous column is the hook into Bea's lecture next week: only
-two of these seven types are continuous, which is worth pointing at, because
-students arrive assuming the normal distribution is the default case.
 :::
 
 ## Every one of these is in our dataset {.smaller}
@@ -570,14 +514,13 @@ tibble(
 -  Bea will explain more about distributions next week
 -  And We will meet the model in the right-hand column of the previous slide for almost all of these before the course ends.
 
-# Descriptive statistics: the shape of the data
-![](L1_images/picture_worth_thousand_words.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
+# Descriptive statistics
+![](L1_images/Why_EDA2.jpg){style="max-width:70%; max-height:70%; margin:auto;"}
 
-## What is a distribution? {.smaller}
+## Visualising Your Data - Frequency Distributions {.smaller}
 
 ::: {style="font-size:0.8em;"}
-A **distribution** is just the answer to "how are the values spread out?" —
-how many observations fall where.
+A **distribution** is just the answer to "how are the values spread out?" — how many observations fall where.
 :::
 
 ```{r}
@@ -617,8 +560,8 @@ patchwork::wrap_plots(d1, d2, d3, nrow = 1)
 
 ::: {.incremental}
 - The **histogram** is the workhorse: bin the values, count how many land in each bin
-- The smooth curve is the same information with the bins taken away
-- Almost everything else in this course starts by asking what shape a variable has
+- The smooth curve is the same information with the bins taken away - **More Next week**
+- Almost everything else in this course starts by asking what shape (*Frequency Distribution*) a variable has
 :::
 
 ## A boxplot is a summarised histogram {.smaller}
@@ -667,7 +610,7 @@ do later in this lecture.
 :::
 
 
-## Count
+## Count Data
 
 ```{r}
 #| label: type-count
@@ -689,7 +632,7 @@ schools_mainstream |>
 - A mean of `r sprintf("%.0f", mean(schools_mainstream$TOTPUPS, na.rm = TRUE))` pupils is meaningful; a school with 1,204.7 pupils is not
 - Distribution: **Poisson** or **negative binomial**, not normal
 
-## Binomial
+## Binomial Data {.smaller}
 
 ```{r}
 #| label: type-binomial
@@ -708,7 +651,7 @@ schools_mainstream |>
   theme_minimal(base_size = 12)
 ```
 
-- A count **bounded above** by the size of the cohort — it cannot exceed an upper ceiling - **N**
+- A count **bounded above** by the size of the cohort — it cannot exceed an upper ceiling - **N** - e.g. a finite number of coin tosses or children in a school
 - The dashed line is the ceiling: where every pupil would be disadvantaged
 - Distribution: **binomial**. This is why a percentage is the natural summary.
 
@@ -747,11 +690,11 @@ ggplot(p8, aes(x = P8MEA)) +
 #| fig-height: 3.6
 #| fig-align: center
 
-abs_pos <- schools_mainstream |> filter(!is.na(PERCTOT), PERCTOT > 0)
+abs_pos <- schools_mainstream |> filter(!is.na(PTEALGRP2), PTEALGRP2 > 0)
 sk <- function(x) mean((x - mean(x))^3) / sd(x)^3
 
-mu_abs  <- mean(abs_pos$PERCTOT)
-med_abs <- median(abs_pos$PERCTOT)
+mu_abs  <- mean(abs_pos$PTEALGRP2)
+med_abs <- median(abs_pos$PTEALGRP2)
 
 # Both panels plot the same variable and mark the same two statistics, so the
 # lines sit at identical values. Only the spacing of the axis differs.
@@ -761,50 +704,100 @@ abs_lines <- list(
              linetype = "dashed", linewidth = 0.8)
 )
 
-p_raw <- ggplot(abs_pos, aes(x = PERCTOT)) +
+p_raw <- ggplot(abs_pos, aes(x = PTEALGRP2)) +
   geom_histogram(bins = 40, fill = casa_purple, alpha = 0.65) +
   abs_lines +
-  labs(title = paste0("As published  (skew = ", sprintf("%.2f", sk(abs_pos$PERCTOT)), ")"),
+  labs(title = paste0("As published  (skew = ", sprintf("%.2f", sk(abs_pos$PTEALGRP2)), ")"),
        subtitle = paste0("mean ", sprintf("%.1f", mu_abs),
                          " | median ", sprintf("%.1f", med_abs)),
-       x = "% sessions missed", y = "Schools") +
+       x = "% of pupils with English as an additional language", y = "Schools") +
   theme_minimal(base_size = 11) +
   theme(plot.subtitle = element_text(size = 8, colour = "grey30"))
 
-p_log <- ggplot(abs_pos, aes(x = PERCTOT)) +
+p_log <- ggplot(abs_pos, aes(x = PTEALGRP2)) +
   geom_histogram(bins = 40, fill = casa_teal, alpha = 0.65) +
   abs_lines +
-  scale_x_log10(breaks = c(3, 5, 10, 20, 30)) +
+  scale_x_log10(breaks = c(1, 3, 10, 30, 100)) +
   labs(title = paste0("On a log scale  (skew = ",
-                      sprintf("%.2f", sk(log(abs_pos$PERCTOT))), ")"),
+                      sprintf("%.2f", sk(log(abs_pos$PTEALGRP2))), ")"),
        subtitle = "same mean, same median, same data",
-       x = "% sessions missed (log scale)", y = "Schools") +
+       x = "% EAL (log scale)", y = "Schools") +
   theme_minimal(base_size = 11) +
   theme(plot.subtitle = element_text(size = 8, colour = "grey30"))
 
 patchwork::wrap_plots(p_raw, p_log, nrow = 1)
 ```
 
-- Strictly positive, and **skewed** — a long tail of high-absence schools
-- Both panels show the same percentages, the same mean and the same median. Only the **spacing of the axis** changes: equal distances now mean equal *multiples* rather than equal *amounts*
+- Strictly positive, and **strongly skewed** — most schools have few EAL pupils, a long tail have very many
+- Both panels show the same percentages, the same mean and the same median. Only the **spacing of the axis** changes: equal distances now mean equal ***multiples*** rather than equal *amounts* (additive)
 - On that spacing the distribution is very nearly symmetric, and the mean sits close to the middle of it
-- This is not a trick. It is what the data type tells us to do — and it is
-  exactly what we do in **week 6** when we fit a log-log model.
+- This is not a trick. It is what the data type tells us to do — and it is exactly what we do in **week 6** when we fit a log-log model.
 
-. . .
+## Real-valued multiplicative
 
-::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.8em;"}
-**Next week.** There is a reason a logarithmic axis does this, and Bea will
-take it apart properly — exponentials, logarithms, and when to reach for them.
-For now, just notice that changing the *spacing* changed the *shape*.
+```{r}
+#| label: type-multiplicative-why
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.2
+#| fig-align: center
+
+# Six real schools, chosen so each has roughly double the EAL share of the one
+# before. On a linear axis the gaps grow; on a log axis they are equal. That
+# is the whole of what a logarithmic scale does.
+targets <- c(3, 6, 12, 24, 48, 96)
+picked <- map_dfr(targets, function(t) {
+  abs_pos |>
+    mutate(gap = abs(PTEALGRP2 - t)) |>
+    slice_min(gap, n = 1, with_ties = FALSE) |>
+    transmute(PTEALGRP2, SCHNAME)
+}) |>
+  distinct(PTEALGRP2, .keep_all = TRUE) |>
+  arrange(PTEALGRP2) |>
+  mutate(step = c(NA, round(PTEALGRP2[-1] / PTEALGRP2[-n()], 1)))
+
+base_strip <- function(dat, logscale) {
+  p <- ggplot(dat, aes(x = PTEALGRP2, y = 0)) +
+    geom_segment(aes(xend = PTEALGRP2, y = -0.12, yend = 0.12),
+                 colour = casa_purple, linewidth = 0.6) +
+    geom_point(size = 4, colour = casa_pink) +
+    geom_text(aes(label = PTEALGRP2), vjust = -1.6, size = 3.6) +
+    scale_y_continuous(limits = c(-0.6, 0.6)) +
+    theme_minimal(base_size = 11) +
+    theme(axis.text.y = element_blank(), panel.grid = element_blank(),
+          axis.title.y = element_blank())
+  if (logscale) {
+    p + scale_x_log10(breaks = dat$PTEALGRP2) +
+      labs(title = "On a log axis: every gap is the same",
+           x = "% EAL (log scale)")
+  } else {
+    p + labs(title = "On a linear axis: the gaps keep growing",
+             x = "% EAL")
+  }
+}
+
+patchwork::wrap_plots(base_strip(picked, FALSE),
+                      base_strip(picked, TRUE), nrow = 2)
+```
+
+::: {style="font-size:0.78em;"}
+Six real schools, each with roughly **twice** the share of the one before. The
+jump from 3% to 6% and the jump from 48% to 96% are *the same size* — as
+multiples. A logarithmic axis is simply an axis that agrees.
 :::
+
+::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.78em;"}
+**Next week.** Bea takes this apart properly — exponentials, logarithms, and
+when to reach for them. For now, just notice that changing the *spacing*
+changed the *shape*.
+:::
+
 
 ::: {.notes}
 If someone asks: the pink line is the ordinary arithmetic mean of the
-percentages, plotted at the same value on both panels. The natural centre of
-a multiplicative variable is really the geometric mean - exp of the mean of
-the logs - which lands closer to the median. Not worth opening up here, but
-it is the reason logged models are quoted as percentage changes.
+percentages, plotted at the same value on both panels. The natural centre of a multiplicative variable is really the geometric mean - exp of the mean of the logs - which lands closer to the median. Not worth opening up here, but it is the reason logged models are quoted as percentage changes.
 :::
 
 ## Why any of this matters {.smaller}
