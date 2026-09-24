@@ -6,6 +6,15 @@
 set -euo pipefail
 cd /project
 
+# Ignore any .Rprofile sitting in the project. The image bakes every package
+# into R's default site-library and nothing needs restoring at run time, but a
+# developer's local (gitignored) .Rprofile will typically call
+# renv/activate.R - and because the project is bind-mounted, the container
+# sources it too. That repoints .libPaths() at /project/renv/library, which
+# may be stale, incomplete or built for another platform, and the render dies
+# with things like "The rmarkdown package is not available".
+export R_PROFILE_USER=/dev/null
+
 if [ "${1:-}" = "preview" ]; then
   shift
   echo "==> quarto preview $*"
