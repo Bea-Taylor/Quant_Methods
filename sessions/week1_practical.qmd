@@ -29,10 +29,9 @@ By the end of this practical you should be able to:
 
 1. Read a multi-file dataset into R or Python and join it together
 2. Identify the **type** of each variable and say what you can legitimately do with it
-3. Produce summary statistics and, more importantly, the plots that go with them
-4. Compare a continuous variable across the groups of a categorical one
-5. Spot missing values, work out whether they are missing at random, and spot outliers
-6. Say what your data can and cannot support a claim about
+3. Spot missing values and work out whether they are missing at random
+4. Produce summary statistics, and compare a continuous variable across the groups of a categorical one using boxplots and violin plots
+5. Say what your data can and cannot support a claim about
 
 ::: callout-note
 Every code block below is given in **both R and Python** — click the tabs to
@@ -63,9 +62,11 @@ figure has been suppressed because the cohort is too small to publish safely,
 `NE` for no entries, `LOWCOV` for low coverage, and so on. If you do not tell
 your software these mean "missing", it will read the whole column as text.
 
-**Dropping rows with no URN.** The files carry local authority and national
-summary rows that have no school reference number. They are not schools. They
-also cause silent duplication when you join, because a missing key matches
+**Dropping rows with no URN.** It's worth checking why some rows have no
+school reference number before you filter them out — it turns out they're
+local authority and national summary rows, not individual schools. We limit
+the selection to schools only, which also avoids the silent duplication
+you'd get from joining on a missing key, because a missing key matches
 another missing key.
 
 ::: {.multicode}
@@ -207,7 +208,7 @@ sum(!is.na(schools$ATT8SCR))
 
 Roughly a fifth of the rows have no Attainment 8 score at all. Some are
 schools that entered no pupils for KS4; some are schools whose results were
-suppressed. **We return to this in Task 7 — do not just delete them yet.**
+suppressed. **We return to this in Task 4 — do not just delete them yet.**
 :::
 
 # Task 3 — What kind of variables are these?
@@ -249,8 +250,11 @@ the progress of a school on 0.5.
 
 ## Getting the type wrong, in code
 
-Knowing `OFSTEDRATING` is ordinal is not enough. **Your code has to know it
-too**, and by default it does not.
+Let's check the data type of each of the columns, the same way you would for
+any new dataset. The numeric ones came in fine here, because we coerced them
+with `parse_number()` / `pd.to_numeric()` while reading the data in — but
+`OFSTEDRATING` is more subtle. Knowing it is ordinal is not enough. **Your
+code has to know it too**, and by default it does not.
 
 Read that column in and ask for its categories in order:
 
@@ -368,7 +372,53 @@ That claim assumes every step on the scale is the same size. As the lecture
 showed, the Ofsted steps are nowhere near equal.
 :::
 
-# Task 4 — Describe one continuous variable
+# Task 4 — Missing values
+
+Let's check how much data is missing for each column in the dataframe — this
+will help us understand the completeness of the data. Earlier you already
+found that not every row has an Attainment 8 score; now find out whether
+those gaps are random.
+
+::: {.multicode}
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: missing-r
+# how much is missing, by column
+schools |>
+  summarise(across(c(ATT8SCR, P8MEA, PERCTOT, PTFSM6CLA1A, OFSTEDRATING),
+                   ~ round(100 * mean(is.na(.x)), 1))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "pct_missing")
+
+# are the missing ones different from the rest?
+schools |>
+  filter(!is.na(TOTPUPS)) |>
+  mutate(p8 = if_else(is.na(P8MEA), "Progress 8 missing", "Progress 8 present")) |>
+  group_by(p8) |>
+  summarise(schools = n(), median_pupils = median(TOTPUPS), .groups = "drop")
+```
+
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: missing-py
+cols = ["ATT8SCR", "P8MEA", "PERCTOT", "PTFSM6CLA1A", "OFSTEDRATING"]
+print((schools[cols].isna().mean() * 100).round(1))
+
+tmp = schools[schools["TOTPUPS"].notna()].copy()
+tmp["p8"] = np.where(tmp["P8MEA"].isna(),
+                     "Progress 8 missing", "Progress 8 present")
+print(tmp.groupby("p8")["TOTPUPS"].agg(schools="size", median_pupils="median"))
+```
+:::
+
+::: {.callout-tip title="Questions"}
+1. Are schools with a missing Progress 8 score bigger or smaller than average?
+2. Look up what `SUPP` means in the DfE guidance. Does that explain the pattern?
+3. If you dropped every row with a missing value, which schools would you have quietly removed from your analysis?
+:::
+
+# Task 5 — Describe one continuous variable
 
 Pick a continuous variable. `ATT8SCR` is the obvious one, but `PERCTOT`
 (absence) or `PTFSM6CLA1A` (% disadvantaged) are just as good, and it is more
@@ -399,63 +449,12 @@ schools["ATT8SCR"].describe()
 :::
 
 ::: {.callout-tip title="Question"}
-Is the mean above or below the median? What does that tell you before you
-have plotted anything?
+Is the mean above or below the median? What does that suggest about the
+shape of the data — even before you have plotted anything? (You will get to
+plot it properly next week.)
 :::
 
-# Task 5 — Look at its shape
-
-A summary table can hide almost anything. Plot it.
-
-::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: hist-r
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 4
-
-ggplot(schools, aes(x = ATT8SCR)) +
-  geom_histogram(bins = 45, fill = "#4E3C56", alpha = 0.7) +
-  geom_vline(xintercept = mean(schools$ATT8SCR, na.rm = TRUE),
-             colour = "#E16FCA", linewidth = 1) +
-  geom_vline(xintercept = median(schools$ATT8SCR, na.rm = TRUE),
-             colour = "black", linetype = "dashed") +
-  labs(title = "Attainment 8, all schools with a KS4 result",
-       subtitle = "pink = mean, dashed = median",
-       x = "Average Attainment 8 score", y = "Number of schools") +
-  theme_minimal()
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: hist-py
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-fig, ax = plt.subplots(figsize=(8, 4))
-sns.histplot(data=schools, x="ATT8SCR", bins=45, color="#4E3C56",
-             alpha=0.7, ax=ax)
-ax.axvline(schools["ATT8SCR"].mean(), color="#E16FCA", linewidth=2)
-ax.axvline(schools["ATT8SCR"].median(), color="black", linestyle="--")
-ax.set_title("Attainment 8, all schools with a KS4 result\npink = mean, dashed = median")
-ax.set_xlabel("Average Attainment 8 score")
-ax.set_ylabel("Number of schools")
-sns.despine()
-plt.show()
-```
-:::
-
-::: {.callout-tip title="Questions"}
-1. Is this one distribution, or more than one stuck together?
-2. Which of the mean and the median is the better summary here, and why?
-3. What would you need to know about the schools to explain the shape?
-:::
-
-# Task 6 — Now split it up
+# Task 6 — Compare groups with boxplots and violins
 
 This is the heart of the practical.
 
@@ -531,6 +530,9 @@ mainstream |>
 
 ```{python}
 #| label: admpol-py
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 sub = mainstream[mainstream["ADMPOL"].notna()]
 
 print(sub.groupby("ADMPOL")["ATT8SCR"]
@@ -613,165 +615,24 @@ Try `GENDER`. Single-sex schools look dramatically better than mixed ones.
 Now cross-tabulate `GENDER` against `ADMPOL` before you believe it.
 :::
 
-# Task 7 — Missing values
-
-Earlier you found that not every row has an Attainment 8 score. Now find out
-whether those gaps are random.
-
-::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: missing-r
-# how much is missing, by column
-schools |>
-  summarise(across(c(ATT8SCR, P8MEA, PERCTOT, PTFSM6CLA1A, OFSTEDRATING),
-                   ~ round(100 * mean(is.na(.x)), 1))) |>
-  pivot_longer(everything(), names_to = "variable", values_to = "pct_missing")
-
-# are the missing ones different from the rest?
-schools |>
-  filter(!is.na(TOTPUPS)) |>
-  mutate(p8 = if_else(is.na(P8MEA), "Progress 8 missing", "Progress 8 present")) |>
-  group_by(p8) |>
-  summarise(schools = n(), median_pupils = median(TOTPUPS), .groups = "drop")
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: missing-py
-cols = ["ATT8SCR", "P8MEA", "PERCTOT", "PTFSM6CLA1A", "OFSTEDRATING"]
-print((schools[cols].isna().mean() * 100).round(1))
-
-tmp = schools[schools["TOTPUPS"].notna()].copy()
-tmp["p8"] = np.where(tmp["P8MEA"].isna(),
-                     "Progress 8 missing", "Progress 8 present")
-print(tmp.groupby("p8")["TOTPUPS"].agg(schools="size", median_pupils="median"))
-```
-:::
-
-::: {.callout-tip title="Questions"}
-1. Are schools with a missing Progress 8 score bigger or smaller than average?
-2. Look up what `SUPP` means in the DfE guidance. Does that explain the pattern?
-3. If you dropped every row with a missing value, which schools would you have quietly removed from your analysis?
-:::
-
-# Task 8 — Outliers
-
-Apply both of the rules from the lecture to your chosen variable and compare
-what they flag.
-
-::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: outliers-r
-x  <- mainstream$ATT8SCR
-mu <- mean(x); sdv <- sd(x)
-q  <- quantile(x, c(0.25, 0.75)); iqr <- q[2] - q[1]
-
-tibble(
-  rule = c("|z| > 3", "Tukey 1.5 x IQR"),
-  flagged = c(sum(abs(x - mu) / sdv > 3),
-              sum(x < q[1] - 1.5 * iqr | x > q[2] + 1.5 * iqr))
-)
-
-# who are they?
-mainstream |>
-  mutate(z = (ATT8SCR - mu) / sdv) |>
-  filter(abs(z) > 3) |>
-  arrange(desc(z)) |>
-  select(SCHNAME, LANAME, ADMPOL, ATT8SCR, z) |>
-  head(8)
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: outliers-py
-x = mainstream["ATT8SCR"]
-mu, sdv = x.mean(), x.std()
-q1, q3 = x.quantile(0.25), x.quantile(0.75)
-iqr = q3 - q1
-
-print({"|z| > 3": int((abs(x - mu) / sdv > 3).sum()),
-       "Tukey 1.5 x IQR": int(((x < q1 - 1.5 * iqr) | (x > q3 + 1.5 * iqr)).sum())})
-
-out = mainstream.assign(z=(mainstream["ATT8SCR"] - mu) / sdv)
-print(out[out["z"].abs() > 3]
-        .sort_values("z", ascending=False)[["SCHNAME", "LANAME", "ADMPOL", "ATT8SCR", "z"]]
-        .head(8))
-```
-:::
-
-::: {.callout-tip title="Questions"}
-1. Do the two rules flag the same number of schools? Should they?
-2. Look at the `ADMPOL` column for the schools at the top. What do they have in common?
-3. Are these errors, or are they the most informative rows in the file?
-:::
-
-# Task 9 — Putting variables on the same scale
-
-Different variables are measured in different units, so you cannot compare
-"3 points above average on attainment" with "300 pupils above average in
-size". Standard scores fix that.
-
-::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: zscore-r
-zvars <- c("ATT8SCR", "PERCTOT", "PTFSM6CLA1A", "PTPRIORLO", "TOTPUPS")
-
-mainstream |>
-  mutate(across(all_of(zvars), ~ as.numeric(scale(.x)), .names = "z_{.col}")) |>
-  filter(SCHNAME == "Longhill High School") |>
-  select(SCHNAME, starts_with("z_")) |>
-  pivot_longer(-SCHNAME, names_to = "variable", values_to = "z") |>
-  mutate(z = round(z, 2))
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: zscore-py
-zvars = ["ATT8SCR", "PERCTOT", "PTFSM6CLA1A", "PTPRIORLO", "TOTPUPS"]
-
-z = mainstream.copy()
-for v in zvars:
-    z["z_" + v] = (z[v] - z[v].mean()) / z[v].std()
-
-row = z[z["SCHNAME"] == "Longhill High School"]
-print(row[["SCHNAME"] + ["z_" + v for v in zvars]].round(2).T)
-```
-:::
-
-::: {.callout-tip title="Your turn"}
-Pick a school you know — your own, or one in a local authority you are
-interested in — and produce its profile. Which variables is it unusual on?
-Plot the profile as a bar chart with zero as the centre line.
-:::
-
-# Task 10 — Write it down
+# Task 7 — Write it down
 
 The point of all of the above is to be able to say something defensible. In
 a few sentences each:
 
 1. **What is in this dataset?** How many schools, over what period, measuring what?
 2. **What did you filter out, and what did that change?** You dropped special and independent schools. Which questions can you no longer answer?
-3. **What is the shape of your chosen variable, and is the mean a good summary of it?**
+3. **Is the mean a good summary of your chosen variable?** What does the gap between mean and median suggest?
 4. **Which grouping variable did you use, and what did the comparison show?**
 5. **What is missing, and is it missing at random?**
 6. **What would you want to check before claiming that the difference you found is real?**
 
 ::: callout-note
 Question 6 is the one the rest of this course exists to answer. Keep your
-notes — we come back to this data in weeks 5 to 10.
+notes — we come back to this data in weeks 5 to 10, and next week you will
+plot its distribution properly.
 :::
 
 ## You're done
 
-Do not worry if some of the syntax is unfamiliar. What matters is the habit:
-look at the data before you model it, plot it before you summarise it, and
-find out what is missing before you decide it does not matter.
+Do not worry if some of the syntax is unfamiliar. What matters practising the exploratory data approach - always look at the data before you model it, and find out what is missing before you decide it does not matter.

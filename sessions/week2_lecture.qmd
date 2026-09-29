@@ -1,7 +1,7 @@
 ---
-title: "Exploratory Data Analysis 2"
+title: "Exploratory Data Analysis #2"
 author: 
-  - name: "Beatrice Taylor"
+  - name: "Bea Taylor"
 email: "beatrice.taylor@ucl.ac.uk"
 date-as-string: "13th October 2026"
 from: markdown+emoji
@@ -18,13 +18,14 @@ format:
 ---
 
 ## Last week 
-**Overview of lecture 1**
+*Exploratory data analysis, part 1*
 
-- Different data types 
-- Key data metrics
-  - the middle and the spread 
-- Visualising the data 
-- Data outliers 
+- Our dataset — DfE school performance in England, 2022/23
+- Data types
+- Descriptive statistics: distributions, histograms, boxplots
+- Descriptive statistics: mean, median, variance, standard deviation
+- Making things comparable: counts, rates and standard scores
+- Missing data and outliers
 
 ::: {.notes}
 4 data types: nominal, ordinal, interval, ratio 
@@ -35,44 +36,15 @@ Key data metrics - the middle: mean, median, mode and the spread: variance and s
 different types of data outliers: caused by measurement error, or irregular pattern or influential outliers 
 :::
 
-# This week 
-Introducing statistical concepts and probability distributions.
-
-<!-- ## The scientific method 
-
-<div style="text-align:center;">
-  <img src="L3_images/scientific_method.png" alt="The scientific method" style="max-width:60%">
-</div>
-
-::: {.notes}
-A specific research model - quite formal - been around from the 19th century. Typifies how scientific research is done in the classical sciences like biology. Link to scientific process and how we test and then iterate over ideas and concepts. Something we will talk about more next lecture. 
-::: -->
-
-<!-- ## Exploratory data analysis 
-
-When we're working with large datasets, exploratory data analysis is the first step in the scientific method. 
+## This week 
+Last week was largely descriptive, this week we go a bit deeper!
 
 ::: {.incremental}
-- How to understand the dataset 
-- What do the variables represent 
-- What statistical techniques should be used
+-   Last week we talked about histogram's, this week we'll look at probability distributions. These are functions with
+    parameters, that you can compute and predict with.
+-   We'll look at how data can be processed to make it easier to analyse. 
+-   Last week you considered what the population of interest was, this week we will consider different sources of data bias. 
 :::
-
-::: {.notes}
-More modern approach approach devloped by computer scientist John Turkey in the 1970s - whilst at Princeton. 'Father of data science'. rather than being driven by more classical statistical analyses (something we'll look at next week) - the idea was to have a more flexible approach. 
-::: -->
-
-<!-- ## Introducing statistical concepts 
-
-::: {.incremental}
-- Data science is about using ideas from statistics to describe large datasets 
-- Focus on numerical data
-- Using probability distributions to characterise them 
-:::
-
-::: {.notes}
-In large datasets its not practical to describe every data point - instead interested in the overall pattern. Moreover maybe that general pattern is more interetsing
-::: -->
 
 ## Learning objectives
 By the end of this lecture you should be able to:
@@ -163,8 +135,7 @@ height_df.describe().round(2)
 :::
 ::: -->
 
-## When descriptive statistics aren't enough
-Last week we talked about descriptive statistics - but what about when this doesn't tell the whole story? 
+## When descriptive statistics aren't enough {.smaller}
 
 ```{python}
 #| echo: true
@@ -193,39 +164,58 @@ These all have mean x = 9, variance x = 11. mean y = 7.5, variance y =4.1.
 But we can see from the diagrams that the distribution of the data is very different, some is linear, some is elliptic etc... So we need more advanced ways of describing the data. 
 :::
 
-# Histograms 
-
-Histograms are a way to visualise the distribution of a dataset. They show the frequency of each value or range of values in the dataset.
-
-::: {.notes}
-Need a slide to show how to make a histogram in Python.
-:::
-
-
 # Probability distributions
 Allow us to describe the distribution of data, and allow us to describe the probability of events occurring.
 
-
 ## Continuous vs. Discrete 
-**Continuous data** 
-Measurable data which can take any value within a given range.  
+*Continuous* 
 
-[*example*: foot length]{style="color:#abc766"}
-[*example*: the number of minutes between tube stops]{style="color:#abc766"}
+[Measurable data which can take any value within a given range.]{style="color:#49a0c4"} 
 
-**Discrete data**
-Measurable data which can take seperate, countable values. 
+*Discrete*
 
-[*example*: shoe size]{style="color:#abc766"} 
-[*example*: the number of tube arrivals in an hour]{style="color:#abc766"}
+[Measurable data which can take seperate, countable values.]{style="color:#49a0c4"}  
 
-::: {.notes}
-Suppose I have someone who is x cm tall, and someone who is y cm tall, I can find someone in between whose x.5cm tall. 
 
-But shoe sizes are discrete (not the length of your foot). 
+## Quiz 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+<br>
+
+<div style="text-align:center;">
+  <img src="L2_images/warren_street.jpg" alt="Warren Street underground platform" style="max-width:80%">
+</div>
+
 :::
 
-## Back to the probability function 
+::: {.column width="50%"}
+
+Is this data continuous or discrete?
+
+::: {.incremental}
+1. The air temperature on the platform at Warren Street 
+2. The number of tubes arriving at the platform in the next 10 minutes 
+3. The distance commuters travel to work 
+4. How late a train is, as recorded in the TfL delay log (whole minutes)
+:::
+
+:::
+
+::::
+
+
+
+::: {.notes}
+1. Continuous - temperature can take any value within a range
+2. Discrete - number of tubes is a countable value
+3. Continuous - distance can take any value within a range
+4. Discrete - delay is a countable value (whole minutes), however the underlying distribution before it gets rounded to whole minutes is continuous.
+:::
+
+## The probability function 
 
 ```{=tex}
 \begin{align}
@@ -233,13 +223,13 @@ p(x)
 \end{align}
 ```
 
-Having a function for the distribution allows us to evaluate the probability of events, and hence evaluate hypotheses. 
+Having a function for the distribution allows us to evaluate the probability of events, and hence (*spoiler alert for lecture 3*) evaluate hypotheses. 
 
 . . .
 
 
-- continusous distirbutions - have probability density functions (PDFs)
-- discrete distributions - have probability mass functions (PMFs). 
+- continuous distributions -> probability density functions (PDFs)
+- discrete distributions -> probability mass functions (PMFs)
 
 <!-- . . .
 
@@ -247,14 +237,14 @@ Having a function for the distribution allows us to evaluate the probability of 
 
 As for the normal distribution, in the general case we should be aware of the sampling distribution.  -->
 
-## Key distributions
+## Key distributions {.smaller}
 
 | | Normal | Binomial | Poisson | Exponential |
 |:--|:--|:--|:--|:--|
-| **Type** | Continuous | Discrete | Discrete | Continuous |
-| **Shape** | Symmetric, one peak | Depends on $p$; symmetric if $p=0.5$ | Right-skewed (more symmetric as $\lambda$ grows) | Right-skewed, highest at zero |
-| **Parameters** | $\mu$, $\sigma$ | $n$, $p$ | $\lambda$ | $\lambda$ |
-| **Probability function** | PDF | PMF | PMF | PDF |
+| [Type]{style="color:#49a0c4"}  | Continuous | Discrete | Discrete | Continuous |
+| [Shape]{style="color:#49a0c4"} | Symmetric, one peak | Depends on $p$; symmetric if $p=0.5$ | Right-skewed (more symmetric as $\lambda$ grows) | Right-skewed, highest at zero |
+| [Parameters]{style="color:#49a0c4"}  | $\mu$, $\sigma$ | $n$, $p$ | $\lambda$ | $\lambda$ |
+| [Probability function]{style="color:#49a0c4"}  | PDF | PMF | PMF | PDF |
 
 # Normal distribution
 The most fundamental distribution
@@ -267,6 +257,9 @@ The most fundamental distribution
 
 
 ::: {.notes}
+
+Talked about this last week - in terms of things being approxiamtely normal. 
+
 Also known as Gaussian distribution after Gauss. 
 The shape is known as the bell curve. 
 
@@ -292,15 +285,91 @@ The shape is known as the bell curve.
 
 ## See it in histograms
 
-<div style="text-align:center;">
-  <img src="L2_images/height_histogram.png" alt="Normal distribution" style="max-width:90%">
-</div>
+Same data as last week: Attainment 8 scores, restricted to mainstream
+state-funded secondaries so we're comparing like with like (special schools
+produce a second hump, as we saw last week).
+
+```{python}
+#| label: att8-mainstream-load
+#| echo: false
+#| output: false
+
+import pandas as pd
+from pathlib import Path
+
+def find_qm_root(start_path: Path = Path.cwd(), anchor: str = "_quarto.yml") -> Path:
+    """Walk up from start_path until we find the folder holding _quarto.yml."""
+    for parent in [start_path] + list(start_path.parents):
+        if (parent / anchor).exists() or parent.name == anchor:
+            return parent
+    raise FileNotFoundError(f"Anchor '{anchor}' not found in path hierarchy.")
+
+base_path = (find_qm_root() / "sessions" / "L6_data"
+             / "Performancetables_130242" / "2022-2023")
+na_all = ["", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT"]
+
+ks4 = pd.read_csv(base_path / "england_ks4final.csv",
+                  na_values=na_all, dtype={"URN": str}, low_memory=False)
+ks4 = ks4[ks4["URN"].notna()]
+ks4["ATT8SCR"] = pd.to_numeric(ks4["ATT8SCR"], errors="coerce")
+
+school_info = pd.read_csv(base_path / "england_school_information.csv",
+                          na_values=na_all, dtype={"URN": str}, low_memory=False)
+school_info = school_info[["URN", "MINORGROUP"]]
+
+schools = ks4.merge(school_info, on="URN", how="left")
+
+mainstream = schools[
+    schools["MINORGROUP"].isin(["Academy", "Maintained school"])
+    & schools["ATT8SCR"].notna()
+].copy()
+```
+
+```{python}
+#| label: att8-hist
+#| echo: false
+#| output: true
+#| fig-align: center
+
+import matplotlib.pyplot as plt
+
+casa_purple = "#4E3C56"
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+ax.hist(mainstream["ATT8SCR"], bins=30, color=casa_purple, alpha=0.7)
+ax.set_xlabel("Average Attainment 8 score")
+ax.set_ylabel("Number of schools")
+ax.set_title("Attainment 8, mainstream English secondary schools, 2022/23")
+plt.tight_layout()
+plt.show()
+```
 
 ---
 
-<div style="text-align:center;">
-  <img src="L2_images/height_histogram_pdf.png" alt="Normal distribution" style="max-width:90%">
-</div>
+```{python}
+#| label: att8-hist-pdf
+#| echo: false
+#| output: true
+#| fig-align: center
+
+import numpy as np
+from scipy.stats import norm
+
+mu, sigma = mainstream["ATT8SCR"].mean(), mainstream["ATT8SCR"].std()
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+ax.hist(mainstream["ATT8SCR"], bins=30, color=casa_purple, alpha=0.6, density=True,
+        label="Observed schools")
+x = np.linspace(mainstream["ATT8SCR"].min(), mainstream["ATT8SCR"].max(), 200)
+ax.plot(x, norm.pdf(x, mu, sigma), color="#F9DD73", linewidth=2.5,
+        label=f"Normal(μ={mu:.1f}, σ={sigma:.1f})")
+ax.set_xlabel("Average Attainment 8 score")
+ax.set_ylabel("Density")
+ax.set_title("Same data, with a fitted Normal curve")
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
 
 
 ## Uniquely described by two variables...
@@ -310,7 +379,7 @@ The shape is known as the bell curve.
 </div>
 
 
-## ...and a probability distribution function
+## ...and a probability density function
 
 <div style="text-align:center;">
   <img src="L2_images/normal_distribution_pdf.png" alt="Normal distribution with annotated probability density function" style="max-width:90%">
@@ -353,6 +422,11 @@ In the case of the normal distribution the standard deviation becomes:
 In practise as the sample size increases the sampling distribution becomes more and more centralised. 
 
 - i.e. with more data we have more certainty about the distribution. 
+
+
+<div style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; margin-top:10px;"> <em>Central limit theorem</em>
+
+As you draw more random samples from a distribution those samples approximate the normal distribution.  </div>
 
 ::: {.notes}
 Typically we think of the distribution as describing the entirety of the relevant popualtion - i.e. every relevant example. Link to sampling - normally only have a subset of the data. 
@@ -617,6 +691,9 @@ Are arrivals independent? Is the rate constant across the day? Are events cluste
 Note that lambda scales with the interval: 0.5 per minute is 5 per ten minutes. The assumptions box is a seed for spatial dependence later in the course (events in space are often not independent).
 :::
 
+
+## Example 2: trees in a forest 
+Spatial example 
 
 
 # Exponentials and Logarithms 
@@ -938,7 +1015,7 @@ log_a(b \times c) &= log_a(b) + log_a(c)
 \end{align}
 ``` -->
 
-## Probability distributions
+## Probability distributions {.smaller}
 
 | | Normal | Binomial | Poisson | Exponential |
 |:--|:--|:--|:--|:--|
@@ -948,12 +1025,10 @@ log_a(b \times c) &= log_a(b) + log_a(c)
 | **Probability function** | PDF | PMF | PMF | PDF |
 | **Urban example** | Heights; measurement error | Yes/no answers in a survey | Bike arrivals per 10 minutes | Wait until the next bike arrives |
 
-::: {.notes}
-Replaces the bare "we've covered" list. This is the same table as the "Four distributions, four questions" slide with more columns.
-:::
 
 # Transforming data 
 
+The logarithm is also a very useful toolf for transforming data.
 Some of the most important rules: 
 
 ```{=tex}
@@ -1105,6 +1180,7 @@ Examples:
 - [WEIRD people](https://oecs.mit.edu/pub/spow8trw/release/1) 
   - Commonly sampled in behavioural sciences. 
   - Reflects a very small proportion of global population. 
+- 2001 Westminster census - reflected less people than expected, as high numbers of second homes 
 
 ::: {.notes}
 Roy model - example from economics - basically there's not a random selection of people in a specific job - thye have chosen that job based on underlying unobserved characterisitcs. For example suppose I'm interested in wages of workers in different occupations - but they have self-selected into that occupation based on their unique skill set - so it's a biased representation. 
