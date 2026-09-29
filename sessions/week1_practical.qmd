@@ -70,48 +70,6 @@ you'd get from joining on a missing key, because a missing key matches
 another missing key.
 
 ::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: load-r
-#| message: false
-#| warning: false
-
-library(tidyverse)
-library(here)
-
-base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
-
-na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
-
-ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
-                na = na_all, show_col_types = FALSE) |>
-  mutate(URN = as.character(URN)) |>
-  filter(!is.na(URN)) |>
-  select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, PTFSM6CLA1A, PTPRIORLO) |>
-  mutate(across(-URN, ~ parse_number(as.character(.x))))
-
-absence <- read_csv(file.path(base_path, "england_abs.csv"),
-                    na = na_all, show_col_types = FALSE) |>
-  mutate(URN = as.character(URN)) |>
-  filter(!is.na(URN)) |>
-  distinct(URN, .keep_all = TRUE) |>
-  select(URN, PERCTOT) |>
-  mutate(PERCTOT = parse_number(as.character(PERCTOT)))
-
-school_info <- read_csv(file.path(base_path, "england_school_information.csv"),
-                        na = na_all, show_col_types = FALSE) |>
-  mutate(URN = as.character(URN)) |>
-  select(URN, SCHNAME, LANAME, MINORGROUP, OFSTEDRATING,
-         ADMPOL, RELCHAR, GENDER)
-
-schools <- ks4 |>
-  left_join(school_info, by = "URN") |>
-  left_join(absence, by = "URN")
-
-nrow(schools)
-```
-
 #### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
@@ -159,6 +117,48 @@ schools = ks4.merge(school_info, on="URN", how="left") \
 
 len(schools)
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: load-r
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+
+base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
+
+na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
+
+ks4 <- read_csv(file.path(base_path, "england_ks4final.csv"),
+                na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  filter(!is.na(URN)) |>
+  select(URN, ATT8SCR, P8MEA, TOTPUPS, TPUP, PTFSM6CLA1A, PTPRIORLO) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+absence <- read_csv(file.path(base_path, "england_abs.csv"),
+                    na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  filter(!is.na(URN)) |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, PERCTOT) |>
+  mutate(PERCTOT = parse_number(as.character(PERCTOT)))
+
+school_info <- read_csv(file.path(base_path, "england_school_information.csv"),
+                        na = na_all, show_col_types = FALSE) |>
+  mutate(URN = as.character(URN)) |>
+  select(URN, SCHNAME, LANAME, MINORGROUP, OFSTEDRATING,
+         ADMPOL, RELCHAR, GENDER)
+
+schools <- ks4 |>
+  left_join(school_info, by = "URN") |>
+  left_join(absence, by = "URN")
+
+nrow(schools)
+```
 :::
 
 # Task 2 — First look: what have you got?
@@ -167,20 +167,20 @@ Before computing anything, find out how big the data is, what the columns are
 called, and what types your software thinks they are.
 
 ::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: look-r
-dim(schools)
-glimpse(schools)
-```
-
 #### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
 #| label: look-py
 print(schools.shape)
 schools.info()
+```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: look-r
+dim(schools)
+glimpse(schools)
 ```
 :::
 
@@ -259,20 +259,20 @@ code has to know it too**, and by default it does not.
 Read that column in and ask for its categories in order:
 
 ::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: type-wrong-r
-# As it arrives: just text
-sort(unique(schools$OFSTEDRATING))
-```
-
 #### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
 #| label: type-wrong-py
 # As it arrives: just text
 sorted(schools["OFSTEDRATING"].dropna().unique())
+```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: type-wrong-r
+# As it arrives: just text
+sort(unique(schools$OFSTEDRATING))
 ```
 :::
 
@@ -288,25 +288,6 @@ The fix is to store it as an **ordered** type, stating the order yourself. But
 there is a trap inside the fix, so we check as we go:
 
 ::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: type-right-r
-rating_order <- c("Special Measures", "Serious Weaknesses", "Inadequate",
-                  "Requires improvement", "Good", "Outstanding")
-
-# How many are missing BEFORE we touch anything?
-before <- sum(is.na(schools$OFSTEDRATING))
-
-schools <- schools |>
-  mutate(OFSTEDRATING = factor(OFSTEDRATING,
-                               levels  = rating_order,
-                               ordered = TRUE))
-
-# Anything not named in rating_order has silently become NA. Did it?
-c(missing_before = before, missing_after = sum(is.na(schools$OFSTEDRATING)))
-```
-
 #### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
@@ -324,6 +305,25 @@ schools["OFSTEDRATING"] = pd.Categorical(schools["OFSTEDRATING"],
 
 print({"missing_before": int(before),
        "missing_after": int(schools["OFSTEDRATING"].isna().sum())})
+```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: type-right-r
+rating_order <- c("Special Measures", "Serious Weaknesses", "Inadequate",
+                  "Requires improvement", "Good", "Outstanding")
+
+# How many are missing BEFORE we touch anything?
+before <- sum(is.na(schools$OFSTEDRATING))
+
+schools <- schools |>
+  mutate(OFSTEDRATING = factor(OFSTEDRATING,
+                               levels  = rating_order,
+                               ordered = TRUE))
+
+# Anything not named in rating_order has silently become NA. Did it?
+c(missing_before = before, missing_after = sum(is.na(schools$OFSTEDRATING)))
 ```
 :::
 
@@ -380,6 +380,19 @@ found that not every row has an Attainment 8 score; now find out whether
 those gaps are random.
 
 ::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: missing-py
+cols = ["ATT8SCR", "P8MEA", "PERCTOT", "PTFSM6CLA1A", "OFSTEDRATING"]
+print((schools[cols].isna().mean() * 100).round(1))
+
+tmp = schools[schools["TOTPUPS"].notna()].copy()
+tmp["p8"] = np.where(tmp["P8MEA"].isna(),
+                     "Progress 8 missing", "Progress 8 present")
+print(tmp.groupby("p8")["TOTPUPS"].agg(schools="size", median_pupils="median"))
+```
+
 #### ![](L6_images/Rlogo.png){width="41" height="30"}
 
 ```{r}
@@ -397,19 +410,6 @@ schools |>
   group_by(p8) |>
   summarise(schools = n(), median_pupils = median(TOTPUPS), .groups = "drop")
 ```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: missing-py
-cols = ["ATT8SCR", "P8MEA", "PERCTOT", "PTFSM6CLA1A", "OFSTEDRATING"]
-print((schools[cols].isna().mean() * 100).round(1))
-
-tmp = schools[schools["TOTPUPS"].notna()].copy()
-tmp["p8"] = np.where(tmp["P8MEA"].isna(),
-                     "Progress 8 missing", "Progress 8 present")
-print(tmp.groupby("p8")["TOTPUPS"].agg(schools="size", median_pupils="median"))
-```
 :::
 
 ::: {.callout-tip title="Questions"}
@@ -425,6 +425,13 @@ Pick a continuous variable. `ATT8SCR` is the obvious one, but `PERCTOT`
 interesting if the room does not all pick the same one.
 
 ::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: describe-py
+schools["ATT8SCR"].describe()
+```
+
 #### ![](L6_images/Rlogo.png){width="41" height="30"}
 
 ```{r}
@@ -438,13 +445,6 @@ schools |>
     min    = min(ATT8SCR, na.rm = TRUE),
     max    = max(ATT8SCR, na.rm = TRUE)
   )
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: describe-py
-schools["ATT8SCR"].describe()
 ```
 :::
 
@@ -466,16 +466,6 @@ From here on we work only with mainstream state-funded secondaries, so that
 we are comparing like with like.
 
 ::: {.multicode}
-#### ![](L6_images/Rlogo.png){width="41" height="30"}
-
-```{r}
-#| label: mainstream-r
-mainstream <- schools |>
-  filter(MINORGROUP %in% c("Academy", "Maintained school"), !is.na(ATT8SCR))
-
-nrow(mainstream)
-```
-
 #### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
@@ -487,6 +477,16 @@ mainstream = schools[
 
 len(mainstream)
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: mainstream-r
+mainstream <- schools |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"), !is.na(ATT8SCR))
+
+nrow(mainstream)
+```
 :::
 
 ## A worked example: admissions policy
@@ -495,6 +495,32 @@ len(mainstream)
 done properly — a table *and* a plot, because neither is enough on its own.
 
 ::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: admpol-py
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sub = mainstream[mainstream["ADMPOL"].notna()]
+
+print(sub.groupby("ADMPOL")["ATT8SCR"]
+         .agg(n="size", mean="mean", median="median", sd="std")
+         .round(1)
+         .sort_values("n", ascending=False))
+
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.violinplot(data=sub, x="ATT8SCR", y="ADMPOL", scale="count",
+               inner=None, palette=["#2E6260", "#9DBB65", "#4E3C56"], ax=ax)
+sns.boxplot(data=sub, x="ATT8SCR", y="ADMPOL", width=0.12,
+            showfliers=True, boxprops={"facecolor": "white"}, ax=ax)
+ax.set_title("Attainment 8 by admissions policy")
+ax.set_xlabel("Average Attainment 8 score")
+ax.set_ylabel("")
+sns.despine()
+plt.show()
+```
+
 #### ![](L6_images/Rlogo.png){width="41" height="30"}
 
 ```{r}
@@ -524,32 +550,6 @@ mainstream |>
   labs(x = "Average Attainment 8 score", y = NULL,
        title = "Attainment 8 by admissions policy") +
   theme_minimal()
-```
-
-#### ![](L6_images/python-logo-only.png){width="30"}
-
-```{python}
-#| label: admpol-py
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-sub = mainstream[mainstream["ADMPOL"].notna()]
-
-print(sub.groupby("ADMPOL")["ATT8SCR"]
-         .agg(n="size", mean="mean", median="median", sd="std")
-         .round(1)
-         .sort_values("n", ascending=False))
-
-fig, ax = plt.subplots(figsize=(8, 4))
-sns.violinplot(data=sub, x="ATT8SCR", y="ADMPOL", scale="count",
-               inner=None, palette=["#2E6260", "#9DBB65", "#4E3C56"], ax=ax)
-sns.boxplot(data=sub, x="ATT8SCR", y="ADMPOL", width=0.12,
-            showfliers=True, boxprops={"facecolor": "white"}, ax=ax)
-ax.set_title("Attainment 8 by admissions policy")
-ax.set_xlabel("Average Attainment 8 score")
-ax.set_ylabel("")
-sns.despine()
-plt.show()
 ```
 :::
 

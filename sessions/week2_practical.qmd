@@ -6,7 +6,8 @@ format:
   ipynb: default
 filters:
   - qna
-  - quarto
+  - multicode
+  - quarto # keep Quarto's built-ins as the last filter or it won't work
 ---
 
 This week is focussed on using some common functions in Python to plot data and distributions. 
@@ -33,7 +34,11 @@ The data is sourced from gov.uk [here](https://www.compare-school-performance.se
 
 If you do want to download the data directly from the gov.uk website then you need to choose the academic year '2022 to 2023', then 'All of England', then 'Key stage 4 results (final)'. Then you'll want to download the 'Data in CSV format' and also 'Explanation of terminology used in the data files'.
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: load-py
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -62,6 +67,30 @@ df = df.copy()
 
 df.head()
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: load-r
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+
+# Read CSV file, handling common missing value entries
+na_vals <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "SUPPMAT")
+df_ks4 <- read_csv(here("sessions", "L2_data", "england_ks4final.csv"),
+                   na = na_vals, show_col_types = FALSE)
+
+info_cols <- c("RECTYPE", "LEA", "SCHNAME", "TOTPUPS")
+ebaccs_cols <- c("EBACCAPS", "EBACCAPS_LO", "EBACCAPS_MID", "EBACCAPS_HI")
+
+df <- df_ks4 |> select(all_of(c(info_cols, ebaccs_cols)))
+
+head(df)
+```
+:::
 
 You might be wondering why I've chosen the columns `info_cols` and `ebaccs_cols`. In open source datasets the column headers might be obscure, or difficult to decipher - but typically metadata will be provided that explains the meaning. 
 
@@ -96,16 +125,46 @@ The EBacc has a minimum score of 0, which indicates very poor performance, and a
 
 Before we can plot anything, this file needs the same two checks you already did properly last week - data types, and which rows actually belong in the data.  
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: dtypes-py
 df.dtypes
 ```
 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: dtypes-r
+glimpse(df)
+```
+:::
+
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: fix-dtypes-py
 df.loc[:, ebaccs_cols] = df.loc[:, ebaccs_cols].apply(pd.to_numeric, errors='coerce')
 df['TOTPUPS'] = pd.to_numeric(df['TOTPUPS'], errors='coerce').fillna(0).astype('int64')
 ```
 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: fix-dtypes-r
+df <- df |>
+  mutate(across(all_of(ebaccs_cols), ~ parse_number(as.character(.x))),
+         TOTPUPS = replace_na(parse_number(as.character(TOTPUPS)), 0))
+```
+:::
+
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: filter-py
 # record types 4, 5 and 7 are aggregated local authority / national rows,
 # not individual schools - keep 1 (mainstream) and 2 (special) only
 df = df[df['RECTYPE'].isin([1, 2])].copy()
@@ -114,23 +173,56 @@ rows, cols = df.shape
 print(f"Rows: {rows}, Columns: {cols}")
 ```
 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: filter-r
+# record types 4, 5 and 7 are aggregated local authority / national rows,
+# not individual schools - keep 1 (mainstream) and 2 (special) only
+df <- df |> filter(RECTYPE %in% c(1, 2))
+
+dim(df)
+```
+:::
+
 
 # Task 2 — Plot the distribution
 
 Let's try plotting the Average EBacc APS score per pupil.
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: hist-py
 n_bins = 10
 fig, ax = plt.subplots(figsize=(12, 8))
 
 ax.hist(df['EBACCAPS'].dropna(), bins=n_bins, color='#abc766', edgecolor='black')
 ax.set_title('EBacc distribution')
 ax.set_xlabel('EBacc score')
-ax.set_ylabel('Number of schools')  
+ax.set_ylabel('Number of schools')
 ax.set_xlim(0,9) # the EBacc has a maximum score of 9
 
 plt.show()
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: hist-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.3
+
+ggplot(df, aes(x = EBACCAPS)) +
+  geom_histogram(bins = 10, fill = "#abc766", colour = "black") +
+  labs(title = "EBacc distribution", x = "EBacc score", y = "Number of schools") +
+  xlim(0, 9) + # the EBacc has a maximum score of 9
+  theme_minimal()
+```
+:::
 
 What do you observe from this histogram? Because the bins are quite large it's difficult to get a sense of the distribution - try changing this to get a better idea of the data spread. 
 
@@ -185,21 +277,25 @@ One way to consider whether it is normally distributed is to overlay the normal 
 
 We can use the package `scipy.stats` which has functions for generating probability density functions for common distributions. You can see which common distributions [here](https://docs.scipy.org/doc/scipy/reference/stats.html).
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: pdf-overlay-py
 import scipy.stats as sps
 
-# first let's get the mean and stand deviation 
+# first let's get the mean and stand deviation
 mu = df['EBACCAPS'].dropna().mean()
 std = df['EBACCAPS'].dropna().std()
 
-## Create the plot 
+## Create the plot
 
 # plot the histogram
 plt.figure(figsize=(12, 8))
 plt.hist(df['EBACCAPS'], bins=40, density=True, color='#abc766', edgecolor='black')
 
 # plot the Probability Density Function (PDF)
-xmin = 0 
+xmin = 0
 xmax = 9
 x = np.linspace(xmin, xmax, 100)
 p = sps.norm.pdf(x, mu, std)
@@ -212,6 +308,35 @@ plt.ylabel("Density")
 
 plt.show()
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: pdf-overlay-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.3
+
+# first let's get the mean and standard deviation
+mu  <- mean(df$EBACCAPS, na.rm = TRUE)
+std <- sd(df$EBACCAPS, na.rm = TRUE)
+
+# the Probability Density Function (PDF), evaluated over the score range
+x <- seq(0, 9, length.out = 100)
+pdf_df <- tibble(x = x, density = dnorm(x, mu, std))
+
+ggplot(df, aes(x = EBACCAPS)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 40,
+                 fill = "#abc766", colour = "black") +
+  geom_line(data = pdf_df, aes(x = x, y = density),
+            colour = "#e16fca", linewidth = 1, inherit.aes = FALSE) +
+  labs(title = sprintf("Fit results: mu = %.2f,  sigma = %.2f", mu, std),
+       x = "EBacc score", y = "Density") +
+  xlim(0, 9) +
+  theme_minimal()
+```
+:::
 
 Note that this time we plot the histogram with `density=True` - this scales the histogram data. 
 
@@ -241,9 +366,13 @@ The results of the Q-Q plot can help us to understand the dataset:
 - Light tails (fewer extreme values than normal): *points bend inward at the ends*
 - Skewed data: *points systematically deviate above or below the line*
 
-We can plot the Q-Q plot in Python. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0. 
+We can plot the Q-Q plot ourselves. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0.
+
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
+#| label: qq-plot-py
 # Drop missing values
 data = df['EBACCAPS'].dropna().values
 n = len(data)
@@ -270,13 +399,53 @@ plt.ylabel("Sample quantiles")
 plt.show()
 ```
 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: qq-plot-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.3
+
+# Drop missing values
+data <- na.omit(df$EBACCAPS)
+n <- length(data)
+
+# normalise the data
+data <- (data - mean(data)) / sd(data)
+
+# Sort the sample data
+sample_quantiles <- sort(data)
+
+# Compute plotting positions (probabilities)
+p <- (seq_len(n) - 0.5) / n
+
+# Compute theoretical quantiles from standard normal
+theoretical_quantiles <- qnorm(p)
+
+# Plot
+tibble(theoretical_quantiles, sample_quantiles) |>
+  ggplot(aes(x = theoretical_quantiles, y = sample_quantiles)) +
+  geom_point(alpha = 0.5, colour = "#abc766") +
+  geom_abline(slope = 1, intercept = 0, colour = "black", linetype = "dashed") +
+  labs(title = "Q-Q plot for EBacc scores",
+       x = "Theoretical quantiles (Normal)", y = "Sample quantiles") +
+  theme_minimal()
+```
+:::
+
 Ok, so in case it wasn't clear from the previous plot we can see that the data definitely isn't perfectly normal. 
 
 # Task 4 — Explain the skew
 
 If you remember above this dataset includes schools of two different types, we have mainstream schools and special schools. 'special schools' refers to schools which cater to students with special educational needs. Let's see what happens when we split our histogram according to the type of school.
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: split-hist-py
 # histogram of # plot histogram of EBACCAPS by RECTYPE
 n_bins = {1:40, 2:20}
 fig, ax = plt.subplots(figsize=(12, 8))
@@ -284,14 +453,41 @@ for rectype, color, label in zip([1, 2], ['#abc766', '#66c2ab'], ['Mainstream', 
     ax.hist(df_ks4.loc[df_ks4['RECTYPE'] == rectype, 'EBACCAPS'].dropna(), bins=n_bins[rectype], alpha=0.7, color=color, edgecolor='black', label=label)
 ax.set_title('EBacc distribution by school type')
 ax.set_xlabel('EBacc score')
-ax.set_ylabel('Number of schools')  
+ax.set_ylabel('Number of schools')
 ax.set_xlim(0,9)
 ax.legend()
 
 plt.show()
 ```
 
-Note that I've played with the number of total bins for each group so that the histograms look nice. 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: split-hist-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.3
+
+# note the different bin counts for each group, so the histograms look nice
+mainstream_h <- df_ks4 |> filter(RECTYPE == 1) |> drop_na(EBACCAPS)
+special_h    <- df_ks4 |> filter(RECTYPE == 2) |> drop_na(EBACCAPS)
+
+ggplot() +
+  geom_histogram(data = mainstream_h, aes(x = EBACCAPS, fill = "Mainstream"),
+                 bins = 40, alpha = 0.7, colour = "black") +
+  geom_histogram(data = special_h, aes(x = EBACCAPS, fill = "Special"),
+                 bins = 20, alpha = 0.7, colour = "black") +
+  scale_fill_manual(values = c("Mainstream" = "#abc766", "Special" = "#66c2ab"),
+                     name = NULL) +
+  labs(title = "EBacc distribution by school type",
+       x = "EBacc score", y = "Number of schools") +
+  xlim(0, 9) +
+  theme_minimal()
+```
+:::
+
+Note that I've played with the number of total bins for each group so that the histograms look nice.
 
 Looking now at the histogram it becomes clear that the skewness of the data is caused by the different school types. 
 
@@ -304,23 +500,53 @@ We can start by splitting the dataset according to the school type.
 ::: qna
 #### Question
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ``` python
 # mainstream school
 df1 = df[??]
 
-# special schools 
+# special schools
 df2 = df[??]
 ```
 
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+``` r
+# mainstream school
+df1 <- df[??]
+
+# special schools
+df2 <- df[??]
+```
+:::
+
 #### Answer
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: split-py
 # mainstream school
 df1 = df[df['RECTYPE'] == 1].copy()
 
 # special schools
 df2 = df[df['RECTYPE'] == 2].copy()
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: split-r
+# mainstream school
+df1 <- df |> filter(RECTYPE == 1)
+
+# special schools
+df2 <- df |> filter(RECTYPE == 2)
+```
+:::
 :::
 
 ## Q-Q plot for mainstream schools
@@ -457,7 +683,11 @@ $$z = \frac{x - \mu}{\sigma}$$
 
 We've just seen that mainstream and special schools sit on quite different distributions, so we standardise mainstream schools (`df1`) against their own mean and standard deviation, rather than mixing the two populations together.
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: zscore-py
 mu1 = df1['EBACCAPS'].dropna().mean()
 std1 = df1['EBACCAPS'].dropna().std()
 
@@ -467,6 +697,24 @@ df1[['SCHNAME', 'EBACCAPS', 'EBACCAPS_z']].dropna() \
   .sort_values('EBACCAPS_z', ascending=False) \
   .head(10)
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: zscore-r
+mu1  <- mean(df1$EBACCAPS, na.rm = TRUE)
+std1 <- sd(df1$EBACCAPS, na.rm = TRUE)
+
+df1 <- df1 |>
+  mutate(EBACCAPS_z = (EBACCAPS - mu1) / std1)
+
+df1 |>
+  select(SCHNAME, EBACCAPS, EBACCAPS_z) |>
+  drop_na() |>
+  arrange(desc(EBACCAPS_z)) |>
+  head(10)
+```
+:::
 
 That's the ten mainstream schools furthest above the mean, in standard-deviation terms. `z = 0` is a school scoring exactly the mean; `z = 1` is one standard deviation above it.
 
@@ -492,7 +740,11 @@ df1[['SCHNAME', 'EBACCAPS', 'EBACCAPS_z']].dropna() \
 
 Standardising doesn't change the shape of a distribution, only its location and scale — everything just shifts to be centred on 0 with a spread of 1. You can see that by plotting the z-scores themselves:
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: zscore-hist-py
 plt.figure(figsize=(12, 6))
 plt.hist(df1['EBACCAPS_z'].dropna(), bins=40, color='#abc766', edgecolor='black')
 plt.axvline(0, color='black', linestyle='--')
@@ -502,6 +754,24 @@ plt.ylabel('Number of schools')
 
 plt.show()
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: zscore-hist-r
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+ggplot(df1, aes(x = EBACCAPS_z)) +
+  geom_histogram(bins = 40, fill = "#abc766", colour = "black") +
+  geom_vline(xintercept = 0, colour = "black", linetype = "dashed") +
+  labs(title = "Standardised EBacc scores (z-scores), mainstream schools",
+       x = "z-score", y = "Number of schools") +
+  theme_minimal()
+```
+:::
 
 That's the same mild skew you saw in the mainstream Q-Q plot above, just relabelled onto a scale centred on 0 with a spread of 1.
 
@@ -529,13 +799,29 @@ If we're willing to accept `EBACCAPS` is approximately normally distributed, we 
 
 The Q-Q plots above showed the whole dataset is clearly not normal — but restricting to mainstream schools removed the second hump caused by special schools, which is why we've been standardising `df1` rather than the full dataset since the z-scores section above. Even mainstream schools weren't a perfect diagonal line on the Q-Q plot, but the whole point of the probaility distirbution to be able to aprpoximatethe data using a matehmatical distirbution, hence simplifying the analysis. So treat what follows as a working approximation, not a guarantee.
 
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
+
 ```{python}
+#| label: print-mu-std-py
 print(f"Mainstream schools:  mu = {mu1:.2f}, std = {std1:.2f}")
 ```
 
-`scipy.stats.norm` gives us probabilities directly from those two numbers: `.cdf(x, mu, std)` returns $P(X \leq x)$, and `.sf(x, mu, std)` ("survival function") returns $P(X > x)$, i.e. $1 - \text{cdf}(x)$.
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: print-mu-std-r
+cat(sprintf("Mainstream schools:  mu = %.2f, std = %.2f\n", mu1, std1))
+```
+:::
+
+`scipy.stats.norm` gives us probabilities directly from those two numbers: `.cdf(x, mu, std)` returns $P(X \leq x)$, and `.sf(x, mu, std)` ("survival function") returns $P(X > x)$, i.e. $1 - \text{cdf}(x)$. In R, the equivalent is `pnorm(x, mu, std)` and `pnorm(x, mu, std, lower.tail = FALSE)`.
+
+::: {.multicode}
+#### ![](L6_images/python-logo-only.png){width="30"}
 
 ```{python}
+#| label: threshold-prob-py
 threshold = 6.0
 
 p_above = sps.norm.sf(threshold, mu1, std1)
@@ -545,6 +831,25 @@ print(f"Normal model:  P(EBacc > {threshold}) = {p_above:.3f}")
 empirical = (df1['EBACCAPS'] > threshold).mean()
 print(f"Raw sample:    proportion of mainstream schools actually above {threshold} = {empirical:.3f}")
 ```
+
+#### ![](L6_images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: threshold-prob-r
+threshold <- 6.0
+
+p_above <- pnorm(threshold, mu1, std1, lower.tail = FALSE)
+cat(sprintf("Normal model:  P(EBacc > %.1f) = %.3f\n", threshold, p_above))
+
+# how does that compare to what's actually in the data? na.rm = TRUE would
+# drop missing rows from the denominator entirely; replace_na(..., FALSE)
+# instead counts them as "not above threshold", matching pandas' behaviour
+# (NaN > x is False, not NaN), so the two languages agree.
+empirical <- mean(replace_na(df1$EBACCAPS > threshold, FALSE))
+cat(sprintf("Raw sample:    proportion of mainstream schools actually above %.1f = %.3f\n",
+            threshold, empirical))
+```
+:::
 
 Those two numbers should be reasonably close — much closer than they would be on the full, mixed dataset — but probably still not identical. That gap is the price of the normality assumption.
 
