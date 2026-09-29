@@ -10,7 +10,7 @@ filters:
   - quarto # keep Quarto's built-ins as the last filter or it won't work
 ---
 
-This week is focussed on using some common functions in Python to plot data and distributions. 
+This week is focussed on using some common functions in Python and R to plot data and distributions. 
 
 ## Learning Outcomes
 
@@ -275,7 +275,7 @@ Remember the key features of the normal distribution:
 
 One way to consider whether it is normally distributed is to overlay the normal distribution on top.
 
-We can use the package `scipy.stats` which has functions for generating probability density functions for common distributions. You can see which common distributions [here](https://docs.scipy.org/doc/scipy/reference/stats.html).
+In Python we can use the package `scipy.stats` which has functions for generating probability density functions for common distributions. You can see which common distributions [here](https://docs.scipy.org/doc/scipy/reference/stats.html).
 
 ::: {.multicode}
 #### ![](L6_images/python-logo-only.png){width="30"}
@@ -344,14 +344,13 @@ Another way to think about whether something is normally distirbuted is to look 
 
 ## Q-Q plot
 
-A Q-Q plot is used to see if a dataset follows a certain distribution, by comparing the quartiles of the two. You can read a bit more about Q-Q plots [here](https://www.datacamp.com/tutorial/qq-plot).
+A Q-Q plot is used to compare two probability distributions, by comparing their quantiles.It can be used to see if data follows a normal distribution. You can read a bit more about Q-Q plots [here](https://www.datacamp.com/tutorial/qq-plot).
 
-Q-Q plots are a good way to check if a dataset follows a normal distribution. 
 
 ::: qna
 #### Question
 
-Thinking about the characteristics of a normal distribution, what would you expect the Q-Q plot of a normally distributed dataset to look like? 
+Thinking about the characteristics of a normal distribution, what would you expect the Q-Q plot of perfectly normally distributed dataset to look like? 
 
 #### Answer
 
@@ -366,7 +365,7 @@ The results of the Q-Q plot can help us to understand the dataset:
 - Light tails (fewer extreme values than normal): *points bend inward at the ends*
 - Skewed data: *points systematically deviate above or below the line*
 
-We can plot the Q-Q plot ourselves. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0.
+We can plot the Q-Q plot ourselves. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0. We will shortly (Task 5) look at normalising the data more explictly. 
 
 ::: {.multicode}
 #### ![](L6_images/python-logo-only.png){width="30"}
@@ -934,7 +933,7 @@ If you've finished everything else, then you might like to look at some of the o
 
 ## You're Done!
 
-Congratulations on completing the second QM practical session! If you are still working on it, take your time.
+You've completed the second QM practical session! 
 
-Don’t worry about understanding every detail of the Python code — what matters most is knowing which functions to use for a specific task, like plotting histograms of data, and knowing how to debug when it goes wrong. Remember, practice makes perfect.
+Don’t worry about understanding every detail of the Python code — what matters most is knowing which functions to use for a specific task and knowing how to debug when it goes wrong. Remember, practice makes perfect :) 
 
