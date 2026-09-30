@@ -74,7 +74,7 @@ read_dfe <- function(f) {
 }
 
 ks4 <- read_dfe("england_ks4final.csv") |>
-  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, PTPRIORHI) |>
+  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, TFSM6CLA1A, PTPRIORHI) |>
   mutate(across(-URN, ~ parse_number(as.character(.x))))
 
 absence <- read_dfe("england_abs.csv") |>
@@ -206,7 +206,59 @@ OLS is just the GLM where the distribution is Normal and the link function does 
 
 ## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-The right-hand side of any regression is a straight line, and a straight line will cheerfully produce **any number at all**. The thing we are trying to predict usually cannot.
+A straight line will cheerfully produce **any number at all**. A probability
+cannot — it is trapped between 0 and 1. The link function is what gets you
+from one to the other.
+
+```{r}
+#| label: link-stretch
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.5
+#| fig-align: center
+
+# The same nine probabilities plotted on their own scale (top) and on the
+# log-odds scale the model actually works on (bottom). The connecting lines
+# fan out at the edges, which IS the stretching.
+pts  <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99)
+lo   <- qlogis(pts)
+rng  <- max(abs(lo))
+
+lk <- tibble(p = pts, logodds = lo,
+             x_top = p,
+             x_bot = (lo + rng) / (2 * rng))
+
+ggplot(lk) +
+  annotate("segment", x = 0, xend = 1, y = 1, yend = 1,
+           colour = "grey55", linewidth = 0.5) +
+  annotate("segment", x = 0, xend = 1, y = 0, yend = 0,
+           colour = "grey55", linewidth = 0.5) +
+  geom_segment(aes(x = x_top, xend = x_bot, y = 0.94, yend = 0.06),
+               colour = casa_teal, alpha = 0.55, linewidth = 0.5) +
+  geom_point(aes(x = x_top, y = 1), colour = casa_purple, size = 2.6) +
+  geom_point(aes(x = x_bot, y = 0), colour = casa_pink, size = 2.6) +
+  geom_text(aes(x = x_top, y = 1, label = p), vjust = -1.2, size = 3.1) +
+  geom_text(aes(x = x_bot, y = 0, label = sprintf("%.1f", logodds)),
+            vjust = 2.1, size = 3.1) +
+  annotate("text", x = -0.02, y = 1, hjust = 1, size = 3.4, fontface = "bold",
+           label = "probability") +
+  annotate("text", x = -0.02, y = 0, hjust = 1, size = 3.4, fontface = "bold",
+           label = "log-odds") +
+  scale_x_continuous(limits = c(-0.16, 1.03)) +
+  scale_y_continuous(limits = c(-0.35, 1.35)) +
+  theme_void(base_size = 11)
+```
+
+::: {style="font-size: 0.86em"}
+**Same nine numbers, twice.** On top, crowded against the walls at 0 and 1. On
+the bottom, the *identical* values on the log-odds scale — spread out, with
+room at both ends and no walls to hit. That fanning out is the link function
+doing its job.
+:::
+
+## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ::: {style="font-size: 0.95em"}
 | Outcome | Its natural range | Link stretches it with | To get back, apply |
@@ -222,37 +274,132 @@ The right-hand side of any regression is a straight line, and a straight line wi
 **The link is a translator.** It stretches a squashed scale out onto the whole number line, so the straight line has somewhere sensible to live. The top row needs no stretching - which is exactly why OLS is a GLM with the boring link.
 :::
 
+. . .
+
+::: {style="font-size: 0.92em"}
+Notice what the picture implies: near the middle, a change in probability and
+a change in log-odds are roughly proportional. **Out at the edges they are
+not** — going from 0.95 to 0.99 is a much bigger move than going from 0.5 to
+0.54, even though both are four percentage points.
+:::
+
 ## Careful - this is not the same as logging your data {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Back in **Vol 1** we fixed a curved relationship by taking logs of Attainment 8 and of % disadvantaged, then fitting OLS to the transformed values.
+Back in **Vol 1**, when a relationship came out curved, we took logs of the
+variables and fitted OLS to the transformed numbers. That also puts a log in
+the model. **It is not the same thing**, and the difference is worth ten
+minutes.
 
 ::: {.columns}
 ::: {.column width="50%"}
-**Transforming the data**
+**What we did in Vol 1**
 
 $$\log(y_i) = \beta_0 + \beta_1x_i + \epsilon_i$$
 
--   We change **every observation**
--   Then fit an ordinary model to the new numbers
--   Errors are assumed Normal *on the logged scale*
+*Change the data, then model it.*
+
+1.  Take every value of $y$ and log it
+2.  Fit an ordinary regression to those new numbers
+3.  You are now modelling the **average of the logged values**
 :::
 ::: {.column width="50%"}
-**A GLM**
+**What a GLM does**
 
 $$\log\big(E[y_i]\big) = \beta_0 + \beta_1x_i$$
 
--   The data are left **completely alone**
--   The link is applied to the **expected value**
--   The distribution does the work the transformation used to
+*Model the data, and put the log on the model.*
+
+1.  Leave every value of $y$ exactly as it is
+2.  Work out its **average**, then log *that*
+3.  You are modelling the **log of the average**
 :::
 :::
 
 . . .
 
-::: {style="font-size: 0.92em"}
-Which matters, because you *cannot* transform a binary outcome. A school is rated below Good or it is not - and $\log\left(\frac{0}{1-0}\right)$ is undefined. There is nothing to take the log of.
+::: {style="font-size: 0.95em"}
+Read those two third points again. *Average of the logs* versus *log of the
+average*. They sound like the same sentence in a different order.
+:::
 
-**The GLM never asks you to.** It models the probability behind the 0s and 1s, and leaves your data exactly as you found them.
+## The average of the logs is not the log of the average {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+fsm <- model_data$TFSM6CLA1A
+fsm <- fsm[!is.na(fsm) & fsm > 0]
+am  <- mean(fsm)
+gm  <- exp(mean(log(fsm)))
+```
+
+Take the **number of disadvantaged pupils** in each of our
+`r comma(length(fsm))` schools, and work out the average two ways.
+
+| | |
+|---|---|
+| Add them up and divide — the ordinary average | **`r sprintf("%.1f", am)`** pupils |
+| Log them, average *that*, then undo the log | **`r sprintf("%.1f", gm)`** pupils |
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**`r sprintf("%.1f", am - gm)` pupils apart — about `r sprintf("%.0f%%", 100 * (am - gm) / am)`.**
+Not a rounding error, and not a mistake in either calculation. They are
+answers to *different questions*.
+
+Logging first quietly hands you the **geometric** mean. Whenever a variable is
+skewed, that sits below the ordinary one — and the more skewed it is, the
+bigger the gap.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So a model fitted to logged data is not predicting the average number of
+disadvantaged pupils. It is predicting something smaller, and you have to
+remember to say so. **A log-link GLM predicts the average you actually meant.**
+:::
+
+## And sometimes you cannot transform at all {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Even if you are happy with the geometric mean, transforming only works if
+every value *can* be logged. Often they cannot.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+n_zero_fsm <- sum(model_data$TFSM6CLA1A == 0, na.rm = TRUE)
+
+# The LA-level object `la` is not built until the Poisson section, so the
+# same count is derived here rather than referenced forward.
+n_zero_la <- schools |>
+  group_by(LANAME) |>
+  summarise(n_schools = n(), n_below = sum(below_good), .groups = "drop") |>
+  filter(n_schools >= 5, n_below == 0) |>
+  nrow()
+```
+
+::: incremental
+-   **Zeros.** $\log(0)$ is $-\infty$. `r n_zero_fsm` of our schools have no
+    disadvantaged pupils at all, and `r n_zero_la` local authorities
+    have no below-Good schools. Every one of those rows drops out, silently
+-   **Yes/no outcomes.** A school is rated below Good or it is not. There is no
+    scale to compress — $\log(0)$ and $\log(1)$ are $-\infty$ and $0$, and
+    neither is any use
+-   **The usual bodge** is to log $y + 1$ instead. It works, and it quietly
+    changes the thing you are modelling, by an amount that depends on how big
+    your counts are
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;"}
+**A GLM never asks you to touch the data.** The zeros stay zeros, the 0s and 1s
+stay 0s and 1s, and the link function does its work on the *average* instead —
+where there is nothing awkward to divide by and nothing to drop.
 :::
 
 # Can we predict School Ofsted ratings? {background-color="#4e3c56"}
