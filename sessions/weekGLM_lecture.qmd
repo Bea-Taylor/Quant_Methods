@@ -1393,28 +1393,122 @@ is a Poisson-shaped problem, exactly as week 1 described.
 
 ## But first - counts or rates? {transition="convex-in none-out" transition-speed="fast"}
 
-Straight from week 1. Lancashire has
-`r la$n_below[la$LANAME == "Lancashire"]` below-Good schools and Bury
-has `r la$n_below[la$LANAME == "Bury"]`.
-
-. . .
-
-**Is Lancashire worse?** It has
-`r la$n_schools[la$LANAME == "Lancashire"]` secondary schools. Bury has
-`r la$n_schools[la$LANAME == "Bury"]`.
+```{r}
+#| label: offset-motivate
+#| echo: false
+#| message: false
+#| warning: false
+pick <- la |>
+  filter(LANAME %in% c("Lancashire", "Bury")) |>
+  arrange(desc(n_schools)) |>
+  transmute(`Local authority` = LANAME,
+            `Secondary schools` = n_schools,
+            `Rated below Good` = n_below,
+            `As a share` = sprintf("%.0f%%", 100 * n_below / n_schools))
+knitr::kable(pick, align = "lrrr")
+```
 
 . . .
 
 ::: {style="font-size: 0.95em"}
-We need to account for how many schools each LA had the *opportunity* to
-get wrong. In a count model that is called an **offset** - a term we
-force into the model with a coefficient fixed at 1:
+**On the raw count, Lancashire looks nearly four times worse.** On the share,
+Bury is the one in trouble.
 
-$$\log(\text{expected count}) = \beta_0 + \beta_1x_1 + \dots + \log(\text{number of schools})$$
-
-Move it to the other side and you are modelling a **rate**, not a count.
+A count on its own tells you very little, because it depends on how many
+chances there were to begin with. Lancashire has six times as many schools, so
+it would take more below-Good ones even if nothing were wrong.
 :::
 
+## So why not just divide? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The obvious move is to model the share — `n_below / n_schools` — and be done
+with it. Two reasons not to:
+
+::: incremental
+-   **Poisson describes whole numbers.** `22/79 = 0.28` is not a count of
+    anything. We would be using a distribution for something it does not
+    describe
+-   **Dividing throws away how much evidence you have.** Bury's 46% rests on
+    **13** schools. Lancashire's 28% rests on **79**. We should be far more
+    confident about Lancashire — but once both are just "a percentage", the
+    model can no longer tell them apart
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+An **offset** gets us both: the outcome stays a genuine count, so Poisson
+still applies and the sample sizes still count for something — but the model
+does the dividing internally.
+:::
+
+## What an offset actually is {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Three lines of algebra, and nothing clever happens in any of them.
+
+::: {style="font-size: 0.95em"}
+**1. What we actually want to model** — a rate, not a count:
+
+$$\log\left(\frac{\text{expected count}}{\text{number of schools}}\right) = \beta_0 + \beta_1x$$
+
+**2. The log of a ratio is a difference of logs** — ordinary school algebra:
+
+$$\log(\text{expected count}) - \log(\text{number of schools}) = \beta_0 + \beta_1x$$
+
+**3. Move that term across to the other side:**
+
+$$\log(\text{expected count}) = \beta_0 + \beta_1x + \log(\text{number of schools})$$
+
+That final term — $\log(\text{number of schools})$ — **is the offset**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So an offset is just **a division, rewritten as an addition** so it can sit
+inside a model that works on the log scale. In R that is
+`offset(log(n_schools))`.
+:::
+
+## Fixed, not estimated {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Look at line 3 again. Every other term on the right gets a $\beta$ in front of
+it that the model **chooses**. The offset does not — it is stuck there with a
+coefficient of exactly **1**, because that is how it arrived.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+In plain words, we are **telling** the model something rather than asking it:
+
+> *Twice as many schools, twice as many below-Good ones expected, all else
+> being equal.*
+
+That is a claim about arithmetic, not about education policy, so we spend no
+parameter finding it out.
+:::
+
+. . .
+
+```{r}
+#| label: offset-vs-estimated
+#| echo: false
+#| message: false
+#| warning: false
+est_m <- glm(n_below ~ mean_abs + log(n_schools), data = la, family = poisson)
+ci    <- confint.default(est_m)["log(n_schools)", ]
+```
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.86em;"}
+**Is that a fair thing to assume?** Put `log(n_schools)` in as an ordinary
+predictor and let the model estimate it instead. It comes back with
+**`r sprintf("%.2f", coef(est_m)["log(n_schools)"])`**, with a 95% interval of
+`r sprintf("%.2f", ci[1])` to `r sprintf("%.2f", ci[2])` — 1 sits comfortably
+inside it. The assumption holds, and fixing it saves us a parameter.
+
+**Always worth checking.** If that interval had excluded 1, the offset would
+have been the wrong tool.
+:::
 ## Running a Poisson model {transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
