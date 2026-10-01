@@ -7,11 +7,11 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-f81f3c79f694eaf6f88ebcce70241f9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aced932c6eb97d642153b8e218288f9f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+  <meta name="generator" content="quarto-1.10.18">
 
   <meta name="author" content="Beatrice Taylor">
   <title>Quantitative Methods – Hypothesis Testing</title>
@@ -24,10 +24,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -1384,18 +1387,18 @@ D_{n,m} = \sup_x \, | F_n(x) - G_m(x) |
 <section id="kde-of-simulated-heights" class="slide level2">
 <h2>KDE of simulated heights</h2>
 <p>It’s easy to fit a KDE to data in Python:</p>
-<div id="c68b5cd2" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
-<span id="cb4-3"><a></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
-<span id="cb4-4"><a></a></span>
-<span id="cb4-5"><a></a><span class="co"># Supposing you have some data </span></span>
-<span id="cb4-6"><a></a>data <span class="op">=</span> pd.read_csv(<span class="st">'/path_to_data'</span>)</span>
-<span id="cb4-7"><a></a></span>
-<span id="cb4-8"><a></a><span class="co"># Kernel Density Estimation</span></span>
-<span id="cb4-9"><a></a>kde <span class="op">=</span> gaussian_kde(data)</span>
-<span id="cb4-10"><a></a>x_vals <span class="op">=</span> np.linspace(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">100</span>)</span>
-<span id="cb4-11"><a></a>y_vals <span class="op">=</span> kde(x_vals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="3c9e1065" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a aria-label="2"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb4-3"><a aria-label="3"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
+<span id="cb4-4"><a aria-label="4"></a></span>
+<span id="cb4-5"><a aria-label="5"></a><span class="co"># Supposing you have some data </span></span>
+<span id="cb4-6"><a aria-label="6"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'/path_to_data'</span>)</span>
+<span id="cb4-7"><a aria-label="7"></a></span>
+<span id="cb4-8"><a aria-label="8"></a><span class="co"># Kernel Density Estimation</span></span>
+<span id="cb4-9"><a aria-label="9"></a>kde <span class="op">=</span> gaussian_kde(data)</span>
+<span id="cb4-10"><a aria-label="10"></a>x_vals <span class="op">=</span> np.linspace(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">100</span>)</span>
+<span id="cb4-11"><a aria-label="11"></a>y_vals <span class="op">=</span> kde(x_vals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="kde-of-simulated-heights-1" class="slide level2">
@@ -1508,16 +1511,16 @@ df = n_1 + n_2 - 2 = 95 + 103 - 2 = 196
 <section id="example---step-4---calculate-the-p-value" class="slide level2">
 <h2>Example - step 4 - calculate the p value</h2>
 <p>Traditionally this uses look up tables - we’re going to use Python.</p>
-<div id="93d729a0" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb5-2"><a></a></span>
-<span id="cb5-3"><a></a>t_val <span class="op">=</span> <span class="op">-</span><span class="fl">12.7</span></span>
-<span id="cb5-4"><a></a>df <span class="op">=</span> <span class="dv">18</span></span>
-<span id="cb5-5"><a></a></span>
-<span id="cb5-6"><a></a><span class="co"># Two-tailed p-value</span></span>
-<span id="cb5-7"><a></a>p_value_two_tailed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.t.cdf(<span class="bu">abs</span>(t_val), df))</span>
-<span id="cb5-8"><a></a></span>
-<span id="cb5-9"><a></a><span class="bu">print</span>(<span class="st">"Two-tailed p-value:"</span>, p_value_two_tailed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="ff54b6f1" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a aria-label="1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb5-2"><a aria-label="2"></a></span>
+<span id="cb5-3"><a aria-label="3"></a>t_val <span class="op">=</span> <span class="op">-</span><span class="fl">12.7</span></span>
+<span id="cb5-4"><a aria-label="4"></a>df <span class="op">=</span> <span class="dv">18</span></span>
+<span id="cb5-5"><a aria-label="5"></a></span>
+<span id="cb5-6"><a aria-label="6"></a><span class="co"># Two-tailed p-value</span></span>
+<span id="cb5-7"><a aria-label="7"></a>p_value_two_tailed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.t.cdf(<span class="bu">abs</span>(t_val), df))</span>
+<span id="cb5-8"><a aria-label="8"></a></span>
+<span id="cb5-9"><a aria-label="9"></a><span class="bu">print</span>(<span class="st">"Two-tailed p-value:"</span>, p_value_two_tailed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Two-tailed p-value: 2.0151302848603336e-10</code></pre>
 </div>

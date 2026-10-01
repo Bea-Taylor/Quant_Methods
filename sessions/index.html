@@ -2,22 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Huanfa Chen">
-<meta name="dcterms.date" content="2026-09-04">
+<meta name="author" content="Bea Taylor">
+<meta name="dcterms.date" content="2026-10-01">
 
 <title>Overview – Quantitative Methods</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -43,14 +46,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f803a4645ea8503f5680f6bf45c8a71.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-3c41c232553d96d355bd6eeda58c3ca2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -339,15 +342,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#why-study-a-quantitative-methods-course" id="toc-why-study-a-quantitative-methods-course" class="nav-link active" data-scroll-target="#why-study-a-quantitative-methods-course">Why study a Quantitative Methods course?</a></li>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives">Objectives</a></li>
   <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives">Course Objectives</a></li>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course Structure</a></li>
   <li><a href="#platforms" id="toc-platforms" class="nav-link" data-scroll-target="#platforms">Platforms</a></li>
   <li><a href="#weekly-schedule" id="toc-weekly-schedule" class="nav-link" data-scroll-target="#weekly-schedule">Weekly Schedule</a></li>
-  <li><a href="#assessment" id="toc-assessment" class="nav-link" data-scroll-target="#assessment">Assessment</a>
+  <li><a href="#how-will-the-module-be-assessed" id="toc-how-will-the-module-be-assessed" class="nav-link" data-scroll-target="#how-will-the-module-be-assessed">How will the module be assessed?</a>
   <ul class="collapse">
-  <li><a href="#assessment-1" id="toc-assessment-1" class="nav-link" data-scroll-target="#assessment-1">Assessment</a></li>
+  <li><a href="#assessment" id="toc-assessment" class="nav-link" data-scroll-target="#assessment">Assessment</a></li>
   <li><a href="#ucl-assessment-policy" id="toc-ucl-assessment-policy" class="nav-link" data-scroll-target="#ucl-assessment-policy">UCL Assessment Policy</a></li>
   <li><a href="#moodle-feedback" id="toc-moodle-feedback" class="nav-link" data-scroll-target="#moodle-feedback">Moodle Feedback</a></li>
   <li><a href="#github-feedback" id="toc-github-feedback" class="nav-link" data-scroll-target="#github-feedback">Github Feedback</a></li>
@@ -370,14 +372,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Huanfa Chen </p>
+             <p>Bea Taylor </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 4, 2026</p>
+      <p class="date">October 1, 2026</p>
     </div>
   </div>
   
@@ -394,24 +396,15 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Coding alone is not enough.</li>
 <li>Understanding models aids in correct tool selection and bug handling.</li>
-<li>Google/ChatGPT can make mistakes; detecting them is crucial.</li>
-<li>Mathematics understanding is not always required.</li>
+<li>Google/Claude Code can make mistakes; detecting them is crucial.</li>
 </ul>
-</section>
-<section id="objectives" class="level2">
-<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
-<ol type="1">
-<li>Understand the structure and focus of the module.</li>
-<li>Develop a method for tackling quantitative problems.</li>
-<li>Formulate a research question and structure quantitative writing.</li>
-</ol>
 </section>
 <section id="course-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="course-objectives">Course Objectives</h2>
 <ol type="1">
 <li>Understand a broad range of quantitative techniques.</li>
 <li>Apply these skills in research.</li>
-<li>Formulate a coherent quantitative argument.</li>
+<li>Formulate coherent quantitative argument.</li>
 </ol>
 </section>
 <section id="prerequisites" class="level2">
@@ -420,23 +413,23 @@ ul.task-list li input[type="checkbox"] {
 <li>No prerequisite of university-level maths/statistics.</li>
 <li>No prerequisite of programming.</li>
 <li>Python (or R) is required for practicals and assessments.</li>
-<li>This module doesn’t teach programming, so CASA0013 is strongly recommneded if you don’t know Python before.</li>
+<li>This module doesn’t teach programming, so CASA0013 is strongly recommended if you don’t know any Python.</li>
 </ul>
 </section>
 <section id="course-structure" class="level2">
 <h2 class="anchored" data-anchor-id="course-structure">Course Structure</h2>
 <ul>
-<li>Lectures: Wednesdays 9:00–10:30; G13 Torrington Place (1-19).</li>
-<li>Tutorials: Wednesdays 10:30–12:30; G13 Torrington Place (1-19).</li>
+<li>Lectures: Tuesdays 9:00–10:30; G03 Bedford Way (26).</li>
+<li>Tutorials: Wednesdays 10:30–12:00; G03 Bedford Way (26).</li>
 </ul>
 </section>
 <section id="platforms" class="level2">
 <h2 class="anchored" data-anchor-id="platforms">Platforms</h2>
 <ul>
-<li><strong>Email</strong> for important notices and private questions.</li>
-<li><strong>Github &amp; website</strong> for lecture notes and notebooks.</li>
-<li><strong>Moodle</strong> for lectures recording and assessments.</li>
-<li><strong>Slack</strong> for public questions.</li>
+<li>Email for important notices and private questions.</li>
+<li><a href="https://github.com/Bea-Taylor/Quant_Methods">Github</a> &amp; <a href="https://bea-taylor.github.io/Quant_Methods/">website</a> for lecture notes and notebooks.</li>
+<li><a href="https://moodle.ucl.ac.uk/course/view.php?id=61867">Moodle</a> for lectures recording and assessments.</li>
+<li>Slack for public questions.</li>
 </ul>
 </section>
 <section id="weekly-schedule" class="level2">
@@ -453,7 +446,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>1</td>
 <td>Introduction to data</td>
-<td>Huanfa</td>
+<td>Adam</td>
 </tr>
 <tr class="even">
 <td>2</td>
@@ -473,7 +466,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>5</td>
 <td>Correlation and regression</td>
-<td>Huanfa</td>
+<td>Adam</td>
 </tr>
 <tr class="even">
 <td>6</td>
@@ -493,20 +486,20 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>9</td>
 <td>Dimensionality reduction</td>
-<td>Huanfa</td>
+<td>Bea</td>
 </tr>
 <tr class="even">
 <td>10</td>
 <td>Clustering Analysis</td>
-<td>Huanfa</td>
+<td>Bea</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="assessment" class="level1">
-<h1>Assessment</h1>
-<section id="assessment-1" class="level2">
-<h2 class="anchored" data-anchor-id="assessment-1">Assessment</h2>
+<section id="how-will-the-module-be-assessed" class="level1">
+<h1>How will the module be assessed?</h1>
+<section id="assessment" class="level2">
+<h2 class="anchored" data-anchor-id="assessment">Assessment</h2>
 <ul>
 <li>Written Investigation (summative): 100%</li>
 <li>Weekly quiz (formative)</li>
@@ -528,7 +521,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="github-feedback" class="level2">
 <h2 class="anchored" data-anchor-id="github-feedback">Github Feedback</h2>
-<p>You can also give feedback on <a href="https://github.com/huanfachen/qm/issues">Github issues</a>.</p>
+<p>You can also give feedback on <a href="https://github.com/Bea-Taylor/Quant_Methods/issues">Github issues</a>.</p>
 
 
 </section>

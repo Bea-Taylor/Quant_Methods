@@ -7,11 +7,11 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-f81f3c79f694eaf6f88ebcce70241f9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aced932c6eb97d642153b8e218288f9f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+  <meta name="generator" content="quarto-1.10.18">
 
   <meta name="author" content="Adam Dennett">
   <title>Quantitative Methods – Prof D’s Regression Sessions - Vol 3</title>
@@ -24,10 +24,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -629,8 +632,8 @@ Fixed effects:
 <section id="the-null-model-icc" class="slide level2">
 <h2>The NULL model ICC</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(performance)</span>
-<span id="cb3-2"><a></a><span class="fu">icc</span>(lme1, <span class="at">by_group =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="fu">library</span>(performance)</span>
+<span id="cb3-2"><a aria-label="2"></a><span class="fu">icc</span>(lme1, <span class="at">by_group =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># ICC by Group
 
@@ -719,8 +722,8 @@ PTFSM6CLA1A -0.071</code></pre>
 <section id="model-with-a-fixed-effect-predictor-3" class="slide level2">
 <h2>Model with a Fixed Effect Predictor</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Random effects (BLUPs): deviations from the global intercept, by group</span></span>
-<span id="cb6-2"><a></a><span class="fu">ranef</span>(lme1)<span class="sc">$</span>OFSTEDRATING</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="co"># Random effects (BLUPs): deviations from the global intercept, by group</span></span>
+<span id="cb6-2"><a aria-label="2"></a><span class="fu">ranef</span>(lme1)<span class="sc">$</span>OFSTEDRATING</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                     (Intercept)
 Special Measures      -0.5358379
@@ -815,22 +818,22 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 <section id="random-intercept-and-random-slope-model-3" class="slide level2">
 <h2>Random Intercept and Random Slope Model</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Extract random effects for each OFSTED group</span></span>
-<span id="cb9-2"><a></a>ranef_values <span class="ot">&lt;-</span> <span class="fu">ranef</span>(lme3)<span class="sc">$</span>OFSTEDRATING</span>
-<span id="cb9-3"><a></a></span>
-<span id="cb9-4"><a></a><span class="co"># Fixed slope</span></span>
-<span id="cb9-5"><a></a>fixed_slope <span class="ot">&lt;-</span> <span class="fu">fixef</span>(lme3)[<span class="st">"PTFSM6CLA1A"</span>]</span>
-<span id="cb9-6"><a></a></span>
-<span id="cb9-7"><a></a><span class="co"># Add random deviations to get group-specific slopes</span></span>
-<span id="cb9-8"><a></a>group_slopes <span class="ot">&lt;-</span> fixed_slope <span class="sc">+</span> ranef_values<span class="sc">$</span>PTFSM6CLA1A</span>
-<span id="cb9-9"><a></a></span>
-<span id="cb9-10"><a></a><span class="co"># Combine into a tidy data frame</span></span>
-<span id="cb9-11"><a></a>slopes_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-12"><a></a>  <span class="at">OFSTEDRATING =</span> <span class="fu">rownames</span>(ranef_values),</span>
-<span id="cb9-13"><a></a>  <span class="at">slope =</span> group_slopes</span>
-<span id="cb9-14"><a></a>)</span>
-<span id="cb9-15"><a></a></span>
-<span id="cb9-16"><a></a><span class="fu">print</span>(slopes_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a><span class="co"># Extract random effects for each OFSTED group</span></span>
+<span id="cb9-2"><a aria-label="2"></a>ranef_values <span class="ot">&lt;-</span> <span class="fu">ranef</span>(lme3)<span class="sc">$</span>OFSTEDRATING</span>
+<span id="cb9-3"><a aria-label="3"></a></span>
+<span id="cb9-4"><a aria-label="4"></a><span class="co"># Fixed slope</span></span>
+<span id="cb9-5"><a aria-label="5"></a>fixed_slope <span class="ot">&lt;-</span> <span class="fu">fixef</span>(lme3)[<span class="st">"PTFSM6CLA1A"</span>]</span>
+<span id="cb9-6"><a aria-label="6"></a></span>
+<span id="cb9-7"><a aria-label="7"></a><span class="co"># Add random deviations to get group-specific slopes</span></span>
+<span id="cb9-8"><a aria-label="8"></a>group_slopes <span class="ot">&lt;-</span> fixed_slope <span class="sc">+</span> ranef_values<span class="sc">$</span>PTFSM6CLA1A</span>
+<span id="cb9-9"><a aria-label="9"></a></span>
+<span id="cb9-10"><a aria-label="10"></a><span class="co"># Combine into a tidy data frame</span></span>
+<span id="cb9-11"><a aria-label="11"></a>slopes_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-12"><a aria-label="12"></a>  <span class="at">OFSTEDRATING =</span> <span class="fu">rownames</span>(ranef_values),</span>
+<span id="cb9-13"><a aria-label="13"></a>  <span class="at">slope =</span> group_slopes</span>
+<span id="cb9-14"><a aria-label="14"></a>)</span>
+<span id="cb9-15"><a aria-label="15"></a></span>
+<span id="cb9-16"><a aria-label="16"></a><span class="fu">print</span>(slopes_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          OFSTEDRATING        slope
 1     Special Measures -0.018639324
@@ -957,18 +960,18 @@ F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2>A Linear Mixed Effects Revision</h2>
 <p>“He threw everything but the kitchen sink at it!”</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>lme9 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
-<span id="cb12-2"><a></a>  <span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> </span>
-<span id="cb12-3"><a></a>    <span class="fu">log</span>(PTFSM6CLA1A) <span class="sc">+</span></span>
-<span id="cb12-4"><a></a>    <span class="fu">log</span>(PERCTOT) <span class="sc">+</span></span>
-<span id="cb12-5"><a></a>    <span class="fu">log</span>(PNUMEAL) <span class="sc">+</span></span>
-<span id="cb12-6"><a></a>    PTPRIORLO <span class="sc">+</span></span>
-<span id="cb12-7"><a></a>    ADMPOL_PT <span class="sc">+</span></span>
-<span id="cb12-8"><a></a>    (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span></span>
-<span id="cb12-9"><a></a>    (<span class="dv">1</span> <span class="sc">|</span> gor_name <span class="sc">/</span> LANAME),</span>
-<span id="cb12-10"><a></a>  <span class="at">data =</span> england_filtered_clean,</span>
-<span id="cb12-11"><a></a>  <span class="at">na.action =</span> na.exclude</span>
-<span id="cb12-12"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a>lme9 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
+<span id="cb12-2"><a aria-label="2"></a>  <span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> </span>
+<span id="cb12-3"><a aria-label="3"></a>    <span class="fu">log</span>(PTFSM6CLA1A) <span class="sc">+</span></span>
+<span id="cb12-4"><a aria-label="4"></a>    <span class="fu">log</span>(PERCTOT) <span class="sc">+</span></span>
+<span id="cb12-5"><a aria-label="5"></a>    <span class="fu">log</span>(PNUMEAL) <span class="sc">+</span></span>
+<span id="cb12-6"><a aria-label="6"></a>    PTPRIORLO <span class="sc">+</span></span>
+<span id="cb12-7"><a aria-label="7"></a>    ADMPOL_PT <span class="sc">+</span></span>
+<span id="cb12-8"><a aria-label="8"></a>    (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span></span>
+<span id="cb12-9"><a aria-label="9"></a>    (<span class="dv">1</span> <span class="sc">|</span> gor_name <span class="sc">/</span> LANAME),</span>
+<span id="cb12-10"><a aria-label="10"></a>  <span class="at">data =</span> england_filtered_clean,</span>
+<span id="cb12-11"><a aria-label="11"></a>  <span class="at">na.action =</span> na.exclude</span>
+<span id="cb12-12"><a aria-label="12"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Not quite everything, but:</li>
