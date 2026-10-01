@@ -14,9 +14,9 @@ Continuing on the theme of exploratory data analysis, this week we introduce com
 
 By the end of this week, you will be able to:
 
-1. Describe the characteristic features of common probability distributions. 
-2. Calculate exponentials and logarithms. 
-3. Evaluate whether a dataset is representative. 
+1. Describe the characteristic features of common probability distributions
+2. Apply exponentials and logarithms to transform data
+3. Evaluate whether a dataset is representative
 
 ## Lecture 
 
@@ -24,7 +24,7 @@ To access the lecture notes: [Lecture](week2_lecture.qmd)
 
 ## Quiz
 
-To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.uk/course/view.php?id=53568).
+To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.uk/course/view.php?id=61867).
 
 ## Practical
 

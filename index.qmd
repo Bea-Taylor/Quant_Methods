@@ -1,7 +1,7 @@
 ---
 format: html
 title: "Welcome"
-author: "Adam Dennett, Bea Taylor"
+author: "Bea Taylor, Adam Dennett"
 date: last-modified
 ---
 
