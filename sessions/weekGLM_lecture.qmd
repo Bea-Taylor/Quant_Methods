@@ -206,9 +206,104 @@ OLS is just the GLM where the distribution is Normal and the link function does 
 
 ## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-A straight line will cheerfully produce **any number at all**. A probability
-cannot — it is trapped between 0 and 1. The link function is what gets you
-from one to the other.
+Every regression we have fitted works the same way: take each predictor,
+multiply it by a number, and add the results up.
+
+$$\beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
+
+. . .
+
+That is **just arithmetic**, and arithmetic does not know what it is
+describing. Feed in a big enough $x$ and the sum comes out as 14.2. Feed in a
+small enough one and it comes out as $-3$. Both are perfectly good numbers.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+But the thing we are *predicting* is usually not free to be any number. A
+probability cannot be $-3$. A count of schools cannot be $-3$ either. **The
+sum has more freedom than the outcome does**, and a link function is how we
+reconcile the two.
+:::
+
+## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+| Outcome | Its natural range | Link stretches it with | To get back, apply |
+|---|---|---|---|
+| A continuous number | $-\infty$ to $+\infty$ | *nothing needed* | *nothing* |
+| A probability | 0 to 1 | $\log\left(\frac{p}{1-p}\right)$ | the logistic curve |
+| A count | 0 to $+\infty$ | $\log$ | $\exp$ |
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**The link is a translator.** It stretches a squashed scale out onto the whole
+number line, so the straight line has somewhere sensible to live.
+
+The top row needs no stretching, because a continuous outcome already has the
+same freedom the sum does — which is exactly why **OLS is a GLM with the
+boring link**.
+:::
+
+## Without a link, and with one {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: link-vs-nolink
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 3.9
+#| fig-align: center
+
+# Counts, not probabilities - the binary version gets its own slide later, and
+# this way the framing previews Poisson instead of repeating logistic.
+la_link <- schools |>
+  group_by(LANAME) |>
+  summarise(n_below  = sum(below_good),
+            mean_abs = mean(PERCTOT, na.rm = TRUE),
+            n_schools = n(), .groups = "drop") |>
+  filter(n_schools >= 5, !is.na(mean_abs))
+
+m_ols  <- lm(n_below ~ mean_abs, data = la_link)
+m_pois <- glm(n_below ~ mean_abs, data = la_link, family = poisson)
+
+grid_l <- tibble(mean_abs = seq(3.5, max(la_link$mean_abs) + 0.5, length.out = 200))
+grid_l$ols  <- predict(m_ols,  newdata = grid_l)
+grid_l$pois <- predict(m_pois, newdata = grid_l, type = "response")
+
+shared <- list(
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = 0,
+           fill = casa_red, alpha = 0.09),
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.4),
+  geom_point(data = la_link, aes(mean_abs, n_below),
+             alpha = 0.35, colour = casa_purple, size = 1.3),
+  scale_y_continuous(limits = c(-2.5, 23)),
+  labs(x = "Average absence across the LA (%)", y = "Schools rated below Good"),
+  theme_minimal(base_size = 11)
+)
+
+p_no <- ggplot() + shared +
+  geom_line(data = grid_l, aes(mean_abs, ols), colour = casa_red, linewidth = 1.2) +
+  labs(title = "No link: a straight line")
+
+p_yes <- ggplot() + shared +
+  geom_line(data = grid_l, aes(mean_abs, pois), colour = casa_teal, linewidth = 1.2) +
+  labs(title = "Log link: a curve that cannot go below zero")
+
+patchwork::wrap_plots(p_no, p_yes, nrow = 1)
+```
+
+::: {style="font-size: 0.82em"}
+Same data, same predictor. The straight line is heading somewhere impossible —
+follow it left and it promises a **negative number of schools**. The log link
+bends the same relationship so it flattens towards zero instead, and can never
+cross it.
+:::
+
+## Same numbers, two scales {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| label: link-stretch
@@ -216,7 +311,7 @@ from one to the other.
 #| message: false
 #| warning: false
 #| fig-width: 10
-#| fig-height: 3.5
+#| fig-height: 3.3
 #| fig-align: center
 
 # The same nine probabilities plotted on their own scale (top) and on the
@@ -251,36 +346,18 @@ ggplot(lk) +
   theme_void(base_size = 11)
 ```
 
-::: {style="font-size: 0.86em"}
+::: {style="font-size: 0.84em"}
 **Same nine numbers, twice.** On top, crowded against the walls at 0 and 1. On
 the bottom, the *identical* values on the log-odds scale — spread out, with
-room at both ends and no walls to hit. That fanning out is the link function
-doing its job.
-:::
-
-## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-::: {style="font-size: 0.95em"}
-| Outcome | Its natural range | Link stretches it with | To get back, apply |
-|---|---|---|---|
-| A continuous number | $-\infty$ to $+\infty$ | *nothing needed* | *nothing* |
-| A probability | 0 to 1 | $\log\left(\frac{p}{1-p}\right)$ | the logistic curve |
-| A count | 0 to $+\infty$ | $\log$ | $\exp$ |
+room at both ends and no walls to hit.
 :::
 
 . . .
 
-::: {style="font-size: 0.95em"}
-**The link is a translator.** It stretches a squashed scale out onto the whole number line, so the straight line has somewhere sensible to live. The top row needs no stretching - which is exactly why OLS is a GLM with the boring link.
-:::
-
-. . .
-
-::: {style="font-size: 0.92em"}
-Notice what the picture implies: near the middle, a change in probability and
-a change in log-odds are roughly proportional. **Out at the edges they are
-not** — going from 0.95 to 0.99 is a much bigger move than going from 0.5 to
-0.54, even though both are four percentage points.
+::: {style="font-size: 0.88em"}
+Near the middle the two scales move together. **Out at the edges they do
+not** — 0.95 to 0.99 is a much bigger step than 0.5 to 0.54, even though both
+are four percentage points.
 :::
 
 ## Careful - this is not the same as logging your data {.smaller transition="convex-in none-out" transition-speed="fast"}
