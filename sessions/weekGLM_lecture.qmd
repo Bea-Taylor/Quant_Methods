@@ -232,7 +232,7 @@ function does nothing at all.
 
 ## A quick word on $E[y]$ {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-From here on there is an $E$ in most of the equations. **$E$ is for
+With GLMs there is an $E$ in most of the equations. **$E$ is for
 expectation**, and $E[y_i]$ reads *"the expected value of y for school i"*.
 
 ::: incremental
@@ -264,16 +264,14 @@ $$E[y_i] = \beta_0 + \beta_1x_i$$
 
 ::: {style="font-size: 0.95em"}
 **That is the line you have been drawing through scatter plots since week 5.**
-A regression line was never a prediction of what any particular school would
-do — it is a prediction of what the *average* school like it does. Which is
-exactly what an expected value is.
+-   A regression line was never an exact school prediction
+—   It is a prediction of what the *average* school like it does - this is the expected value
 :::
 
 . . .
 
 ::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.88em;"}
-So $\log(E[y_i])$ is **not new machinery**. It is the same quantity you have
-been predicting all term, with a log wrapped around it.
+So $\log(E[y_i])$ is **not anything new or different**. Just more formalised in the GLM equation.
 :::
 
 ## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
@@ -284,9 +282,9 @@ multiply it by a number, and add the results up.
 $$y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
 
 - The model is **just arithmetic**
-- But arithmetic ignores reality
+- But arithmetic ignores the reality of your data
   - feed in a big enough $x$ and the sum ($y$) comes out as 14.2.
-  - feed in a small enough one and it comes out as $-3$.
+  - feed in a small enough $x$ and it comes out as $-3$.
 - Both are perfectly good numbers
 - But the thing we are *predicting* ($y$) is usually not free to be **any**
   number, even though the maths would allow it.
@@ -478,13 +476,55 @@ am  <- mean(fsm)
 gm  <- exp(mean(log(fsm)))
 ```
 
-Take the **number of disadvantaged pupils** in each of our
-`r comma(length(fsm))` schools, and work out the average two ways.
+It comes down to **which one you do first**. Take three schools, with 1, 10
+and 100 disadvantaged pupils.
 
-|  |  |
-|------------------------------------|------------------------------------|
-| Add them up and divide — the ordinary average | **`r sprintf("%.1f", am)`** pupils |
-| Log them, average *that*, then undo the log | **`r sprintf("%.1f", gm)`** pupils |
+```{r}
+#| label: toy-order
+#| echo: false
+toy  <- c(1, 10, 100)
+t_gm <- exp(mean(log(toy)))
+t_am <- mean(toy)
+```
+
+::: {.columns}
+::: {.column width="50%"}
+**Log first, then average**
+
+*(what transforming the data does)*
+
+1.  Log each one: `r paste(sprintf("%.2f", log(toy)), collapse = ", ")`
+2.  Average those: `r sprintf("%.2f", mean(log(toy)))`
+3.  Undo the log: **`r sprintf("%.0f", t_gm)`**
+:::
+::: {.column width="50%"}
+**Average first, then log**
+
+*(what a log link does)*
+
+1.  Add them up and divide: **`r sprintf("%.0f", t_am)`**
+2.  The model logs *that*:
+    `r sprintf("%.2f", log(t_am))`
+:::
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+Same three numbers. **`r sprintf("%.0f", t_gm)` against
+`r sprintf("%.0f", t_am)`.** Nothing has gone wrong — the order of operations
+simply matters, and $\log$ is the reason why.
+:::
+
+## The same thing, on our data {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The **number of disadvantaged pupils** across our
+`r comma(length(fsm))` schools:
+
+| | What you do | Result |
+|---|---|---|
+| **Log first, then average** | log each school, average, undo the log | **`r sprintf("%.1f", gm)`** pupils |
+| **Average first, then log** | add them up and divide | **`r sprintf("%.1f", am)`** pupils |
 
 . . .
 
