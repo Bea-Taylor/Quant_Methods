@@ -232,50 +232,6 @@ Every GLM has exactly three pieces. You already know the middle one.
 OLS is just the GLM where the distribution is Normal and the link
 function does nothing at all.
 
-## A quick word on $E[y]$ {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-With GLMs there is an $E$ in most of the equations. **$E$ is for
-expectation**, and $E[y_i]$ reads *"the expected value of y for school i"*.
-
-::: incremental
--   It is essentially **an average** — but a theoretical one. Your sample
-    mean is a fact about the 3,000 schools you happen to have; an expected
-    value is a fact about the **process that produced them**
--   **"Expected" is a poor name.** It need not be a value you could ever
-    observe — the expected value of a dice roll is 3.5, and the expected
-    number of children per family is about 1.8
--   **The little $i$ matters.** $E[y_i]$ is *that school's own* expected
-    value, and it depends on that school's predictors. There are thousands of
-    them, one per school — not a single average across the dataset
-:::
-
-## You have been using it all along {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-Ordinary regression, exactly as we wrote it in Vol 1:
-
-$$y_i = \beta_0 + \beta_1x_i + \epsilon_i$$
-
-. . .
-
-The errors average out to zero. So take the average of both sides, and the
-error term disappears:
-
-$$E[y_i] = \beta_0 + \beta_1x_i$$
-
-. . .
-
-::: {style="font-size: 0.95em"}
-**That is the line you have been drawing through scatter plots since week 5.**
--   A regression line was never an exact school prediction
-—   It is a prediction of what the *average* school like it does - this is the expected value
-:::
-
-. . .
-
-::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.88em;"}
-So $\log(E[y_i])$ is **not anything new or different**. Just more formalised in the GLM equation.
-:::
-
 ## What a link function actually does {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 Every regression we have fitted works the same way: take each predictor,
@@ -1447,7 +1403,7 @@ the two ideas that make them work: a **link function**, and coefficients you
 have to **exponentiate** before they mean anything.
 :::
 
-## The family, in one slide {transition="convex-in none-out" transition-speed="fast"}
+## The family, in one slide {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 | Outcome | `family =` | Link | Interpret coefficients as |
 |------------------|------------------|------------------|------------------|

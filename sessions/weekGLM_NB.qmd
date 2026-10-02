@@ -1,0 +1,664 @@
+---
+title: "Prof D's Regression Sessions - Vol 5"
+subtitle: "Counts, rates and the negative binomial"
+author:
+  - name: "Adam Dennett"
+email: "a.dennett@ucl.ac.uk"
+date-as-string: "Week GLM"
+other: "CASA0007 Quantitative Methods"
+from: markdown+emoji
+format:
+  revealjs:
+    template-partials:
+      - title-slide.html
+    transition: none
+    slide-number: TRUE
+    preview-links: auto
+    theme: ../css/casa-slides.scss
+    chalkboard: true
+filters:
+ - code-visibility
+lightbox: auto
+title-slide-attributes:
+    data-background-image: "L6_images/regression.png"
+    data-background-size: stretch
+    data-background-opacity: "0.08"
+    data-background-color: "#4e3c56"
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(here)
+library(knitr)
+library(scales)
+library(patchwork)
+library(MASS)
+library(nnet)
+
+# MASS::select masks dplyr's, and we want dplyr's everywhere below
+select <- dplyr::select
+
+knitr::opts_chunk$set(dev = "ragg_png")
+
+# CASA palette, stated explicitly so the deck does not depend on casaviz
+casa_purple <- "#4E3C56"
+casa_teal   <- "#2E6260"
+casa_yellow <- "#F9DD73"
+casa_pink   <- "#E16FCA"
+casa_green  <- "#9DBB65"
+casa_red    <- "#C94C4C"
+casa_cols   <- c("#2E6260", "#658E62", "#9DBB65", "#E7D870",
+                 "#F3C486", "#E993AC", "#8F5289", "#4E3C56")
+
+theme_set(theme_minimal(base_size = 16))
+
+base_path <- here("sessions", "L6_data", "Performancetables_130242", "2022-2023")
+
+# The DfE publishes suppressed / not-applicable values as codes, not blanks
+na_all <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "LOWCOV", "NEW", "SUPPMAT")
+
+# Every file is keyed on URN. The LA and national summary rows carry no URN,
+# and because dplyr joins NA to NA they would duplicate rows as well as not
+# being schools - so they go before anything else happens.
+read_dfe <- function(f) {
+  suppressWarnings(
+    read_csv(file.path(base_path, f), na = na_all, show_col_types = FALSE)
+  ) |>
+    mutate(URN = as.character(URN)) |>
+    filter(!is.na(URN))
+}
+
+ks4 <- read_dfe("england_ks4final.csv") |>
+  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, TFSM6CLA1A, PTEALGRP2, PTPRIORHI) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+absence <- read_dfe("england_abs.csv") |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, PERCTOT, PPERSABS10) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+school_info <- read_dfe("england_school_information.csv") |>
+  select(URN, SCHNAME, LANAME, MINORGROUP, OFSTEDRATING, OFSTEDLASTINSP)
+
+destinations <- read_dfe("england_ks4-pupdest.csv") |>
+  distinct(URN, .keep_all = TRUE) |>
+  select(URN, COHORT, OVERALL_DEST) |>
+  mutate(across(-URN, ~ parse_number(as.character(.x))))
+
+# Mainstream secondaries with an Ofsted judgement. Ofsted's five published
+# grades collapse to four analytical ones: "serious weaknesses" and "special
+# measures" are both categories of inadequate in Ofsted's own scheme, and
+# separately they are far too small to model.
+schools <- ks4 |>
+  inner_join(absence, by = "URN") |>
+  inner_join(school_info, by = "URN") |>
+  filter(MINORGROUP %in% c("Academy", "Maintained school"),
+         OFSTEDRATING %in% c("Outstanding", "Good", "Requires improvement",
+                             "Serious Weaknesses", "Special Measures")) |>
+  mutate(
+    rating4 = case_when(
+      OFSTEDRATING == "Outstanding"           ~ "Outstanding",
+      OFSTEDRATING == "Good"                  ~ "Good",
+      OFSTEDRATING == "Requires improvement"  ~ "Requires improvement",
+      TRUE                                    ~ "Inadequate"),
+    rating4 = factor(rating4,
+                     levels = c("Inadequate", "Requires improvement",
+                                "Good", "Outstanding"),
+                     ordered = TRUE),
+    below_good  = as.integer(rating4 %in% c("Inadequate", "Requires improvement")),
+    outstanding = as.integer(rating4 == "Outstanding"),
+    insp_year   = suppressWarnings(as.integer(substr(OFSTEDLASTINSP, 7, 10)))
+  )
+
+model_data <- schools |>
+  drop_na(P8MEA, PTFSM6CLA1A, PERCTOT, PPERSABS10, TPUP, PTPRIORHI)
+
+# One split, used by every classification model in the deck
+set.seed(42)
+train_idx <- sample(nrow(model_data), floor(0.7 * nrow(model_data)))
+train <- model_data[train_idx, ]
+test  <- model_data[-train_idx, ]
+
+# AUC by the rank identity, so the deck needs no extra package
+auc_of <- function(scores, actual) {
+  r  <- rank(scores)
+  n1 <- sum(actual == 1); n0 <- sum(actual == 0)
+  (sum(r[actual == 1]) - n1 * (n1 + 1) / 2) / (n1 * n0)
+}
+
+# Every model below spells its formula out in full rather than sharing one
+# object. More typing, but the code on the slide is then exactly the code that
+# runs, which matters more in a teaching deck than staying DRY.
+```
+
+## Last time {transition="convex-in none-out" transition-speed="fast"}
+
+-   We met the **Generalised Linear Model** — one framework, three moving
+    parts: a distribution, a linear predictor, and a **link function**
+-   We spent the session on **logistic regression**, because once you can read
+    an odds ratio the rest of the family follows
+-   And we left three outcome types on the table. This session picks up the
+    biggest of them: **counts**
+
+## This session {transition="convex-in none-out" transition-speed="fast"}
+
+::: {.incremental}
+-   **$E[y]$** — the notation the count models are written in, and why it is
+    nothing new
+-   **Poisson regression** for counts, and how to read a rate ratio
+-   **Offsets** — the thing that turns a model of counts into a model of
+    *rates*, which is almost always what you actually wanted
+-   **Overdispersion**, and the **negative binomial** model that deals with it
+-   **Proportions** — *x out of n* — which turn out to be a binomial problem
+    in disguise
+:::
+
+. . .
+
+Same dataset, same schools. The only thing changing is what we put on the
+left-hand side.
+
+# First, a word on notation {background-color="#4e3c56"}
+## A quick word on $E[y]$ {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+With GLMs there is an $E$ in most of the equations. **$E$ is for
+expectation**, and $E[y_i]$ reads *"the expected value of y for school i"*.
+
+::: incremental
+-   It is essentially **an average** — but a theoretical one. Your sample
+    mean is a fact about the 3,000 schools you happen to have; an expected
+    value is a fact about the **process that produced them**
+-   **"Expected" is a poor name.** It need not be a value you could ever
+    observe — the expected value of a dice roll is 3.5, and the expected
+    number of children per family is about 1.8
+-   **The little $i$ matters.** $E[y_i]$ is *that school's own* expected
+    value, and it depends on that school's predictors. There are thousands of
+    them, one per school — not a single average across the dataset
+:::
+
+## You have been using it all along {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Ordinary regression, exactly as we wrote it in Vol 1:
+
+$$y_i = \beta_0 + \beta_1x_i + \epsilon_i$$
+
+. . .
+
+The errors average out to zero. So take the average of both sides, and the
+error term disappears:
+
+$$E[y_i] = \beta_0 + \beta_1x_i$$
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**That is the line you have been drawing through scatter plots since week 5.**
+-   A regression line was never an exact school prediction
+—   It is a prediction of what the *average* school like it does - this is the expected value
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.88em;"}
+So $\log(E[y_i])$ is **not anything new or different**. Just more formalised in the GLM equation.
+:::
+
+# Counting things {background-color="#4e3c56"}
+
+## A different kind of outcome {transition="convex-in none-out" transition-speed="fast"}
+
+Let's change the question and move up a level.
+
+::: {style="font-size: 1.05em"}
+*How many below-Good schools does each local authority have?*
+:::
+
+::: incremental
+- That is a **count**: 0, 1, 2, 3... never negative, never fractional
+- Most LAs have a few; some have none at all; a couple have a lot
+- A straight line will happily predict minus two struggling schools,
+  which is not a thing
+:::
+
+## What counts look like {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.2
+#| out-width: 95%
+
+la <- schools |>
+  group_by(LANAME) |>
+  summarise(n_schools = n(),
+            n_below   = sum(below_good),
+            mean_fsm  = mean(PTFSM6CLA1A, na.rm = TRUE),
+            mean_abs  = mean(PERCTOT, na.rm = TRUE),
+            .groups = "drop") |>
+  filter(n_schools >= 5)
+
+ggplot(la, aes(n_below)) +
+  geom_histogram(binwidth = 1, fill = casa_teal, colour = "white") +
+  labs(x = "Schools rated below Good", y = "Local authorities",
+       title = sprintf("%d local authorities; mean %.2f, variance %.2f",
+                       nrow(la), mean(la$n_below), var(la$n_below)))
+```
+
+::: {style="font-size: 0.85em"}
+Discrete, non-negative, right-skewed, with a pile-up at the low end -
+**`r sum(la$n_below == 0)`** LAs have no below-Good schools at all. This
+is a Poisson-shaped problem, exactly as week 1 described.
+:::
+
+## But first - counts or rates? {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: offset-motivate
+#| echo: false
+#| message: false
+#| warning: false
+pick <- la |>
+  filter(LANAME %in% c("Lancashire", "Bury")) |>
+  arrange(desc(n_schools)) |>
+  transmute(`Local authority` = LANAME,
+            `Secondary schools` = n_schools,
+            `Rated below Good` = n_below,
+            `As a share` = sprintf("%.0f%%", 100 * n_below / n_schools))
+knitr::kable(pick, align = "lrrr")
+```
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**On the raw count, Lancashire looks nearly four times worse.** On the share,
+Bury is the one in trouble.
+
+A count on its own tells you very little, because it depends on how many
+chances there were to begin with. Lancashire has six times as many schools, so
+it would take more below-Good ones even if nothing were wrong.
+:::
+
+## So why not just divide? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The obvious move is to model the share — `n_below / n_schools` — and be done
+with it. Two reasons not to:
+
+::: incremental
+-   **Poisson describes whole numbers.** `22/79 = 0.28` is not a count of
+    anything. We would be using a distribution for something it does not
+    describe
+-   **Dividing throws away how much evidence you have.** Bury's 46% rests on
+    **13** schools. Lancashire's 28% rests on **79**. We should be far more
+    confident about Lancashire — but once both are just "a percentage", the
+    model can no longer tell them apart
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+An **offset** gets us both: the outcome stays a genuine count, so Poisson
+still applies and the sample sizes still count for something — but the model
+does the dividing internally.
+:::
+
+## What an offset actually is {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Three lines of algebra, and nothing clever happens in any of them.
+
+::: {style="font-size: 0.95em"}
+**1. What we actually want to model** — a rate, not a count:
+
+$$\log\left(\frac{\text{expected count}}{\text{number of schools}}\right) = \beta_0 + \beta_1x$$
+
+**2. The log of a ratio is a difference of logs** — ordinary school algebra:
+
+$$\log(\text{expected count}) - \log(\text{number of schools}) = \beta_0 + \beta_1x$$
+
+**3. Move that term across to the other side:**
+
+$$\log(\text{expected count}) = \beta_0 + \beta_1x + \log(\text{number of schools})$$
+
+That final term — $\log(\text{number of schools})$ — **is the offset**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So an offset is just **a division, rewritten as an addition** so it can sit
+inside a model that works on the log scale. In R that is
+`offset(log(n_schools))`.
+:::
+
+## Fixed, not estimated {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Look at line 3 again. Every other term on the right gets a $\beta$ in front of
+it that the model **chooses**. The offset does not — it is stuck there with a
+coefficient of exactly **1**, because that is how it arrived.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+In plain words, we are **telling** the model something rather than asking it:
+
+> *Twice as many schools, twice as many below-Good ones expected, all else
+> being equal.*
+
+That is a claim about arithmetic, not about education policy, so we spend no
+parameter finding it out.
+:::
+
+. . .
+
+```{r}
+#| label: offset-vs-estimated
+#| echo: false
+#| message: false
+#| warning: false
+est_m <- glm(n_below ~ mean_abs + log(n_schools), data = la, family = poisson)
+ci    <- confint.default(est_m)["log(n_schools)", ]
+```
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.86em;"}
+**Is that a fair thing to assume?** Put `log(n_schools)` in as an ordinary
+predictor and let the model estimate it instead. It comes back with
+**`r sprintf("%.2f", coef(est_m)["log(n_schools)"])`**, with a 95% interval of
+`r sprintf("%.2f", ci[1])` to `r sprintf("%.2f", ci[2])` — 1 sits comfortably
+inside it. The assumption holds, and fixing it saves us a parameter.
+
+**Always worth checking.** If that interval had excluded 1, the offset would
+have been the wrong tool.
+:::
+## Running a Poisson model {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+pois <- glm(n_below ~ mean_fsm + mean_abs + offset(log(n_schools)),
+            data = la, family = poisson)
+```
+
+```{r}
+#| echo: false
+pc <- summary(pois)$coefficients
+tibble(
+  Term = c("(Intercept)", "Mean % disadvantaged", "Mean % absence"),
+  Coefficient = round(pc[, 1], 4),
+  `Rate ratio` = round(exp(pc[, 1]), 3),
+  `p` = ifelse(pc[, 4] < 0.001, "<0.001", as.character(round(pc[, 4], 3)))
+) |> kable()
+```
+
+. . .
+
+::: {style="font-size: 0.9em"}
+The link function here is $\log$, so exponentiating gives a **rate
+ratio**. And note the result: once average absence is in the model,
+**average disadvantage adds nothing detectable** - a confounding story
+of exactly the kind we met in week 6.
+:::
+
+## Checking the Poisson assumption {transition="convex-in none-out" transition-speed="fast"}
+
+The Poisson distribution assumes something quite strong: that the
+**variance equals the mean**. Real data often disagrees.
+
+```{r}
+#| echo: true
+dispersion <- pois$deviance / pois$df.residual
+dispersion
+```
+
+. . .
+
+::: {style="font-size: 0.95em"}
+A value near **1** means the assumption holds. Much above 1 means
+**overdispersion** - the data are more variable than Poisson allows,
+your standard errors are too small, and you will think results are
+significant when they are not.
+
+Here we get **`r sprintf("%.2f", dispersion)`**, which is mild. So
+Poisson is adequate - but we should check rather than assume.
+:::
+
+## When it is not adequate {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+nb <- MASS::glm.nb(n_below ~ mean_fsm + mean_abs + offset(log(n_schools)), data = la)
+
+tibble(
+  Model = c("Poisson", "Negative binomial"),
+  AIC = round(c(AIC(pois), AIC(nb))),
+  `SE on absence` = sprintf("%.4f", c(summary(pois)$coefficients["mean_abs", 2],
+                                      summary(nb)$coefficients["mean_abs", 2]))
+) |> kable()
+```
+
+- The **negative binomial** is the Poisson's more forgiving cousin - it
+  adds a parameter that lets the variance exceed the mean
+- This is exactly the distribution we met in week 1, and this is what it
+  is for
+- Here the two models are essentially tied, so we keep the simpler one
+
+. . .
+
+**Fit the Poisson, check the dispersion, escalate only if you need to.**
+
+## The fun bit: who beats their own odds? {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.4
+#| out-width: 95%
+
+la <- la |>
+  mutate(expected = fitted(pois),
+         resid    = (n_below - expected) / sqrt(expected))
+
+plot_la <- bind_rows(
+  la |> slice_max(resid, n = 6) |> mutate(grp = "More than expected"),
+  la |> slice_min(resid, n = 6) |> mutate(grp = "Fewer than expected")
+)
+
+plot_la |>
+  pivot_longer(c(n_below, expected), names_to = "what", values_to = "val") |>
+  mutate(what = recode(what, n_below = "Observed", expected = "Model expects")) |>
+  ggplot(aes(x = val, y = fct_reorder(LANAME, resid), colour = what)) +
+  geom_line(aes(group = LANAME), colour = "grey70", linewidth = 1) +
+  geom_point(size = 3.4) +
+  facet_wrap(~grp, scales = "free_y") +
+  scale_colour_manual(values = c("Observed" = casa_red, "Model expects" = casa_teal),
+                      name = NULL) +
+  labs(x = "Schools rated below Good", y = NULL,
+       title = "Where the model is wrong, and in which direction") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.8em"}
+Given their intake, some LAs have far **more** struggling schools than
+expected and some far **fewer**. The residuals of a count model are not
+a diagnostic afterthought here - they are the finding.
+:::
+
+# One more outcome type {background-color="#4e3c56"}
+
+## Proportions out of a known total {transition="convex-in none-out" transition-speed="fast"}
+
+Back down to school level, and to a file we have not touched yet: **what
+happens to pupils after Year 11?**
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+dest <- destinations |>
+  inner_join(schools, by = "URN") |>
+  filter(!is.na(COHORT), COHORT > 0, !is.na(OVERALL_DEST), !is.na(PTFSM6CLA1A)) |>
+  mutate(not_sust = COHORT - OVERALL_DEST,
+         prop     = OVERALL_DEST / COHORT) |>
+  filter(not_sust >= 0)
+
+tibble(
+  ` ` = c("Schools", "Median cohort", "Median % sustaining a destination",
+          "Schools at exactly 100%"),
+  Value = c(comma(nrow(dest)), comma(median(dest$COHORT)),
+            sprintf("%.1f%%", 100 * median(dest$prop)),
+            sprintf("%d (%.1f%%)", sum(dest$prop == 1), 100 * mean(dest$prop == 1)))
+) |> kable()
+```
+
+- Each school gives us "**x** of **n** pupils went on to education,
+  employment or training"
+- That is not really a percentage - it is a **count out of a known
+  total**, which is exactly what the binomial distribution describes
+
+## Modelling it properly {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+dest_glm <- glm(cbind(OVERALL_DEST, not_sust) ~ PTFSM6CLA1A,
+                data = dest, family = binomial)
+```
+
+```{r}
+#| echo: false
+or10 <- exp(coef(dest_glm)["PTFSM6CLA1A"] * 10)
+```
+
+::: {style="font-size: 1.05em"}
+Note the `cbind()` - we hand the model **successes and failures**, not a
+proportion, so it knows a school of 30 carries less weight than a school
+of 300.
+:::
+
+. . .
+
+::: {style="font-size: 1.05em"}
+**Every 10 percentage points more disadvantage is associated with a
+`r sprintf("%.0f%%", 100 * (1 - or10))` fall in the odds of a pupil
+sustaining a destination.**
+:::
+
+## Does it matter? Compare the predictions {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 11
+#| fig-height: 4.3
+#| out-width: 95%
+
+dest_ols <- lm(I(prop * 100) ~ PTFSM6CLA1A, data = dest)
+gd <- tibble(PTFSM6CLA1A = seq(0, 100, length.out = 200))
+gd$OLS <- predict(dest_ols, newdata = gd)
+gd$GLM <- 100 * predict(dest_glm, newdata = gd, type = "response")
+
+ggplot() +
+  geom_point(data = dest, aes(PTFSM6CLA1A, 100 * prop),
+             alpha = 0.10, colour = casa_purple, size = 0.8) +
+  geom_line(data = gd, aes(PTFSM6CLA1A, OLS, colour = "Straight line (OLS)"), linewidth = 1.3) +
+  geom_line(data = gd, aes(PTFSM6CLA1A, GLM, colour = "Binomial GLM"), linewidth = 1.3) +
+  scale_colour_manual(values = c("Straight line (OLS)" = casa_red,
+                                 "Binomial GLM" = casa_teal), name = NULL) +
+  labs(x = "% disadvantaged pupils", y = "% sustaining a destination",
+       title = "Same data, two models") +
+  theme(legend.position = "top")
+```
+
+::: {style="font-size: 0.85em"}
+They agree almost exactly through the middle and **diverge at the top
+end** - the schools policy cares about most. Here OLS is not obviously
+broken. It is quietly wrong at the edges, and **nothing in its output
+tells you so**.
+:::
+
+## And check the dispersion again {transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| echo: false
+disp_dest <- dest_glm$deviance / dest_glm$df.residual
+tibble(
+  Model = c("LA below-Good counts (Poisson)", "Destinations (binomial)"),
+  Dispersion = sprintf("%.2f", c(dispersion, disp_dest)),
+  Verdict = c("Mild - Poisson is fine",
+              "Overdispersed - use quasibinomial")
+) |> kable()
+```
+
+. . .
+
+- **Two models, two different answers.** The check is not a formality
+  you tick off
+- For the destinations model, switching to `family = quasibinomial`
+  widens the standard errors by about 60% - the coefficients are
+  unchanged, but our confidence in them was overstated
+
+
+# Wrapping up {background-color="#4e3c56"}
+
+## The family, in one slide {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+| Outcome | `family =` | Link | Interpret coefficients as |
+|------------------|------------------|------------------|------------------|
+| Continuous | `gaussian` | identity | Units of y per unit of x |
+| Yes / no | `binomial` | logit | Odds ratios |
+| **x out of n** | `binomial` | logit | Odds ratios |
+| Ordered categories | `MASS::polr()` | logit | Odds of being in a higher category |
+| Unordered categories | `nnet::multinom()` | logit | Odds vs a reference category |
+| **Count** | `poisson` | log | **Rate ratios** |
+| **Overdispersed count** | `MASS::glm.nb()` | log | **Rate ratios** |
+
+. . .
+
+**One framework.** Change the family, change the link, and everything you
+learned about building and interpreting a linear model still applies.
+
+## Conclusions {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {.incremental}
+-   A **count** is not a continuous number. It cannot go negative, it comes in
+    whole units, and its variance grows with its mean — so it gets a log link
+    and a Poisson distribution
+-   **An offset is a division in disguise.** It turns counts into rates, and
+    it is the single most commonly forgotten piece of a count model
+-   **Always check the dispersion.** Much above 1 and your standard errors are
+    too small, which means significance you have not earned
+-   A **proportion out of a known total** is a binomial, not a percentage to
+    be modelled with OLS — `cbind(successes, failures)` keeps the sample sizes
+    in the model where they belong
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
+And the thread running through both sessions: **look at your outcome variable
+before you choose a model.** Week 1's data types were never an academic
+exercise — they decide what you are allowed to do.
+:::
+
+## Today's Practical {transition="convex-in none-out" transition-speed="fast"}
+
+-   Fitting Poisson models to the schools data, with and without an offset,
+    and seeing what the offset changes
+-   Checking dispersion, and deciding whether you need the negative binomial
+-   Reading **rate ratios** out loud in plain English — the same skill as
+    odds ratios, one family along
