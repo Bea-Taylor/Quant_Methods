@@ -265,8 +265,47 @@ $$y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
 
 ::: {style="font-size: 0.95em"}
 -   **The link is a translator.** It stretches a squashed natural range out onto the whole number line, so the straight line has somewhere sensible to live.
--   The top row needs no stretching, because a continuous outcome already has the same freedom the sum does 
+-   The top row needs no stretching, because a continuous outcome already has the same freedom the sum does
    —   which is exactly why **OLS is a GLM with the boring link**.
+:::
+
+## The same model, three times {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Written out in full, with the **right-hand side identical every time**. Only
+the left changes.
+
+::: {style="font-size: 0.95em"}
+**Ordinary regression** — the outcome goes in as it is:
+
+$$y_i = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \epsilon_i$$
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**Logistic regression** — the *probability* goes in, through the logit:
+
+$$\log\!\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**Poisson regression** — the *average count* goes in, through a log:
+
+$$\log\big(E[y_i]\big) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
+
+[$E[y_i]$ is standard notation for the **expected value** of $y$ — the average
+count for a school like this one.]{style="font-size:0.85em; color:#666;"}
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+Notice what is **missing** from the bottom two: the $\epsilon$. OLS adds an
+error term on the end; a GLM does not, because the randomness is already
+described by the distribution you chose. **That is the swap** — an error term
+for a distribution.
 :::
 
 ## Without a link, and with one {.smaller transition="convex-in none-out" transition-speed="fast"}
