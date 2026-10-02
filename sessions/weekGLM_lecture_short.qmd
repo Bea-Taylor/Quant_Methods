@@ -702,8 +702,17 @@ was smuggled in: just a one-unit step, and one rule about logarithms.
 
 ## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Take the simple model from earlier — **below Good, predicted from Progress 8
-alone** — and ask it what it expects at four different Progress 8 scores.
+That curve we drew a few slides ago had a model behind it. Here it is — the
+same one predictor we gave `lm()`, fitted properly:
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+glm1 <- glm(below_good ~ P8MEA, data = model_data, family = binomial)
+```
+
+Now ask it what it expects at four different Progress 8 scores.
 
 ```{r}
 #| echo: false
