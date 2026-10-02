@@ -23,8 +23,8 @@ title: "Overview"
 - This module doesn't teach programming, so CASA0013 is strongly recommended if you don't know any Python.
 
 ## Course Structure
-- Lectures: Tuesdays 9:00–10:30; G03 Bedford Way (26). 
-- Tutorials: Wednesdays 10:30–12:00; G03 Bedford Way (26).
+- Lectures: Tuesdays 9:00–10:30; G13 Torrington Place (1-19).  
+- Tutorials: Tuesdays 10:30–12:00; G13 Torrington Place (1-19). 
 
 ## Platforms
 - Email for important notices and private questions.
