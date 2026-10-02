@@ -821,6 +821,93 @@ whether its relationship with the outcome is straight — and that is the thing
 you are actually trying to fix.
 :::
 
+## So how do you tell? Draw it twice {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: straighter-which-way
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 4.3
+#| fig-align: center
+
+# Outcome on a log axis, because that is the scale a log-link model works on.
+# Straight on this plot = straight on the link scale. Dashed line is the
+# straight-line fit; solid curve is a loess smoother following the data.
+sv2 <- sv |> filter(TFSM6CLA1A > 0)
+
+# Binned averages rather than a loess curve. With 3,000 points and a lot of
+# tied low values, loess spikes badly at the left-hand edge; binning is both
+# steadier and a technique the students can use themselves.
+draw <- function(xv, logx, lab) {
+  dat <- sv2 |>
+    mutate(xval = if (logx) log10(.data[[xv]]) else .data[[xv]],
+           bin  = ntile(xval, 18)) |>
+    group_by(bin) |>
+    summarise(x = mean(xval), y = exp(mean(log(TFSM6CLA1A))), .groups = "drop")
+
+  ggplot(dat, aes(x, y)) +
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+                colour = casa_red, linetype = "dashed", linewidth = 0.9) +
+    geom_line(colour = casa_teal, linewidth = 1) +
+    geom_point(colour = casa_teal, size = 1.8) +
+    scale_y_log10() +
+    labs(title = lab, x = NULL, y = "Disadvantaged pupils") +
+    theme_minimal(base_size = 10) +
+    theme(plot.title = element_text(size = 9.5))
+}
+
+patchwork::wrap_plots(
+  draw("PTFSM6CLA1A", FALSE, "% disadvantaged — raw"),
+  draw("PTFSM6CLA1A", TRUE,  "% disadvantaged — logged"),
+  draw("PTEALGRP2",   FALSE, "% EAL — raw"),
+  draw("PTEALGRP2",   TRUE,  "% EAL — logged"),
+  nrow = 2)
+```
+
+::: {style="font-size: 0.78em"}
+Schools split into 18 equal groups along the x-axis; each **teal dot** is one
+group's average. **Dashed** is the straight line the model would fit. Where
+the dots wander away from the dashed line, the relationship is curved.
+:::
+
+## The tip worth remembering {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+**Plot your outcome against the predictor twice — once raw, once logged — and
+keep whichever is straighter.**
+
+Put the outcome on a **log axis** while you do it, because that is the scale a
+log-link model actually works on. Straight on that plot means straight where
+the model cares.
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+On the previous slide, look at the **top row**: raw, the dots curve away from
+the line; logged, they drop neatly onto it. That is a predictor worth logging,
+and you can see it before fitting anything.
+
+The **bottom row** does not improve. Logging the EAL figures just moves the
+scatter around — which is exactly why the AIC got *worse* when we logged it.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;"}
+**Three habits that will serve you all term**
+
+1.  Draw it before you model it — curvature is obvious in a picture and
+    invisible in a coefficient
+2.  Add a **smoother** alongside the straight line. If they agree, a straight
+    line is fine; if they diverge, you have found something
+3.  If logging a predictor does not visibly straighten anything, **leave it
+    alone**. A transformation you cannot justify is one more thing to explain
+    in your write-up
+:::
+
 # Can we predict School Ofsted ratings? {background-color="#4e3c56"}
 
 ## Our question for today {transition="convex-in none-out" transition-speed="fast"}
