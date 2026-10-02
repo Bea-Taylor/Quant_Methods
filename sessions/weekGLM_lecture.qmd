@@ -1238,16 +1238,56 @@ was smuggled in: just a one-unit step, and one rule about logarithms.
 ## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 That curve we drew a few slides ago had a model behind it. Here it is — the
-same one predictor we gave `lm()`, fitted properly:
+same single predictor we gave `lm()`, fitted properly:
 
 ```{r}
 #| echo: true
 #| message: false
 #| warning: false
 glm1 <- glm(below_good ~ P8MEA, data = model_data, family = binomial)
+coef(glm1)
 ```
 
-Now ask it what it expects at four different Progress 8 scores.
+```{r}
+#| echo: false
+g0 <- as.numeric(coef(glm1)[1])
+g1 <- as.numeric(coef(glm1)[2])
+lo0 <- g0 + g1 * 0
+od0 <- exp(lo0)
+pr0 <- od0 / (1 + od0)
+```
+
+::: {style="font-size: 0.95em"}
+**Two numbers. That is the entire model**, and it says:
+
+$$\log(\text{odds}) = `r sprintf("%.2f", g0)` + (`r sprintf("%.2f", g1)` \times \text{Progress 8})$$
+:::
+
+## From those two numbers to a probability {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Take a school with a Progress 8 of **0** and turn the handle. Three steps, and
+each one undoes a bit of the link function:
+
+::: {.incremental}
+1.  **Log-odds** — put 0 into the equation:
+    $`r sprintf("%.2f", g0)` + (`r sprintf("%.2f", g1)` \times 0) = `r sprintf("%.2f", lo0)`$
+2.  **Odds** — undo the log with $\exp$:
+    $e^{`r sprintf("%.2f", lo0)`} = `r sprintf("%.4f", od0)`$
+3.  **Probability** — undo the odds with $\frac{\text{odds}}{1+\text{odds}}$:
+    $`r sprintf("%.4f", od0)` \div `r sprintf("%.4f", 1 + od0)` = `r sprintf("%.3f", pr0)`$
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+So a school on exactly average progress has about a
+**`r sprintf("%.0f%%", 100 * pr0)` chance** of being rated below Good.
+:::
+
+## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+**Every row below is those same three steps**, done at a different Progress 8
+score.
 
 ```{r}
 #| echo: false
@@ -1273,13 +1313,9 @@ tibble(
 ```
 
 ::: {style="font-size: 0.86em"}
-**Where each column comes from.** The **probability** is simply what the model
-predicts at that Progress 8 score. The **odds** is that probability converted
-with $p \div (1-p)$ — at Progress 8 of 0 the model says
-`r sprintf("%.3f", as.numeric(predict(glm1, data.frame(P8MEA=0), type="response")))`,
-so the odds are that divided by one minus itself =
-**`r sprintf("%.4f", odds_at(0))`**. The last column divides each row's odds by
-the one above it.
+Check the **Progress 8 = 0** row against the slide before: probability
+`r sprintf("%.3f", pr0)`, odds `r sprintf("%.4f", od0)`. The last column simply
+divides each row's odds by the one above it.
 :::
 
 . . .
