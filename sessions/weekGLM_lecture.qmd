@@ -173,6 +173,8 @@ auc_of <- function(scores, actual) {
   multinomial versions for categories
 - **Poisson regression** for counts, offsets for rates, and what to do
   about overdispersion
+- **How to judge one** when there is no R² - deviance, AIC, the
+  pseudo-R²s, and whether the predictions are actually any use
 - Throughout: can we predict a school's Ofsted rating from everything
   else we know about it?
 
@@ -784,6 +786,9 @@ changes the sentence you write, from *per unit* to *per doubling*.
 Here the logged version fits slightly better (AIC `r sprintf("%.0f", AIC(m_log))`
 against `r sprintf("%.0f", AIC(m_raw))`), so it is a real choice, not a
 formality.
+
+[*AIC is a score for comparing models fitted to the same data — lower is
+better. We take it apart properly later today.*]{style="font-size:0.85em; color:#666;"}
 :::
 
 . . .
@@ -1375,19 +1380,228 @@ the outcome the model managed to explain.
 
 ::: {style="font-size: 0.95em"}
 That worked because the outcome was a *number*, with variation in it to
-explain. Ours is a **yes or no**. There is no spread to account for, and no
-agreed R² for logistic regression — several competing "pseudo-R²" measures
-exist and none of them means quite what R² does.
+explain. Ours is a **yes or no**. There is no spread to account for, and R²
+as you know it simply does not exist here.
 :::
 
 . . .
 
 ::: {style="font-size: 0.95em"}
-So we ask a different question. Not *how much of the variation did I explain?*
-but:
+So we ask **two** questions instead, and they are genuinely different:
 
-> **How often is the model right?**
+1.  **Does the model fit the data?** — likelihood, deviance, AIC, the
+    pseudo-R²s, Hosmer–Lemeshow
+2.  **Does it make good decisions?** — accuracy, the confusion matrix, ROC
+    and AUC
+
+A model can do respectably on one and badly on the other. We take them in
+turn.
 :::
+
+# 1. Does the model fit? {background-color="#4e3c56"}
+
+## Likelihood: how surprised is the model? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: fit-stats
+#| echo: false
+#| message: false
+#| warning: false
+n_tr   <- nrow(train)
+ll     <- as.numeric(logLik(logit_below))
+dev0   <- logit_below$null.deviance
+dev1   <- logit_below$deviance
+k      <- length(coef(logit_below))
+cs     <- 1 - exp((dev1 - dev0) / n_tr)
+cs_max <- 1 - exp(-dev0 / n_tr)
+nk     <- cs / cs_max
+```
+
+Every school in the data either was or was not rated below Good. The model
+assigns each one a probability. **Likelihood** asks the obvious question:
+
+> *Given these coefficients, how probable was the data we actually saw?*
+
+::: incremental
+-   A school that *was* below Good, which the model gave 0.9 — good, that was
+    likely
+-   A school that was **not**, which the model gave 0.9 — bad, the model was
+    confidently wrong
+-   Multiply all `r comma(n_tr)` of those probabilities together and you have
+    the **likelihood** of the whole dataset
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Fitting the model *is* choosing the coefficients that make this number as
+large as possible — **maximum likelihood**. We report its log, because
+multiplying `r comma(n_tr)` probabilities together gives a number too small
+for a computer to hold.
+
+For our model: **log-likelihood = `r sprintf("%.1f", ll)`**. Always negative;
+closer to zero is better.
+:::
+
+## Deviance: distance from a perfect fit {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+A log-likelihood on its own is hard to read. **Deviance** rescales it into
+something more like an error score — *how far this model sits from one that
+predicted every school perfectly*.
+
+$$\text{deviance} = -2 \times \text{log-likelihood}$$
+
+::: {style="font-size: 0.95em"}
+| | | What it is |
+|---|---|---|
+| **Null deviance** | `r sprintf("%.1f", dev0)` | with **no predictors at all** — just the overall rate |
+| **Residual deviance** | `r sprintf("%.1f", dev1)` | with our seven predictors in |
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**Lower is better**, and the drop — `r sprintf("%.0f", dev0 - dev1)` — is what
+the predictors bought us. This is the direct equivalent of the sum-of-squares
+drop you used to read off an OLS table.
+:::
+
+::: {.notes}
+Deviance is also the statistic behind the overdispersion check later in the
+Poisson section: residual deviance divided by residual degrees of freedom.
+Worth flagging forward so it is not a surprise there.
+:::
+
+## AIC: fit, minus a fine for complexity {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+There is a problem with judging a model on deviance alone: **adding any
+predictor, however useless, will always lower it slightly.** Left to itself,
+deviance always says "more variables".
+
+. . .
+
+So we charge for them:
+
+$$\text{AIC} = \text{deviance} + 2k \quad\text{where } k = \text{number of coefficients}$$
+
+::: {style="font-size: 0.95em"}
+For our model: `r sprintf("%.1f", dev1)` + 2 × `r k` =
+**`r sprintf("%.1f", dev1 + 2*k)`**. A predictor only improves the AIC if it
+reduces the deviance by more than the 2 points it costs.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+**AIC has no meaning on its own.** `r sprintf("%.0f", AIC(logit_below))` is
+neither good nor bad — it is only useful for **comparing models fitted to the
+same data**. Lower wins. That is exactly how we used it earlier to choose
+between a raw and a logged predictor.
+:::
+
+## The pseudo-R²s {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+People badly want an R², so several substitutes exist. The two you will meet
+in software output:
+
+::: {style="font-size: 0.95em"}
+**Cox & Snell** — built from the likelihood ratio between your model and the
+null model. For us: **`r sprintf("%.3f", cs)`**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+That looks dismal — until you learn its catch. **Cox & Snell cannot reach 1.**
+With a binary outcome its ceiling here is **`r sprintf("%.3f", cs_max)`**, so
+`r sprintf("%.3f", cs)` is really `r sprintf("%.3f", cs)` out of a possible
+`r sprintf("%.3f", cs_max)`.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**Nagelkerke** fixes precisely that, by dividing by the ceiling:
+
+$$R^2_{\text{Nagelkerke}} = \frac{`r sprintf("%.3f", cs)`}{`r sprintf("%.3f", cs_max)`} = \mathbf{`r sprintf("%.3f", nk)`}$$
+
+Now it can reach 1, and it reads much more like the R² you are used to.
+:::
+
+## ...and how much to trust them {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+Report them if the journal or the marker expects them — but know what you are
+saying.
+
+::: incremental
+-   **They are not "variance explained".** Nothing here is variance. The name
+    is borrowed, and the interpretation does not come with it
+-   **They are not comparable across datasets**, and barely across models. A
+    Nagelkerke of 0.32 is not "half as good" as one of 0.64
+-   **There is no accepted threshold** for a good one. Values that would be
+    embarrassing in OLS are routine here
+:::
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+Treat a pseudo-R² as a **rough indication that the predictors are doing
+something**, and nothing more. If you want to know whether the model is
+actually any use, ask the second question — the one we come to next.
+:::
+
+## Hosmer–Lemeshow: does it fit everywhere? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: hoslem
+#| echo: false
+#| message: false
+#| warning: false
+pfit <- fitted(logit_below)
+hl_g <- 10
+hl_grp <- cut(pfit, breaks = quantile(pfit, probs = seq(0, 1, 1/hl_g)),
+              include.lowest = TRUE)
+hl_obs <- tapply(train$below_good, hl_grp, sum)
+hl_exp <- tapply(pfit, hl_grp, sum)
+hl_n   <- tapply(pfit, hl_grp, length)
+hl_chi <- sum((hl_obs - hl_exp)^2 / (hl_exp * (1 - hl_exp / hl_n)))
+hl_p   <- pchisq(hl_chi, hl_g - 2, lower.tail = FALSE)
+```
+
+Everything so far gives one number for the whole model. **Hosmer–Lemeshow**
+asks something more specific: *is the model well calibrated across the whole
+range of risk, or only in parts of it?*
+
+::: {style="font-size: 0.95em"}
+1.  Sort the schools by predicted probability and cut them into **10 equal
+    groups**
+2.  In each group, compare **how many actually were** below Good with **how
+    many the model expected**
+3.  Add up the discrepancies into a chi-squared statistic
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+Ours: $\chi^2$ = **`r sprintf("%.1f", hl_chi)`** on `r hl_g - 2` df,
+**p = `r sprintf("%.3f", hl_p)`**.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;"}
+**Read the direction carefully — it is the opposite of most tests.** A
+*small* p-value means the model fits **badly**. Ours is
+`r sprintf("%.2f", hl_p)`, so there is no evidence of poor fit.
+
+And "no evidence of poor fit" is **not** the same as "good fit". The test is
+known to be sensitive to how many groups you choose, and to have little power
+on small samples. It is a flag worth checking, not a certificate.
+:::
+
+# 2. Does it make good decisions? {background-color="#4e3c56"}
 
 ## Don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
 
