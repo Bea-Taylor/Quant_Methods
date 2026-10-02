@@ -1209,13 +1209,17 @@ probability, and not a difference in odds — a difference in *logged* odds.
 We have a **difference of logs**. There is a rule from school algebra for
 exactly that:
 
-$$\log(A) - \log(B) = \log\!\left(\frac{A}{B}\right)$$
+$$\log(M) - \log(N) = \log\!\left(\frac{M}{N}\right)$$
+
+[Deliberately *not* A and B — those are taken. $M$ and $N$ are just
+placeholders for "whatever you are subtracting".]{style="font-size:0.8em; color:#666;"}
 
 . . .
 
-Apply it to what we just found:
+Ours was $\log(\text{odds}_B) - \log(\text{odds}_A)$, so $M$ is **School B's**
+odds and $N$ is **School A's**:
 
-$$\beta_1 = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)$$
+$$\beta_1 = \log(\text{odds}_B) - \log(\text{odds}_A) = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)$$
 
 . . .
 
