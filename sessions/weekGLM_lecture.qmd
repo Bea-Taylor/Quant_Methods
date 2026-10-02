@@ -77,7 +77,7 @@ read_dfe <- function(f) {
 }
 
 ks4 <- read_dfe("england_ks4final.csv") |>
-  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, TFSM6CLA1A, PTPRIORHI) |>
+  select(URN, ATT8SCR, P8MEA, TPUP, PTFSM6CLA1A, TFSM6CLA1A, PTEALGRP2, PTPRIORHI) |>
   mutate(across(-URN, ~ parse_number(as.character(.x))))
 
 absence <- read_dfe("england_abs.csv") |>
@@ -698,8 +698,11 @@ $$\log\big(E[y_i]\big) = \beta_0 + \beta_1 x_i$$
 
 ::: {style="font-size: 0.95em"}
 **The link is a statement about the outcome's type.** Counts cannot go
-negative, so we use a log link. That is *all* it says — it has nothing
-whatsoever to tell you about the predictors, which go in raw by default.
+negative, so we use a log link. That is *all* it says — and in particular it
+says **nothing whatsoever about the predictors**.
+
+You are still free to log them, or not, exactly as you always were. That
+choice is untouched by the link, and we come to it next.
 :::
 
 ## Logging a predictor is still available {.smaller transition="convex-in none-out" transition-speed="fast"}
@@ -747,6 +750,75 @@ formality.
 to account for how many schools an LA has. That is a logged predictor with its
 coefficient *fixed at 1* — and it is what turns a model of counts into a model
 of rates.
+:::
+
+## So should I log a skewed predictor? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Tempting, and a very common habit — but **not because it is skewed**.
+
+::: {style="font-size: 0.95em"}
+Regression makes **no assumption whatsoever about the distribution of your
+predictors**. The assumptions are about the *errors*. A skewed `x` breaks
+nothing and is not, on its own, a problem to be fixed.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+Three things that **are** real reasons to log a predictor:
+
+1.  **The relationship is curved.** Straightening it is the main reason, and
+    the only one you can see on a scatter plot
+2.  **A handful of extreme values are dragging the fit around.** Logging pulls
+    in a long tail and reduces their leverage
+3.  **You want a proportional reading** — *per 10% more* rather than *per unit
+    more*
+:::
+
+## Skew does not predict whether logging helps {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: skew-vs-logging
+#| echo: false
+#| message: false
+#| warning: false
+sv <- model_data |>
+  drop_na(TPUP, TFSM6CLA1A, PTFSM6CLA1A, PTEALGRP2) |>
+  filter(if_all(c(TPUP, PTFSM6CLA1A, PTEALGRP2), ~ .x > 0))
+skw <- function(x) mean((x - mean(x))^3) / sd(x)^3
+
+tibble(
+  Predictor = c("Pupils in the cohort", "% disadvantaged",
+                "% English as an additional language"),
+  var = c("TPUP", "PTFSM6CLA1A", "PTEALGRP2")
+) |>
+  rowwise() |>
+  mutate(
+    Skew = sprintf("%.2f", skw(sv[[var]])),
+    a = AIC(glm(reformulate(var, "TFSM6CLA1A"), data = sv, family = poisson)),
+    b = AIC(glm(reformulate(sprintf("log(%s)", var), "TFSM6CLA1A"),
+                data = sv, family = poisson)),
+    `Does logging help?` = if (b < a - 2) "Yes, clearly"
+                           else if (b > a + 2) "No - it makes it worse"
+                           else "No real difference"
+  ) |>
+  ungroup() |>
+  select(Predictor, Skew, `Does logging help?`) |>
+  knitr::kable(align = "lrl")
+```
+
+::: {style="font-size: 0.92em"}
+The **least** skewed predictor here is one where logging clearly helps. The
+**most** skewed is the one where logging actively makes the model worse.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+**Look at the relationship, not at the histogram of x.** Skew in a predictor
+tells you how its values are spread out. It tells you nothing at all about
+whether its relationship with the outcome is straight — and that is the thing
+you are actually trying to fix.
 :::
 
 # Can we predict School Ofsted ratings? {background-color="#4e3c56"}
