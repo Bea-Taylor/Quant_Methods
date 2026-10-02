@@ -1434,7 +1434,7 @@ accuracy <- mean((p_below > 0.5) == test$below_good)
 ```
 
 ```{r}
-#| echo: false
+#| echo: true
 baseline <- max(mean(test$below_good), 1 - mean(test$below_good))
 auc_below <- auc_of(p_below, test$below_good)
 ```
@@ -1492,8 +1492,22 @@ percentage points**.
 #| echo: false
 cm <- table(Actual = ifelse(test$below_good == 1, "Below Good", "Good or better"),
             Predicted = ifelse(p_below > 0.5, "Below Good", "Good or better"))
-kable(cm)
+
+# kable() silently drops the dimnames of a table object, which leaves the
+# reader with two identical sets of labels and no way to tell which axis is
+# which. Rebuilt as a data frame so the headings say so explicitly.
+tibble::tibble(
+  ` ` = paste("**Actually**", rownames(cm)),
+  `Predicted below Good`     = as.integer(cm[, "Below Good"]),
+  `Predicted Good or better` = as.integer(cm[, "Good or better"])
+) |>
+  kable(align = "lrr")
 ```
+
+::: {style="font-size: 0.75em"}
+The `r comma(nrow(test))` **test** schools — the ones the model never saw
+while it was being fitted.
+:::
 
 ::: incremental
 - Only **`r comma(sum(test$below_good))`** of the `r comma(nrow(test))`
