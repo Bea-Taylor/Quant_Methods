@@ -134,8 +134,9 @@ auc_of <- function(scores, actual) {
   (sum(r[actual == 1]) - n1 * (n1 + 1) / 2) / (n1 * n0)
 }
 
-predictors <- ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
-                log(TPUP) + PTPRIORHI + MINORGROUP
+# Every model below spells its formula out in full rather than sharing one
+# object. More typing, but the code on the slide is then exactly the code that
+# runs, which matters more in a teaching deck than staying DRY.
 ```
 
 ## Recap {transition="convex-in none-out" transition-speed="fast"}
@@ -1268,7 +1269,7 @@ X"* is never a safe reading of a logistic coefficient.
 
 # Binary logistic regression {background-color="#4e3c56"}
 
-## Running the model {transition="convex-in none-out" transition-speed="fast"}
+## Running the model {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 Same formula interface you have used for three weeks. Two differences:
 `glm()` not `lm()`, and a `family` argument.
@@ -1277,9 +1278,12 @@ Same formula interface you have used for three weeks. Two differences:
 #| echo: true
 #| message: false
 #| warning: false
-logit_below <- glm(update(predictors, below_good ~ .),
-                   data   = train,
-                   family = binomial)
+logit_below <- glm(
+  below_good ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+               log(TPUP) + PTPRIORHI + MINORGROUP,
+  data   = train,
+  family = binomial
+)
 ```
 
 . . .
@@ -1535,7 +1539,10 @@ question, not a statistical one** - and that is the right way round.
 #| echo: false
 #| message: false
 #| warning: false
-logit_out <- glm(update(predictors, outstanding ~ .), data = train, family = binomial)
+logit_out <- glm(
+  outstanding ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+                log(TPUP) + PTPRIORHI + MINORGROUP,
+  data = train, family = binomial)
 p_out <- predict(logit_out, newdata = test, type = "response")
 acc_out <- mean((p_out > 0.5) == test$outstanding)
 base_out <- max(mean(test$outstanding), 1 - mean(test$outstanding))
@@ -1614,7 +1621,10 @@ spacing.
 #| fig-height: 4
 #| out-width: 95%
 
-ord <- polr(update(predictors, rating4 ~ .), data = train, Hess = TRUE)
+ord <- polr(
+  rating4 ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+            log(TPUP) + PTPRIORHI + MINORGROUP,
+  data = train, Hess = TRUE)
 cuts <- ord$zeta
 
 x <- seq(-9, 7, length.out = 600)
@@ -1647,7 +1657,10 @@ estimates them from the data rather than assuming them.
 #| message: false
 #| warning: false
 library(MASS)
-ord <- polr(update(predictors, rating4 ~ .), data = train, Hess = TRUE)
+ord <- polr(
+  rating4 ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+            log(TPUP) + PTPRIORHI + MINORGROUP,
+  data = train, Hess = TRUE)
 ```
 
 ```{r}
@@ -1734,8 +1747,10 @@ what ignoring the order costs us.
 #| warning: false
 #| results: hide
 library(nnet)
-multi <- multinom(update(predictors, factor(rating4, ordered = FALSE) ~ .),
-                  data = train, trace = FALSE)
+multi <- multinom(
+  factor(rating4, ordered = FALSE) ~ P8MEA + PTFSM6CLA1A + PERCTOT +
+                  PPERSABS10 + log(TPUP) + PTPRIORHI + MINORGROUP,
+  data = train, trace = FALSE)
 ```
 
 ```{r}
