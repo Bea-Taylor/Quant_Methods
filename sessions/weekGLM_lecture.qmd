@@ -956,18 +956,13 @@ scatter around — which is exactly why the AIC got *worse* when we logged it.
 
 - We have used Ofsted ratings as a **predictor** and as a **grouping
   variable** already
-
 - Today we turn it around and make it the **outcome**
-
 - *Given everything else we know about a school - its results, its
   intake, its absence rates, its size - can we predict what Ofsted said
   about it?*
-
 - And if we can, what does that tell us about what Ofsted is actually
   measuring?
-
-- **Note**, *Ofsted has changed how it rates schools now, so single-word
-  ratings are no longer given*
+- **Note**, *Ofsted has changed how it rates schools now, so single-word ratings are no longer given*
 
 ## The outcome variable {transition="convex-in none-out" transition-speed="fast"}
 
@@ -1163,23 +1158,72 @@ worse"*
 
 ## Why the coefficient *is* a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
 
+**First, where the "one" comes from.** A slope always answers the same
+question, in every model you have ever fitted:
+
+> *If the predictor goes up by **one unit**, what happens to the outcome?*
+
+In Vol 1 that was *"one more percentage point of absence costs 0.38 Attainment
+8 points"*. The **one** is not special — it is just the step size we have
+always quoted coefficients in.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So picture **two schools, identical in every respect**, except the second has
+one more unit of $x$ — one more percentage point of absence, say.
+:::
+
+## Why the coefficient *is* a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
+
 Our model says the log-odds are a straight line:
 
 $$\log(\text{odds}) = \beta_0 + \beta_1 x$$
 
-::: incremental
-- At $x$, the log-odds are $\beta_0 + \beta_1x$
-- At $x+1$, they are $\beta_0 + \beta_1x + \beta_1$
-- So the **difference in log-odds is just** $\beta_1$
-- And subtracting logs is the same as dividing...
+::: {style="font-size: 0.95em"}
+| | Predictor | Its log-odds |
+|---|---|---|
+| **School A** | $x$ | $\beta_0 + \beta_1x$ |
+| **School B** | $x+1$ | $\beta_0 + \beta_1x + \beta_1$ |
 :::
 
 . . .
 
-$$e^{\beta_1} = \frac{\text{odds at } x+1}{\text{odds at } x}$$
+Subtract one from the other, and everything cancels except $\beta_1$:
 
-**A ratio of two odds** - because the coefficient was a difference of
-two log-odds all along.
+$$\log(\text{odds}_B) - \log(\text{odds}_A) = \beta_1$$
+
+::: {style="font-size: 0.92em"}
+**So the coefficient is a difference of two log-odds.** Not a difference in
+probability, and not a difference in odds — a difference in *logged* odds.
+:::
+
+## From a difference to a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+We have a **difference of logs**. There is a rule from school algebra for
+exactly that:
+
+$$\log(A) - \log(B) = \log\!\left(\frac{A}{B}\right)$$
+
+. . .
+
+Apply it to what we just found:
+
+$$\beta_1 = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)$$
+
+. . .
+
+Now undo the log on both sides — exponentiate:
+
+$$e^{\beta_1} = \frac{\text{odds}_B}{\text{odds}_A}$$
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;"}
+**That is the whole thing.** A ratio of two odds — because subtracting logs
+*is* dividing, and the coefficient was a difference of logs all along. Nothing
+was smuggled in: just a one-unit step, and one rule about logarithms.
+:::
 
 ## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
 
