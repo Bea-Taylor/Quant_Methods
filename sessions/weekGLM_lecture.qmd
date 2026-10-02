@@ -1524,6 +1524,117 @@ while it was being fitted.
 baseline.** On imbalanced data, accuracy on its own is not evidence of
 anything.
 
+## 0.5 was a choice, not a law {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The model does not output yes or no. It outputs a **probability** for every
+school. We turned that into a yes/no by flagging anything above **0.5** — and
+nothing made 0.5 the right number.
+
+```{r}
+#| label: threshold-table
+#| echo: false
+#| message: false
+#| warning: false
+thr_tbl <- map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
+  flag <- p_below > t
+  tibble(`Flag if probability above` = sprintf("%.2f", t),
+         `Struggling schools caught`  = sum(flag & test$below_good == 1),
+         `...and missed`              = sum(!flag & test$below_good == 1),
+         `False alarms`               = sum(flag & test$below_good == 0))
+})
+kable(thr_tbl, align = "crrr")
+```
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Drop the threshold and you catch far more struggling schools — **32 up to
+121** of the `r comma(sum(test$below_good))`. But the false alarms go from
+**23 to 316**.
+
+**There is no setting that is simply best.** Which error hurts more is a
+policy question, and the model cannot answer it for you.
+:::
+
+## Every threshold at once: the ROC curve {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Rather than argue about one cut-off, plot **all of them**. Two numbers per
+threshold:
+
+::: {style="font-size: 0.92em"}
+- **True positive rate** — of the schools that *really are* below Good, what
+  share did we flag? *(we want this high)*
+- **False positive rate** — of the schools that are *fine*, what share did we
+  flag anyway? *(we want this low)*
+:::
+
+```{r}
+#| label: roc-explained
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 6.2
+#| fig-height: 3.4
+#| fig-align: center
+thr_all <- seq(0.001, 0.999, length.out = 400)
+roc_df <- map_dfr(thr_all, function(t) {
+  tibble(tpr = mean(p_below[test$below_good == 1] > t),
+         fpr = mean(p_below[test$below_good == 0] > t))
+})
+marks <- map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
+  tibble(t = t,
+         tpr = mean(p_below[test$below_good == 1] > t),
+         fpr = mean(p_below[test$below_good == 0] > t))
+})
+
+ggplot(roc_df, aes(fpr, tpr)) +
+  geom_abline(linetype = "dashed", colour = "grey60") +
+  geom_line(colour = casa_teal, linewidth = 1.2) +
+  geom_point(data = marks, colour = casa_red, size = 2.6) +
+  geom_text(data = marks, aes(label = sprintf("%.1f", t)),
+            hjust = -0.35, size = 3.2, colour = casa_red) +
+  labs(x = "False positive rate", y = "True positive rate") +
+  theme_minimal(base_size = 11)
+```
+
+::: {style="font-size: 0.8em"}
+**Each red dot is one row of the table above.** Sweep the threshold from 1
+down to 0 and you trace the whole curve. The dashed diagonal is what you would
+get by **guessing at random** — the further above it you sit, the more the
+model knows.
+:::
+
+## And AUC is the area underneath it {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+One curve is awkward to quote in a sentence, so we summarise it by the **area
+under it** — the *AUC*.
+:::
+
+| AUC | What it means |
+|---|---|
+| **0.5** | the diagonal — no better than tossing a coin |
+| **0.7–0.8** | useful |
+| **0.9+** | very strong |
+| **1.0** | perfect: every struggling school scored above every healthy one |
+
+. . .
+
+::: {style="font-size: 0.95em"}
+It also has a reading that needs no curve at all:
+
+> **Pick one struggling school and one healthy school at random. AUC is the
+> probability the model gives the struggling one the higher score.**
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
+Notice what that does **not** depend on: any threshold. AUC asks whether the
+model puts schools in the right **order**, which is a different and fairer
+question from whether it labels them correctly at one arbitrary cut-off.
+:::
+
 ## But the model is not useless {transition="convex-in none-out" transition-speed="fast"}
 
 Accuracy asks "did you get it right?" at one arbitrary cut-off. A better
