@@ -1366,6 +1366,64 @@ Anything whose interval crosses **1** is doing nothing detectable. Note
 how much work Progress 8 is doing compared with everything else.
 :::
 
+## How do you score a model like this? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+For three weeks we judged models with **R²** — the share of the variation in
+the outcome the model managed to explain.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+That worked because the outcome was a *number*, with variation in it to
+explain. Ours is a **yes or no**. There is no spread to account for, and no
+agreed R² for logistic regression — several competing "pseudo-R²" measures
+exist and none of them means quite what R² does.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So we ask a different question. Not *how much of the variation did I explain?*
+but:
+
+> **How often is the model right?**
+:::
+
+## Don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The obvious way to answer that is to run the model over our schools and count
+how often it got the answer right.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**The problem: it has already seen those schools.** The coefficients were
+chosen to fit them as closely as possible. Scoring a model on the data it was
+fitted to is revising with the exam paper in front of you — you will do well,
+and it tells you nothing about the next paper.
+:::
+
+. . .
+
+```{r}
+#| echo: true
+#| eval: false
+# Split the schools in two, before fitting anything
+set.seed(42)
+train_idx <- sample(nrow(model_data), floor(0.7 * nrow(model_data)))
+train <- model_data[train_idx, ]   # fit the model on these
+test  <- model_data[-train_idx, ]  # judge it on these
+```
+
+::: {style="font-size: 0.92em"}
+`r comma(nrow(train))` schools to **learn** from, `r comma(nrow(test))` kept
+back to **test** on. The model never sees the second group while it is being
+fitted, so how it does there is a fair sitting of a fresh paper.
+
+That is what **test-set accuracy** means: of the `r comma(nrow(test))` schools
+it had never met, what share did it classify correctly?
+:::
+
 ## So how good is it? {transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
