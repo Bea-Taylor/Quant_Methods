@@ -1260,6 +1260,18 @@ tibble(
 ) |> kable(align = "rrrr")
 ```
 
+::: {style="font-size: 0.86em"}
+**Where each column comes from.** The **probability** is simply what the model
+predicts at that Progress 8 score. The **odds** is that probability converted
+with $p \div (1-p)$ — at Progress 8 of 0 the model says
+`r sprintf("%.3f", as.numeric(predict(glm1, data.frame(P8MEA=0), type="response")))`,
+so the odds are that divided by one minus itself =
+**`r sprintf("%.4f", odds_at(0))`**. The last column divides each row's odds by
+the one above it.
+:::
+
+. . .
+
 ::: {style="font-size: 0.9em"}
 The coefficient on Progress 8 is **`r sprintf("%.2f", b1)`**, and
 $e^{`r sprintf("%.2f", b1)`}$ = **`r sprintf("%.3f", exp(b1))`**.
