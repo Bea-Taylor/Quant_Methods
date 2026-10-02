@@ -433,7 +433,7 @@ worth ten minutes.
 
 ::::: columns
 ::: {.column width="50%"}
-**What we did in Vol 1**
+**What we did in Vol 1 - log(lm)**
 
 $$\log(y_i) = \beta_0 + \beta_1x_i + \epsilon_i$$
 
@@ -489,7 +489,7 @@ t_am <- mean(toy)
 
 ::: {.columns}
 ::: {.column width="50%"}
-**Log first, then average**
+**lm - Log first, then average**
 
 *(what transforming the data does)*
 
@@ -498,7 +498,7 @@ t_am <- mean(toy)
 3.  Undo the log: **`r sprintf("%.0f", t_gm)`**
 :::
 ::: {.column width="50%"}
-**Average first, then log**
+**GLM - Average first, then log**
 
 *(what a log link does)*
 
@@ -523,29 +523,25 @@ The **number of disadvantaged pupils** across our
 
 | | What you do | Result |
 |---|---|---|
-| **Log first, then average** | log each school, average, undo the log | **`r sprintf("%.1f", gm)`** pupils |
-| **Average first, then log** | add them up and divide | **`r sprintf("%.1f", am)`** pupils |
+| **LM - Log first, then average** | log each school, average, undo the log | **`r sprintf("%.1f", gm)`** pupils |
+| **GLM - Average first, then log** | add them up and divide | **`r sprintf("%.1f", am)`** pupils |
 
 . . .
 
 ::: {style="font-size: 0.95em"}
-**`r sprintf("%.1f", am - gm)` pupils apart — about
-`r sprintf("%.0f%%", 100 * (am - gm) / am)`.** Not a rounding error, and
-not a mistake in either calculation. They are answers to *different
+-   **`r sprintf("%.1f", am - gm)` pupils apart — about
+`r sprintf("%.0f%%", 100 * (am - gm) / am)`.** Not a rounding error, and not a mistake in either calculation. They are answers to *different
 questions*.
-
-Logging first quietly hands you the **geometric** mean. Whenever a
-variable is skewed, that sits below the ordinary one — and the more
+-   Logging first gives you the **geometric** mean. Whenever a
+variable is skewed, it sits below the ordinary mean — and the more
 skewed it is, the bigger the gap.
 :::
 
 . . .
 
 ::: {style="font-size: 0.95em"}
-So a model fitted to logged data is not predicting the average number of
-disadvantaged pupils. It is predicting something smaller, and you have
-to remember to say so. **A log-link GLM predicts the average you
-actually meant.**
+-   A model fitted to logged data is not predicting the average number of disadvantaged pupils. 
+-   It is predicting something smaller (geometric mean), and you have to remember to say so. **A log-link GLM predicts the average you actually meant.**
 :::
 
 ## The same gap, inside a model {.smaller transition="convex-in none-out" transition-speed="fast"}
@@ -667,6 +663,12 @@ binomial models performed well throughout.
 Which is exactly what the previous slide showed — `r sprintf("%.0f%%", gap50)`
 apart at a cohort of 50, converging to almost nothing by 400. **Large counts,
 small gap. Small counts, big gap.**
+:::
+
+::: {style="font-size:0.52em; color:#666; margin-top:0.4em;"}
+O'Hara, R.B. & Kotze, D.J. (2010) Do not log-transform count data.
+*Methods in Ecology and Evolution*, **1**(2), 118–122.
+[doi:10.1111/j.2041-210X.2010.00021.x](https://doi.org/10.1111/j.2041-210X.2010.00021.x)
 :::
 
 ::: {.notes}
