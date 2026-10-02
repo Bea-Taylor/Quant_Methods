@@ -570,6 +570,78 @@ the right-hand one. The two converge as schools get bigger, which is exactly
 what you would expect: the more skewed the slice of data, the wider the gap.
 :::
 
+## So which one is right? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+For **counts, yes/no outcomes and proportions** this is not a matter of taste.
+Logging is the wrong tool and a GLM is the right one.
+
+For a **continuous, strictly positive** outcome both are defensible, and they
+answer slightly different questions. Four things to ask:
+
+::: incremental
+1.  **What does the number have to do?** If it must *add up* — totals,
+    budgets, headcounts — you need the arithmetic mean, so you need the GLM.
+    **Geometric means do not aggregate.** Average logged predictions across
+    150 LAs, convert back, and the total will be wrong
+2.  **What type is the outcome?** Logging a count does not make it
+    continuous. It makes it a logged discrete thing
+3.  **Are there zeros?** Then there is no decision to make
+4.  **What do you believe about the noise?** This is the real test, and it is
+    checkable
+:::
+
+## It comes down to the errors {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {.columns}
+::: {.column width="50%"}
+**Logging assumes** the error is **multiplicative** — roughly constant spread
+on the log scale.
+
+*A school is 20% above expectation, whatever its size.*
+:::
+::: {.column width="50%"}
+**A log-link GLM assumes** the variance **grows with the mean**.
+
+*Bigger schools vary more in absolute terms — which is what counts actually
+do.*
+:::
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Plot the residuals against the fitted values. If the spread fans out on the
+raw scale but is flat once logged, logging is honest. If the variance tracks
+the mean, you want Poisson. **This is a question you can answer with a plot,
+not a preference.**
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;"}
+**The published rule of thumb.** O'Hara & Kotze simulated count data and
+compared the two approaches. Transformations performed poorly *except when
+dispersion was small and the mean counts were large*; Poisson and negative
+binomial models performed well throughout.
+
+Which is exactly what the previous slide showed — `r sprintf("%.0f%%", gap50)`
+apart at a cohort of 50, converging to almost nothing by 400. **Large counts,
+small gap. Small counts, big gap.**
+:::
+
+::: {.notes}
+Reference: O'Hara, R.B. & Kotze, D.J. (2010) "Do not log-transform count
+data", Methods in Ecology and Evolution 1(2): 118-122.
+doi:10.1111/j.2041-210X.2010.00021.x
+
+If a student asks for a one-line answer: the GLM is the safer default and for
+counts it is the correct one. Logging is legitimate when the outcome is
+continuous, positive, has no zeros, and the noise really is multiplicative -
+and then it answers a question about the typical case rather than the average
+case. If you cannot say which of those you want, you want the average, so use
+the GLM.
+:::
+
 ## And sometimes you cannot transform at all {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 Even if you are happy with the geometric mean, transforming only works
