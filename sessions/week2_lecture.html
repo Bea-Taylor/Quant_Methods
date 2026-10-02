@@ -269,7 +269,7 @@
 </section>
 <section id="when-descriptive-statistics-arent-enough" class="slide level2 smaller">
 <h2>When descriptive statistics aren’t enough</h2>
-<div id="62376678" class="cell" data-execution_count="1">
+<div id="2c2e6f4f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-label="1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-2"><a aria-label="2"></a></span>
 <span id="cb1-3"><a aria-label="3"></a><span class="co"># read data</span></span>
@@ -720,7 +720,7 @@ p(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 </div>
 <div class="fragment">
 <p>Or the probability of a range of values by integrating the PDF:</p>
-<div id="e1d91e0d" class="cell" data-execution_count="2">
+<div id="3a330a2a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a aria-label="1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> sps</span>
 <span id="cb2-2"><a aria-label="2"></a></span>
 <span id="cb2-3"><a aria-label="3"></a>mu <span class="op">=</span> <span class="dv">0</span></span>
@@ -812,7 +812,7 @@ P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
 </ul></li>
 </ul>
 <div class="fragment">
-<div id="8752e898" class="cell" data-execution_count="3">
+<div id="145d7464" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span>
 <span id="cb4-2"><a aria-label="2"></a></span>
 <span id="cb4-3"><a aria-label="3"></a><span class="co"># P(X &gt;= 120) = P(X &gt; 119)</span></span>
@@ -909,7 +909,7 @@ P(X = k) = \frac{\lambda^k e^{- \lambda}}{k!}
 <li class="fragment">How likely is it that no bikes arrive in the next 10 minutes?</li>
 <li class="fragment">How likely is it that 8 or more bikes arrive?</li>
 </ul>
-<div id="01e50922" class="cell" data-execution_count="4">
+<div id="fe1b8839" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb7-2"><a aria-label="2"></a></span>
 <span id="cb7-3"><a aria-label="3"></a>lambda_10min <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="dv">10</span>  <span class="co"># expected arrivals in 10 minutes</span></span>
@@ -955,7 +955,7 @@ Probability of 8 or more arrivals: 0.1334</code></pre>
 <li class="fragment">London Plane trees are randomly distirbuted in London’s parks, with an average of 2 trees per 100m².</li>
 <li class="fragment">What is the probability of finding exactly 3 trees in a 100m² area of Hyde Park?</li>
 </ul>
-<div id="08181f02" class="cell" data-execution_count="5">
+<div id="0ca9ca17" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb10-2"><a aria-label="2"></a></span>
 <span id="cb10-3"><a aria-label="3"></a>lambda_trees <span class="op">=</span> <span class="dv">2</span>  <span class="co"># expected trees in 100m²</span></span>
@@ -1146,7 +1146,7 @@ This is sometimes referred to as the <em>negative exponential distribution</em> 
 <li><span class="math inline">\(p(10) = 1 \times e^{-1 \times 10}\)</span></li>
 </ul></li>
 </ul>
-<div id="8a9cebaa" class="cell" data-execution_count="6">
+<div id="80e0c6f6" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> expon</span>
 <span id="cb14-2"><a aria-label="2"></a></span>
 <span id="cb14-3"><a aria-label="3"></a>lambda_1min <span class="op">=</span> <span class="dv">1</span>  <span class="co"># rate per minute</span></span>

@@ -358,7 +358,7 @@ Let's look at a dataset of students height.
 
 Easy to print the summary statistics in Python, using `pandas`: 
 
-::: {#6a88e90d .cell execution_count=1}
+::: {#36fecc34 .cell execution_count=1}
 ``` {.python .cell-code}
 import pandas as pd 
 
@@ -372,7 +372,7 @@ height_df.describe().round(2)
 
 ::: column
 
-::: {#5479648c .cell execution_count=2}
+::: {#0ca97b22 .cell execution_count=2}
 
 ::: {.cell-output .cell-output-display execution_count=2}
 ```{=html}
@@ -446,7 +446,7 @@ height_df.describe().round(2)
 <section id="when-descriptive-statistics-arent-enough" class="slide level2">
 <h2>When descriptive statistics aren’t enough</h2>
 <p>Last week we talked about descriptive statistics - but what about when this doesn’t tell the whole story?</p>
-<div id="c4240c35" class="cell" data-execution_count="3">
+<div id="e7c13f45" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-label="1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-2"><a aria-label="2"></a></span>
 <span id="cb1-3"><a aria-label="3"></a><span class="co"># read data</span></span>
@@ -978,7 +978,7 @@ P(X \geq 7) &= P(X=7) + P(X=8) + P(X=9) + P(X=10)
 </ul></li>
 </ul>
 <div class="fragment">
-<div id="d470da75" class="cell" data-execution_count="4">
+<div id="567ca01d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span>
 <span id="cb2-2"><a aria-label="2"></a></span>
 <span id="cb2-3"><a aria-label="3"></a><span class="bu">print</span>(<span class="bu">round</span>(binom.sf(<span class="dv">14</span>, n<span class="op">=</span><span class="dv">20</span>, p<span class="op">=</span><span class="fl">0.5</span>), <span class="dv">4</span>))    <span class="co"># P(X &gt;= 15) = P(X &gt; 14)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1087,7 +1087,7 @@ P(X = 10) = \frac{2^{10} e^{-2}}{10!}
 <li class="fragment">How likely is it that <strong>8 or more</strong> arrive?</li>
 </ul>
 <div class="fragment">
-<div id="5203ad81" class="cell" data-execution_count="5">
+<div id="48b573ee" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb4-2"><a aria-label="2"></a></span>
 <span id="cb4-3"><a aria-label="3"></a><span class="bu">print</span>(<span class="bu">round</span>(poisson.pmf(<span class="dv">0</span>, mu<span class="op">=</span><span class="dv">5</span>), <span class="dv">4</span>))   <span class="co"># P(X = 0)</span></span>
@@ -1543,7 +1543,7 @@ log_a(a^x) = x
 </section>
 <section id="log-it-to-straighten-growth" class="slide level2">
 <h2><em>Log it!</em> to straighten growth</h2>
-<div id="73828b68" class="cell" data-execution_count="6">
+<div id="fdfbdc7b" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1571,7 +1571,7 @@ log_a(a^x) = x
 </section>
 <section id="log-it-to-tame-long-tails" class="slide level2">
 <h2><em>Log it!</em> to tame long tails</h2>
-<div id="08a973b4" class="cell" data-execution_count="7">
+<div id="97bedb6b" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
