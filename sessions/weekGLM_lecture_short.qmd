@@ -841,9 +841,12 @@ Notice those do **not** fall by a constant multiplier the way the odds did.
 That is why we report odds ratios and not "the probability changes by X".
 :::
 
-# Binary logistic regression {background-color="#4e3c56"}
+# More than one predictor {background-color="#4e3c56"}
 
-## Running the model {.smaller transition="convex-in none-out" transition-speed="fast"}
+## Same recipe, more predictors {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+One predictor answered *"what does Progress 8 do?"*. A real question needs
+**controls** — what does Progress 8 do, *for schools otherwise alike*?
 
 Same formula interface you have used for three weeks. Two differences:
 `glm()` not `lm()`, and a `family` argument.
@@ -868,36 +871,75 @@ ct <- summary(logit_below)$coefficients
 tibble(
   Term        = rownames(ct),
   Coefficient = round(ct[, 1], 3),
-  `Std. error`= round(ct[, 2], 3),
   `p`         = ifelse(ct[, 4] < 0.001, "<0.001", as.character(round(ct[, 4], 3)))
-) |> kable()
+) |> kable(align = "lrr")
 ```
 
-## Same move, seven predictors {.smaller transition="convex-in none-out" transition-speed="fast"}
+::: {style="font-size: 0.9em"}
+Eight numbers, all in log-odds, all unreadable. **Step 1 of the recipe: ignore
+them.**
+:::
 
-Exactly as before — exponentiate, and read the result as a multiplier:
+## Step 2: exponentiate the lot {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: true
-exp(coef(logit_below)["P8MEA"])
+exp(coef(logit_below))
+```
+
+```{r}
+#| echo: false
+ors <- exp(coef(logit_below))
+or_p8  <- as.numeric(ors["P8MEA"])
+or_fsm <- as.numeric(ors["PTFSM6CLA1A"])
+or_pa  <- as.numeric(ors["PPERSABS10"])
 ```
 
 . . .
 
 ::: {style="font-size: 0.92em"}
-**One extra Progress 8 point multiplies the odds of being rated below Good by
-about `r round(exp(coef(logit_below)["P8MEA"]), 3)`** — cutting them by roughly
-`r round(100 * (1 - exp(coef(logit_below)["P8MEA"])))`%.
+**Step 3 — sort them by which side of 1 they fall:**
+
+| | Odds ratio | Which means |
+|---|---|---|
+| Progress 8 | `r sprintf("%.3f", or_p8)` | well **below 1** — odds drop sharply |
+| % disadvantaged | `r sprintf("%.3f", or_fsm)` | just below 1 |
+| % persistently absent | `r sprintf("%.3f", or_pa)` | just **above 1** — odds rise |
+| the rest | ≈ 1 | nothing detectable |
+:::
+
+## Step 4: say them out loud {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+> **Progress 8.** One more point multiplies the odds of being rated below Good
+> by **`r sprintf("%.3f", or_p8)`** — a cut of about
+> **`r sprintf("%.0f%%", 100 * (1 - or_p8))`**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+> **Persistent absence.** One more percentage point multiplies those odds by
+> **`r sprintf("%.3f", or_pa)`** — a rise of about
+> **`r sprintf("%.0f%%", 100 * (or_pa - 1))`**.
 :::
 
 . . .
 
 ::: {style="font-size: 0.9em"}
-Note it is **not** the `r sprintf("%.3f", exp(g1))` we got from the
-one-predictor model. Adding the other six changed it, because this one now
-answers a different question: *holding absence, disadvantage, size and school
-type constant*, what does one more Progress 8 point do? **Same arithmetic,
-different claim.**
+**Small ratios compound.** `r sprintf("%.3f", or_pa)` sounds trivial, but it
+applies *per percentage point*. Ten points worse is
+`r sprintf("%.3f", or_pa)`^10^ = **`r sprintf("%.2f", or_pa^10)`** — the odds
+over half as big again.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+**And note Progress 8 has changed.** On its own it was
+`r sprintf("%.3f", exp(g1))`; here it is `r sprintf("%.3f", or_p8)`. Same
+arithmetic, **different claim** — this one holds absence, disadvantage, size
+and school type constant. Always say which one you mean.
 :::
 
 ## Reading odds ratios {transition="convex-in none-out" transition-speed="fast"}
