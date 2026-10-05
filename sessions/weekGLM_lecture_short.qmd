@@ -1316,16 +1316,26 @@ it had never met, what share did it classify correctly?
 
 ## Step 3: so how good is it? {transition="convex-in none-out" transition-speed="fast"}
 
-```{r}
-#| echo: true
-#| message: false
-p_below <- predict(logit_below, newdata = test, type = "response")
-accuracy <- mean((p_below > 0.5) == test$below_good)
-```
+The model gives every school a **probability**. To count how often it is
+*right* we first have to turn those into yes/no answers — so we need a
+**cut-off**.
+
+::: {style="font-size: 0.9em"}
+We will use **0.5**: *more likely than not*. It is the obvious first guess and
+what most software reaches for by default. **Nothing requires it** — we come
+back to that at step 6.
+:::
 
 ```{r}
 #| echo: true
+#| message: false
+p_below  <- predict(logit_below, newdata = test, type = "response")
+accuracy <- mean((p_below > 0.5) == test$below_good)
 baseline <- max(mean(test$below_good), 1 - mean(test$below_good))
+```
+
+```{r}
+#| echo: false
 auc_below <- auc_of(p_below, test$below_good)
 ```
 
