@@ -1782,6 +1782,80 @@ Shmueli, G. (2010) To Explain or to Predict? *Statistical Science*, **25**(3),
 [doi:10.1214/10-STS330](https://doi.org/10.1214/10-STS330)
 :::
 
+## So — can we predict School Ofsted ratings? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+We asked that on slide one. The honest answer is **partly**, and the model is
+specific about which part.
+
+::: {style="font-size: 0.9em"}
+| | Our model | Verdict |
+|---|---|---|
+| **Ranking** — AUC | `r sprintf("%.3f", auc_below)` | Good. It puts a struggling school above a healthy one `r sprintf("%.0f%%", 100 * auc_below)` of the time |
+| **Labelling** — accuracy at 0.5 | `r sprintf("%.1f%%", 100 * accuracy)` vs a do-nothing baseline of `r sprintf("%.1f%%", 100 * baseline)` | Almost worthless |
+| **Fit** — Nagelkerke R² | `r sprintf("%.3f", nk)` (Cox & Snell `r sprintf("%.3f", cs)`) | Respectable for cross-sectional social data |
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+And on the **variables**: Progress 8 dominates everything else
+(OR `r sprintf("%.3f", or_p8)`), persistent absence adds a little per
+percentage point (OR `r sprintf("%.3f", or_pa)`), and most of the rest have
+intervals crossing 1 — *doing nothing detectable*.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;"}
+**In one line: a decent ranking device, and a poor labelling device.** Those
+are different claims, and the deck spent an hour on why.
+:::
+
+## ...and here is what it cannot tell you {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.88em"}
+::: incremental
+-   **Circularity.** Inspectors read Progress 8 *before* they visit. We are
+    not independently predicting a judgement — we are partly recovering one
+    of its own inputs. Our strongest coefficient is the one we should trust
+    least.
+-   **Timing.** Ratings here span
+    **`r min(model_data$insp_year, na.rm = TRUE)`–`r max(model_data$insp_year, na.rm = TRUE)`**;
+    the results are 2022-23. Some ratings were handed out a decade *before*
+    the data we are "predicting" them with.
+-   **Causation.** Nothing here says that raising a school's Progress 8 would
+    change its rating. We have an association, measured on log-odds.
+-   **Rarity.** Only `r sprintf("%.0f%%", 100 * mean(model_data$below_good))`
+    of schools are below Good. The model inherits that, and so does every
+    accuracy figure you quote from it.
+:::
+:::
+
+## The bit the software will never do for you {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+Every number on the last two slides is **correct**. The code ran, the maths
+is right, the AUC is genuinely 0.82.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**None of it tells you whether the model is any use.** That verdict came from
+knowing something R does not: *how an Ofsted inspection actually works*.
+:::
+
+. . .
+
+::: {style="background-color:#4e3c56; color:white; padding:11px; border-radius:5px; font-size:0.95em;"}
+These methods will carry you a long way, and they will show you things you
+could not have seen by eye. But they measure **associations in the data you
+happened to collect** — they cannot tell you where that data came from, who
+made it, or what it would mean to act on it.
+
+**That part is yours.** It always was.
+:::
+
 ## Conclusions {transition="convex-in none-out" transition-speed="fast"}
 
 - **Look at your outcome variable before you choose a model.** Week 1's
