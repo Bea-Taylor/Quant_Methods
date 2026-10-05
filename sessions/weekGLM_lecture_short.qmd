@@ -1258,7 +1258,28 @@ So learn the **shape** of what follows, not just the logistic version of it.
 We come back to what this means for the earlier lectures at the end.
 :::
 
-## Don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
+## A recipe for judging the decisions {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Same shape as the fit recipe. **Six steps, and the order matters:**
+
+::: {.incremental}
+1.  **Hold data back** — fit on some schools, judge on the rest
+2.  **Predict** on the ones it never saw
+3.  **Compare against a baseline** — never quote accuracy on its own
+4.  **Read the confusion matrix** — *which kind* of mistake is it making?
+5.  **Check the ranking with AUC** — this needs no cut-off at all
+6.  **Only then pick a cut-off** — and that is a policy decision, not a
+    statistical one
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Steps 5 and 6 are the ones people skip, and they are where the interesting
+part lives.
+:::
+
+## Steps 1 and 2: don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 The obvious way to answer that is to run the model over our schools and count
 how often it got the answer right.
@@ -1293,7 +1314,7 @@ That is what **test-set accuracy** means: of the `r comma(nrow(test))` schools
 it had never met, what share did it classify correctly?
 :::
 
-## So how good is it? {transition="convex-in none-out" transition-speed="fast"}
+## Step 3: so how good is it? {transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: true
@@ -1355,7 +1376,7 @@ beats it by **`r sprintf("%.1f", 100 * (accuracy - baseline))`
 percentage points**.
 :::
 
-## Why accuracy lied to us {transition="convex-in none-out" transition-speed="fast"}
+## Step 4: why accuracy lied to us {transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: false
@@ -1393,48 +1414,33 @@ while it was being fitted.
 baseline.** On imbalanced data, accuracy on its own is not evidence of
 anything.
 
-## 0.5 was a choice, not a law {.smaller transition="convex-in none-out" transition-speed="fast"}
+## Step 5: judge the ranking, not the labels {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-The model does not output yes or no. It outputs a **probability** for every
-school. We turned that into a yes/no by flagging anything above **0.5** — and
-nothing made 0.5 the right number.
-
-```{r}
-#| label: threshold-table
-#| echo: false
-#| message: false
-#| warning: false
-thr_tbl <- map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
-  flag <- p_below > t
-  tibble(`Flag if probability above` = sprintf("%.2f", t),
-         `Struggling schools caught`  = sum(flag & test$below_good == 1),
-         `...and missed`              = sum(!flag & test$below_good == 1),
-         `False alarms`               = sum(flag & test$below_good == 0))
-})
-kable(thr_tbl, align = "crrr")
-```
+Everything so far hung on **0.5** — and nothing made 0.5 the right cut-off.
+Move it and the accuracy, the catches and the false alarms all move with it.
 
 . . .
 
-::: {style="font-size: 0.92em"}
-Drop the threshold and you catch far more struggling schools — **32 up to
-121** of the `r comma(sum(test$below_good))`. But the false alarms go from
-**23 to 316**.
+::: {style="font-size: 0.95em"}
+So ask a question that **does not depend on the cut-off at all**:
 
-**There is no setting that is simply best.** Which error hurts more is a
-policy question, and the model cannot answer it for you.
+> *Does the model put schools in the right **order**? Are the struggling ones
+> nearer the top of the list than the healthy ones?*
+
+A model that ranks well is useful whatever cut-off you eventually pick. That
+is what **ROC** and **AUC** measure.
 :::
 
-## Every threshold at once: the ROC curve {.smaller transition="convex-in none-out" transition-speed="fast"}
+## What a ROC curve actually is {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Rather than argue about one cut-off, plot **all of them**. Two numbers per
-threshold:
+Slide the cut-off from 1 all the way down to 0. At **every** setting, write
+down two numbers:
 
 ::: {style="font-size: 0.92em"}
-- **True positive rate** — of the schools that *really are* below Good, what
-  share did we flag? *(we want this high)*
-- **False positive rate** — of the schools that are *fine*, what share did we
-  flag anyway? *(we want this low)*
+- **How many struggling schools did we catch?** *(of those that really are
+  below Good — we want this high)*
+- **How many healthy schools did we wrongly flag?** *(of those that are fine —
+  we want this low)*
 :::
 
 ```{r}
@@ -1442,15 +1448,15 @@ threshold:
 #| echo: false
 #| message: false
 #| warning: false
-#| fig-width: 6.2
-#| fig-height: 3.4
+#| fig-width: 6
+#| fig-height: 3.2
 #| fig-align: center
 thr_all <- seq(0.001, 0.999, length.out = 400)
 roc_df <- map_dfr(thr_all, function(t) {
   tibble(tpr = mean(p_below[test$below_good == 1] > t),
          fpr = mean(p_below[test$below_good == 0] > t))
 })
-marks <- map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
+marks <- map_dfr(c(0.5, 0.3, 0.1), function(t) {
   tibble(t = t,
          tpr = mean(p_below[test$below_good == 1] > t),
          fpr = mean(p_below[test$below_good == 0] > t))
@@ -1460,164 +1466,83 @@ ggplot(roc_df, aes(fpr, tpr)) +
   geom_abline(linetype = "dashed", colour = "grey60") +
   geom_line(colour = casa_teal, linewidth = 1.2) +
   geom_point(data = marks, colour = casa_red, size = 2.6) +
-  geom_text(data = marks, aes(label = sprintf("%.1f", t)),
-            hjust = -0.35, size = 3.2, colour = casa_red) +
-  labs(x = "False positive rate", y = "True positive rate") +
+  geom_text(data = marks, aes(label = sprintf("cut-off %.1f", t)),
+            hjust = -0.15, size = 3, colour = casa_red) +
+  labs(x = "Healthy schools wrongly flagged", y = "Struggling schools caught") +
   theme_minimal(base_size = 11)
 ```
 
 ::: {style="font-size: 0.8em"}
-**Each red dot is one row of the table above.** Sweep the threshold from 1
-down to 0 and you trace the whole curve. The dashed diagonal is what you would
-get by **guessing at random** — the further above it you sit, the more the
-model knows.
+Plot one against the other and you get the curve. **Each red dot is one
+cut-off.** The dashed diagonal is what pure guessing would give you — the
+further above it the curve sits, the more the model knows.
 :::
 
-## And AUC is the area underneath it {.smaller transition="convex-in none-out" transition-speed="fast"}
+## AUC — one number for the whole curve {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+A curve is awkward to quote in a sentence, so we summarise it by the **area
+underneath it**.
 
 ::: {style="font-size: 0.95em"}
-One curve is awkward to quote in a sentence, so we summarise it by the **area
-under it** — the *AUC*.
-:::
-
 | AUC | What it means |
 |---|---|
 | **0.5** | the diagonal — no better than tossing a coin |
 | **0.7–0.8** | useful |
 | **0.9+** | very strong |
-| **1.0** | perfect: every struggling school scored above every healthy one |
-
-. . .
-
-::: {style="font-size: 0.95em"}
-It also has a reading that needs no curve at all:
-
-> **Pick one struggling school and one healthy school at random. AUC is the
-> probability the model gives the struggling one the higher score.**
+| **1.0** | perfect — every struggling school ranked above every healthy one |
 :::
 
 . . .
 
-::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
-Notice what that does **not** depend on: any threshold. AUC asks whether the
-model puts schools in the right **order**, which is a different and fairer
-question from whether it labels them correctly at one arbitrary cut-off.
-:::
-
-## But the model is not useless {transition="convex-in none-out" transition-speed="fast"}
-
-Accuracy asks "did you get it right?" at one arbitrary cut-off. A better
-question is "**do you rank schools sensibly?**"
-
 ```{r}
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
-#| fig-width: 11
-#| fig-height: 4.3
-#| out-width: 95%
-
-thr <- seq(0.001, 0.999, length.out = 300)
-roc <- map_dfr(thr, function(t) {
-  tibble(tpr = mean(p_below[test$below_good == 1] > t),
-         fpr = mean(p_below[test$below_good == 0] > t))
-})
-
-p_roc <- ggplot(roc, aes(fpr, tpr)) +
-  geom_abline(linetype = "dashed", colour = "grey60") +
-  geom_line(colour = casa_teal, linewidth = 1.3) +
-  labs(x = "False positive rate", y = "True positive rate",
-       title = sprintf("ROC curve - AUC = %.3f", auc_below))
-
-p_box <- tibble(p = p_below,
-                actual = ifelse(test$below_good == 1, "Below Good", "Good or better")) |>
-  ggplot(aes(x = actual, y = p, fill = actual)) +
-  geom_boxplot(alpha = 0.75, outlier.alpha = 0.25) +
-  geom_hline(yintercept = 0.5, linetype = "dashed", colour = casa_red) +
-  scale_fill_manual(values = c(casa_pink, casa_teal)) +
-  labs(x = NULL, y = "Predicted probability",
-       title = "Predictions, by what actually happened") +
-  theme(legend.position = "none")
-
-p_roc + p_box
-```
-
-::: {style="font-size: 0.8em"}
-**AUC = `r sprintf("%.3f", auc_below)`** - pick a below-Good school and
-a Good-or-better school at random, and the model gives the below-Good
-one a higher score `r sprintf("%.0f%%", 100 * auc_below)` of the time.
-That is genuinely useful. The problem was never the model - it was the
-**0.5 threshold**, which is a choice, not a law.
-:::
-
-## Moving the threshold {transition="convex-in none-out" transition-speed="fast"}
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-width: 11
-#| fig-height: 4.3
-#| out-width: 95%
-
-sweep <- map_dfr(seq(0.02, 0.9, by = 0.01), function(t) {
-  pred <- p_below > t
-  tibble(threshold = t,
-         `Caught (recall)`   = mean(pred[test$below_good == 1]),
-         `Correct when flagged (precision)` =
-            ifelse(sum(pred) == 0, NA, mean(test$below_good[pred] == 1)))
-}) |>
-  pivot_longer(-threshold)
-
-ggplot(sweep, aes(threshold, value, colour = name)) +
-  geom_line(linewidth = 1.2, na.rm = TRUE) +
-  geom_vline(xintercept = 0.5, linetype = "dashed", colour = "grey50") +
-  scale_y_continuous(labels = percent) +
-  scale_colour_manual(values = c(casa_purple, casa_teal), name = NULL) +
-  labs(x = "Classification threshold", y = NULL,
-       title = "There is no free lunch here") +
-  theme(legend.position = "top")
-```
-
-::: {style="font-size: 0.8em"}
-Drop the threshold and you catch more struggling schools, but more of
-your flags are false alarms. **Which error is worse is a policy
-question, not a statistical one** - and that is the right way round.
-:::
-
-## A second outcome, same story {transition="convex-in none-out" transition-speed="fast"}
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-logit_out <- glm(
-  outstanding ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
-                log(TPUP) + PTPRIORHI + MINORGROUP,
-  data = train, family = binomial)
-p_out <- predict(logit_out, newdata = test, type = "response")
-acc_out <- mean((p_out > 0.5) == test$outstanding)
-base_out <- max(mean(test$outstanding), 1 - mean(test$outstanding))
-auc_out <- auc_of(p_out, test$outstanding)
-
-tibble(
-  Model = c("Below Good vs Good+", "Outstanding vs rest"),
-  Accuracy = sprintf("%.1f%%", 100 * c(accuracy, acc_out)),
-  Baseline = sprintf("%.1f%%", 100 * c(baseline, base_out)),
-  AUC = sprintf("%.3f", c(auc_below, auc_out)),
-  `Caught at p > 0.5` = c(
-    sprintf("%d of %d", cm["Below Good", "Below Good"], sum(test$below_good)),
-    sprintf("%d of %d", sum(p_out > 0.5 & test$outstanding == 1), sum(test$outstanding)))
-) |> kable()
+roc <- performance::performance_roc(logit_below, new_data = test)
+bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
 ```
 
 . . .
 
-- Higher AUC, so the ranking is even better
-- Barely above baseline on accuracy, and still catching well under half
-  the Outstanding schools
-- **Not a quirk of one model.** This is what rare outcomes do, and you
-  will meet it in your own data
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+**Ours is `r sprintf("%.3f", auc_below)`**, which reads as: *pick one
+struggling school and one healthy school at random — the model gives the
+struggling one the higher score `r sprintf("%.0f%%", 100 * auc_below)` of the
+time.*
+
+Remember accuracy said this model was barely better than useless. **It ranks
+well; we were just reading it at the wrong cut-off.**
+:::
+
+## Step 6: now choose your cut-off {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Only now, knowing the model ranks sensibly, does the cut-off become a sensible
+question — and it is a **policy** question, not a statistical one.
+
+```{r}
+#| label: threshold-table
+#| echo: false
+#| message: false
+#| warning: false
+map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
+  flag <- p_below > t
+  tibble(`Flag if probability above` = sprintf("%.2f", t),
+         `Struggling schools caught`  = sum(flag & test$below_good == 1),
+         `...and missed`              = sum(!flag & test$below_good == 1),
+         `False alarms`               = sum(flag & test$below_good == 0))
+}) |> kable(align = "crrr")
+```
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Drop the cut-off and you catch far more struggling schools — but you raise far
+more false alarms. **There is no setting that is simply best.**
+
+If a missed school means children let down, catch more. If a false alarm means
+a wasted inspection, flag fewer. **The model cannot tell you which matters
+more — you have to.**
+:::
 
 ## An uncomfortable question {transition="convex-in none-out" transition-speed="fast"}
 
