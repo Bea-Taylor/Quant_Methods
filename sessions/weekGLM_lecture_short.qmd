@@ -1233,25 +1233,29 @@ learning method you go on to meet.
   data well and still be useless on the next school
 :::
 
+## ...but the scoreboard changes {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+**What does *not* transfer is how you keep score.** Accuracy, the confusion
+matrix and AUC all need a **categorical** outcome — none of them means
+anything if you are predicting a number.
+
 . . .
 
-::: {style="font-size: 0.92em"}
-**What does *not* transfer is the scoreboard.** Accuracy, the confusion matrix
-and AUC all need a *categorical* outcome. Swap the outcome type and you swap
-the metric:
+::: {style="font-size: 0.95em"}
+Swap the outcome type and you swap the metric:
 
 | If the outcome is… | Baseline to beat | Typical metrics |
 |---|---|---|
-| A category | always predict the commonest class | accuracy, AUC, precision/recall |
-| A number | always predict the mean | RMSE, MAE, R² **on held-out data** |
-| A count | always predict the mean count | RMSE, or deviance on held-out data |
+| A **category** | always predict the commonest class | accuracy, AUC, precision/recall |
+| A **number** | always predict the mean | RMSE, MAE, R² **on held-out data** |
+| A **count** | always predict the mean count | RMSE, or deviance on held-out data |
 :::
 
 . . .
 
-::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
 So learn the **shape** of what follows, not just the logistic version of it.
-We will come back to what this means for the earlier lectures at the end.
+We come back to what this means for the earlier lectures at the end.
 :::
 
 ## Don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
