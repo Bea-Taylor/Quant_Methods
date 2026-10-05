@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Huanfa Chen">
+<meta name="author" content="Adam Dennett">
 <meta name="dcterms.date" content="2026-10-05">
 
-<title>Setting up – Quantitative Methods</title>
+<title>Week 7 - Prof D’s Regression Sessions Vol 2 – Quantitative Methods</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -31,28 +31,33 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="..//img/favicon.ico" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../sessions/week_multilevel_regression/index.html" rel="next">
+<link href="../../sessions/week_regression/index.html" rel="prev">
+<link href="../..//img/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7da10b1139b0a40bb5a5d6e5a01f90aa.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,25 +87,25 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<meta property="og:title" content="Setting up – Quantitative Methods">
+<meta property="og:title" content="Week 7 - Prof D’s Regression Sessions Vol 2 – Quantitative Methods">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://bea-taylor.com/quant_methods/setup/img/logo/full_sm.png">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/images/regression2.PNG">
 <meta property="og:site_name" content="Quantitative Methods">
 <meta property="og:locale" content="en_GB">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-md " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content">
-    <img src="../img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content">
+    <img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Quantitative Methods</span>
     </a>
   </div>
@@ -111,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../setup/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../setup/index.html"> 
 <span class="menu-text">Setup</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -120,53 +125,53 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-week-by-week">    
         <li>
-    <a class="dropdown-item" href="../sessions/index.html">
+    <a class="dropdown-item" href="../../sessions/index.html">
  <span class="dropdown-text">Overview</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Part 1: Quantitative Basics</li>
         <li>
-    <a class="dropdown-item" href="../sessions/week_EDA1/index.html">
+    <a class="dropdown-item" href="../../sessions/week_EDA1/index.html">
  <span class="dropdown-text">1. Explanatory Data Analysis #1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_EDA2/index.html">
+    <a class="dropdown-item" href="../../sessions/week_EDA2/index.html">
  <span class="dropdown-text">2. Explanatory Data Analysis #2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_hyp_test/index.html">
+    <a class="dropdown-item" href="../../sessions/week_hyp_test/index.html">
  <span class="dropdown-text">3. Hypothesis Testing</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_linear_alg/index.html">
+    <a class="dropdown-item" href="../../sessions/week_linear_alg/index.html">
  <span class="dropdown-text">4. Introduction to Linear Algebra</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Part 2: Regression</li>
         <li>
-    <a class="dropdown-item" href="../sessions/week_regression/index.html">
+    <a class="dropdown-item" href="../../sessions/week_regression/index.html">
  <span class="dropdown-text">5. Introduction to Regression</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_multiple_regression/index.html">
+    <a class="dropdown-item" href="../../sessions/week_multiple_regression/index.html">
  <span class="dropdown-text">6. Multiple Regression</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_multilevel_regression/index.html">
+    <a class="dropdown-item" href="../../sessions/week_multilevel_regression/index.html">
  <span class="dropdown-text">7. Multilevel Regression</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_GLM/index.html">
+    <a class="dropdown-item" href="../../sessions/week_GLM/index.html">
  <span class="dropdown-text">8. Generalised Linear Model</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Part 3: Dimension Reduction &amp; Clustering</li>
         <li>
-    <a class="dropdown-item" href="../sessions/week_PCA/index.html">
+    <a class="dropdown-item" href="../../sessions/week_PCA/index.html">
  <span class="dropdown-text">9. Dimension Reduction</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions/week_clustering/index.html">
+    <a class="dropdown-item" href="../../sessions/week_clustering/index.html">
  <span class="dropdown-text">10. Clustering</span></a>
   </li>  
     </ul>
@@ -177,13 +182,13 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-assessments">    
         <li>
-    <a class="dropdown-item" href="../assessments/index.html">
+    <a class="dropdown-item" href="../../assessments/index.html">
  <span class="dropdown-text">Overview</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../help/help.html"> 
+    <a class="nav-link" href="../../help/help.html"> 
 <span class="menu-text">Getting Help</span></a>
   </li>  
 </ul>
@@ -197,17 +202,144 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Week 7 - Prof D’s Regression Sessions Vol 2</h1>
+        </a>     
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../img/logo/full_md.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../img/logo/full_md.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 1: Quantitative Basics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_EDA1/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Explanatory Data Analysis #1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_EDA2/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Explanatory Data Analysis #2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_hyp_test/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Hypothesis Testing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_linear_alg/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Introduction to Linear Algebra</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 2: Regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Introduction to Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_multiple_regression/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">6. Multiple Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_multilevel_regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Multilevel Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_GLM/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Generalised Linear Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 3: Dimension Reduction &amp; Clustering</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_PCA/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. Dimension Reduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../sessions/week_clustering/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set-up</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
+  <li><a href="#quiz" id="toc-quiz" class="nav-link" data-scroll-target="#quiz">Quiz</a></li>
+  <li><a href="#practical" id="toc-practical" class="nav-link" data-scroll-target="#practical">Practical</a></li>
+  <li><a href="#further-resources" id="toc-further-resources" class="nav-link" data-scroll-target="#further-resources">Further resources</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -216,7 +348,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Setting up</h1>
+<h1 class="title d-none d-lg-block">Week 7 - Prof D’s Regression Sessions Vol 2</h1>
 </div>
 
 
@@ -226,7 +358,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Huanfa Chen </p>
+             <p>Adam Dennett </p>
           </div>
   </div>
     
@@ -245,9 +377,55 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="set-up" class="level2">
-<h2 class="anchored" data-anchor-id="set-up">Set-up</h2>
-<p>Please follow <a href="https://jreades.github.io/fsds/setup/">CASA0013 Set-up page</a> to set up the CASA Computing Environment.</p>
+<p><a href="../images/regression2.PNG" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/regression2.PNG" class="img-fluid"></a></p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This week will build on last week’s introduction to Linear Regression, extending the model into deep space and beyond. Sorry, that’s the Progression Sessions Vol 2 (this week’s recommended listening on the practical pages!). No, we won’t quite get that far, but we will be extending our regression model into multiple (near-space) dimensions to really start to unpick what might be influencing our attainment variables in English Schools.</p>
+<p>In a multiple linear regression model, additional independent/explanatory variables are added to try and explain the unexplained variance that may remain in a bivariate regression model. In theory these dimensions are infinite, however in practice care needs to be taken to strike the correct balance between explanatory power and interpretability with it unlikely that you could select a large number of independent variables without running into issues of multicollinearity (more of which in the lecture).</p>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<p>By the end of this week, you will:</p>
+<ol type="1">
+<li>Extend your understanding of linear regression by learning how we might incorporate additional continuous and categorical independent variables</li>
+<li>Understand why multicollinearity is an issue and how to avoid it</li>
+<li>Understand how the spatial or temporal autocorrelation of residuals might indicate issues in your model</li>
+<li>Understand how to incorporate and interpret dummy (categorial) independent variables in your model</li>
+<li>Understand what confounding is and how you can use confounding to better understand the influence of variables in your model</li>
+<li>Understand how it is possible to interact some of the variables in your model to see how the effects of one variable change in the presence of another, or whether there is indeed no statistically significant interaction</li>
+</ol>
+</section>
+<section id="lecture" class="level2">
+<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
+<p>To access the lecture notes: <a href="multiple_regression_lecture.html">Lecture</a></p>
+</section>
+<section id="quiz" class="level2">
+<h2 class="anchored" data-anchor-id="quiz">Quiz</h2>
+<p>To access the quiz on Moodle, please check <a href="https://moodle.ucl.ac.uk/course/view.php?id=61867">Moodle page</a>.</p>
+</section>
+<section id="practical" class="level2">
+<h2 class="anchored" data-anchor-id="practical">Practical</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To save a copy of notebook to your own GitHub Repo: follow the GitHub link, click on <code>Raw</code> and then <code>Save File As...</code> to save it to your own computer. Make sure to change the extension from <code>.ipynb.txt</code> (which will probably be the default) to <code>.ipynb</code>before adding the file to <em>your</em> GitHub repository.</p>
+</div>
+</div>
+<p>To access the practical:</p>
+<ol type="1">
+<li><a href="multiple_regression_practical.html">Main Practical Page</a></li>
+<li><a href="multiple_regression_practical.ipynb">Download</a></li>
+</ol>
+</section>
+<section id="further-resources" class="level2">
+<h2 class="anchored" data-anchor-id="further-resources">Further resources</h2>
 
 
 </section>
@@ -653,6 +831,18 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../sessions/week_regression/index.html" class="pagination-link" aria-label="5. Introduction to Regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5. Introduction to Regression</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../sessions/week_multilevel_regression/index.html" class="pagination-link" aria-label="7. Multilevel Regression">
+        <span class="nav-page-text">7. Multilevel Regression</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -660,7 +850,7 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 2025–, Huanfa Chen, Adam Dennett, Bea Taylor</p>
 </div>   
     <div class="nav-footer-center">
-<p><img src="../img/logo/logo_only_sm.png" height="25"> Quantitative Methods</p>
+<p><img src="../../img/logo/logo_only_sm.png" height="25"> Quantitative Methods</p>
 <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
@@ -680,6 +870,38 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

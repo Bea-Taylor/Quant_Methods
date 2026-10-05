@@ -2,166 +2,166 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bea-taylor.com/quant_methods/setup/index.html</loc>
-    <lastmod>2026-10-02T13:05:34.245Z</lastmod>
+    <lastmod>2026-10-05T15:25:14.225Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/weekX_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.210Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_regression/regression_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.225Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/weekGLM_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.210Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multiple_regression/multiple_regression_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week9_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multiple_regression/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week9.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multilevel_regression/multilevel_regression_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week8_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_linear_alg/linear_alg_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.223Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week7_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_linear_alg/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.223Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week7.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_hyp_test/hyp_test_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.219Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week6_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_correlation/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.219Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week5_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_correlation/correlation_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.218Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week5.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_clustering/clustering_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.210Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week4_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_PCA/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.209Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week3_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_PCA/PCA_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.195Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week3.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_GLM/GLM_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.195Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week2_lecture_v2.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA2/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.194Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week2.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA2/EDA2_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.182Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week1_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA1/EDA1_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.163Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week10_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.206Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/weekX/weekX_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.163Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week1.html</loc>
-    <lastmod>2026-10-02T13:05:34.206Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/weekX/weekX.html</loc>
+    <lastmod>2026-10-05T15:25:14.162Z</lastmod>
   </url>
   <url>
     <loc>https://bea-taylor.com/quant_methods/index.html</loc>
-    <lastmod>2026-10-02T13:05:34.037Z</lastmod>
+    <lastmod>2026-10-05T15:25:14.030Z</lastmod>
   </url>
   <url>
     <loc>https://bea-taylor.com/quant_methods/assessments/index.html</loc>
-    <lastmod>2026-10-02T13:05:34.034Z</lastmod>
+    <lastmod>2026-10-05T15:25:14.028Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/help.html</loc>
-    <lastmod>2026-10-02T13:05:34.035Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/help/help.html</loc>
+    <lastmod>2026-10-05T15:25:14.028Z</lastmod>
   </url>
   <url>
     <loc>https://bea-taylor.com/quant_methods/sessions/index.html</loc>
-    <lastmod>2026-10-02T13:05:34.201Z</lastmod>
+    <lastmod>2026-10-05T15:25:14.162Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week10.html</loc>
-    <lastmod>2026-10-02T13:05:34.206Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/weekX/weekX_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.163Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week10_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA1/EDA1_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.163Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week1_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA1/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.182Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week2_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_EDA2/EDA2_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.183Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week2_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_GLM/GLM_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.194Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week3_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.207Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_GLM/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.195Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week4.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_PCA/PCA_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.196Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week4_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_clustering/clustering_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.209Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week5_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_clustering/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.218Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week6.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_correlation/correlation_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.219Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week6_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.208Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_hyp_test/hyp_test_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.219Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week7_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_hyp_test/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.219Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week8.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_linear_alg/linear_alg_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.223Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week8_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multilevel_regression/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.223Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/week9_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multilevel_regression/multilevel_regression_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/weekGLM_lecture.html</loc>
-    <lastmod>2026-10-02T13:05:34.209Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_multiple_regression/multiple_regression_lecture.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/weekX.html</loc>
-    <lastmod>2026-10-02T13:05:34.210Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_regression/index.html</loc>
+    <lastmod>2026-10-05T15:25:14.224Z</lastmod>
   </url>
   <url>
-    <loc>https://bea-taylor.com/quant_methods/sessions/weekX_practical.html</loc>
-    <lastmod>2026-10-02T13:05:34.210Z</lastmod>
+    <loc>https://bea-taylor.com/quant_methods/sessions/week_regression/regression_practical.html</loc>
+    <lastmod>2026-10-05T15:25:14.225Z</lastmod>
   </url>
 </urlset>
