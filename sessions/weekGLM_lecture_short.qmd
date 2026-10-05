@@ -1443,8 +1443,21 @@ is what **ROC** and **AUC** measure.
 
 ## What a ROC curve actually is {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Slide the cut-off from 1 all the way down to 0. At **every** setting, write
-down two numbers:
+**ROC** stands for **Receiver Operating Characteristic** — a name that makes
+no sense until you know where it came from.
+
+::: {style="font-size: 0.86em"}
+It was invented by radar engineers during the Second World War. The *receiver*
+was the radar set, and the problem was exactly ours: an operator watching a
+screen has to decide what is a real aircraft and what is noise. Catch more
+aircraft and you also raise more false alarms. Where you set that dial is the
+*operating characteristic*.
+:::
+
+. . .
+
+Same idea here. Slide the cut-off from 1 all the way down to 0, and at
+**every** setting write down two numbers:
 
 ::: {style="font-size: 0.92em"}
 - **How many struggling schools did we catch?** *(of those that really are
@@ -1491,7 +1504,8 @@ further above it the curve sits, the more the model knows.
 ## AUC — one number for the whole curve {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 A curve is awkward to quote in a sentence, so we summarise it by the **area
-underneath it**.
+underneath it** — which is all **AUC** stands for: **Area Under the Curve**.
+You will also see it written **AUROC**, *area under the ROC curve*; same thing.
 
 ::: {style="font-size: 0.95em"}
 | AUC | What it means |
