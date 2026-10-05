@@ -641,6 +641,42 @@ intuition for log-odds — you cannot tell a head teacher their log-odds fell by
 this number into something you can say out loud.
 :::
 
+## So we undo the log {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+We only took a logarithm in the first place **to give the straight line somewhere
+to live**. It was a convenience for the maths — nothing says we have to *report*
+our answer on that scale.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So undo it. The opposite of a log is $\exp$:
+
+```{r}
+#| echo: true
+exp(coef(glm1)["P8MEA"])
+```
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+And here is the useful part. On the log scale the coefficient **added**
+`r sprintf("%.2f", g1)`. Once exponentiated it **multiplies** instead:
+
+> One more Progress 8 point multiplies the odds of being rated below Good by
+> **`r sprintf("%.3f", exp(g1))`** — cutting them by about
+> **`r sprintf("%.0f%%", 100 * (1 - exp(g1)))`**.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+That sentence you *can* say to a head teacher. It is called an **odds ratio** —
+and the name is a promise: it really is one lot of odds divided by another.
+The next few slides show exactly whose odds, divided by whose.
+:::
+
 ## Odds are not probabilities {transition="convex-in none-out" transition-speed="fast"}
 
 Worth pausing, because this trips people (including me!) up all the
@@ -882,17 +918,9 @@ tibble(
 ) |> kable()
 ```
 
-## These coefficients are on the log-odds scale {transition="convex-in none-out" transition-speed="fast"}
+## Same move, seven predictors {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-- A coefficient of `r round(coef(logit_below)["P8MEA"], 2)` on Progress
-  8 does **not** mean "the probability falls by
-  `r abs(round(coef(logit_below)["P8MEA"], 2))`"
-- It means the **log-odds** fall by that much, for every one-point
-  increase in Progress 8
-- Nobody thinks in log-odds. So we exponentiate, and get an **odds
-  ratio**
-
-. . .
+Exactly as before — exponentiate, and read the result as a multiplier:
 
 ```{r}
 #| echo: true
@@ -901,11 +929,20 @@ exp(coef(logit_below)["P8MEA"])
 
 . . .
 
-::: {style="font-size: 0.9em"}
-**One extra Progress 8 point multiplies the odds of being rated below
-Good by about `r round(exp(coef(logit_below)["P8MEA"]), 2)`** - that is,
-it cuts them by roughly
+::: {style="font-size: 0.92em"}
+**One extra Progress 8 point multiplies the odds of being rated below Good by
+about `r round(exp(coef(logit_below)["P8MEA"]), 3)`** — cutting them by roughly
 `r round(100 * (1 - exp(coef(logit_below)["P8MEA"])))`%.
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+Note it is **not** the `r sprintf("%.3f", exp(g1))` we got from the
+one-predictor model. Adding the other six changed it, because this one now
+answers a different question: *holding absence, disadvantage, size and school
+type constant*, what does one more Progress 8 point do? **Same arithmetic,
+different claim.**
 :::
 
 ## Reading odds ratios {transition="convex-in none-out" transition-speed="fast"}
