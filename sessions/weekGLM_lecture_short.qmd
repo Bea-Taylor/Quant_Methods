@@ -18,6 +18,8 @@ format:
     chalkboard: true
 filters:
  - code-visibility
+execute:
+  freeze: false
 lightbox: auto
 title-slide-attributes:
     data-background-image: "L6_images/regression.png"

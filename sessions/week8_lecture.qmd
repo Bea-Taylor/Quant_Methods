@@ -2158,14 +2158,17 @@ knitr::kable(
 ## Conclusions
 
 -   Linear Mixed Effects Models are just one useful extension to OLS standard regression. They work well particularly when there are logical groups, hierarchies or repeated measurements within your data
--   Other regression variants (not yet covered in this course) might be more appropriate in other situations:
-    -   Generalised Linear Models 
-        -   Logistic Regression (binary or multinomial outcomes)
-        -   Poisson Regression / Negative Binomal Regression (count data)
-        -   Generalised Additive Models (non-linear relationships)
+-   Next week we break the assumption we have never questioned - that the thing we are predicting is a continuous, roughly normal number - with **Generalised Linear Models**:
+    -   Logistic Regression (binary, ordered or unordered categorical outcomes)
+    -   Poisson / Negative Binomial Regression (count data)
+
+## Conclusions
+
+-   Other regression variants, beyond the scope of this course, might be more appropriate in other situations:
+    -   Generalised Additive Models (non-linear relationships)
     -   Geographically Weighted or Spatial Regression Models
     -   Lasso and Ridge Regression (incorporating shrinkage)
--   Now you have a good grounding in the basics of linear regression, these other methods should be much easier learn in future
+-   Now you have a good grounding in the basics of linear regression, these other methods should be much easier to learn in future
 
 ## Today's Practical
 
