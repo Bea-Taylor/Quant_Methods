@@ -1049,9 +1049,13 @@ large as possible — **maximum likelihood**. We report its log, because
 multiplying `r comma(n_tr)` probabilities together gives a number too small
 for a computer to hold.
 
-For our model: **log-likelihood = `r sprintf("%.1f", ll)`**. Always negative;
-closer to zero is better.
+Always negative; closer to zero is better.
 :::
+
+```{r}
+#| echo: true
+logLik(logit_below)
+```
 
 ## Deviance: distance from a perfect fit {.smaller transition="convex-in none-out" transition-speed="fast"}
 
@@ -1067,6 +1071,12 @@ $$\text{deviance} = -2 \times \text{log-likelihood}$$
 | **Null deviance** | `r sprintf("%.1f", dev0)` | with **no predictors at all** — just the overall rate |
 | **Residual deviance** | `r sprintf("%.1f", dev1)` | with our seven predictors in |
 :::
+
+```{r}
+#| echo: true
+logit_below$null.deviance    # no predictors
+logit_below$deviance         # our model
+```
 
 . . .
 
@@ -1099,6 +1109,11 @@ For our model: `r sprintf("%.1f", dev1)` + 2 × `r k` =
 **`r sprintf("%.1f", dev1 + 2*k)`**. A predictor only improves the AIC if it
 reduces the deviance by more than the 2 points it costs.
 :::
+
+```{r}
+#| echo: true
+AIC(logit_below)
+```
 
 . . .
 
@@ -1136,6 +1151,40 @@ With a binary outcome its ceiling here is **`r sprintf("%.3f", cs_max)`**, so
 $$R^2_{\text{Nagelkerke}} = \frac{`r sprintf("%.3f", cs)`}{`r sprintf("%.3f", cs_max)`} = \mathbf{`r sprintf("%.3f", nk)`}$$
 
 Now it can reach 1, and it reads much more like the R² you are used to.
+:::
+
+## Getting them in R {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Unlike `logLik()`, `AIC()` and the deviances, the pseudo-R²s are **not in base
+R** — `summary()` will not give you one. The `performance` package will:
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+performance::r2_coxsnell(logit_below)
+performance::r2_nagelkerke(logit_below)
+```
+
+. . .
+
+::: {style="font-size: 0.92em"}
+So the whole fit toolkit is four lines:
+
+| What | How |
+|---|---|
+| Log-likelihood | `logLik(model)` |
+| Deviances | `model$null.deviance`, `model$deviance` |
+| AIC | `AIC(model)` |
+| Pseudo-R² | `performance::r2_nagelkerke(model)` |
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+`summary(model)` prints the deviances and the AIC for you at the bottom of its
+output — you have been looking at them all along without knowing what they
+were.
 :::
 
 ## ...and how much to trust them {.smaller transition="convex-in none-out" transition-speed="fast"}
