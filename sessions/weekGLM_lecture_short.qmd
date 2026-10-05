@@ -1616,34 +1616,6 @@ statistical question:
 **The model cannot tell you which of those matters more. You have to.**
 :::
 
-## An uncomfortable question {transition="convex-in none-out" transition-speed="fast"}
-
-Progress 8 is by far the strongest predictor in both models. So what
-have we actually built?
-
-::: incremental
-- Ofsted inspectors **read a school's Progress 8 score before they
-  visit**
-- So we are not independently predicting a judgement - we are partly
-  **recovering one of Ofsted's own inputs**
-- That is circularity, and it makes the model much less interesting than
-  it first looked
-:::
-
-. . .
-
-::: {style="font-size: 0.9em"}
-And a second problem: inspection dates in this file run from
-**`r min(model_data$insp_year, na.rm = TRUE)` to
-`r max(model_data$insp_year, na.rm = TRUE)`**, median
-`r median(model_data$insp_year, na.rm = TRUE)`. Some of these ratings
-were handed out a decade before the results we are using to "predict"
-them.
-
-**Ask these questions of your own models.** They matter more than
-another decimal place of AUC.
-:::
-
 # Wrapping up {background-color="#4e3c56"}
 
 ## The three you did not get today {.smaller transition="convex-in none-out" transition-speed="fast"}
