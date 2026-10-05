@@ -1314,16 +1314,30 @@ That is what **test-set accuracy** means: of the `r comma(nrow(test))` schools
 it had never met, what share did it classify correctly?
 :::
 
-## Step 3: so how good is it? {transition="convex-in none-out" transition-speed="fast"}
+## Step 3: so how good is it? {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 The model gives every school a **probability**. To count how often it is
 *right* we first have to turn those into yes/no answers — so we need a
 **cut-off**.
 
-::: {style="font-size: 0.9em"}
+```{r}
+#| echo: false
+#| message: false
+# p_below is introduced to students in the echoed chunk below, but the note
+# above it needs the counts first, so they are worked out quietly here.
+n_flag_half <- sum(predict(logit_below, newdata = test, type = "response") > 0.5)
+n_test      <- nrow(test)
+```
+
+::: {style="font-size: 0.88em"}
 We will use **0.5**: *more likely than not*. It is the obvious first guess and
 what most software reaches for by default. **Nothing requires it** — we come
 back to that at step 6.
+
+**And it is applied school by school, not to the batch.** Each school's own
+probability is compared with 0.5, so this is *not* a rule that flags half the
+schools: at 0.5 we flag `r n_flag_half` of the `r n_test` test schools, about
+`r sprintf("%.1f%%", 100 * n_flag_half / n_test)` of them.
 :::
 
 ```{r}
@@ -1339,14 +1353,9 @@ baseline <- max(mean(test$below_good), 1 - mean(test$below_good))
 auc_below <- auc_of(p_below, test$below_good)
 ```
 
-::: {style="font-size: 1.1em"}
-**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`**
-:::
-
-. . .
-
-::: {style="font-size: 1.1em"}
-Not bad! Nearly nine schools in ten classified correctly.
+::: {style="font-size: 1.05em"}
+**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`** — not bad! Nearly
+nine schools in ten classified correctly.
 :::
 
 . . .
@@ -1526,37 +1535,45 @@ roc <- performance::performance_roc(logit_below, new_data = test)
 bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
 ```
 
-. . .
+## What our AUC says {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+::: {style="background-color:#2e6260; color:white; padding:11px; border-radius:5px; font-size:0.9em;"}
 **Ours is `r sprintf("%.3f", auc_below)`**, which reads as:
 
 > *Pick one school that really is below Good and one that really is not. The
 > model gives the struggling one the **higher predicted probability of being
 > below Good** `r sprintf("%.0f%%", 100 * auc_below)` of the time.*
-
-Remember accuracy said this model was barely better than useless. **It ranks
-well; we were just reading it at the wrong cut-off.**
 :::
 
-::: {style="font-size: 0.82em"}
+::: {style="font-size: 0.85em"}
 **"Predicted probability" means the model's own output** — the 0-to-1 number
 from `predict(..., type = "response")` that we have been cutting at 0.5. Not
 Progress 8, and not any of the predictors: a *higher* number means *more
 likely to be below Good*.
 :::
 
+. . .
+
+::: {style="font-size: 0.95em"}
+Remember accuracy said this model was barely better than useless. **It ranks
+well; we were just reading it at the wrong cut-off.**
+:::
+
 ## Step 6: now choose your cut-off {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Only now, knowing the model ranks sensibly, does the cut-off become a sensible
-question — and it is a **policy** question, not a statistical one.
+The ROC curve showed you **every** cut-off at once. Choosing one just means
+deciding **which point on that curve you want to sit at.**
+
+::: {style="font-size: 0.92em"}
+Here are the three red dots from that curve, written out as counts:
+:::
 
 ```{r}
 #| label: threshold-table
 #| echo: false
 #| message: false
 #| warning: false
-map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
+map_dfr(c(0.5, 0.3, 0.1), function(t) {
   flag <- p_below > t
   tibble(`Flag if probability above` = sprintf("%.2f", t),
          `Struggling schools caught`  = sum(flag & test$below_good == 1),
@@ -1565,15 +1582,36 @@ map_dfr(c(0.5, 0.3, 0.2, 0.1), function(t) {
 }) |> kable(align = "crrr")
 ```
 
+::: {style="font-size: 0.9em"}
+Lower the cut-off and you move **up and to the right** along the curve: more
+struggling schools caught, more healthy ones wrongly flagged. **There is no
+point on the curve that is simply best.**
+:::
+
+## The bit AUC cannot do for you {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+**AUC told you the curve was worth picking from.** A model with an AUC of 0.5
+has nothing to offer at *any* cut-off. Ours ranks well, so some point on it is
+worth using.
+:::
+
 . . .
 
-::: {style="font-size: 0.92em"}
-Drop the cut-off and you catch far more struggling schools — but you raise far
-more false alarms. **There is no setting that is simply best.**
+::: {style="font-size: 0.95em"}
+**But AUC cannot tell you where to sit on it**, because that is not a
+statistical question:
 
-If a missed school means children let down, catch more. If a false alarm means
-a wasted inspection, flag fewer. **The model cannot tell you which matters
-more — you have to.**
+- If a missed school means children let down — **catch more**, and accept the
+  false alarms.
+- If a false alarm means a wasted inspection — **flag fewer**, and accept the
+  misses.
+:::
+
+. . .
+
+::: {.fragment style="font-size: 1.05em; color: #C94C4C"}
+**The model cannot tell you which of those matters more. You have to.**
 :::
 
 ## An uncomfortable question {transition="convex-in none-out" transition-speed="fast"}
