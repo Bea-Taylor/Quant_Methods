@@ -580,6 +580,67 @@ $$\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots$$
 - The link-function converts the expected value of the outcome (the
   mean) into something a straight line can cope with
 
+## Enough theory — let's fit one {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+The simplest possible version: **is a school rated below Good**, predicted
+from **Progress 8** and nothing else.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+glm1 <- glm(below_good ~ P8MEA, data = model_data, family = binomial)
+coef(summary(glm1))
+```
+
+```{r}
+#| echo: false
+g0 <- as.numeric(coef(glm1)[1])
+g1 <- as.numeric(coef(glm1)[2])
+```
+
+::: {style="font-size: 0.9em"}
+The **`Std. Error`**, **`z value`** and **`Pr(>|z|)`** columns do exactly what
+their equivalents did in OLS — how precise the estimate is, and whether it is
+distinguishable from zero. It is the **`Estimate`** column that needs new
+thinking.
+:::
+
+## So what *is* that coefficient? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Put the estimates back into the equation from the last slide:
+
+$$\log\left(\frac{p}{1-p}\right) = `r sprintf("%.2f", g0)` + (`r sprintf("%.2f", g1)` \times \text{Progress 8})$$
+
+. . .
+
+::: {style="font-size: 0.95em"}
+The left-hand side is **log-odds**. So whatever is multiplying Progress 8 must
+be *in log-odds too*:
+
+> **`r sprintf("%.2f", g1)` is the amount the log-odds change for each extra
+> Progress 8 point.**
+
+One more point of Progress 8, and the log-odds of being rated below Good drop
+by `r sprintf("%.2f", abs(g1))`.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+And the **intercept** is just the same thing at zero: a school with a Progress
+8 of exactly 0 has log-odds of **`r sprintf("%.2f", g0)`**.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
+**Both of those sentences are true, and both are useless.** Nobody has an
+intuition for log-odds — you cannot tell a head teacher their log-odds fell by
+`r sprintf("%.2f", abs(g1))`. The next few slides are entirely about turning
+this number into something you can say out loud.
+:::
+
 ## Odds are not probabilities {transition="convex-in none-out" transition-speed="fast"}
 
 Worth pausing, because this trips people (including me!) up all the
@@ -702,28 +763,16 @@ was smuggled in: just a one-unit step, and one rule about logarithms.
 
 ## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-That curve we drew a few slides ago had a model behind it. Here it is — the
-same single predictor we gave `lm()`, fitted properly:
-
-```{r}
-#| echo: true
-#| message: false
-#| warning: false
-glm1 <- glm(below_good ~ P8MEA, data = model_data, family = binomial)
-coef(glm1)
-```
-
 ```{r}
 #| echo: false
-g0 <- as.numeric(coef(glm1)[1])
-g1 <- as.numeric(coef(glm1)[2])
 lo0 <- g0 + g1 * 0
 od0 <- exp(lo0)
 pr0 <- od0 / (1 + od0)
 ```
 
+Back to the model we fitted earlier — the same two numbers:
+
 ::: {style="font-size: 0.95em"}
-**Two numbers. That is the entire model**, and it says:
 
 $$\log(\text{odds}) = `r sprintf("%.2f", g0)` + (`r sprintf("%.2f", g1)` \times \text{Progress 8})$$
 :::
