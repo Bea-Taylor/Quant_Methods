@@ -729,9 +729,13 @@ Straight from our model:
 | Progress 8 | Odds of being below Good |
 |---|---|
 | −1 (a point worse) | `r sprintf("%.3f", exp(g0 - g1))` |
-| 0 (average) | `r sprintf("%.3f", exp(g0))` |
+| 0 (average) | `r sprintf("%.3f", exp(g0))` ← **the intercept** |
 
 $$\frac{`r sprintf("%.3f", exp(g0))`}{`r sprintf("%.3f", exp(g0 - g1))`} = \mathbf{`r sprintf("%.3f", exp(g1))`}$$
+
+[`r sprintf("%.3f", exp(g0))` is just $e^{`r sprintf("%.2f", g0)`}$ — exponentiate
+the intercept and you get the odds when the predictor is
+zero.]{style="font-size:0.78em; color:#666;"}
 :::
 ::: {.column width="45%"}
 And a reminder of what odds *are* — not probabilities:
@@ -751,6 +755,59 @@ And a reminder of what odds *are* — not probabilities:
 Move up one more Progress 8 point and you divide by the same number again.
 **It is the same multiplier wherever you start** — which is exactly what makes
 one coefficient enough to describe the whole curve.
+:::
+
+## A warning about that intercept {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: intercept-warning
+#| echo: false
+#| message: false
+#| warning: false
+# Fitted here rather than reusing logit_below, which is not created until the
+# next section - this slide needs to stand on its own.
+full_for_b0 <- glm(below_good ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 +
+                     log(TPUP) + PTPRIORHI + MINORGROUP,
+                   data = train, family = binomial)
+full_b0  <- as.numeric(coef(full_for_b0)[1])
+n_tiny   <- sum(model_data$TPUP == 1, na.rm = TRUE)
+n_noabs  <- sum(model_data$PERCTOT == 0, na.rm = TRUE)
+```
+
+With **one** predictor, $e^{\beta_0}$ was genuinely useful — the odds for a
+school on average progress. That worked because **Progress 8 is already
+centred**: zero means *expected progress*, not *no progress*.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+Add more predictors and the intercept becomes the odds when **every single
+predictor is zero at once**. In our seven-predictor model that is a school
+with:
+
+- no disadvantaged pupils, **no absence at all**, no persistent absence
+- no high prior attainers
+- and `log(cohort) = 0`, meaning a cohort of **one pupil**
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+`r if (n_tiny == 0 && n_noabs == 0) "**No such school exists.**" else "**Almost no such school exists.**"`
+In our data, `r n_tiny` schools have a cohort of one and `r n_noabs` have zero
+absence. The intercept there — $e^{`r sprintf("%.2f", full_b0)`}$ =
+`r sprintf("%.4f", exp(full_b0))` — is a **mathematical anchor**, not a
+description of anything.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
+**If you want an interpretable intercept, centre your predictors** — subtract
+each one's mean, so zero means *average* rather than *none*. Then
+$e^{\beta_0}$ is the odds for a thoroughly average school, which is a sentence
+worth saying. Progress 8 arrives centred already, which is why it worked here
+for free.
 :::
 
 ## And if you want a probability {.smaller transition="convex-in none-out" transition-speed="fast"}
