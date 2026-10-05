@@ -700,20 +700,27 @@ $$\text{odds} = \frac{p}{1-p}$$
 
 $$\text{OR} = \frac{\text{odds of one school}}{\text{odds of another}}$$
 
-*"This school's odds are 0.10 — **`r sprintf("%.3f", exp(g1))`** times the
-odds of a school one Progress 8 point worse."*
+From our own model:
 
-Probabilities are bounded above. **Odds are not** — which is the whole reason
-we work with them.
+| Progress 8 | Odds of being below Good |
+|---|---|
+| 0 (average) | `r sprintf("%.3f", exp(g0))` |
+| −1 (a point worse) | `r sprintf("%.3f", exp(g0 - g1))` |
+
+$$\frac{`r sprintf("%.3f", exp(g0))`}{`r sprintf("%.3f", exp(g0 - g1))`} = \mathbf{`r sprintf("%.3f", exp(g1))`}$$
 :::
 :::
 
 . . .
 
 ::: {style="font-size: 0.92em"}
-The odds are the raw ingredient. The **ratio** is what you get by putting two
-of them side by side — and a ratio is exactly what an exponentiated
-coefficient hands you. Here is why.
+Probabilities are bounded above. **Odds are not** — which is the whole reason
+we work with them.
+
+The odds are the raw ingredient; the **ratio** is what you get by putting two
+of them side by side. And notice that ratio is the
+**`r sprintf("%.3f", exp(g1))`** we got from exponentiating the coefficient —
+which is not a coincidence. Here is why.
 :::
 
 ## Two schools, one unit apart {.smaller transition="convex-in none-out" transition-speed="fast"}
