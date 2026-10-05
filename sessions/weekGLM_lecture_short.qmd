@@ -677,79 +677,53 @@ and the name is a promise: it really is one lot of odds divided by another.
 The next few slides show exactly whose odds, divided by whose.
 :::
 
-## Odds are not probabilities {transition="convex-in none-out" transition-speed="fast"}
+## Odds, and odds *ratios* {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-Worth pausing, because this trips people (including me!) up all the
-time.
+Two words that sound alike and are not. Worth pausing — this trips people
+(including me) up all the time.
 
-| Probability | Odds | In words            |
-|-------------|------|---------------------|
-| 0.5         | 1.0  | Evens               |
-| 0.75        | 3.0  | Three to one on     |
-| 0.9         | 9.0  | Nine to one on      |
-| 0.1         | 0.11 | Nine to one against |
-
-. . .
-
-Probabilities are bounded above. **Odds are not.** That is the whole
-reason we work with them.
-
-## And odds are not odds *ratios* {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-::::: columns
-::: {.column width="48%"}
+::: {.columns}
+::: {.column width="47%"}
 **Odds** describe **one** situation
 
 $$\text{odds} = \frac{p}{1-p}$$
 
-*"This school's odds of being rated below Good are 0.10"*
+| Probability | Odds | In words |
+|---|---|---|
+| 0.5 | 1.0 | evens |
+| 0.75 | 3.0 | three to one on |
+| 0.9 | 9.0 | nine to one on |
+| 0.1 | 0.11 | nine to one against |
 :::
-
-::: {.column width="52%"}
+::: {.column width="53%"}
 **An odds ratio** compares **two**
 
-$$\text{OR} = \frac{\text{odds}_A}{\text{odds}_B}$$
+$$\text{OR} = \frac{\text{odds of one school}}{\text{odds of another}}$$
 
-*"...which is 0.07 times the odds of a school one Progress 8 point
-worse"*
+*"This school's odds are 0.10 — **`r sprintf("%.3f", exp(g1))`** times the
+odds of a school one Progress 8 point worse."*
+
+Probabilities are bounded above. **Odds are not** — which is the whole reason
+we work with them.
 :::
-:::::
+:::
 
 . . .
 
-::: {style="font-size: 0.95em"}
-- Easily the most common mistake in reading logistic output.
-- The odds are the raw ingredient;
-- the **ratio** is what you get when you put two of them side by side -
-  and the **odds-ratio** is what a regression coefficient hands you.
+::: {style="font-size: 0.92em"}
+The odds are the raw ingredient. The **ratio** is what you get by putting two
+of them side by side — and a ratio is exactly what an exponentiated
+coefficient hands you. Here is why.
 :::
 
-## Why the coefficient *is* a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
+## Two schools, one unit apart {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-**First, where the "one" comes from.** A slope always answers the same
-question, in every model you have ever fitted:
-
-> *If the predictor goes up by **one unit**, what happens to the outcome?*
-
-In Vol 1 that was *"one more percentage point of absence costs 0.38 Attainment
-8 points"*. The **one** is not special — it is just the step size we have
-always quoted coefficients in.
-
-. . .
+A slope always answers the same question, in every model you have ever fitted:
+*if the predictor goes up by **one unit**, what happens?* So compare two
+schools identical in every way, except one has **one more** Progress 8 point.
 
 ::: {style="font-size: 0.95em"}
-So picture **two schools, identical in every respect**, except the second has
-one more unit of $x$ — one more percentage point of absence, say.
-:::
-
-## Why the coefficient *is* a ratio {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-Our model says the log-odds are a straight line:
-
-$$\log(\text{odds}) = \beta_0 + \beta_1 x$$
-
-::: {style="font-size: 0.95em"}
-| | Predictor | Its log-odds |
+| | Progress 8 | Its log-odds |
 |---|---|---|
 | **School A** | $x$ | $\beta_0 + \beta_1x$ |
 | **School B** | $x+1$ | $\beta_0 + \beta_1x + \beta_1$ |
@@ -757,9 +731,11 @@ $$\log(\text{odds}) = \beta_0 + \beta_1 x$$
 
 . . .
 
-Subtract one from the other, and everything cancels except $\beta_1$:
+Subtract one from the other and everything cancels except the coefficient:
 
 $$\log(\text{odds}_B) - \log(\text{odds}_A) = \beta_1$$
+
+. . .
 
 ::: {style="font-size: 0.92em"}
 **So the coefficient is a difference of two log-odds.** Not a difference in
@@ -774,49 +750,79 @@ exactly that:
 $$\log(M) - \log(N) = \log\!\left(\frac{M}{N}\right)$$
 
 [Deliberately *not* A and B — those are taken. $M$ and $N$ are just
-placeholders for "whatever you are subtracting".]{style="font-size:0.8em; color:#666;"}
+placeholders.]{style="font-size:0.8em; color:#666;"}
 
 . . .
 
-Ours was $\log(\text{odds}_B) - \log(\text{odds}_A)$, so $M$ is **School B's**
-odds and $N$ is **School A's**:
+Ours was $\log(\text{odds}_B) - \log(\text{odds}_A)$, so:
 
-$$\beta_1 = \log(\text{odds}_B) - \log(\text{odds}_A) = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)$$
+$$\beta_1 = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)$$
 
 . . .
 
-Now undo the log on both sides — exponentiate:
+Undo the log on both sides — exponentiate:
 
 $$e^{\beta_1} = \frac{\text{odds}_B}{\text{odds}_A}$$
 
 . . .
 
-::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;"}
-**That is the whole thing.** A ratio of two odds — because subtracting logs
-*is* dividing, and the coefficient was a difference of logs all along. Nothing
-was smuggled in: just a one-unit step, and one rule about logarithms.
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;"}
+**There it is.** $e^{\beta}$ really is one lot of odds divided by another —
+because subtracting logs *is* dividing, and the coefficient was a difference
+of logs all along.
 :::
 
-## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
+## The same ratio, wherever you start {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
+#| label: odds-ladder
 #| echo: false
+#| message: false
+#| warning: false
+odds_at <- function(x) {
+  p <- predict(glm1, newdata = data.frame(P8MEA = x), type = "response")
+  as.numeric(p / (1 - p))
+}
 lo0 <- g0 + g1 * 0
 od0 <- exp(lo0)
 pr0 <- od0 / (1 + od0)
+
+tibble(
+  `Progress 8`  = c(-1, 0, 1, 2),
+  Probability   = sprintf("%.3f", map_dbl(c(-1, 0, 1, 2),
+                    ~ as.numeric(predict(glm1, data.frame(P8MEA = .x), type = "response")))),
+  Odds          = sprintf("%.4f", map_dbl(c(-1, 0, 1, 2), odds_at)),
+  `Odds ÷ the row above` = c("—", sprintf("%.3f", map_dbl(c(0, 1, 2),
+                    ~ odds_at(.x) / odds_at(.x - 1))))
+) |> kable(align = "rrrr")
 ```
 
-Back to the model we fitted earlier — the same two numbers:
+Our model's coefficient was **`r sprintf("%.2f", g1)`**, and
+$e^{`r sprintf("%.2f", g1)`}$ = **`r sprintf("%.3f", exp(g1))`**.
 
-::: {style="font-size: 0.95em"}
+. . .
 
-$$\log(\text{odds}) = `r sprintf("%.2f", g0)` + (`r sprintf("%.2f", g1)` \times \text{Progress 8})$$
+::: {style="font-size: 0.92em"}
+That is the last column, **every single time** — whether you start from a
+Progress 8 of −1, 0 or 1. One coefficient, one odds ratio, valid wherever you
+begin.
 :::
 
-## From those two numbers to a probability {.smaller transition="convex-in none-out" transition-speed="fast"}
+. . .
 
-Take a school with a Progress 8 of **0** and turn the handle. Three steps, and
-each one undoes a bit of the link function:
+::: {style="font-size: 0.92em"}
+Now look at the **probabilities**: `r sprintf("%.2f", as.numeric(predict(glm1, data.frame(P8MEA=-1), type="response")))`
+→ `r sprintf("%.2f", pr0)`
+→ `r sprintf("%.3f", as.numeric(predict(glm1, data.frame(P8MEA=1), type="response")))`.
+Nothing so tidy. Which is exactly why *"the probability falls by X"* is never
+a safe reading of a logistic coefficient.
+:::
+
+## And back to a probability {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Odds ratios are for *comparing*. If you want a straight answer for **one**
+school, turn the handle the other way — three steps, each undoing a bit of the
+link function. Take a school with Progress 8 of **0**:
 
 ::: {.incremental}
 1.  **Log-odds** — put 0 into the equation:
@@ -831,59 +837,8 @@ each one undoes a bit of the link function:
 
 ::: {style="font-size: 0.92em"}
 So a school on exactly average progress has about a
-**`r sprintf("%.0f%%", 100 * pr0)` chance** of being rated below Good.
-:::
-
-## See it in our own data {.smaller transition="convex-in none-out" transition-speed="fast"}
-
-**Every row below is those same three steps**, done at a different Progress 8
-score.
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-
-# Single-predictor model, so the arithmetic is visible. glm1 is already fitted
-# on the "minus fifty percent" slide.
-odds_at <- function(x) {
-  p <- predict(glm1, newdata = data.frame(P8MEA = x), type = "response")
-  as.numeric(p / (1 - p))
-}
-b1 <- as.numeric(coef(glm1)["P8MEA"])
-
-tibble(
-  `Progress 8`  = c(-1, 0, 1, 2),
-  Probability   = sprintf("%.3f", map_dbl(c(-1, 0, 1, 2),
-                    ~ as.numeric(predict(glm1, data.frame(P8MEA = .x), type = "response")))),
-  Odds          = sprintf("%.4f", map_dbl(c(-1, 0, 1, 2), odds_at)),
-  `Odds ÷ the row above` = c("-", sprintf("%.3f", map_dbl(c(0, 1, 2),
-                    ~ odds_at(.x) / odds_at(.x - 1))))
-) |> kable(align = "rrrr")
-```
-
-::: {style="font-size: 0.86em"}
-Check the **Progress 8 = 0** row against the slide before: probability
-`r sprintf("%.3f", pr0)`, odds `r sprintf("%.4f", od0)`. The last column simply
-divides each row's odds by the one above it.
-:::
-
-. . .
-
-::: {style="font-size: 0.9em"}
-The coefficient on Progress 8 is **`r sprintf("%.2f", b1)`**, and
-$e^{`r sprintf("%.2f", b1)`}$ = **`r sprintf("%.3f", exp(b1))`**.
-
-That is the last column, every time. **One coefficient, one odds ratio,
-valid wherever you start from.** Now look at the probabilities - they
-fall
-`r sprintf("%.2f", as.numeric(predict(glm1, data.frame(P8MEA=-1), type="response")))`
-→
-`r sprintf("%.2f", as.numeric(predict(glm1, data.frame(P8MEA=0), type="response")))`
-→
-`r sprintf("%.3f", as.numeric(predict(glm1, data.frame(P8MEA=1), type="response")))`,
-doing nothing so tidy. Which is exactly why *"the probability falls by
-X"* is never a safe reading of a logistic coefficient.
+**`r sprintf("%.0f%%", 100 * pr0)` chance** of being rated below Good — and
+that is the number in the table's second row.
 :::
 
 # Binary logistic regression {background-color="#4e3c56"}
