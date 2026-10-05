@@ -1529,13 +1529,21 @@ bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
 . . .
 
 ::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;"}
-**Ours is `r sprintf("%.3f", auc_below)`**, which reads as: *pick one
-struggling school and one healthy school at random — the model gives the
-struggling one the higher score `r sprintf("%.0f%%", 100 * auc_below)` of the
-time.*
+**Ours is `r sprintf("%.3f", auc_below)`**, which reads as:
+
+> *Pick one school that really is below Good and one that really is not. The
+> model gives the struggling one the **higher predicted probability of being
+> below Good** `r sprintf("%.0f%%", 100 * auc_below)` of the time.*
 
 Remember accuracy said this model was barely better than useless. **It ranks
 well; we were just reading it at the wrong cut-off.**
+:::
+
+::: {style="font-size: 0.82em"}
+**"Predicted probability" means the model's own output** — the 0-to-1 number
+from `predict(..., type = "response")` that we have been cutting at 0.5. Not
+Progress 8, and not any of the predictors: a *higher* number means *more
+likely to be below Good*.
 :::
 
 ## Step 6: now choose your cut-off {.smaller transition="convex-in none-out" transition-speed="fast"}
