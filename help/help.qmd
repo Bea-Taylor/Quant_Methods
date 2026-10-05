@@ -1,0 +1,24 @@
+---
+format: html
+date: last-modified
+author: "Bea Taylor"
+title: "Getting Help"
+lightbox:
+  match: auto
+  effect: fade
+  desc-position: right
+  loop: false
+---
+
+We all need help from time to time. We will always do our best to support you, particularly because we know that this module can be challenging if you are new to quantitative methods or statistics. However, one of the most important skills you can develop is knowing how to find and make use of the help that is available to you.
+
+## How to Help Yourself 
+
+There are lots of things you can do when you are struggling with a concept, a tutorial, or some code. Here are six places to start:
+
+1. **Make the most of the practical sessions**. We can't help with something we don't know you're struggling with! Please talk to us, or to the TAs, during practical sessions if you are stuck, unsure about something, or would simply like some feedback on your approach. You don't need to wait until you have a fully formed question.
+2. **Use the dedicated #0007-quantitative-methods channel on Slack**. This should be your primary way of asking for help outside scheduled teaching hours. Slack allows everyone to benefit from questions and answers.
+3. **Look at the recommended readings**. Whether or not we ask you questions about them in class, the readings have been carefully chosen to support the module's learning outcomes. If you're struggling with a concept or idea, the [reading list](https://moodle.ucl.ac.uk/mod/lti/view.php?id=9217800) is a good place to start. 
+4. **Search for coding solutions**.  Use Google or [Stack Overflow](https://stackoverflow.com/questions/tagged/python) or your LLM of choice (we prefer Claude Code) --- as you become a better programmer you'll start to understand how to frame your questions/prompts in ways that produce the right answer right away.
+5. **Try online courses**. If you'd like to spend some more time practising a particular skill, there are lots of online courses available through platforms such as [LinkedIn course](https://www.linkedin.com/learning/) or [Coursera](https://www.coursera.org/). There is a huge range of material available, so check the reviews and course descriptions to make sure that a course is appropriate for your level and covers what you need.
+6. **Talk to your peers**. You're very unlikely to be the only person who is finding something difficult. Discussing problems with your peers can be a great way to work through a difficult concept, compare approaches, and learn from one another. Just remember that struggling with something is a normal part of learning! Asking for help is a strength, not a weakness!

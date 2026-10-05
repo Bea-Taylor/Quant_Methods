@@ -89,7 +89,7 @@ library(tidyverse)
 library(kableExtra)
 library(here)
 
-assessment <- read_csv(here("data", "assessment.csv"))
+assessment <- read_csv("assessment.csv")
 
 kable(assessment)
 ```

@@ -52,7 +52,7 @@ jobs:
 
       - name: Install casaviz from ZIP
         run: |
-          unzip setup/casaviz.zip -d casaviz
+          unzip packages/casaviz.zip -d casaviz
           R CMD INSTALL casaviz
           rm -rf casaviz
 

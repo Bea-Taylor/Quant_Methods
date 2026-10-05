@@ -1,0 +1,46 @@
+---
+format: html
+date: last-modified
+author: "Bea Taylor"
+title: "Week 2"
+subtitle: "Exploratory Data Analysis 2"
+---
+
+## Introduction
+
+Continuing on the theme of exploratory data analysis, this week we introduce common probability distributions, discuss the risks of biased data, and get to grips with exponential functions. We'll be covering ideas from statistics and probability, so if this is new to you, or something you haven't studied in a while, I'd recommend checking out some of the resources below. 
+
+## Learning Objectives
+
+By the end of this week, you will be able to:
+
+1. Describe the characteristic features of common probability distributions
+2. Apply exponentials and logarithms to transform data
+3. Evaluate whether a dataset is representative
+
+## Lecture 
+
+To access the lecture notes: [Lecture](EDA2_lecture.qmd)
+
+## Quiz
+
+To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.uk/course/view.php?id=61867).
+
+## Practical
+
+To access the practical:
+
+1. [Preview](EDA2_practical.html)
+2. [Download](EDA2_practical.ipynb)
+
+:::{.callout-note}
+
+To save a copy of notebook to your own GitHub Repo: follow the GitHub link, click on `Raw` and then `Save File As...` to save it to your own computer. Make sure to change the extension from `.ipynb.txt` (which will probably be the default) to `.ipynb`before adding the file to *your* GitHub repository.
+
+:::
+
+## Further resources
+
+- If you want to brush up on probability and statistics check out this Khan Academy course: [https://www.khanacademy.org/math/statistics-probability](https://www.khanacademy.org/math/statistics-probability). In particular unit 9 on 'Random variables' and unit 10 on 'Sampling distributions'. 
+- If you're interested in reading a bit more about the risks of biased data: [https://plus.maths.org/content/ai-be-judge-use-algorithms-criminal-justice-system](https://plus.maths.org/content/ai-be-judge-use-algorithms-criminal-justice-system)
+- If you're interested in reading more generally/casually about statistics I'd recommend 'The Art of Statistics: Learning from Data' by David Spielgelhalter. 

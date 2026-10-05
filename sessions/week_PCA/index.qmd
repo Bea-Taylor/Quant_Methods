@@ -1,0 +1,41 @@
+---
+format: html
+date: last-modified
+author: "Bea Taylor"
+title: "Week 9"
+---
+
+## Introduction
+
+This week will introduce how to simplify complex datasets by reducing the number of variables while preserving important information.
+
+## Learning Objectives
+
+By the end of this week, you will be able to:
+
+1. Understand the principle of dimensionality reduction.
+2. Understand the method of principle component analysis.
+3. Visualise and describe the results of PCA.
+
+## Lecture 
+
+To access the lecture notes: [Lecture](PCA_lecture.qmd)
+
+## Quiz
+
+To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.uk/course/view.php?id=61867).
+
+## Practical
+
+:::{.callout-note}
+
+To save a copy of notebook to your own GitHub Repo: follow the GitHub link, click on `Raw` and then `Save File As...` to save it to your own computer. Make sure to change the extension from `.ipynb.txt` (which will probably be the default) to `.ipynb`before adding the file to *your* GitHub repository.
+
+:::
+
+To access the practical:
+
+1. [Preview](PCA_practical.html)
+2. [Download](PCA_practical.ipynb)
+
+## Further resources
