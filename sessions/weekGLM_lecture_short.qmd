@@ -866,16 +866,14 @@ logit_below <- glm(
 . . .
 
 ```{r}
-#| echo: false
-ct <- summary(logit_below)$coefficients
-tibble(
-  Term        = rownames(ct),
-  Coefficient = round(ct[, 1], 3),
-  `p`         = ifelse(ct[, 4] < 0.001, "<0.001", as.character(round(ct[, 4], 3)))
-) |> kable(align = "lrr")
+#| echo: true
+printCoefmat(coef(summary(logit_below)))
 ```
 
-::: {style="font-size: 0.9em"}
+::: {style="font-size: 0.86em"}
+*(That is the coefficients block of `summary(logit_below)` — which also prints
+the call, the deviance and the AIC. We come back to those later.)*
+
 Eight numbers, all in log-odds, all unreadable. **Step 1 of the recipe: ignore
 them.**
 :::
