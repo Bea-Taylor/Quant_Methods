@@ -344,7 +344,7 @@ window.Quarto = {
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>We first import the Python libraries needed for data handling, clustering, and plotting.</p>
-<div id="b695dbd4" class="cell" data-execution_count="1">
+<div id="75e50f55" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -362,7 +362,7 @@ window.Quarto = {
 <section id="load-school-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-school-data">Load school data</h2>
 <p>We now load the DfE school dataset of 2022-2023.</p>
-<div id="020d5bd0" class="cell" data-execution_count="2">
+<div id="2ec6b67f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url_school <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L6_data/Performancetables_130242/2022-2023/england_filtered.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_school <span class="op">=</span> pd.read_csv(url_school)</span>
@@ -407,7 +407,7 @@ window.Quarto = {
 <section id="load-lad-to-county-lookup-and-filter-to-london" class="level2">
 <h2 class="anchored" data-anchor-id="load-lad-to-county-lookup-and-filter-to-london">Load LAD-to-county lookup and filter to London</h2>
 <p>We need to keep only schools in <strong>Inner London</strong> or <strong>Outer London</strong>. To do this, we join a LAD-to-county lookup table to the school data.</p>
-<div id="625cdbcd" class="cell" data-execution_count="3">
+<div id="b82771b4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw link to the lookup table</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>url_lad_county <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L10_data/Local_Authority_District_to_County_(December_2024)_Lookup_in_EN.csv"</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -429,7 +429,7 @@ window.Quarto = {
 </li>
 <li>Keep only rows where <code>CTY24NM</code> is <strong>Inner London</strong> or <strong>Outer London</strong>.</li>
 </ul>
-<div id="59a1c796" class="cell" data-execution_count="4">
+<div id="1a7b93b4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge school data with LAD→County lookup</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_school_london <span class="op">=</span> df_school.merge(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    df_lad_county[[<span class="st">"LAD24NM"</span>, <span class="st">"CTY24NM"</span>]],</span>
@@ -513,7 +513,7 @@ Name: count, dtype: int64</code></pre>
 </li>
 <li><strong>P8MEA_NFSM6CLA1A</strong> – Progress 8 measure for non-disadvantaged pupils.</li>
 </ol>
-<div id="27518439" class="cell" data-execution_count="5">
+<div id="fcee9647" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cols_for_clustering <span class="op">=</span> [</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PTFSM6CLA1A"</span>, <span class="st">"PTNOTFSM6CLA1A"</span>, <span class="st">"PNUMEAL"</span>, <span class="st">"PNUMFSMEVER"</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ATT8SCR_FSM6CLA1A"</span>, <span class="st">"ATT8SCR_NFSM6CLA1A"</span>, <span class="st">"ATT8SCR_BOYS"</span>, <span class="st">"ATT8SCR_GIRLS"</span>,</span>
@@ -618,7 +618,7 @@ Name: count, dtype: int64</code></pre>
 <section id="check-and-handle-missing-values" class="level2">
 <h2 class="anchored" data-anchor-id="check-and-handle-missing-values">Check and handle missing values</h2>
 <p>Clustering algorithms cannot directly work with missing values, so we have to handle them. We will use <strong>KNN imputation</strong>, which fills in missing values based on similar rows.</p>
-<div id="b0780bcb" class="cell" data-execution_count="6">
+<div id="c34f7d6b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_school_reduced.isna().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>PTFSM6CLA1A           11
@@ -634,7 +634,7 @@ P8MEA_NFSM6CLA1A      21
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="15a4b1b9" class="cell" data-execution_count="7">
+<div id="8ffc2387" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use K-nearest neighbours imputation (k = 5)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>imputer <span class="op">=</span> KNNImputer(n_neighbors<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -744,7 +744,7 @@ dtype: int64</code></pre>
 <section id="standardise-variables" class="level2">
 <h2 class="anchored" data-anchor-id="standardise-variables">Standardise variables</h2>
 <p>Different variables are measured on different scales (e.g.&nbsp;ratio vs scores). To avoid one variable dominating the distance measure, we standardise them so each has mean <span class="math display">\[0\]</span> and standard deviation <span class="math display">\[1\]</span>.</p>
-<div id="e62e12e9" class="cell" data-execution_count="8">
+<div id="6760c86f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>scaled_array <span class="op">=</span> scaler.fit_transform(df_reduced_imputed)</span>
@@ -905,7 +905,7 @@ dtype: int64</code></pre>
 </ol>
 <section id="elbow-plot-to-choose-k" class="level3">
 <h3 class="anchored" data-anchor-id="elbow-plot-to-choose-k">Elbow plot to choose <span class="math display">\[k\]</span></h3>
-<div id="6214f20a" class="cell" data-execution_count="9">
+<div id="f2c65daa" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>k_values <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)  <span class="co"># try k = 2 to 10</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -937,7 +937,7 @@ dtype: int64</code></pre>
 </section>
 <section id="fit-k-means-with-chosen-k" class="level3">
 <h3 class="anchored" data-anchor-id="fit-k-means-with-chosen-k">Fit K-means with chosen <span class="math display">\[k\]</span></h3>
-<div id="3e3e94a7" class="cell" data-execution_count="10">
+<div id="1ab59d8b" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>k_val <span class="op">=</span> <span class="dv">5</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>kmeans_final <span class="op">=</span> KMeans(</span>
@@ -968,7 +968,7 @@ Name: count, dtype: int64</code></pre>
 <section id="inspect-k-means-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="inspect-k-means-cluster-centroids">Inspect K-means cluster centroids</h3>
 <p>We will look at the <em>typical</em> school in each cluster by examining the cluster centroids back in the original units.</p>
-<div id="accda47d" class="cell" data-execution_count="11">
+<div id="4ceffc28" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>centroids_scaled <span class="op">=</span> kmeans_final.cluster_centers_</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>centroids_original <span class="op">=</span> scaler.inverse_transform(centroids_scaled)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1006,7 +1006,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="plot-of-k-means-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="plot-of-k-means-cluster-centroids">Plot of K-means cluster centroids</h3>
 <p>We will use the following code to visualise the cluster centroids in multiple dimensions.</p>
-<div id="cbde31fa" class="cell" data-execution_count="12">
+<div id="d780072c" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adapted from this tutorial: https://towardsdatascience.com/how-to-make-stunning-radar-charts-with-python-implemented-in-matplotlib-and-plotly-91e21801d8ca</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> radar_plot_cluster_centroids(df_cluster_centroid):</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># parameters</span></span>
@@ -1031,7 +1031,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Can you observe and describe the difference between cluster centroids?</p>
-<div id="32c4f345" class="cell" data-execution_count="13">
+<div id="d96b8b8a" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>radar_plot_cluster_centroids(df_centroids)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1045,7 +1045,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="visualising-clusters-with-selected-variables" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-clusters-with-selected-variables">Visualising clusters with selected variables</h3>
 <p>To visualise all data points coloured by the clusters, we can pick up two variables (such as Attainment 8 for FSM vs non-FSM students) and create a scatterplot.</p>
-<div id="dc6ca3ba" class="cell" data-execution_count="14">
+<div id="acaa45ee" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x_var <span class="op">=</span> <span class="st">"ATT8SCR_FSM6CLA1A"</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_var <span class="op">=</span> <span class="st">"ATT8SCR_NFSM6CLA1A"</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1077,7 +1077,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="helper-function-to-plot-dendrogram" class="level3">
 <h3 class="anchored" data-anchor-id="helper-function-to-plot-dendrogram">Helper function to plot dendrogram</h3>
 <p>We reconstruct a linkage matrix from the fitted model, following the pattern used in scikit-learn tutorials.</p>
-<div id="4f8ddabe" class="cell" data-execution_count="15">
+<div id="8b9087ff" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_dendrogram(model, <span class="op">**</span>kwargs):</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot a dendrogram for a fitted AgglomerativeClustering model.</span></span>
@@ -1108,7 +1108,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="fit-hierarchical-model" class="level3">
 <h3 class="anchored" data-anchor-id="fit-hierarchical-model">Fit hierarchical model</h3>
 <p>We first fit a model that builds the full tree so that we can draw the dendrogram.</p>
-<div id="83f5af65" class="cell" data-execution_count="16">
+<div id="175fcfa0" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>agg_full <span class="op">=</span> AgglomerativeClustering(</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    distance_threshold<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    n_clusters<span class="op">=</span><span class="va">None</span>,</span>
@@ -1122,7 +1122,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="plot-truncated-dendrogram" class="level3">
 <h3 class="anchored" data-anchor-id="plot-truncated-dendrogram">Plot truncated dendrogram</h3>
 <p>We only show the top few levels so the plot is not too crowded.</p>
-<div id="5409c06e" class="cell" data-execution_count="17">
+<div id="a55395ce" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hierarchical Clustering Dendrogram (truncated) - London schools"</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1150,7 +1150,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <li>A big vertical jump suggests a natural place to cut the tree into a small number of clusters.### Cut tree into a chosen number of clusters</li>
 </ul>
 <p>We now choose a number of clusters (e.g.&nbsp;5, for easier comparison with K-means).</p>
-<div id="388bbc87" class="cell" data-execution_count="18">
+<div id="eae3cf6e" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n_clusters_hier <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>agg_cut <span class="op">=</span> AgglomerativeClustering(</span>
@@ -1177,7 +1177,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="plot-of-hierarchical-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="plot-of-hierarchical-cluster-centroids">Plot of hierarchical cluster centroids</h3>
-<div id="0c4c0452" class="cell" data-execution_count="19">
+<div id="745e635a" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_hc <span class="op">=</span> df_school_reduced.copy()</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df_hc <span class="op">=</span> df_hc.assign(cluster_hier<span class="op">=</span>hier_labels)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>df_hc_centroid <span class="op">=</span> df_hc.groupby(<span class="st">'cluster_hier'</span>).mean()</span>
@@ -1195,7 +1195,7 @@ Name: count, dtype: int64</code></pre>
 <section id="visualising-clusters-with-selected-variables-1" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-clusters-with-selected-variables-1">Visualising clusters with selected variables</h3>
 <p>We reuse the same two attainment variables but colour by hierarchical cluster.</p>
-<div id="b56b2554" class="cell" data-execution_count="20">
+<div id="38ac6de7" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df_school_london,</span>
@@ -1229,7 +1229,7 @@ Name: count, dtype: int64</code></pre>
 </ul>
 <section id="map-with-k-means-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="map-with-k-means-clusters">Map with K-means clusters</h3>
-<div id="489f2e54" class="cell" data-execution_count="21">
+<div id="527e7f79" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> Polygon, MultiPolygon</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.lines <span class="im">as</span> mlines</span>
@@ -1334,7 +1334,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_27797/2539784033.py:29: DeprecationWarning: The 'unary_union' attribute is deprecated, use the 'union_all()' method instead.
+<pre><code>/tmp/ipykernel_27841/2539784033.py:29: DeprecationWarning: The 'unary_union' attribute is deprecated, use the 'union_all()' method instead.
   london_union = gdf_london.unary_union      # Polygon or MultiPolygon</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1348,7 +1348,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="map-with-hierarchical-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="map-with-hierarchical-clusters">Map with hierarchical clusters</h3>
-<div id="d7707c28" class="cell" data-execution_count="22">
+<div id="bb493228" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.lines <span class="im">as</span> mlines</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
