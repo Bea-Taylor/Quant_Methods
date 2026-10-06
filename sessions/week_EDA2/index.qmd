@@ -20,7 +20,7 @@ By the end of this week, you will be able to:
 
 ## Lecture 
 
-The lecture slides are available [here](EDA2_lecture.pdf).
+The lecture slides are available [here](EDA2_lecture.qmd).
 
 ## Quiz
 
