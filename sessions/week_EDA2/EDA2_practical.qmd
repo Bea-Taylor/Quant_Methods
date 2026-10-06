@@ -10,11 +10,11 @@ filters:
   - quarto # keep Quarto's built-ins as the last filter or it won't work
 ---
 
-This week is focussed on using some common functions in Python and R to plot data and distributions. 
+This week is focussed on linking probability distributions to the data using some common functions in Python/R.  
 
 ## Learning Outcomes
 
-- Load and tidy a new dataset in Python, building on what you did in Practical 1.
+- Load and tidy a new dataset, building on what you did in Practical 1.
 - Plot histograms and recognise the features of a normal distribution.
 - Use Q-Q plots to check whether a dataset is (approximately) normally distributed.
 - Standardise a variable into z-scores, and use them to flag unusual values.
@@ -22,15 +22,41 @@ This week is focussed on using some common functions in Python and R to plot dat
 
 ## Starting the Practical
 
-As per last week: download the notebook to your `QM` folder, switch over to `JupyterLab` (which will be running in Podman/Docker) and get to work. 
+As per last week, download the notebook to your chosen folder, then open `JupyterLab` (which will be running in Podman/Docker), or [VS Code](https://code.visualstudio.com/), to run the code yourself. 
 
 *Optionally* if you want to save the completed notebook to your Github repo, you can `add`, `commit`, and `push` the notebook in Git after you download it. When you're done for the day, save your changes to the file (This is very important!), then `add`, `commit`, and `push` your work to save the completed notebook.
 
-# Task 1 — Read the data in
+# Task 1 — Import the packages (if using Python)
+
+We are going to import some common python packages. 
+
+::: {.multicode}
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: imports-py
+import pandas as pd # pandas is a library for data manipulation
+import matplotlib.pyplot as plt # matplotlib is a library for data visualisation
+import numpy as np # numpy is a library for numerical computing
+from pathlib import Path # pathlib is a library for working with file paths
+```
+
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: imports-r
+#| message: false
+#| warning: false
+library(tidyverse) # tidyverse is a collection of packages for data manipulation and visualisation
+library(here) # here is a library for working with file paths
+```
+:::
+
+# Task 2 — Read the data in
 
 We are going to look at schools performance data in England.
 
-The data is sourced from gov.uk [here](https://www.compare-school-performance.service.gov.uk/download-data) - HOWEVER I have also saved a copy of the relevant dataset to the Github repo (in case the dataset is removed from the website) which you can load directly in the code below. In this notebook we're using the performance table for academic year 2022/23: 'Performancetables_130242/2022-2023'.
+The data is sourced from gov.uk [here](https://www.compare-school-performance.service.gov.uk/download-data) - HOWEVER I have also saved a copy of the relevant dataset to the Github repo which you can load directly in the code below. In this notebook we're using the performance table for academic year 2022/23: 'Performancetables_130242/2022-2023'.
 
 If you do want to download the data directly from the gov.uk website then you need to choose the academic year '2022 to 2023', then 'All of England', then 'Key stage 4 results (final)'. Then you'll want to download the 'Data in CSV format' and also 'Explanation of terminology used in the data files'.
 
@@ -39,11 +65,6 @@ If you do want to download the data directly from the gov.uk website then you ne
 
 ```{python}
 #| label: load-py
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from pathlib import Path
-
 def find_qm_root(start_path: Path = Path.cwd(), anchor: str = "_quarto.yml") -> Path:
     """Walk up from start_path until we find the folder holding _quarto.yml."""
     for parent in [start_path] + list(start_path.parents):
@@ -72,12 +93,6 @@ df.head()
 
 ```{r}
 #| label: load-r
-#| message: false
-#| warning: false
-
-library(tidyverse)
-library(here)
-
 # Read CSV file, handling common missing value entries
 na_vals <- c("", "NA", "SUPP", "NP", "NE", "SP", "SN", "SUPPMAT")
 df_ks4 <- read_csv(here("sessions", "data", "Performancetables_130242", "2022-2023", "england_ks4final.csv"),
@@ -186,7 +201,7 @@ dim(df)
 :::
 
 
-# Task 2 — Plot the distribution
+# Task 3 — Plot the distribution
 
 Let's try plotting the Average EBacc APS score per pupil.
 
@@ -224,10 +239,10 @@ ggplot(df, aes(x = EBACCAPS)) +
 ```
 :::
 
-What do you observe from this histogram? Because the bins are quite large it's difficult to get a sense of the distribution - try changing this to get a better idea of the data spread. 
-
 ::: qna
 #### Question
+
+What do you observe from this histogram? Because the bins are quite large it's difficult to get a sense of the distribution - try changing this to get a better idea of the data spread. 
 
 ``` python
 n_bins = ??
@@ -258,7 +273,7 @@ plt.show()
 ```
 :::
 
-# Task 3 — Check for normality
+# Task 4 — Check for normality
 
 Looking at the histogram does the data look normally distributed?
 
@@ -282,7 +297,7 @@ In Python we can use the package `scipy.stats` which has functions for generatin
 
 ```{python}
 #| label: pdf-overlay-py
-import scipy.stats as sps
+import scipy.stats as sps # scipy.stats is a library for statistical functions
 
 # first let's get the mean and stand deviation
 mu = df['EBACCAPS'].dropna().mean()
@@ -365,7 +380,7 @@ The results of the Q-Q plot can help us to understand the dataset:
 - Light tails (fewer extreme values than normal): *points bend inward at the ends*
 - Skewed data: *points systematically deviate above or below the line*
 
-We can plot the Q-Q plot ourselves. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0. We will shortly (Task 5) look at normalising the data more explictly. 
+We can plot the Q-Q plot ourselves. Note that before we Q-Q plot the sample data we will need to normalise it - this accounts for the fact that our data is not centred around 0. We will shortly (Task 6) look at normalising the data more explictly. 
 
 ::: {.multicode}
 #### ![](../images/python-logo-only.png){width="30"}
@@ -436,7 +451,7 @@ tibble(theoretical_quantiles, sample_quantiles) |>
 
 Ok, so in case it wasn't clear from the previous plot we can see that the data definitely isn't perfectly normal. 
 
-# Task 4 — Explain the skew
+# Task 5 — Explain the skew
 
 If you remember above this dataset includes schools of two different types, we have mainstream schools and special schools. 'special schools' refers to schools which cater to students with special educational needs. Let's see what happens when we split our histogram according to the type of school.
 
@@ -494,10 +509,10 @@ Looking now at the histogram it becomes clear that the skewness of the data is c
 
 Let's try again to see if the data is normal - this time splitting the dataset according to the school type.
 
-We can start by splitting the dataset according to the school type. 
-
 ::: qna
 #### Question
+
+Split the dataset according to the school type. 
 
 ::: {.multicode}
 #### ![](../images/python-logo-only.png){width="30"}
@@ -674,7 +689,7 @@ plt.show()
 
 Looking at the resultant Q-Q plots what can we say about the data? We see that the mainstream schools is a skewed dataset, whilst the special schools dataset has a heavy tail.
 
-# Task 5 — Standardise with z-scores
+# Task 6 — Standardise with z-scores
 
 So far we've described scores in their own units — an EBacc point. A z-score puts every value on a common scale instead - how many standard deviations a value sits from the mean.
 
@@ -792,7 +807,7 @@ How many mainstream schools have $|z| > 2$?
 ```
 :::
 
-# Task 6 — Calculate a probability from the normal distribution
+# Task 7 — Calculate a probability from the normal distribution
 
 If we're willing to accept `EBACCAPS` is approximately normally distributed, we can answer questions like "what proportion of schools would we expect to score above 6.0?" using nothing but a mean and a standard deviation, without needing the raw data at all.
 
@@ -828,7 +843,7 @@ print(f"Normal model:  P(EBacc > {threshold}) = {p_above:.3f}")
 
 # how does that compare to what's actually in the data?
 empirical = (df1['EBACCAPS'] > threshold).mean()
-print(f"Raw sample:    proportion of mainstream schools actually above {threshold} = {empirical:.3f}")
+print(f"Raw sample: proportion of mainstream schools actually above {threshold} = {empirical:.3f}")
 ```
 
 #### ![](../images/Rlogo.png){width="41" height="30"}
@@ -845,7 +860,7 @@ cat(sprintf("Normal model:  P(EBacc > %.1f) = %.3f\n", threshold, p_above))
 # instead counts them as "not above threshold", matching pandas' behaviour
 # (NaN > x is False, not NaN), so the two languages agree.
 empirical <- mean(replace_na(df1$EBACCAPS > threshold, FALSE))
-cat(sprintf("Raw sample:    proportion of mainstream schools actually above %.1f = %.3f\n",
+cat(sprintf("Raw sample: proportion of mainstream schools actually above %.1f = %.3f\n",
             threshold, empirical))
 ```
 :::

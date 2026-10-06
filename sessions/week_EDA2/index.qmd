@@ -20,7 +20,7 @@ By the end of this week, you will be able to:
 
 ## Lecture 
 
-To access the lecture notes: [Lecture](EDA2_lecture.qmd)
+The lecture slides are available [here](EDA2_lecture.pdf).
 
 ## Quiz
 
@@ -30,8 +30,8 @@ To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.u
 
 To access the practical:
 
-1. [Preview](EDA2_practical.html)
-2. [Download](EDA2_practical.ipynb)
+1. You can [preview](EDA2_practical.html) the practical - which includes the code in both R and Python.
+2. You can [download](https://github.com/Bea-Taylor/Quant_Methods/tree/main/practicals) the practical here as a python notebook (.ipynb) - ready for you to run the code yourself.
 
 :::{.callout-note}
 
