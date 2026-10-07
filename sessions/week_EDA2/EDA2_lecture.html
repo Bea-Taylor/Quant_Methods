@@ -269,7 +269,7 @@
 </section>
 <section id="when-descriptive-statistics-arent-enough" class="slide level2 smaller">
 <h2>When descriptive statistics aren’t enough</h2>
-<div id="6c845f0c" class="cell" data-execution_count="1">
+<div id="f16e0105" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-label="1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-2"><a aria-label="2"></a></span>
 <span id="cb1-3"><a aria-label="3"></a><span class="co"># read data</span></span>
@@ -666,34 +666,27 @@ p(x)
 </div>
 <p><span style="color:#49a0c4"><em>The probability density function (PDF) describes the likelihood of different outcomes for a continuous random variable</em></span></p>
 </section>
-<section id="random-variable" class="slide level2">
-<h2>Random variable</h2>
-<p><span style="color:#49a0c4"><em>A random variable is a way to map the outcome of a random process to a probability.</em></span></p>
-<p>In mathematical notation, a random variable <span class="math inline">\(X\)</span> is approximately normally distributed about a mean of <span class="math inline">\(\mu\)</span> with a standard deviation of <span class="math inline">\(\sigma\)</span>:</p>
+<section id="a-note-on-samples" class="slide level2 smaller">
+<h2>A note on samples</h2>
+<p>When we talk about a distribution, we are usually referring to the population distribution. However, in practice, we often only have a sample from the population.</p>
+<p>The standard deviation of the whole population is <span class="math inline">\(\sigma\)</span>:</p>
 <span class="math display">\[\begin{align}
-X \sim N(\mu,\sigma)
+\sigma = \frac{\sum_{i=1}^{n}(x_i - \mu)^2}{n}
 \end{align}\]</span>
-</section>
-<section id="sampling-distributions" class="slide level2 smaller">
-<h2>Sampling distributions</h2>
-<p><span style="color:#49a0c4"><em>The distribution of a statistic (e.g.&nbsp;the sample mean) across all the samples of size <span class="math inline">\(n\)</span> we could have drawn.</em></span></p>
-<div class="fragment">
-<p>The standard deviation of the sampling distribution of the mean (the <em>standard error</em>) is:</p>
+<p>But when we only have a sample from the population, the standard deviation is:</p>
 <span class="math display">\[\begin{align}
-\frac{\sigma}{\sqrt{n}}
+\sigma = \frac{\sum_{i=1}^{n}(x_i - \mu)^2}{n-1}
 \end{align}\]</span>
-<p>As <span class="math inline">\(n\)</span> increases, the sampling distribution gets less spread out — more certainty about the mean.</p>
-</div>
 <div class="fragment">
 <div style="background-color:
 #2e6260; color:white; padding:8px; border-radius:5px; margin-top:10px;">
-<p><em>Central limit theorem</em></p>
-As the sample size <span class="math inline">\(n\)</span> grows, the sampling distribution of the mean tends towards normal — whatever the shape of the original data.
+<p><em>Bessel’s correction</em></p>
+<p>Bessel’s correction refers to the adjustment made when calculating the standard deviation of a sample.</p>
+Intuiiviely, we expect the sample standard deviation to be a bit smaller than the whole population standard deviation, as we have less information about the population. We correct for this by dividing by n-1 instead of n.&nbsp;This correction makes the estimate a bit larger, and hence more accurate.
 </div>
 <aside class="notes">
-<p>Typically we think of the distribution as describing the entirety of the relevant popualtion - i.e.&nbsp;every relevant example. Link to sampling - normally only have a subset of the data.</p>
-<p>Need to account for the fact that we don’t have all the data. So our statistic will vary a bit according to what sample of the data we’re looking at.</p>
-<p>In practise - as the sample size increases the sampling distribution of the normal distribution becomes more and more centralised. I.e. we have more certainty about the distribution.</p>
+<p>The difference is that we divide by n-1 instead of n.&nbsp;This is because we are estimating the population standard deviation from a sample, and we want to account for the fact that we have less information. This is known as Bessel’s correction.</p>
+<p>Intuitively we expect the sample standard deviation to be a bit smaller than the population standard deviation, as we have less information about the population. So we correct for this by dividing by n-1 instead of n.&nbsp;Which makes the estimate a bit larger, and hence more accurate.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -706,6 +699,44 @@ As the sample size <span class="math inline">\(n\)</span> grows, the sampling di
           display:block!important;
       }</style></aside>
 </div>
+</section>
+<section id="random-variable" class="slide level2">
+<h2>Random variable</h2>
+<p><span style="color:#49a0c4"><em>A random variable is a way to map the outcome of a random process to a probability.</em></span></p>
+<p>In mathematical notation, if a random variable <span class="math inline">\(X\)</span> is approximately normally distributed about a mean of <span class="math inline">\(\mu\)</span> with a standard deviation of <span class="math inline">\(\sigma\)</span> we write:</p>
+<span class="math display">\[\begin{align}
+X \sim N(\mu,\sigma)
+\end{align}\]</span>
+<!-- ## Sampling distributions {.smaller}
+[*The distribution of a statistic (e.g. the sample mean) across all the samples of size $n$ we could have drawn.*]{style="color:#49a0c4"} 
+
+. . .
+
+The standard deviation of the sampling distribution of the mean (the *standard error*) is: 
+
+```{=tex}
+\begin{align}
+\frac{\sigma}{\sqrt{n}}
+\end{align}
+```
+
+As $n$ increases, the sampling distribution gets less spread out — more certainty about the mean. 
+
+. . .
+
+<div style="background-color:
+#2e6260; color:white; padding:8px; border-radius:5px; margin-top:10px;"> <em>Central limit theorem</em>
+
+As the sample size $n$ grows, the sampling distribution of the mean tends towards normal — whatever the shape of the original data. </div>
+
+
+::: {.notes}
+Typically we think of the distribution as describing the entirety of the relevant popualtion - i.e. every relevant example. Link to sampling - normally only have a subset of the data. 
+
+Need to account for the fact that we don't have all the data. So our statistic will vary a bit according to what sample of the data we're looking at. 
+
+In practise - as the sample size increases the sampling distribution of the normal distribution becomes more and more centralised. I.e. we have more certainty about the distribution. 
+::: -->
 </section>
 <section id="calculating-probabilities" class="slide level2 smaller">
 <h2>Calculating probabilities</h2>
@@ -720,7 +751,7 @@ p(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 </div>
 <div class="fragment">
 <p>Or the probability of a range of values by integrating the PDF:</p>
-<div id="02196bc0" class="cell" data-execution_count="2">
+<div id="c939336c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a aria-label="1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> sps</span>
 <span id="cb2-2"><a aria-label="2"></a></span>
 <span id="cb2-3"><a aria-label="3"></a>mu <span class="op">=</span> <span class="dv">0</span></span>
@@ -812,7 +843,7 @@ P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
 </ul></li>
 </ul>
 <div class="fragment">
-<div id="c58d0753" class="cell" data-execution_count="3">
+<div id="d2f9897d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span>
 <span id="cb4-2"><a aria-label="2"></a></span>
 <span id="cb4-3"><a aria-label="3"></a><span class="co"># P(X &gt;= 120) = P(X &gt; 119)</span></span>
@@ -909,7 +940,7 @@ P(X = k) = \frac{\lambda^k e^{- \lambda}}{k!}
 <li class="fragment">How likely is it that no bikes arrive in the next 10 minutes?</li>
 <li class="fragment">How likely is it that 8 or more bikes arrive?</li>
 </ul>
-<div id="c44461c7" class="cell" data-execution_count="4">
+<div id="3777d2ac" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb7-2"><a aria-label="2"></a></span>
 <span id="cb7-3"><a aria-label="3"></a>lambda_10min <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="dv">10</span>  <span class="co"># expected arrivals in 10 minutes</span></span>
@@ -955,7 +986,7 @@ Probability of 8 or more arrivals: 0.1334</code></pre>
 <li class="fragment">London Plane trees are randomly distirbuted in London’s parks, with an average of 2 trees per 100m².</li>
 <li class="fragment">What is the probability of finding exactly 3 trees in a 100m² area of Hyde Park?</li>
 </ul>
-<div id="d149e11b" class="cell" data-execution_count="5">
+<div id="564ee19a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb10-2"><a aria-label="2"></a></span>
 <span id="cb10-3"><a aria-label="3"></a>lambda_trees <span class="op">=</span> <span class="dv">2</span>  <span class="co"># expected trees in 100m²</span></span>
@@ -1146,7 +1177,7 @@ This is sometimes referred to as the <em>negative exponential distribution</em> 
 <li><span class="math inline">\(p(10) = 1 \times e^{-1 \times 10}\)</span></li>
 </ul></li>
 </ul>
-<div id="a645ba29" class="cell" data-execution_count="6">
+<div id="e2d54722" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> expon</span>
 <span id="cb14-2"><a aria-label="2"></a></span>
 <span id="cb14-3"><a aria-label="3"></a>lambda_1min <span class="op">=</span> <span class="dv">1</span>  <span class="co"># rate per minute</span></span>
@@ -1181,59 +1212,6 @@ This is sometimes referred to as the <em>negative exponential distribution</em> 
 </ul>
 <div class="fragment">
 <p>This is easier said than done – the best way is to invert the equation.</p>
-</div>
-</section>
-<section id="inverse-operations" class="slide level2">
-<h2>Inverse operations</h2>
-<p><span style="color:#49a0c4"><em>The mathematical operation that reverses.</em></span></p>
-<p>Subtract is the inverse of adding.</p>
-<span class="math display">\[\begin{align}
-2 + x=5 \implies 5-2=x
-\end{align}\]</span>
-<p>Divide is the inverse of multiplying.</p>
-<span class="math display">\[\begin{align}
-2 \times x =6 \implies 6 \div 2=x
-\end{align}\]</span>
-</section>
-<section id="logarithms" class="slide level2">
-<h2>Logarithms</h2>
-<p>Taking the logarithm is the inverse of taking the exponential.</p>
-<div class="fragment">
-<span class="math display">\[\begin{align}
-2^3 = 8 \implies \log_2(8) =3
-\end{align}\]</span>
-</div>
-<div class="fragment">
-<p>More generally:</p>
-<span class="math display">\[\begin{align}
-a^x = b \implies \log_a(b) =x
-\end{align}\]</span>
-</div>
-<div class="fragment">
-<p>For the natural logarithm:</p>
-<span class="math display">\[\begin{align}
-e^x = b \implies \log_e(b) =ln(b) = x
-\end{align}\]</span>
-<aside class="notes">
-<p>Multiply and divide are inverse operations of one another (they reverse the process).</p>
-<p>Read the equation as log of 8 base 2 equals 3.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section>
-<section id="natural-logarithm" class="slide level2">
-<h2>Natural logarithm</h2>
-<div style="text-align:center;">
-<p><img src="images/natural_logarithm.png" alt="Natural logarithm" style="max-width:90%;"></p>
 </div>
 </section>
 <section id="probability-distributions-1" class="slide level2 smaller">
@@ -1286,11 +1264,107 @@ e^x = b \implies \log_e(b) =ln(b) = x
 </tr>
 </tbody>
 </table>
+</section>
+<section id="quiz-1" class="slide level2 smaller">
+<h2>Quiz</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><br></p>
+<div style="text-align:center;">
+<img src="images/charing_cross.jpg" alt="The cross at Charing Cross" style="max-width:80%">
+<div style="font-size:0.8em; color: #555; margin-top:4px;">
+<pre><code>The cross at Charing Cross - the geographic centre of London.</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:60%;">
+<p>What probability distribution most likely describes the following data?</p>
+<ol type="1">
+<li class="fragment">Heights of a sample of UCL students</li>
+<li class="fragment">The number of students arriving at the lecture in the next ten minutes</li>
+<li class="fragment">Commute distance to work in London</li>
+<li class="fragment">Public votes for a new block of flats in the borough of Camden</li>
+<li class="fragment">How far north or south people’s guesses of Charing Cross are from the actual location (signed: + north, − south)</li>
+<li class="fragment">The value of land parcels across London</li>
+</ol>
+</div></div>
+<aside class="notes">
+<ol type="1">
+<li>Normal</li>
+<li>Poisson - coutn of events in a fixed interval</li>
+<li>Exponetial - although this is more debatable. It doesn’t go below zero, and it has a long tail, so exp is probably a bettter fit than normal.</li>
+<li>Binomial - assuming it’s a yes/no vote, and that the votes are independent of one another.</li>
+<li>Discrete - delay is a countable value (whole minutes), however the underlying distribution before it gets rounded to whole minutes is continuous.</li>
+<li>Normal - the distribution of errors is often normal, and this is a signed error.</li>
+<li>Exponential - land values are often right skewed, with a long tail of very high values. Although in rewlaity - probably closer to a log-normal distribution.</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="transforming-data" class="title-slide slide level1 center">
 <h1>Transforming data</h1>
 
+</section>
+<section id="inverse-operations" class="slide level2">
+<h2>Inverse operations</h2>
+<p><span style="color:#49a0c4"><em>The mathematical operation that reverses.</em></span></p>
+<p>Subtract is the inverse of adding.</p>
+<span class="math display">\[\begin{align}
+2 + x=5 \implies 5-2=x
+\end{align}\]</span>
+<p>Divide is the inverse of multiplying.</p>
+<span class="math display">\[\begin{align}
+2 \times x =6 \implies 6 \div 2=x
+\end{align}\]</span>
+</section>
+<section id="logarithms" class="slide level2">
+<h2>Logarithms</h2>
+<p>Taking the logarithm is the inverse of taking the exponential.</p>
+<div class="fragment">
+<span class="math display">\[\begin{align}
+2^3 = 8 \implies \log_2(8) =3
+\end{align}\]</span>
+</div>
+<div class="fragment">
+<p>More generally:</p>
+<span class="math display">\[\begin{align}
+a^x = b \implies \log_a(b) =x
+\end{align}\]</span>
+</div>
+<div class="fragment">
+<p>For the natural logarithm:</p>
+<span class="math display">\[\begin{align}
+e^x = b \implies \log_e(b) =ln(b) = x
+\end{align}\]</span>
+<aside class="notes">
+<p>Multiply and divide are inverse operations of one another (they reverse the process).</p>
+<p>Read the equation as log of 8 base 2 equals 3.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ## Natural logarithm 
+
+<div style="text-align:center;">
+  <img src="images/natural_logarithm.png" alt="Natural logarithm" style="max-width:90%;">
+</div> -->
+</div>
 </section>
 <section id="why-transform" class="slide level2">
 <h2>Why transform?</h2>
@@ -1307,19 +1381,24 @@ log_a(a^x) = x
 \end{align}\]</span>
 </div>
 </section>
-<section id="log-it-to-straighten-growth" class="slide level2">
+<section id="log-it-to-straighten-growth" class="slide level2 smaller">
 <h2><em>Log it!</em> to straighten growth</h2>
 <p>As the logarithm inverses the exponential, taking the logarithm of an exponential function will result in a linear relationship.</p>
 <div style="text-align:center;">
-<p><img src="images/logarithm_growth.png" alt="Exponential growth straightened out with a logarithm." style="max-width:80%;"></p>
+<p><img src="images/logarithm_growth.png" alt="Exponential growth straightened out with a logarithm." style="max-width:90%;"></p>
+</div>
+<div class="fragment">
+<p>Here we take log base 2, which results in a line through <span class="math inline">\(y=x\)</span>, but any base will work.</p>
 </div>
 </section>
-<section id="log-it-to-tame-long-tails" class="slide level2">
+<section id="log-it-to-tame-long-tails" class="slide level2 smaller">
 <h2><em>Log it!</em> to tame long tails</h2>
 <p>Long right tail, no typical size: most schools cluster at low absence, but a few sit far out — after the log it looks much closer to normal.</p>
 <div style="text-align:center;">
-<p><img src="images/absence_histogram_side_by_side.png" alt="Taking the logarithm of the y variable to tame log tails." style="max-width:80%;"></p>
+<p><img src="images/absence_histogram_side_by_side.png" alt="Taking the logarithm of the y variable to tame log tails." style="max-width:90%;"></p>
 </div>
+<div class="fragment">
+<p>Here we take log base <span class="math inline">\(e\)</span> (the natural logarithm). This is the most common choice in statistics and data analysis, but any base will work.</p>
 <aside class="notes">
 <p>Same schools data as the rest of this deck: absence rate (PERCTOT), mainstream state-funded secondaries only.</p>
 <style type="text/css">
@@ -1333,11 +1412,12 @@ log_a(a^x) = x
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</div>
 </section></section>
 <section>
 <section id="representative-data" class="title-slide slide level1 center">
 <h1>Representative data</h1>
-<p><strong>Before we try to describe the data, it’s important to know where the data came from.</strong></p>
+<p>Before we try to describe the data, it’s important to know where the data came from.</p>
 </section>
 <section id="the-dream-vs-reality" class="slide level2">
 <h2>The dream vs reality</h2>
@@ -1372,7 +1452,7 @@ log_a(a^x) = x
 <li class="fragment">systematic sampling</li>
 </ul>
 <aside class="notes">
-<p>I might assign everyone a number and then choose 100 random numbers and measure them. Or I might choose a specific subset, for exampel just everyone in this lecture theatre.</p>
+<p>I might assign everyone a number and then choose 100 random numbers and measure them. Or I might choose a specific subset, for example just everyone in this lecture theatre.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1415,7 +1495,7 @@ log_a(a^x) = x
 <li class="fragment"><strong>In the analyst</strong>: <em>cognitive bias</em>. What did we choose to collect, keep and report?</li>
 </ul>
 <div class="fragment">
-<p>Particularly important for large datasets and AI models, where patterns that aren’t obvious to us can reflect these biases.</p>
+<p>Particularly important for large datasets and AI models, where the model can learn patterns that aren’t obvious to us.</p>
 <aside class="notes">
 <p>Already talked about the idea of cognitive bias. There are lots and lots of different types of biases - going to talk a little about different ways they can bias the dataset.</p>
 <p>Dataset bias has become a more prevalent topic of concern on the era of large AI models. These models are really good at learnign patterns which aren’t obvious to the human eye - but the pattern might reflect a bias. For example generative AI models learn that scientists are white men, even though if I asked you you’d tell me anyone can be a scientist.</p>
@@ -1435,21 +1515,24 @@ log_a(a^x) = x
       }</style></aside>
 </div>
 </section>
-<section id="selection-bias" class="slide level2">
+<section id="selection-bias" class="slide level2 smaller">
 <h2>Selection bias</h2>
 <p><span style="color:#49a0c4"><em>When the sample chosen doesn’t represent the whole population of interest</em></span></p>
 <p>Examples:</p>
 <ul>
-<li>Self selection <a href="https://en.wikipedia.org/wiki/Roy_model">Roy Model</a>
+<li><a href="https://en.wikipedia.org/wiki/Roy_model">Roy Model</a>
 <ul>
-<li>Underlying characteristics of people who self select into certain groups.</li>
+<li>People who self select into certain groups, tend to have underlying characteristics.</li>
 </ul></li>
 <li><a href="https://oecs.mit.edu/pub/spow8trw/release/1">WEIRD people</a>
 <ul>
-<li>Commonly sampled in behavioural sciences.</li>
-<li>Reflects a very small proportion of global population.</li>
+<li>WEIRD = western, educated, industrialised, rich, democratic</li>
+<li>Commonly sampled in behavioural sciences, but reflects a very small proportion of global population.</li>
 </ul></li>
-<li>2001 Westminster census - reflected less people than expected, as high numbers of second homes</li>
+<li><a href="https://www.theguardian.com/science/2003/sep/11/thisweekssciencequestions">2001 Westminster census</a>
+<ul>
+<li>Unexpectedly small sample sizes, as high numbers of second homes.</li>
+</ul></li>
 </ul>
 <aside class="notes">
 <p>Roy model - example from economics - basically there’s not a random selection of people in a specific job - thye have chosen that job based on underlying unobserved characterisitcs. For example suppose I’m interested in wages of workers in different occupations - but they have self-selected into that occupation based on their unique skill set - so it’s a biased representation.</p>
@@ -1466,7 +1549,7 @@ log_a(a^x) = x
           display:block!important;
       }</style></aside>
 </section>
-<section id="historical-bias" class="slide level2">
+<section id="historical-bias" class="slide level2 smaller">
 <h2>Historical bias</h2>
 <p><span style="color:#49a0c4"><em>Reflects existing, real world, inequalities</em></span></p>
 <p>Examples:</p>
@@ -1475,6 +1558,17 @@ log_a(a^x) = x
 <ul>
 <li>Automated tools to detect ‘criminals’.</li>
 <li>Trained on datasets which reflect current racist practises.</li>
+</ul></li>
+<li><a href="https://www.nature.com/articles/d41586-024-00674-9">Generative images</a>
+<ul>
+<li>Studies have found AI-generated images perpetuate racist and sexist stereotypes.<br>
+</li>
+<li>Reflects who is represented in the training data.</li>
+</ul></li>
+<li><a href="https://en.wikipedia.org/wiki/Hungry_judge_effect">Hungry judges</a>
+<ul>
+<li>Judges sentence differently based on how hungry they are.</li>
+<li>Tend to be harsher just before lunch and more lenient after lunch.</li>
 </ul></li>
 </ul>
 <aside class="notes">
