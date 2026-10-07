@@ -1642,7 +1642,7 @@ deviance** (`r sprintf("%.0f", dev0)`) from the fit section: R has been
 fitting this model for you every time you call `glm()`.
 :::
 
-## Step 4: why accuracy lied to us {transition="convex-in none-out" transition-speed="fast"}
+## Step 4: why accuracy lied to us {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| echo: false
@@ -1661,8 +1661,7 @@ tibble::tibble(
 ```
 
 ::: {style="font-size: 0.75em"}
-The `r comma(nrow(test))` **test** schools — the ones the model never saw
-while it was being fitted.
+The `r comma(nrow(test))` **test** schools — the ones the model never saw.
 :::
 
 ::: incremental
@@ -1676,9 +1675,17 @@ while it was being fitted.
 
 . . .
 
-**Always, always compare your accuracy against the majority-class
-baseline.** On imbalanced data, accuracy on its own is not evidence of
-anything.
+::: {style="font-size: 0.78em"}
+**And this is what "the baseline" was.** A model that just said *Good or
+better* to every school gets the whole **bottom row** right and the top row
+wrong: `r comma(sum(test$below_good == 0))` of `r comma(nrow(test))`, or
+`r sprintf("%.1f%%", 100 * baseline)`. Ours gets the two diagonal cells —
+`r comma(cm["Below Good", "Below Good"] + cm["Good or better", "Good or better"])`,
+or `r sprintf("%.1f%%", 100 * accuracy)`.
+
+**Always compare the two. On imbalanced data, accuracy on its own is not
+evidence of anything.**
+:::
 
 ## Step 5: judge the ranking, not the labels {.smaller transition="convex-in none-out" transition-speed="fast"}
 
