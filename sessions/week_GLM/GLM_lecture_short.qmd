@@ -1437,6 +1437,101 @@ Steps 5 and 6 are the ones people skip, and they are where the interesting
 part lives.
 :::
 
+## First, the thing we are guarding against {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Here are fifteen points, and two models fitted to them. The **red** one is
+better at its job — it passes through every single point and makes **no error
+at all**.
+
+```{r}
+#| label: overfitting-figure
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10.5
+#| fig-height: 4.1
+#| out-width: 95%
+
+set.seed(11)
+truth_fn <- function(x) 20 + 6 * x - 0.45 * x^2
+n_of  <- 15
+x_fit  <- sort(runif(n_of, 0.3, 9.7))
+d_fit  <- tibble(x = x_fit, y = truth_fn(x_fit) + rnorm(n_of, 0, 3.2))
+x_new  <- sort(runif(n_of, 0.3, 9.7))
+d_new  <- tibble(x = x_new, y = truth_fn(x_new) + rnorm(n_of, 0, 3.2))
+
+simple_fit <- lm(y ~ poly(x, 2), data = d_fit)
+# An interpolating spline: it is *forced* through every training point, which
+# is precisely the behaviour we want to put on screen.
+wiggly_fit <- splinefun(d_fit$x, d_fit$y, method = "fmm")
+
+# Bounded by the training points: past the last knot the spline extrapolates
+# cubically and dives off the bottom of the panel, which looks like a fault.
+gx <- seq(min(d_fit$x), max(d_fit$x), length.out = 500)
+curves <- bind_rows(
+  tibble(x = gx, y = predict(simple_fit, newdata = tibble(x = gx)),
+         Model = "Simple model"),
+  tibble(x = gx, y = wiggly_fit(gx), Model = "Wiggly model"))
+
+rmse_of <- function(a, b) sqrt(mean((a - b)^2))
+of_panel <- function(d, title, e_simple, e_wiggly) {
+  ggplot() +
+    geom_line(data = curves, aes(x, y, colour = Model), linewidth = 1.15) +
+    geom_point(data = d, aes(x, y), size = 2.9, colour = "grey15") +
+    scale_colour_manual(values = c("Simple model" = casa_teal,
+                                   "Wiggly model" = casa_red)) +
+    coord_cartesian(ylim = c(15, 50)) +
+    labs(title = title, x = NULL, y = NULL, colour = NULL,
+         subtitle = sprintf("average error —  simple: %.2f      wiggly: %.2f",
+                            e_simple, e_wiggly)) +
+    theme_minimal(base_size = 13) +
+    theme(axis.text = element_blank(), panel.grid.minor = element_blank(),
+          plot.subtitle = element_text(size = 11))
+}
+
+e1s <- rmse_of(d_fit$y, predict(simple_fit, d_fit))
+e1w <- rmse_of(d_fit$y, wiggly_fit(d_fit$x))
+e2s <- rmse_of(d_new$y, predict(simple_fit, d_new))
+e2w <- rmse_of(d_new$y, wiggly_fit(d_new$x))
+
+(of_panel(d_fit, "Fitted on these 15 points", e1s, e1w) |
+ of_panel(d_new, "Then shown 15 it had never seen", e2s, e2w)) +
+  plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+::: {style="font-size: 0.86em"}
+On the **left** the red model is flawless and the teal one is not. On the
+**right** — the same two models, fifteen points neither has seen — the red one
+is now **the worse of the two**, by a distance.
+:::
+
+## Overfitting {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+The red model did not learn the **pattern**. It learned the **noise** — the
+particular wobbles of the particular fifteen points it was handed, which the
+next fifteen do not share.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+And here is the uncomfortable part. **You can always make the fit better.**
+Add a predictor, add an interaction, add a squared term — the fit to the data
+in front of you never gets worse. Push it far enough and you reach error
+`r sprintf("%.2f", e1w)`, like the red line.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.95em;"}
+So **"it fits well" is not evidence of very much on its own** — and a *perfect*
+fit is not a triumph, it is a warning sign.
+
+The only honest test is data the model has **never seen**. Which is exactly
+what we do next.
+:::
+
 ## Steps 1 and 2: don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 The obvious way to answer that is to run the model over our schools and count
