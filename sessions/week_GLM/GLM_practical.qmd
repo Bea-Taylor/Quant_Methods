@@ -495,6 +495,26 @@ print(logit_full.summary())
 You should have **2,219 training** and **951 test** schools, and an intercept
 of **-4.7376**.
 
+::: {.callout-warning title="Your numbers will not match the lecture's — and that is correct"}
+The lecture split the schools with `set.seed(42)` and `sample()`. We split on
+sorted row position instead, for the reason given at the top: R's and Python's
+random number generators will never agree with each other.
+
+Both splits take 70/30 of the same 3,170 schools, so **both give 2,219 and
+951**. But they are a *different* 951 schools — so every test-set figure from
+here on differs a little from the lecture's:
+
+| | Lecture | Here |
+|---|---|---|
+| Test-set accuracy | 86.2% | **86.9%** |
+| Majority-class baseline | 85.3% | **86.9%** |
+| AUC | 0.818 | **0.812** |
+
+Do not go hunting for a bug. The conclusion is the same in both, and here it
+is sharper: in the lecture the model beat the baseline by 0.9 points, and on
+this split it does not beat it **at all**.
+:::
+
 ## Task 7 - Say all six out loud
 
 Same recipe as Task 4, applied six times.
@@ -579,6 +599,27 @@ cs  = 1 - np.exp((logit_full.llnull - logit_full.llf) * 2 / n)
 nag = cs / (1 - np.exp(2 * logit_full.llnull / n))
 print({"Cox & Snell": round(cs, 4), "Nagelkerke": round(nag, 4)})
 ```
+:::
+
+::: {.callout-warning title="Python trap — `.prsquared` is not the number you just computed"}
+`smf.glm()` has no `.prsquared` attribute. `smf.logit()` **does**, and it is
+very tempting to reach for it instead of writing those two lines out.
+
+It is **McFadden's** pseudo-R², which is a different measure built a different
+way. Fit this model both ways and compare:
+
+```python
+lg = smf.logit("below_good ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 "
+               "+ np.log(TPUP) + PTPRIORHI", data=train).fit(disp=0)
+print(lg.prsquared)
+```
+
+You should get **0.2416**, against the **0.3264** Nagelkerke you computed
+above. Same data, same fit, two numbers with the same nickname. Whichever you
+report, **name it**.
+
+R users are not immune: `performance::r2_mcfadden()` sits right next to
+`r2_nagelkerke()` and will give you the same 0.2416.
 :::
 
 ::: {.callout-note title="How to read them"}
