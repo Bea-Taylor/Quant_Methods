@@ -49,9 +49,9 @@ website:
           href: sessions/index.qmd
         - section: "Part 1: Quantitative Basics"
           contents:
-            - text: "1. Explanatory Data Analysis #1"
+            - text: "1. Exploratory Data Analysis #1"
               href: sessions/week_EDA1/index.qmd
-            - text: "2. Explanatory Data Analysis #2"
+            - text: "2. Exploratory Data Analysis #2"
               href: sessions/week_EDA2/index.qmd
             - text: "3. Hypothesis Testing"
               href: sessions/week_hyp_test/index.qmd
