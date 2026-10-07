@@ -1534,8 +1534,7 @@ what we do next.
 
 ## Steps 1 and 2: don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-So we split the schools **before** fitting anything: learn from one part,
-judge on the other.
+So we split the schools **before** fitting anything: learn from one part, judge on the other.
 
 ```{r}
 #| echo: true
@@ -1549,38 +1548,90 @@ test  <- model_data[-train_idx, ]  # judge it on these
 . . .
 
 ::: {style="font-size: 0.95em"}
-`r comma(nrow(train))` schools to **learn** from. `r comma(nrow(test))` kept
-back to **test** on.
+`r comma(nrow(train))` schools to **learn** from. `r comma(nrow(test))` kept back to **test** on.
 
-**Test-set accuracy** is then one question: of the `r comma(nrow(test))`
-schools the model never met, what share did it get right?
+**Test-set accuracy** is then one question: "of the `r comma(nrow(test))`
+schools the model never met, what share did it guess were below good, correctly?
 :::
 
-## Step 3: so how good is it? {.smaller transition="convex-in none-out" transition-speed="fast"}
+## Step 3: from a probability to a yes or a no {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-The model gives every school a **probability**. To count how often it is
-*right*, we need a **cut-off** to turn those into yes/no answers.
+The model does not hand back a **yes** or a **no**. For each school it hands
+back a **probability** — a number between 0 and 1.
+
+To count how often it was *right*, we first have to turn each of those into an
+answer. That needs a **cut-off**.
 
 ```{r}
 #| echo: false
 #| message: false
-# p_below is introduced to students in the echoed chunk below, but the note
-# above it needs the counts first, so they are worked out quietly here.
-n_flag_half <- sum(predict(logit_below, newdata = test, type = "response") > 0.5)
+p_below     <- predict(logit_below, newdata = test, type = "response")
+n_flag_half <- sum(p_below > 0.5)
 n_test      <- nrow(test)
 ```
 
-::: {style="font-size: 0.9em"}
-We will use **0.5** — *50% of the time*. We could choose any threshold - 10%, 90% etc. we will come back to this at step 6.
+. . .
 
-It is applied **school by school**, so it does not flag half the schools: at
-0.5 it flags `r n_flag_half` of `r comma(n_test)`.
+::: {style="font-size: 0.93em"}
+We will use **0.5**, which is just this rule:
+
+> *If **this school's** probability is above 0.5, call it **below Good**.
+> Otherwise call it **Good or better**.*
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.9em;"}
+**0.5 is not "half the time".** It is a line drawn on each school's own
+probability, one school at a time — and most schools are nowhere near it.
+
+Applied to all `r comma(n_test)` test schools, it flags
+**`r n_flag_half`** of them. Not `r comma(round(n_test / 2))`.
+:::
+
+## So, one school at a time {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Four of our `r comma(n_test)` test schools, taken through the rule:
+
+```{r}
+#| label: walkthrough
+#| echo: false
+#| message: false
+#| warning: false
+flag_w <- p_below > 0.5
+act_w  <- test$below_good == 1
+pick_w <- function(sel, target) {
+  i <- which(sel); i[which.min(abs(p_below[i] - target))]
+}
+# One real school for each of the four things that can happen
+idx_w <- c(pick_w(!flag_w & !act_w, 0.03), pick_w(flag_w &  act_w, 0.70),
+           pick_w(!flag_w &  act_w, 0.30), pick_w(flag_w & !act_w, 0.60))
+
+tibble(
+  School = c("A", "B", "C", "D"),
+  `Model's probability` = sprintf("%.2f", p_below[idx_w]),
+  `Above 0.5?` = ifelse(p_below[idx_w] > 0.5, "yes", "no"),
+  `So we predict...` = ifelse(p_below[idx_w] > 0.5, "Below Good", "Good or better"),
+  `It actually was...` = ifelse(act_w[idx_w], "Below Good", "Good or better"),
+  `Right?` = ifelse((p_below[idx_w] > 0.5) == act_w[idx_w], "**✔**", "**✘**")
+) |> kable(align = "crccc")
+```
+
+::: {style="font-size: 0.82em"}
+**C** was missed and **D** was a false alarm. Each school is judged on
+**its own** probability — the cut-off simply sorts them either side of the
+line, one at a time.
+:::
+
+. . .
+
+::: {style="font-size: 0.93em"}
+Now do that for **every** school and **count the ticks**.
 :::
 
 ```{r}
 #| echo: true
 #| message: false
-p_below  <- predict(logit_below, newdata = test, type = "response")
 accuracy <- mean((p_below > 0.5) == test$below_good)
 baseline <- max(mean(test$below_good), 1 - mean(test$below_good))
 ```
@@ -1591,8 +1642,9 @@ auc_below <- auc_of(p_below, test$below_good)
 ```
 
 ::: {style="font-size: 1.05em"}
-**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`** — nearly nine
-schools in ten.
+**`r comma(sum((p_below > 0.5) == test$below_good))` ticks out of
+`r comma(n_test)` — test-set accuracy
+`r sprintf("%.1f%%", 100 * accuracy)`.** Nearly nine schools in ten.
 :::
 
 . . .
