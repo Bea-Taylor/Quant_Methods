@@ -1060,7 +1060,7 @@ turn.
 
 # 1. Does the model fit? {background-color="#4e3c56"}
 
-## Likelihood: how surprised is the model? {.smaller transition="convex-in none-out" transition-speed="fast"}
+## Likelihood: the probability of what happened {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
 #| label: fit-stats
@@ -1077,35 +1077,87 @@ cs_max <- 1 - exp(-dev0 / n_tr)
 nk     <- cs / cs_max
 ```
 
-Every school in the data either was or was not rated below Good. The model
-assigns each one a probability. **Likelihood** asks the obvious question:
+Every school in the data **either was or was not** rated below Good — no
+ambiguity. And the model gives every school a probability. So we can ask one
+question of each school in turn:
 
-> *Given these coefficients, how probable was the data we actually saw?*
+> *What probability did the model put on the thing that actually happened?*
 
-::: incremental
--   A school that *was* below Good, which the model gave 0.9 — good, that was
-    likely
--   A school that was **not**, which the model gave 0.9 — bad, the model was
-    confidently wrong
--   Multiply all `r comma(n_tr)` of those probabilities together and you have
-    the **likelihood** of the whole dataset
+```{r}
+#| label: likelihood-examples
+#| echo: false
+#| message: false
+#| warning: false
+p_tr <- fitted(logit_below)
+
+# Three real training schools. Picked as the rows nearest a target
+# probability rather than the extremes, because the extremes round to 0.00
+# and 1.00 and look invented.
+pick <- function(outcome, target) {
+  idx <- which(train$below_good == outcome)
+  idx[which.min(abs(p_tr[idx] - target))]
+}
+i1 <- pick(1, 0.80)   # struggling school, called correctly
+i2 <- pick(0, 0.05)   # healthy school, called correctly
+i3 <- pick(1, 0.03)   # struggling school the model was confident about - wrongly
+
+idx3 <- c(i1, i2, i3)
+truth_p <- ifelse(train$below_good[idx3] == 1, p_tr[idx3], 1 - p_tr[idx3])
+
+ex <- tibble(
+  School = c("A", "B", "C"),
+  `What actually happened` = ifelse(train$below_good[idx3] == 1,
+                                    "Below Good", "Good or better"),
+  `Model's P(below Good)` = sprintf("%.2f", p_tr[idx3]),
+  `Probability it put on what happened` = sprintf("**%.2f**", truth_p)
+)
+kable(ex, align = "cllr")
+```
+
+::: {style="font-size: 0.86em"}
+**The last column is the whole idea.** For **A** and **B** the model was
+confident and right, so it put a high probability on the truth. For **C** it
+was confident and *wrong* — it gave that school
+only `r sprintf("%.2f", p_tr[i3])` of being below Good, and below Good is exactly
+what it was.
+:::
+
+## From three schools to one number {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Do that for **every** school, then **multiply the last column together**. That
+product is the **likelihood** of the whole dataset.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+And now the definition of fitting falls out of it:
+
+> **Fitting the model *is* choosing the coefficients that make that number as
+> large as possible.**
+
+That is all **maximum likelihood** means. There is no formula to solve as
+there was in OLS — the computer searches until it cannot make the number any
+bigger.
 :::
 
 . . .
 
 ::: {style="font-size: 0.92em"}
-Fitting the model *is* choosing the coefficients that make this number as
-large as possible — **maximum likelihood**. We report its log, because
-multiplying `r comma(n_tr)` probabilities together gives a number too small
-for a computer to hold.
-
-Always negative; closer to zero is better.
+We report its **log**, for a blunt practical reason: multiplying
+`r comma(n_tr)` numbers that are all smaller than 1 gives a result far too
+small for a computer to hold. Taking logs turns that product into a sum.
 :::
 
 ```{r}
 #| echo: true
 logLik(logit_below)
 ```
+
+::: {style="font-size: 0.86em"}
+**Always negative, and closer to zero is better.** You will also hear this
+described as how *surprised* the model is: school **C** above was a nasty
+surprise, and surprises are what drag the number down.
+:::
 
 ## Deviance: distance from a perfect fit {.smaller transition="convex-in none-out" transition-speed="fast"}
 
