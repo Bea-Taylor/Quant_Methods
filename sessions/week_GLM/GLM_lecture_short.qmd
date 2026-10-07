@@ -1289,6 +1289,63 @@ output — you have been looking at them all along without knowing what they
 were.
 :::
 
+## ...and the same four in Python {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+In `statsmodels` the first three are **attributes** of the fitted model rather
+than functions — no brackets:
+
+::: {style="font-size: 0.9em"}
+| What | R | Python (`statsmodels`) |
+|---|---|---|
+| Log-likelihood | `logLik(model)` | `model.llf` |
+| Deviances | `model$null.deviance` / `model$deviance` | `model.null_deviance` / `model.deviance` |
+| AIC | `AIC(model)` | `model.aic` |
+| Pseudo-R² | `performance::r2_nagelkerke(model)` | **nothing built in** |
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+For the pseudo-R²s you write them out. Two lines, and they agree with
+`performance` to six decimal places:
+
+```python
+n   = model.nobs
+cs  = 1 - np.exp((model.llnull - model.llf) * 2 / n)   # Cox & Snell
+nag = cs / (1 - np.exp(2 * model.llnull / n))          # Nagelkerke
+```
+:::
+
+## One trap worth knowing about {transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+Fit with `smf.logit()` instead of `smf.glm()` and Python *does* hand you a
+`.prsquared`. It is tempting. **Do not assume it is the one we just
+calculated.**
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+`.prsquared` is **McFadden's** pseudo-R² — a different measure, built a
+different way. On our model:
+
+| | |
+|---|---|
+| Nagelkerke | **`r sprintf("%.3f", nk)`** |
+| McFadden (`.prsquared`) | **`r sprintf("%.3f", 1 - ll / (-dev0 / 2))`** |
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;"}
+Same data, same model, same fit — **different number**, because they are
+different quantities with the same nickname.
+
+Whichever you report, **name it**. "Pseudo-R² = 0.3" tells your reader almost
+nothing on its own.
+:::
+
 ## ...and how much to trust them {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ::: {style="font-size: 0.95em"}
