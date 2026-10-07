@@ -1571,8 +1571,7 @@ n_test      <- nrow(test)
 ```
 
 ::: {style="font-size: 0.9em"}
-We will use **0.5** — *more likely than not*. Nothing requires it; we come
-back to that at step 6.
+We will use **0.5** — *50% of the time*. We could choose any threshold - 10%, 90% etc. we will come back to this at step 6.
 
 It is applied **school by school**, so it does not flag half the schools: at
 0.5 it flags `r n_flag_half` of `r comma(n_test)`.
@@ -1645,46 +1644,65 @@ fitting this model for you every time you call `glm()`.
 ## Step 4: why accuracy lied to us {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 ```{r}
+#| label: confusion-pair
 #| echo: false
-cm <- table(Actual = ifelse(test$below_good == 1, "Below Good", "Good or better"),
-            Predicted = ifelse(p_below > 0.5, "Below Good", "Good or better"))
+#| message: false
+#| warning: false
+#| fig-width: 10.5
+#| fig-height: 3.5
+#| out-width: 94%
 
-# kable() silently drops the dimnames of a table object, which leaves the
-# reader with two identical sets of labels and no way to tell which axis is
-# which. Rebuilt as a data frame so the headings say so explicitly.
-tibble::tibble(
-  ` ` = paste("**Actually**", rownames(cm)),
-  `Predicted below Good`     = as.integer(cm[, "Below Good"]),
-  `Predicted Good or better` = as.integer(cm[, "Good or better"])
-) |>
-  kable(align = "lrr")
+actual_lab <- ifelse(test$below_good == 1, "Below Good", "Good or better")
+pred_ours  <- ifelse(p_below > 0.5, "Below Good", "Good or better")
+pred_base  <- rep("Good or better", nrow(test))   # the do-nothing model
+
+cm <- table(Actual = actual_lab, Predicted = pred_ours)
+
+cm_tbl <- function(pred, label) {
+  tibble(Actual = actual_lab, Predicted = pred) |>
+    count(Actual, Predicted) |>
+    # a cell with no schools in it still has to be drawn, and for the
+    # baseline that is half the grid
+    complete(Actual    = c("Below Good", "Good or better"),
+             Predicted = c("Below Good", "Good or better"),
+             fill = list(n = 0)) |>
+    mutate(correct = Actual == Predicted, Model = label)
+}
+
+n_base <- sum(pred_base == actual_lab)
+n_ours <- sum(pred_ours == actual_lab)
+lab_b  <- sprintf("Baseline: always says \"Good or better\"\n%s of %s right  —  %.1f%%",
+                  comma(n_base), comma(nrow(test)), 100 * n_base / nrow(test))
+lab_o  <- sprintf("Our logistic model\n%s of %s right  —  %.1f%%",
+                  comma(n_ours), comma(nrow(test)), 100 * n_ours / nrow(test))
+
+bind_rows(cm_tbl(pred_base, lab_b), cm_tbl(pred_ours, lab_o)) |>
+  mutate(Model = factor(Model, levels = c(lab_b, lab_o))) |>
+  ggplot(aes(Predicted, fct_rev(Actual), fill = correct)) +
+  geom_tile(colour = "white", linewidth = 2.5) +
+  geom_text(aes(label = comma(n)), size = 7, colour = "white", fontface = "bold") +
+  facet_wrap(~ Model) +
+  scale_fill_manual(values = c(`TRUE` = casa_teal, `FALSE` = casa_red)) +
+  labs(x = "Model predicted...", y = "Actually was...") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none", panel.grid = element_blank(),
+        strip.text = element_text(face = "bold", size = 11.5, lineheight = 1.2))
 ```
 
-::: {style="font-size: 0.75em"}
-The `r comma(nrow(test))` **test** schools — the ones the model never saw.
+::: {style="font-size: 0.78em"}
+**Teal = right, red = wrong.** Both models are judged on the same
+`r comma(nrow(test))` test schools.
 :::
 
 ::: incremental
-- Only **`r comma(sum(test$below_good))`** of the `r comma(nrow(test))`
-  test schools are actually below Good - the class is **rare**
-- The model catches **`r cm["Below Good", "Below Good"]`** of them and
-  misses **`r cm["Below Good", "Good or better"]`**
-- If you were Ofsted, trying to decide which schools to visit, this
-  model would be close to useless *at this threshold*
-:::
-
-. . .
-
-::: {style="font-size: 0.78em"}
-**And this is what "the baseline" was.** A model that just said *Good or
-better* to every school gets the whole **bottom row** right and the top row
-wrong: `r comma(sum(test$below_good == 0))` of `r comma(nrow(test))`, or
-`r sprintf("%.1f%%", 100 * baseline)`. Ours gets the two diagonal cells —
-`r comma(cm["Below Good", "Below Good"] + cm["Good or better", "Good or better"])`,
-or `r sprintf("%.1f%%", 100 * accuracy)`.
-
-**Always compare the two. On imbalanced data, accuracy on its own is not
-evidence of anything.**
+- The baseline **never flags a single school** — its entire left-hand column
+  is zero — and still scores **`r sprintf("%.1f%%", 100 * baseline)`**
+- Ours flags `r cm["Below Good","Below Good"] + cm["Good or better","Below Good"]`
+  schools and gets `r cm["Below Good","Below Good"]` of them right. **That is
+  the whole of the `r sprintf("%.1f", 100 * (accuracy - baseline))`-point gain**
+- It still misses `r cm["Below Good","Good or better"]` of the
+  `r comma(sum(test$below_good))` really below Good — close to useless for
+  deciding where to send inspectors *at this threshold*
 :::
 
 ## Step 5: judge the ranking, not the labels {.smaller transition="convex-in none-out" transition-speed="fast"}
