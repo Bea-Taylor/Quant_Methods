@@ -1534,44 +1534,32 @@ what we do next.
 
 ## Steps 1 and 2: don't mark your own homework {.smaller transition="convex-in none-out" transition-speed="fast"}
 
-The obvious way to answer that is to run the model over our schools and count
-how often it got the answer right.
-
-. . .
-
-::: {style="font-size: 0.95em"}
-**The problem: it has already seen those schools.** The coefficients were
-chosen to fit them as closely as possible. Scoring a model on the data it was
-fitted to is revising with the exam paper in front of you — you will do well,
-and it tells you nothing about the next paper.
-:::
-
-. . .
+So we split the schools **before** fitting anything: learn from one part,
+judge on the other.
 
 ```{r}
 #| echo: true
 #| eval: false
-# Split the schools in two, before fitting anything
 set.seed(42)
 train_idx <- sample(nrow(model_data), floor(0.7 * nrow(model_data)))
 train <- model_data[train_idx, ]   # fit the model on these
 test  <- model_data[-train_idx, ]  # judge it on these
 ```
 
-::: {style="font-size: 0.92em"}
-`r comma(nrow(train))` schools to **learn** from, `r comma(nrow(test))` kept
-back to **test** on. The model never sees the second group while it is being
-fitted, so how it does there is a fair sitting of a fresh paper.
+. . .
 
-That is what **test-set accuracy** means: of the `r comma(nrow(test))` schools
-it had never met, what share did it classify correctly?
+::: {style="font-size: 0.95em"}
+`r comma(nrow(train))` schools to **learn** from. `r comma(nrow(test))` kept
+back to **test** on.
+
+**Test-set accuracy** is then one question: of the `r comma(nrow(test))`
+schools the model never met, what share did it get right?
 :::
 
 ## Step 3: so how good is it? {.smaller transition="convex-in none-out" transition-speed="fast"}
 
 The model gives every school a **probability**. To count how often it is
-*right* we first have to turn those into yes/no answers — so we need a
-**cut-off**.
+*right*, we need a **cut-off** to turn those into yes/no answers.
 
 ```{r}
 #| echo: false
@@ -1582,15 +1570,12 @@ n_flag_half <- sum(predict(logit_below, newdata = test, type = "response") > 0.5
 n_test      <- nrow(test)
 ```
 
-::: {style="font-size: 0.88em"}
-We will use **0.5**: *more likely than not*. It is the obvious first guess and
-what most software reaches for by default. **Nothing requires it** — we come
+::: {style="font-size: 0.9em"}
+We will use **0.5** — *more likely than not*. Nothing requires it; we come
 back to that at step 6.
 
-**And it is applied school by school, not to the batch.** Each school's own
-probability is compared with 0.5, so this is *not* a rule that flags half the
-schools: at 0.5 we flag `r n_flag_half` of the `r n_test` test schools, about
-`r sprintf("%.1f%%", 100 * n_flag_half / n_test)` of them.
+It is applied **school by school**, so it does not flag half the schools: at
+0.5 it flags `r n_flag_half` of `r comma(n_test)`.
 :::
 
 ```{r}
@@ -1607,8 +1592,8 @@ auc_below <- auc_of(p_below, test$below_good)
 ```
 
 ::: {style="font-size: 1.05em"}
-**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`** — not bad! Nearly
-nine schools in ten classified correctly.
+**Test-set accuracy: `r sprintf("%.1f%%", 100 * accuracy)`** — nearly nine
+schools in ten.
 :::
 
 . . .
