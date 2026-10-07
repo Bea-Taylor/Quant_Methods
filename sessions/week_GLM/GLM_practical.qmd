@@ -208,7 +208,7 @@ below will drift.
 
 ::: {.callout-important title="15% is the number to remember"}
 Only 15 schools in 100 are below Good. Write that down. It is going to come
-back and ruin our afternoon at Task 9, in the most instructive way possible.
+back and ruin our afternoon at Task 10, in the most instructive way possible.
 :::
 
 # Part 1: Watching a straight line fail
@@ -450,6 +450,18 @@ the data**. From here on the model is fitted on 70% of schools and judged on
 the 30% it has never seen. Everything in Part 5 depends on that separation,
 so we do it before we fit rather than bolting it on afterwards.
 
+::: {.callout-note title="Why bother — remember the wiggly red line"}
+The lecture showed two models fitted to fifteen points: a sensible curve, and
+one forced through every single point. The second had an average error of
+**0.00** on the data it was fitted to, and was the **worse** of the two on
+fifteen points it had never seen.
+
+That is overfitting, and it is why a model's performance on its own training
+data is not evidence. You can always improve that number by adding terms. The
+only honest test is data the model has never seen - which is what the next two
+lines create.
+:::
+
 ::: {.multicode}
 #### ![](../images/Rlogo.png){width="41" height="30"}
 
@@ -552,9 +564,91 @@ questions:
     intercept in a write-up?
 :::
 
+## Task 8 - Centre the predictors, and get an intercept worth quoting
+
+Task 7 left you with a useless intercept: the odds for a school with a cohort
+of one pupil, no absence and no disadvantaged pupils. No such school exists.
+
+There is a standard fix. **Subtract each predictor's mean from itself**, so
+that zero stops meaning *none* and starts meaning *average*. Progress 8
+already arrives this way - that is why it behaved sensibly in Task 3.
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: centre-r
+
+train_c <- train |>
+  mutate(log_TPUP = log(TPUP),
+         across(c(P8MEA, PTFSM6CLA1A, PERCTOT, PPERSABS10, log_TPUP, PTPRIORHI),
+                ~ .x - mean(.x), .names = "c_{.col}"))
+
+logit_centred <- glm(below_good ~ c_P8MEA + c_PTFSM6CLA1A + c_PERCTOT +
+                       c_PPERSABS10 + c_log_TPUP + c_PTPRIORHI,
+                     data = train_c, family = binomial)
+
+# the intercept, three ways
+c(log_odds = coef(logit_centred)[[1]],
+  odds     = exp(coef(logit_centred)[[1]]),
+  prob     = plogis(coef(logit_centred)[[1]]))
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: centre-py
+
+train_c = train.copy()
+train_c["log_TPUP"] = np.log(train_c["TPUP"])
+for v in ["P8MEA", "PTFSM6CLA1A", "PERCTOT", "PPERSABS10", "log_TPUP", "PTPRIORHI"]:
+    train_c["c_" + v] = train_c[v] - train_c[v].mean()
+
+logit_centred = smf.glm(
+    "below_good ~ c_P8MEA + c_PTFSM6CLA1A + c_PERCTOT + c_PPERSABS10 "
+    "+ c_log_TPUP + c_PTPRIORHI",
+    data=train_c, family=sm.families.Binomial()).fit()
+
+b0 = logit_centred.params["Intercept"]
+print({"log_odds": round(b0, 4),
+       "odds": round(np.exp(b0), 4),
+       "prob": round(1 / (1 + np.exp(-b0)), 4)})
+```
+:::
+
+::: {.callout-important title="Compare the two intercepts"}
+|  | Intercept | $e^{\beta_0}$ (odds) | as a probability |
+|---|---|---|---|
+| Task 6 model, uncentred | −4.7376 | 0.0088 | **0.9%** |
+| Centred | −2.3174 | 0.0985 | **9.0%** |
+
+The first describes a school that does not exist. The second describes a
+school at the average of every predictor - and **that** is a sentence you can
+put in a report.
+:::
+
+::: {.callout-tip title="Questions"}
+1.  **Compare the other six coefficients with the ones from Task 7.** They
+    should be *identical* - and so should the deviance, the AIC and every
+    pseudo-R². Check that they are. If centring changes none of those, what
+    exactly *has* it changed, and why was it worth doing?
+2.  Write the sentence. "A school at the national average on every one of
+    these measures has a ___ chance of being rated below Good."
+3.  **The awkward one.** 15.8% of the training schools really are below Good,
+    but the centred intercept says an *average* school has a 9.0% chance. Those
+    are not the same number and neither is wrong. Why not? *(Hint: the model
+    is linear in log-odds, not in probability - so the probability at the
+    average school is not the average of the probabilities. You met this in
+    Week 1 as the difference between the mean of the logs and the log of the
+    mean.)*
+4.  Centring is not the only option. What would you subtract instead if you
+    wanted the intercept to describe a *specific, real* school - say, a
+    median-sized school in your own local authority?
+:::
+
 # Part 4: Does the model fit?
 
-## Task 8 - Deviance, AIC and the pseudo-R-squareds
+## Task 9 - Deviance, AIC and the pseudo-R-squareds
 
 There is no R-squared here, because there are no residuals in the sense OLS
 means. What we have instead is a set of numbers built on the **likelihood** -
@@ -650,12 +744,84 @@ only the **scoreboard** - accuracy, confusion matrices and AUC need a
 categorical outcome to be defined at all.
 :::
 
-## Task 9 - Predict, and compare with doing nothing
+## Task 10 - Predict, and compare with doing nothing
 
-Here is the whole trap in one task. Predict on the held-out schools, count
-how often you were right, and then count how often you would have been right
-by **not building a model at all** - by simply saying "not below Good" to
-every school.
+The model does not hand back a yes or a no. For each school it hands back a
+**probability**, so before counting anything, watch what the 0.5 cut-off does
+to four individual schools.
+
+### 10a - Four schools, one at a time
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: walkthrough-r
+
+p_below <- predict(logit_full, newdata = test, type = "response")
+
+flag <- p_below > 0.5
+act  <- test$below_good == 1
+
+# one real school nearest each of four illustrative probabilities
+pick <- function(sel, target) {
+  i <- which(sel); i[which.min(abs(p_below[i] - target))]
+}
+idx <- c(pick(!flag & !act, 0.03), pick(flag &  act, 0.70),
+         pick(!flag &  act, 0.30), pick(flag & !act, 0.60))
+
+data.frame(
+  school      = c("A", "B", "C", "D"),
+  probability = round(p_below[idx], 2),
+  above_0.5   = ifelse(p_below[idx] > 0.5, "yes", "no"),
+  predicted   = ifelse(p_below[idx] > 0.5, "Below Good", "Good or better"),
+  actual      = ifelse(act[idx], "Below Good", "Good or better"),
+  right       = ifelse((p_below[idx] > 0.5) == act[idx], "yes", "no"),
+  row.names   = NULL
+)
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: walkthrough-py
+
+p_below = logit_full.predict(test)
+
+flag = p_below > 0.5
+act  = test["below_good"] == 1
+
+def pick(sel, target):
+    return (p_below[sel] - target).abs().idxmin()
+
+idx = [pick(~flag & ~act, 0.03), pick(flag &  act, 0.70),
+       pick(~flag &  act, 0.30), pick(flag & ~act, 0.60)]
+
+print(pd.DataFrame({
+    "school":      ["A", "B", "C", "D"],
+    "probability": p_below[idx].round(2).values,
+    "above_0.5":   np.where(p_below[idx] > 0.5, "yes", "no"),
+    "predicted":   np.where(p_below[idx] > 0.5, "Below Good", "Good or better"),
+    "actual":      np.where(act[idx], "Below Good", "Good or better"),
+    "right":       np.where((p_below[idx] > 0.5) == act[idx], "yes", "no"),
+}))
+```
+:::
+
+::: {.callout-note title="What just happened"}
+**C** was missed and **D** was a false alarm. Each school is judged on **its
+own** probability - the cut-off simply sorts them either side of the line, one
+school at a time.
+
+So **0.5 is not "half the time"**. Applied to all 951 test schools it flags 48
+of them, not 476.
+:::
+
+### 10b - Now count them all
+
+Here is the whole trap in one step. Count how often you were right, and then
+count how often you would have been right by **not building a model at all** -
+by simply saying "not below Good" to every school.
 
 ::: {.multicode}
 #### ![](../images/Rlogo.png){width="41" height="30"}
@@ -694,7 +860,62 @@ This is not a mistake in your code. It is what the 15% was always going to do
 to us, and it is the most useful result in this practical.
 :::
 
-## Task 10 - The confusion matrix shows you why
+### 10c - That baseline is a model you have already fitted
+
+We worked the baseline out arithmetically - *what share would I get right by
+always guessing the commoner answer?* But it is also a **model**: an
+intercept and nothing else. R and `statsmodels` will fit it for you.
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| label: nullmodel-r
+
+null_mod <- glm(below_good ~ 1, data = train, family = binomial)
+p_null   <- predict(null_mod, newdata = test, type = "response")
+
+c(distinct_predictions = length(unique(round(p_null, 10))),
+  it_predicts          = round(unique(p_null)[[1]], 4),
+  its_accuracy         = round(mean((p_null > 0.5) == test$below_good), 4),
+  our_baseline         = round(baseline, 4))
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| label: nullmodel-py
+
+null_mod = smf.glm("below_good ~ 1", data=train,
+                   family=sm.families.Binomial()).fit()
+p_null = null_mod.predict(test)
+
+print({"distinct_predictions": p_null.round(10).nunique(),
+       "it_predicts":  round(p_null.iloc[0], 4),
+       "its_accuracy": round(((p_null > 0.5).astype(int) == test["below_good"]).mean(), 4),
+       "our_baseline": round(baseline, 4)})
+```
+:::
+
+::: {.callout-note title="Why they are the same number"}
+The null model makes **one** distinct prediction - 0.1577, the share of
+training schools below Good - for every school in the test set. That is below
+0.5, so thresholding sends *every* school to "Good or better", which is
+exactly the always-say-no rule. Hence the identical accuracy.
+
+Now compare `null_mod$deviance` with the `null_deviance` you printed back in
+Task 9. **They are the same number**, because that is what null deviance
+*is*: the deviance of this model. R has been fitting it for you every time you
+call `glm()` - you have just never looked at it.
+:::
+
+::: {.callout-tip title="Question"}
+Would the two still agree if below-Good schools were the **majority** - say
+60% of them? Work out what the null model would predict, what thresholding at
+0.5 would then do, and what the majority-class baseline would be.
+:::
+
+## Task 11 - The confusion matrix shows you why
 
 Accuracy is one number squashed out of four, and the four are more honest.
 
@@ -731,7 +952,7 @@ the four cells in that table costs them most? Does accuracy weight it that
 way?
 :::
 
-## Task 11 - ROC and AUC: judge the ranking instead
+## Task 12 - ROC and AUC: judge the ranking instead
 
 Everything above hung on the cut-off of **0.5**, and nothing made 0.5 right.
 So ask a question that does not depend on it at all: does the model put
@@ -796,7 +1017,7 @@ well. There is no contradiction. We were reading a good ranking at a cut-off
 that threw the ranking away.
 :::
 
-## Task 12 - Now choose a cut-off
+## Task 13 - Now choose a cut-off
 
 Only now that you know the model ranks sensibly is the cut-off a sensible
 question - and it is a **policy** question, not a statistical one.
