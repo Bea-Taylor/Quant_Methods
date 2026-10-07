@@ -20,7 +20,7 @@ R and Python packages are both baked into the image at **build** time (see
 
 ```bash
 scripts/render.sh                     # render the whole site
-scripts/render.sh sessions/week1.qmd  # render a single file
+scripts/render.sh sessions/week1/week1.qmd  # render a single file
 scripts/render.sh preview             # live preview
 ```
 
@@ -100,7 +100,7 @@ pandas-flavor 0.7.0.
 is installed on the host drives path B. Output can differ between them.
 
 **Re-rendering rewrites files under `sessions/`.** Figure directories
-(`sessions/*_files/`) and the maps written by `week6_practical.qmd` are
+(`sessions/**/*_files/`) and the maps written by `regression_practical.qmd` are
 gitignored precisely because every render regenerates them. If `git status`
 looks noisy after a render, that is why.
 
@@ -112,5 +112,5 @@ of what used to sit in that mount (`renv/library`, `.venv-reticulate`), which
 should help, but hasn't been verified against the original ~8-minute report.
 If it's still slow: either keep the project inside WSL2's own filesystem
 rather than `/mnt/c/...`, or exclude the remaining large dirs (`_freeze`,
-`sessions/*_files`) from the mount with anonymous volumes. Not verified on
+`sessions/**/*_files`) from the mount with anonymous volumes. Not verified on
 macOS, where bind mounts have a smaller but nonzero version of the same tax.

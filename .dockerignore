@@ -12,6 +12,4 @@
 !renv
 renv/library
 renv/.cache
-!setup
-setup/casaviz.zip.backup
-setup/index.qmd
+!packages

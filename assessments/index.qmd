@@ -70,7 +70,7 @@ We will not expect standard academic referencing in this piece, however, this do
 
 ## Deadline
 
-The Deadline for the assessment is {{< var assess.deadline-date >}} \@ {{< var assess.deadline-time >}}.
+The Deadline for the assessment is Tuesday 19th January 2027 @ 10am.
 
 Your report and technical appendix should be uploaded to Moodle as a single PDF document.
 
@@ -89,7 +89,7 @@ library(tidyverse)
 library(kableExtra)
 library(here)
 
-assessment <- read_csv(here("data", "assessment.csv"))
+assessment <- read_csv("assessment.csv")
 
 kable(assessment)
 ```

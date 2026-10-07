@@ -10,8 +10,8 @@ project:
     - "img/web"
     - "img/logo"
     - "bib/"
-    - "sessions/L1_images"
-    - "sessions/L5_images"
+    - "sessions/week_EDA1/images"
+    - "sessions/week_correlation/images"
 
 execute:
   freeze: auto
@@ -46,7 +46,7 @@ format:
   revealjs:
     logo: "/img/logo/full.svg"
     template-partials:
-      - /inc/title-slide.html
+      - /sessions/title-slide.html
     transition: none
     slide-number: false
     preview-links: auto

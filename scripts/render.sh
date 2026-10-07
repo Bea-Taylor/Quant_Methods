@@ -4,7 +4,7 @@
 #
 # Usage:
 #   scripts/render.sh                    # render the whole site
-#   scripts/render.sh sessions/week1.qmd # render a single file
+#   scripts/render.sh sessions/week1/week1.qmd # render a single file
 #   scripts/render.sh preview            # live preview at http://localhost:4200
 #
 # R and Python packages are both baked into the image at build time (see

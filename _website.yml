@@ -31,7 +31,7 @@ website:
       - sidebar:schedule
       - sidebar:assessments
       - text: "Getting Help"
-        href: help.qmd
+        href: help/help.qmd
 
   sidebar:
     - id: assessments
@@ -47,31 +47,31 @@ website:
       contents:
         - text: "Overview"
           href: sessions/index.qmd
-        - section: "Part 1: Basics"
+        - section: "Part 1: Quantitative Basics"
           contents:
-            - text: "1. Explanatory Data Analysis #1"
-              href: sessions/week1.qmd
-            - text: "2. Explanatory Data Analysis #2"
-              href: sessions/week2.qmd
+            - text: "1. Exploratory Data Analysis #1"
+              href: sessions/week_EDA1/index.qmd
+            - text: "2. Exploratory Data Analysis #2"
+              href: sessions/week_EDA2/index.qmd
             - text: "3. Hypothesis Testing"
-              href: sessions/week3.qmd
+              href: sessions/week_hyp_test/index.qmd
             - text: "4. Introduction to Linear Algebra"
-              href: sessions/week4.qmd
-        - section: "Part 2: Correlation and Regression"
+              href: sessions/week_linear_alg/index.qmd
+        - section: "Part 2: Regression"
           contents:
-          - text: "5. Measuring Relationship"
-            href: sessions/week5.qmd
-          - text: "6. Introduction to Regression"
-            href: sessions/week6.qmd
-          - text: "7. Multiple Regression" 
-            href: sessions/week7.qmd
-          - text: "8. Multilevel Regression" 
-            href: sessions/week8.qmd 
+          - text: "5. Introduction to Regression"
+            href: sessions/week_regression/index.qmd
+          - text: "6. Multiple Regression" 
+            href: sessions/week_multiple_regression/index.qmd
+          - text: "7. Multilevel Regression" 
+            href: sessions/week_multilevel_regression/index.qmd
+          - text: "8. Generalised Linear Model" 
+            href: sessions/week_GLM/index.qmd
         - section: "Part 3: Dimension Reduction & Clustering"
           contents:
           - text: "9. Dimension Reduction"
-            href: sessions/week9.qmd
+            href: sessions/week_PCA/index.qmd
           - text: "10. Clustering"
-            href: sessions/week10.qmd
-        - text: "Bibliography"
-          href: references.qmd
+            href: sessions/week_clustering/index.qmd
+        # - text: "Bibliography"
+        #   href: references.qmd

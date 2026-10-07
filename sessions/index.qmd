@@ -8,13 +8,8 @@ title: "Overview"
 ## Why study a Quantitative Methods course?
 - Coding alone is not enough.
 - Understanding models aids in correct tool selection and bug handling.
-- Google/ChatGPT can make mistakes; detecting them is crucial.
-- Mathematics understanding is not always required.
+- Google/Claude Code can make mistakes; detecting them is crucial.
 
-<!-- ## Objectives
-1. Understand the structure and focus of the module.
-2. Develop a method for tackling quantitative problems.
-3. Formulate a research question and structure quantitative writing. -->
 
 ## Course Objectives
 1. Understand a broad range of quantitative techniques.
@@ -28,14 +23,14 @@ title: "Overview"
 - This module doesn't teach programming, so CASA0013 is strongly recommended if you don't know any Python.
 
 ## Course Structure
-- Lectures: Tuesdays 9:00–10:30; G03 Bedford Way (26). 
-- Tutorials: Wednesdays 10:30–12:00; G03 Bedford Way (26).
+- Lectures: Tuesdays 9:00–10:30; G13 Torrington Place (1-19).  
+- Tutorials: Tuesdays 10:30–12:00; G13 Torrington Place (1-19). 
 
 ## Platforms
-- **Email** for important notices and private questions.
-- **Github & website** for lecture notes and notebooks.
-- **Moodle** for lectures recording and assessments.
-- **Slack** for public questions.
+- Email for important notices and private questions.
+- [Github](https://github.com/Bea-Taylor/Quant_Methods) & [website](https://bea-taylor.github.io/Quant_Methods/) for lecture notes and notebooks.
+- [Moodle](https://moodle.ucl.ac.uk/course/view.php?id=61867) for lectures recording and assessments.
+- Slack for public questions.
 
 ## Weekly Schedule
 | Session | Topic                          | Lecturer |
@@ -66,7 +61,7 @@ title: "Overview"
 
 ## Moodle Feedback
 Please provide anonymous feedback on Moodle
-![](L1_images/moodle_feedback.png)
+![](week_EDA1/images/moodle_feedback.png)
 
 ## Github Feedback
 You can also give feedback on [Github issues](https://github.com/Bea-Taylor/Quant_Methods/issues).

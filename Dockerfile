@@ -66,7 +66,7 @@ RUN Rscript -e 'install.packages("renv", repos = "https://cloud.r-project.org");
 # into that same default library. The path goes via a file rather than
 # $(...): renv writes some of its startup notices to stdout, so command
 # substitution captures those too.
-COPY setup/casaviz.zip casaviz.zip
+COPY packages/casaviz.zip casaviz.zip
 RUN Rscript -e 'writeLines(.libPaths()[1], "r-lib-path")' \
     && unzip -q casaviz.zip -d casaviz \
     && R CMD INSTALL -l "$(cat r-lib-path)" casaviz \
