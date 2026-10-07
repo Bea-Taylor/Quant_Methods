@@ -528,9 +528,9 @@ ggplot() +
   # Mark the single point the caption talks about, so it can be found on the
   # graph rather than taken on trust
   annotate("point", x = 1, y = p8_one, colour = casa_red, size = 3.2) +
-  annotate("segment", x = 1, xend = 1.45, y = p8_one, yend = p8_one - 0.18,
+  annotate("segment", x = 1, xend = 0.90, y = p8_one, yend = p8_one - 0.18,
            colour = casa_red, linewidth = 0.4) +
-  annotate("text", x = 1.5, y = p8_one - 0.21, hjust = 0, size = 4,
+  annotate("text", x = 1.5, y = p8_one - 0.21, hjust = 2, size = 4,
            colour = casa_red,
            label = sprintf("Progress 8 = +1\npredicts %.0f%%", 100 * p8_one)) +
   scale_colour_manual(values = c("Straight line (OLS)" = casa_red,
@@ -827,21 +827,68 @@ predict(glm1,
 
 . . .
 
+::: {style="font-size: 0.93em"}
+**`type = "response"` means "answer on the scale of the thing I measured".**
+Here that is a **probability between 0 and 1 that the school is rated below
+Good**. Leave it out and R gives you log-odds — which is where we came in.
+
+The three numbers are the three schools you asked about, in the order you
+asked for them:
+:::
+
+```{r}
+#| echo: false
+#| message: false
+p8_vals <- c(-1, 0, 1)
+lo_vals <- as.numeric(coef(glm1)[1] + coef(glm1)[2] * p8_vals)
+pr_vals <- plogis(lo_vals)
+
+tibble(
+  `P8MEA` = c("−1", "0", "+1"),
+  `Which school?` = c("one point **below** the national average",
+                      "**exactly** the national average",
+                      "one point **above** the national average"),
+  `log-odds` = sprintf("%.3f", lo_vals),
+  `odds` = sprintf("%.4f", exp(lo_vals)),
+  `probability` = sprintf("**%.1f%%**", 100 * pr_vals)
+) |> kable(align = "clrrr")
+```
+
+::: {style="font-size: 0.86em"}
+Read the last column only. The two middle ones are the scales we passed
+through on the way — and `type = "response"` is what saves you from making
+that journey by hand.
+:::
+
+## The reason we report ratios, not probabilities {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+Look down the two right-hand columns of that table again.
+
 ::: {style="font-size: 0.95em"}
-`type = "response"` is the important bit. Leave it out and R gives you
-**log-odds** — which is where we came in.
+| Going from | The **odds** | The **probability** |
+|---|---|---|
+| −1 → 0 | ×`r sprintf("%.3f", exp(as.numeric(coef(glm1)[2])))` | `r sprintf("%.1f%%", 100 * pr_vals[1])` → `r sprintf("%.1f%%", 100 * pr_vals[2])` |
+| 0 → +1 | ×`r sprintf("%.3f", exp(as.numeric(coef(glm1)[2])))` | `r sprintf("%.1f%%", 100 * pr_vals[2])` → `r sprintf("%.1f%%", 100 * pr_vals[3])` |
 :::
 
 . . .
 
-::: {style="font-size: 0.92em"}
-So a school on average progress has about a
-**`r sprintf("%.0f%%", 100 * as.numeric(predict(glm1, data.frame(P8MEA = 0), type = "response")))`
-chance** of being rated below Good; one a point better, about
-**`r sprintf("%.1f%%", 100 * as.numeric(predict(glm1, data.frame(P8MEA = 1), type = "response")))`**.
+::: {style="font-size: 0.95em"}
+**The odds fall by the same multiplier every time** — that multiplier *is* our
+odds ratio, and it is the same whatever school you start from.
 
-Notice those do **not** fall by a constant multiplier the way the odds did.
-That is why we report odds ratios and not "the probability changes by X".
+**The probabilities do not.** The first step costs
+`r sprintf("%.0f", 100 * (pr_vals[1] - pr_vals[2]))` percentage points, the
+second costs `r sprintf("%.0f", 100 * (pr_vals[2] - pr_vals[3]))`. Same
+one-point change in Progress 8, wildly different effect on the probability.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;"}
+That is why we report an **odds ratio** and never "the probability changes by
+X%". There is no single such number — **it depends entirely on where the
+school started.**
 :::
 
 # More than one predictor {background-color="#4e3c56"}
