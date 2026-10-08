@@ -70,9 +70,19 @@ library(leaflet)
 # past that point and the data drawn over it stays sharp.
 addProviderTiles <- function(map, provider, ...) {
   nm <- as.character(provider)[1]
-  if (!startsWith(nm, "CartoDB."))
+  # Both the old CartoDB.* names and Esri's own gray canvases are routed
+  # through the handling below. leaflet's built-in Esri.* providers serve the
+  # base canvas only - no place names - and do not cap the zoom, so calling
+  # them directly would lose the labels and grey out past level 16.
+  if (startsWith(nm, "CartoDB.")) {
+    nm <- substring(nm, 9L)
+  } else if (nm == "Esri.WorldGrayCanvas") {
+    nm <- "Positron"
+  } else if (nm == "Esri.WorldDarkGrayCanvas") {
+    nm <- "DarkMatter"
+  } else {
     return(leaflet::addProviderTiles(map, provider, ...))
-  nm <- substring(nm, 9L)
+  }
 
   dark <- startsWith(nm, "DarkMatter")
   shade <- if (dark) "Dark" else "Light"
@@ -436,7 +446,7 @@ color_scale <- colorNumeric(palette = casa_palette, domain = sf_df$TOTPUPS)
 
 
 leaflet(sf_df) |>
-  addProviderTiles("CartoDB.Positron") |>  # plain, minimal basemap
+  addProviderTiles("Esri.WorldGrayCanvas") |>  # plain, minimal basemap
   addCircleMarkers(
     lng = ~lon,
     lat = ~lat,
