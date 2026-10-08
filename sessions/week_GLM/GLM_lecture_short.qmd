@@ -1,6 +1,6 @@
 ---
 title: "Prof D's Regression Sessions - Vol 4"
-subtitle: "Breaking the mould - GLMs and logistic regression"
+subtitle: "Good Skool / Bad Skool Breaks - GLMs and logistic regression"
 author:
   - name: "Adam Dennett"
 email: "a.dennett@ucl.ac.uk"

@@ -5,7 +5,7 @@ author: "Adam Dennett"
 title: "Week 8 - Prof D's Regression Sessions Vol 4"
 ---
 
-![](../images/regression.png)
+![](../images/regression2.PNG)
 
 ## Introduction
 

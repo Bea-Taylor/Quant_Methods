@@ -1217,56 +1217,56 @@ Change the question and the same variable changes role - which is why you
 cannot work this out from the data, only from the question.
 :::
 
-## So where does the Shapley decomposition fit? {.smaller}
+<!-- ## So where does the Shapley decomposition fit? {.smaller} -->
 
-Earlier we split the shared variance between the two: disadvantage
-**`r sprintf("%.0f%%", shap_pct[[1]])`**, absence
-**`r sprintf("%.0f%%", shap_pct[[2]])`**, adding up exactly to the model's
-$R^2$. That settled a real question - but **not this one**.
+<!-- Earlier we split the shared variance between the two: disadvantage -->
+<!-- **`r sprintf("%.0f%%", shap_pct[[1]])`**, absence -->
+<!-- **`r sprintf("%.0f%%", shap_pct[[2]])`**, adding up exactly to the model's -->
+<!-- $R^2$. That settled a real question - but **not this one**. -->
 
-. . .
+<!-- . . . -->
 
-::: {style="font-size: 0.92em"}
-| | What is shared | What settles it |
-|---|---|---|
-| **Shared variance** | Both predictors explain some of the *same variation* in attainment | **Shapley / LMG** - average over every ordering and the shares add up |
-| **Shared causal pathway** | Part of disadvantage's effect *travels through* absence | **Only the causal story** - no decomposition can see an arrow |
-:::
+<!-- ::: {style="font-size: 0.92em"} -->
+<!-- | | What is shared | What settles it | -->
+<!-- |---|---|---| -->
+<!-- | **Shared variance** | Both predictors explain some of the *same variation* in attainment | **Shapley / LMG** - average over every ordering and the shares add up | -->
+<!-- | **Shared causal pathway** | Part of disadvantage's effect *travels through* absence | **Only the causal story** - no decomposition can see an arrow | -->
+<!-- ::: -->
 
-. . .
+<!-- . . . -->
 
-::: {style="font-size: 0.92em"}
-Notice *why*. Shapley averages over **every order of entry** precisely because
-it has **no idea which order is the causal one**. That is what makes it fair
-and additive - and it is also exactly why it cannot tell a mediator from a
-confounder. Hand it a mediator and it will cheerfully split the mediated
-effect between both variables.
-:::
+<!-- ::: {style="font-size: 0.92em"} -->
+<!-- Notice *why*. Shapley averages over **every order of entry** precisely because -->
+<!-- it has **no idea which order is the causal one**. That is what makes it fair -->
+<!-- and additive - and it is also exactly why it cannot tell a mediator from a -->
+<!-- confounder. Hand it a mediator and it will cheerfully split the mediated -->
+<!-- effect between both variables. -->
+<!-- ::: -->
 
-## Two tools, two questions {.smaller}
+<!-- ## Two tools, two questions {.smaller} -->
 
-::: {style="font-size: 0.95em"}
-| If you are asking... | Reach for... |
-|---|---|
-| *How much of the explanation does each variable account for?* | the **Shapley / LMG** shares |
-| *What belongs in the model, and what does this coefficient mean?* | the **causal story** - confounder or mediator |
-:::
+<!-- ::: {style="font-size: 0.95em"} -->
+<!-- | If you are asking... | Reach for... | -->
+<!-- |---|---| -->
+<!-- | *How much of the explanation does each variable account for?* | the **Shapley / LMG** shares | -->
+<!-- | *What belongs in the model, and what does this coefficient mean?* | the **causal story** - confounder or mediator | -->
+<!-- ::: -->
 
-. . .
+<!-- . . . -->
 
-::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.93em;"}
-**Use the first to report, and the second to decide.**
+<!-- ::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.93em;"} -->
+<!-- **Use the first to report, and the second to decide.** -->
 
-The decomposition tells you how to divide the credit once the model is built.
-It will not tell you what should have been in the model, and it will not tell
-you whether a shrinking coefficient is bias being removed or a mechanism being
-split in half. Nothing in the data will.
-:::
+<!-- The decomposition tells you how to divide the credit once the model is built. -->
+<!-- It will not tell you what should have been in the model, and it will not tell -->
+<!-- you whether a shrinking coefficient is bias being removed or a mechanism being -->
+<!-- split in half. Nothing in the data will. -->
+<!-- ::: -->
 
-::: {style="font-size: 0.8em"}
-Which is the same lesson as the Buckfast: the arithmetic was never the hard
-part.
-:::
+<!-- ::: {style="font-size: 0.8em"} -->
+<!-- Which is the same lesson as the Buckfast: the arithmetic was never the hard -->
+<!-- part. -->
+<!-- ::: -->
 
 ## Interaction Effects
 
