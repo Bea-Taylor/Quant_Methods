@@ -4,7 +4,7 @@ subtitle: "Time to go deep!"
 author: 
   - name: "Adam Dennett"
 email: "a.dennett@ucl.ac.uk"
-date-as-string: "1st August 2024"
+date-as-string: "2025-26"
 other: "CASA0007 Quantitative Methods"
 from: markdown+emoji
 format:
@@ -342,7 +342,7 @@ Motivation:
 The Conversation: <https://theconversation.com/poorer-pupils-do-worse-at-school-heres-how-to-reduce-the-attainment-gap-205535>
 :::
 
-## Reserarch Question(s) {transition="convex-in none-out" transition-speed="fast"}
+## Research Question(s) {transition="convex-in none-out" transition-speed="fast"}
 
 -   What are the factors that affect school-level educational attainment in Brighton and Hove?
 -   To what extent is attainment driven by social mixing?
@@ -729,7 +729,7 @@ flowchart TD
 
 ::::: columns
 ::: {.column width="60%"}
--   However, wider reading also suggests that factors such as attendance (which Gordard does not include in his paper as a variable) may also play a big role in the attainment of disadvantaged pupils
+-   However, wider reading also suggests that factors such as attendance (which Gorard does not include in his paper as a variable) may also play a big role in the attainment of disadvantaged pupils
 -   Work by Claymore suggests that a large proportion of the gap in attainment between disadvantaged pupils and more affluent peers can be explained by:
     -   the differences in absence rates
     -   exclusion
@@ -1296,7 +1296,7 @@ ggplot(btn_sub1) +
 
 ## Linear Regression - Variance
 
--   Degress of Freedom are also used to calculate the ***variance*** of the model
+-   Degrees of Freedom are also used to calculate the ***variance*** of the model
 -   If you ran the same model on different samples of the same population - e.g instead of Brighton, you ran this model on schools in Leeds or Bristol or Liverpool - you would get different values for your coefficients each time
 -   How similar these are to each other and more importantly the the whole population (all schools in England and Wales) is the ***variance*** - you want to minimise the variance in your coefficients if you want to generalise your model to the wider population
 -   **We will return to the idea of variance in the practical**
@@ -1315,7 +1315,8 @@ ggplot(btn_sub1) +
 
 -   The Standard Error (SE) - measure of the uncertainty or precision of the estimate (coefficient) - how much it might vary
     -   **Large SE relative to the Estimate = estimate unreliable / uncertain**
-    -   SE of 0.15 for the estimate of -0.63 for PTFSM6CLA1A means the change in the value of Attainment 8 for a 1% change in disadvantaged students could vary between -0.48 and -0.78
+    -   SE of 0.15 for the estimate of -0.63 for PTFSM6CLA1A means that one standard error either side of the estimate runs from -0.48 to -0.78
+    -   For the **95% confidence interval** you need roughly **two** standard errors either side: -0.33 to -0.93. With only 8 degrees of freedom, that is a very wide range
 
 ## Linear Regression - Coefficients 3
 
@@ -1331,7 +1332,8 @@ ggplot(btn_sub1) +
 ![](../images/the_coefs.png)
 
 -   The $P$-value - $P$-robability of observing a t-value as extreme as the one calculated if there were ***no relationship*** between the independent and the dependent variable
--   A small $P$-value (typically $p$ \< 0.05) indicates \<5% chance that $X$ is not really explaining variation in $Y$
+-   A small $P$-value (typically $p$ \< 0.05) means that data like ours would be **surprising** if $X$ really had no relationship with $Y$
+-   **Careful**: it does *not* say there is a 5% chance the relationship is absent - that is a different question, and the $P$-value cannot answer it
 -   The Signif. codes (like \*\*\* and \*\*) are just a quick visual guide to this p-value, showing you at a glance which variables are significant.
 -   Any parameter with 1, 2 or 3\* is "statistically significant" at 5% or better
 
@@ -1341,7 +1343,7 @@ ggplot(btn_sub1) +
 
 -   The $P$-values relate to the ***null hypotheses*** that:
     -   The true value of the intercept (baseline attainment) is **zero** when the independent variable (% disadvantage) is **zero**. 
-    -   $P$ \<0.001 = \<0.1% $P$-robability that 62.3 occurred by random chance
+    -   $P$ \<0.001 means an intercept this far from zero would be very surprising *if the true intercept were zero*
 -   **Note** - It doesn't tell us that when % Disadvantaged is zero, 62.3 will be a *correct* Attainment 8 score, just that real value is unlikely to be zero
     
 ## Linear Regression - Coefficients 4

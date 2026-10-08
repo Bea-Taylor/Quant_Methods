@@ -4,7 +4,7 @@ subtitle: "In the mix - the linear mix(ed effects model lecture)"
 author: 
   - name: "Adam Dennett"
 email: "a.dennett@ucl.ac.uk"
-date-as-string: "1st August 2024"
+date-as-string: "2025-26"
 other: "CASA0007 Quantitative Methods"
 from: markdown+emoji
 format:
@@ -639,7 +639,7 @@ In order to model these grouping factors more explicitly and understand their ge
 -   Random effects, (random intercepts and slopes) represent the deviations of each group's effect from the overall fixed-effect average.
     -   When you model a grouping factor (like Ofsted Rating) as a random effect, you are not estimating five separate coefficients (one for each rating).
     -   Instead, you estimate a variance term ($\sigma^2_{\text{group}}$) that quantifies how much the true group effects (intercepts and/or slopes) scatter around the overall mean effect.
-    -   Remember: Higher variance = Higher uncertainty, so higher variance groups have less weight in the model
+    -   Remember: a group's mean is uncertain mainly because it has **few observations**, so small groups get pulled furthest towards the overall average
     -   This allows the model to "borrow strength" across groups to stabilise estimates (the principle of shrinkage).
 
 ## Random Effects vs Dummy Variables
@@ -1963,7 +1963,7 @@ Fixed Effects
 -   Reducing absence is significantly more likely to improve Attainment 8 than reducing levels of disadvantage in a school
 -   In terms of random effects, while not causal a jump between Ofsted ratings is worth, on average, about 2.5 GSCE points - similar to a reduction in disadvanage in a school from 20%-10%.
 
-## Back to our Week 6 Reserarch Question(s)
+## Back to our Week 6 Research Question(s)
 
 -   What are the factors that affect school-level educational attainment in Brighton and Hove?
 -   To what extent is attainment driven by social mixing?

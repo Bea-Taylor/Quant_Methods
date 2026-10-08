@@ -4,7 +4,7 @@ subtitle: "Time to go even deeper!"
 author: 
   - name: "Adam Dennett"
 email: "a.dennett@ucl.ac.uk"
-date-as-string: "1st August 2024"
+date-as-string: "2025-26"
 other: "CASA0007 Quantitative Methods"
 from: markdown+emoji
 format:
@@ -497,9 +497,9 @@ summary(lm_fit1)
 
 ## Multiple Linear Regression
 
--   When we start adding more variables into the model, an alternative to the mode generic notation is to include the variables in the equation explicitly, for example:
+-   When we start adding more variables into the model, an alternative to the more generic notation is to include the variables in the equation explicitly, for example:
 
-$$\log(\text{Attainment8}) = \beta_0 + \beta_1\log(\text{PctDisadvantage}) +\\\\ \beta_2log(\text{PctPersistentAbsence}) + \epsilon$$
+$$\log(\text{Attainment8}) = \beta_0 + \beta_1\log(\text{PctDisadvantage}) +\\\\ \beta_2log(\text{PctOverallAbsence}) + \epsilon$$
 
 -   There's no real limit to the number of variables you can include in a model - however:
     -   Fewer is easier to interpret
@@ -563,9 +563,9 @@ display(mp)
 ## Multiple Linear Regression
 
 -   The coefficients for both variables are statistically ***significant and negative***, indicating that both variables contribute to explaining the variation in Attainment 8 scores
--   But t-values indicate that the ***% Overall Absence variable (-50.49) has a stronger effect on Attainment 8 scores than the % Disadvantaged Students variable (-31.16)***
+-   The t-values *suggest* the ***% Overall Absence variable (-50.49) is doing more work than the % Disadvantaged Students variable (-31.16)*** - but hold that thought, because **ranking predictors this way is harder than it looks** and we come back to it after the diagnostics
 -   The $R^2$ value is now 0.69, indicating that the model is potentially good and explains ***69% of the variation in Attainment 8 scores***. Degrees of freedom are good and the overall model is statistically significant.
--   But does is satisfy the assumptions of linear regression?
+-   But does it satisfy the assumptions of linear regression?
 
 ## Diagnostics 1
 
@@ -630,7 +630,7 @@ corr %>%
 -   Difficult to say what is too much correlation - but over 0.7 is often considered problematic
 -   However, pairwise correlations might miss n-way correlations
 
-## Variance Inflaction Factor - VIF
+## Variance Inflation Factor - VIF
 
 ```{r}
 #| out-width: 70%
@@ -642,7 +642,7 @@ check_model(lm_fit1,
 -   A more useful diagnostic tool is the ***Variance Inflation Factor (VIF)***, which measures how much the variance of a regression coefficient is increased due to multicollinearity
 -   A VIF value of 1 indicates no correlation, while a VIF value above 5 or 10 suggests high multicollinearity
 
-## Variance Inflaction Factor - VIF
+## Variance Inflation Factor - VIF
 
 ***Why does it even matter if the variance is inflated?***
 
@@ -651,17 +651,137 @@ check_model(lm_fit1,
 -   The model makes an arbitrary split
 -   Small changes in the data could make the split go either way - e.g. attribute more of the effect to % Disadvantaged Students or % Overall Absence (if VIF high) - thus ***inflating*** the uncertainty / ***variance***
 
-## Variance Inflaction Factor - VIF
+## Variance Inflation Factor - VIF
 
 -   Despite some positive correlation (0.48) between % Disadvantaged Students and % Overall Absence, the VIF is very low \~1.5
 -   No problems with multicollinearity
 -   So we have passed that test and can happily use both in the model
 
+## So which variable actually matters more?
+
+```{r}
+#| label: shapley-setup
+#| echo: false
+#| message: false
+#| warning: false
+
+# Every subset has to be fitted on exactly the same rows or the incremental
+# R-squared values are not comparable - lm() drops incomplete cases silently.
+decomp_data <- model_data |>
+  dplyr::filter(ATT8SCR > 0, PTFSM6CLA1A > 0, PERCTOT > 0)
+
+r2_of <- function(vs) {
+  rhs <- if (length(vs) == 0) "1" else paste(vs, collapse = " + ")
+  summary(lm(as.formula(paste("log(ATT8SCR) ~", rhs)), data = decomp_data))$r.squared
+}
+
+V        <- c("log(PTFSM6CLA1A)", "log(PERCTOT)")
+r2_fsm   <- r2_of(V[1]);  r2_abs <- r2_of(V[2]);  r2_both <- r2_of(V)
+r2_share <- r2_fsm + r2_abs - r2_both
+
+shap <- setNames(numeric(2), V)
+for (p in list(c(1, 2), c(2, 1))) {
+  sofar <- character(0)
+  for (i in p) {
+    shap[V[i]] <- shap[V[i]] + (r2_of(c(sofar, V[i])) - r2_of(sofar))
+    sofar <- c(sofar, V[i])
+  }
+}
+shap     <- shap / 2
+shap_pct <- 100 * shap / sum(shap)
+```
+
+-   Earlier we said the t-values made % Overall Absence look like the stronger
+    predictor. **That comparison is shakier than it appears.**
+-   A t-value is $\frac{\text{Estimate}}{\text{SE}}$, so it mixes up **how big**
+    an effect is with **how precisely** we have measured it
+-   With `r format(nrow(decomp_data), big.mark=",")` schools, everything is
+    precisely measured, so the t-values mostly tell us about sample size
+-   And there is a deeper problem - one we have already met under a different
+    name
+
+## The two variables overlap
+
+```{r}
+#| echo: false
+knitr::kable(data.frame(
+  Model = c("% Disadvantaged on its own",
+            "% Overall Absence on its own",
+            "Both together",
+            "Sum of the two separately"),
+  R2 = sprintf("%.3f", c(r2_fsm, r2_abs, r2_both, r2_fsm + r2_abs))
+), col.names = c("", "$R^2$"), align = "lr")
+```
+
+. . .
+
+-   The two on their own add up to **`r sprintf("%.3f", r2_fsm + r2_abs)`**,
+    but together they explain only **`r sprintf("%.3f", r2_both)`**
+-   The difference - **`r sprintf("%.3f", r2_share)`** - is variance the two
+    variables **share**. It is explained by *either* of them, and owned by
+    *neither*
+-   That is `r sprintf("%.0f%%", 100 * r2_share / r2_both)` of everything the
+    model explains. **This is the VIF problem again**: the model has to make an
+    arbitrary split, and the t-values inherit it
+
+## Shapley values - splitting the shared variance fairly
+
+-   Instead of letting the model split the shared variance arbitrarily, we can
+    **average over every possible order** in which the variables could enter
+-   Add disadvantage first, then absence. Then absence first, then disadvantage.
+    Average what each one gained
+-   This is the **Shapley value**, known in regression as the **LMG
+    decomposition**
+
+```{r}
+#| echo: true
+#| eval: false
+r2_of <- function(vs) {                     # R² of a model with these variables
+  rhs <- if (length(vs) == 0) "1" else paste(vs, collapse = " + ")
+  summary(lm(as.formula(paste("log(ATT8SCR) ~", rhs)), data = decomp_data))$r.squared
+}
+
+# average each variable's gain across both orders of entry
+shap["fsm"] <- mean(c(r2_of("fsm"),            r2_of(c("abs","fsm")) - r2_of("abs")))
+shap["abs"] <- mean(c(r2_of(c("fsm","abs")) - r2_of("fsm"), r2_of("abs")))
+```
+
+::: footer
+`relaimpo::calc.relimp(model, type = "lmg")` does this for you. Shapley (1953); Lindeman, Merenda & Gold (1980); Grömping (2007) *The American Statistician* 61(2) 139-147
+:::
+
+## What the decomposition says
+
+```{r}
+#| echo: false
+knitr::kable(data.frame(
+  Variable = c("% Disadvantaged", "% Overall Absence", "**Total**"),
+  Shapley  = sprintf("%.3f", c(shap[[1]], shap[[2]], sum(shap))),
+  Share    = c(sprintf("%.1f%%", shap_pct[[1]]), sprintf("%.1f%%", shap_pct[[2]]), "100%")
+), col.names = c("", "Shapley $R^2$", "Share of explained"), align = "lrr")
+```
+
+-   The shares **sum exactly to the model's $R^2$**
+    (`r sprintf("%.3f", r2_both)`) - nothing is lost or double-counted
+-   Absence takes `r sprintf("%.0f%%", shap_pct[[2]])` of the explanation,
+    disadvantage `r sprintf("%.0f%%", shap_pct[[1]])`
+
+. . .
+
+-   **Here the ranking happens to agree with the t-values** - but now it is a
+    defensible number rather than a side-effect of sample size, and we also know
+    that `r sprintf("%.0f%%", 100 * r2_share / r2_both)` of the explanation is
+    shared between the two
+-   **Two warnings**: a Shapley share has **no sign** (it cannot tell you
+    whether an effect is positive or negative), so always report it *alongside*
+    the coefficients - and the cost grows as $2^k$, so it gets slow with many
+    predictors
+
 ## Linear Regression - Diagnostics
 
 -   **Linearity**: :sunglasses:
 -   **Homoscedasticity**: :sunglasses:
--   **Normality of residuals**: ::sunglasses::
+-   **Normality of residuals**: :sunglasses:
 -   **No multicollinearity**: :sunglasses:
 -   **Independence of residuals**: :confused:
 
@@ -738,7 +858,7 @@ leaflet(data = england_sf) %>%
 
 -   **Linearity**: :sunglasses:
 -   **Homoscedasticity**: :sunglasses:
--   **Normality of residuals**: ::sunglasses::
+-   **Normality of residuals**: :sunglasses:
 -   **No multicollinearity**: :sunglasses:
 -   **Independence of residuals**: :grimacing:
 
@@ -1007,7 +1127,7 @@ Disadvantage $\rightarrow$ Absence $\rightarrow$ Attainment
 
 The equation for a model where we interact Overall Absence with Regions would look like:
 
-$$\log(\text{Attainment8}) = \beta_0 + \beta_1 \log(\text{PctPersistentAbsence}) +\\\\ \sum_{j=1}^{k} \gamma_j \text{Region}_j + \sum_{j=1}^{k} \delta_j (\log(\text{PctPersistentAbsence}) \times \text{Region}_j) + \epsilon$$
+$$\log(\text{Attainment8}) = \beta_0 + \beta_1 \log(\text{PctOverallAbsence}) +\\\\ \sum_{j=1}^{k} \gamma_j \text{Region}_j + \sum_{j=1}^{k} \delta_j (\log(\text{PctOverallAbsence}) \times \text{Region}_j) + \epsilon$$
 
 ## Interaction Effects
 

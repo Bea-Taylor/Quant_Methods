@@ -13,6 +13,22 @@ editor:
     wrap: 72
 ---
 
+
+::: {.callout-note title="Status — what has been applied"}
+Applied since this review was written:
+
+-   Both broken image paths, and the data download link repointed at this repo
+-   The p-value wording ([§1](#p-value)) and the standard-error interval (§2)
+-   The t-value importance claim (§3) — now made provisional and answered
+    properly by the new **Shapley decomposition** slides in Vol 2
+-   The shrinkage sentence (§5) and the `PctOverallAbsence` renaming (§6)
+-   All typos, the `::sunglasses::` emoji, and the stale dates in all three
+    lectures
+
+Still open: the Vol 3 grouping factor ([§4](#grouping) — needs a decision, see
+below), Python parity in Vols 2 and 3, the Dropbox file, the Progress 8 /
+Attainment 8 inconsistency, and the `include: false` audit.
+:::
 ## How this review was done
 
 I read all six files — three lectures and three practicals, about 9,900
