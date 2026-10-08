@@ -1031,7 +1031,7 @@ Confound: "to fail to discern differences between : mix up"
 -   That is what makes something a confounder: it is a ***common cause***. It causes the independent variable **and** it causes the dependent variable
 -   The result is that $X$ and $Y$ move together **without** $X$ doing anything to $Y$. Some - or all - of the association you can see is really the confounder showing through both of them
 -   Drop the confounder into the model and that borrowed association is handed back to its owner, so the coefficient on $X$ **changes**
--   **In the picture**: the Buckfast makes the rainy glen ($X$) *look* glorious, and it makes the man $Y$ happy. Glen and mood move together - but the glen is not what is cheering him up. Take the Buckfast away and the association goes with it
+-   **In the picture**: the Buckfast makes the rainy glen ($X$) *look* glorious, and it makes the man ($Y$) happy. Glen and mood move together - but the glen is not what is cheering him up. Take the Buckfast away and the association goes with it
 
 ## Confounding
 
@@ -1157,7 +1157,7 @@ coefficients move identically either way. Only your knowledge of the system -
 what plausibly causes what - can tell you.
 :::
 
-## So which is absence?
+## So which is absence? {.smaller}
 
 ::: {style="font-size: 0.95em"}
 Our two slides have told two different stories about the same pair of
@@ -1216,6 +1216,58 @@ properties of a variable *relative to the effect you are trying to estimate*.
 Change the question and the same variable changes role - which is why you
 cannot work this out from the data, only from the question.
 :::
+
+## So where does the Shapley decomposition fit? {.smaller}
+
+Earlier we split the shared variance between the two: disadvantage
+**`r sprintf("%.0f%%", shap_pct[[1]])`**, absence
+**`r sprintf("%.0f%%", shap_pct[[2]])`**, adding up exactly to the model's
+$R^2$. That settled a real question - but **not this one**.
+
+. . .
+
+::: {style="font-size: 0.92em"}
+| | What is shared | What settles it |
+|---|---|---|
+| **Shared variance** | Both predictors explain some of the *same variation* in attainment | **Shapley / LMG** - average over every ordering and the shares add up |
+| **Shared causal pathway** | Part of disadvantage's effect *travels through* absence | **Only the causal story** - no decomposition can see an arrow |
+:::
+
+. . .
+
+::: {style="font-size: 0.92em"}
+Notice *why*. Shapley averages over **every order of entry** precisely because
+it has **no idea which order is the causal one**. That is what makes it fair
+and additive - and it is also exactly why it cannot tell a mediator from a
+confounder. Hand it a mediator and it will cheerfully split the mediated
+effect between both variables.
+:::
+
+## Two tools, two questions {.smaller}
+
+::: {style="font-size: 0.95em"}
+| If you are asking... | Reach for... |
+|---|---|
+| *How much of the explanation does each variable account for?* | the **Shapley / LMG** shares |
+| *What belongs in the model, and what does this coefficient mean?* | the **causal story** - confounder or mediator |
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.93em;"}
+**Use the first to report, and the second to decide.**
+
+The decomposition tells you how to divide the credit once the model is built.
+It will not tell you what should have been in the model, and it will not tell
+you whether a shrinking coefficient is bias being removed or a mechanism being
+split in half. Nothing in the data will.
+:::
+
+::: {style="font-size: 0.8em"}
+Which is the same lesson as the Buckfast: the arithmetic was never the hard
+part.
+:::
+
 ## Interaction Effects
 
 -   Put simply, an interaction term allows the model to answer the question: ***"Does the effect of disadvantage/Overall Absence on a school's Attainment 8 score change from region to region?"***
