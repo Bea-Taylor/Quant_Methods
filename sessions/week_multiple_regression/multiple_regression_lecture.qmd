@@ -1025,38 +1025,23 @@ Confound: "to fail to discern differences between : mix up"
 
 ![](../images/confound3.png)
 
-## Confounding
+## Confounding {.smaller}
 
--   Look at the arrows in that picture. The confounder is **not** sitting
-    between the two variables - it is sitting **above both of them**, with an
-    arrow running down to each
--   That is what makes something a confounder: it is a ***common cause***. It
-    causes the independent variable **and** it causes the dependent variable
--   The result is that $X$ and $Y$ move together **without** $X$ doing anything
-    to $Y$. Some - or all - of the association you can see is really the
-    confounder showing through both of them
--   Drop the confounder into the model and that borrowed association is handed
-    back to its owner, so the coefficient on $X$ **changes**
--   **In the picture**: the Buckfast makes the rainy glen *look* glorious, and
-    it makes the man happy. Glen and mood move together - but the glen is not
-    what is cheering him up. Take the Buckfast away and the association goes
-    with it
+-   Look at the arrows in that picture. The confounder is **not** sitting between the two variables - it is sitting **above both of them**, with an arrow running down to each
+-   That is what makes something a confounder: it is a ***common cause***. It causes the independent variable **and** it causes the dependent variable
+-   The result is that $X$ and $Y$ move together **without** $X$ doing anything to $Y$. Some - or all - of the association you can see is really the confounder showing through both of them
+-   Drop the confounder into the model and that borrowed association is handed back to its owner, so the coefficient on $X$ **changes**
+-   **In the picture**: the Buckfast makes the rainy glen ($X$) *look* glorious, and it makes the man $Y$ happy. Glen and mood move together - but the glen is not what is cheering him up. Take the Buckfast away and the association goes with it
 
 ## Confounding
 
--   So in practice you spot confounding by its ***symptom***: the effect of one
-    independent variable changes in the presence of another
--   This can happen even when the two are not correlated enough to cause any
-    variance problems - **confounding and multicollinearity are different
-    things**
--   **Looking for confounding effects is a crucial part of model building - how
-    do the coefficients of your model change when you introduce other
-    variables?**
--   But a word of warning, which we will come back to after mediation: *a
-    coefficient changing* is the symptom of **more than one** underlying
+-   So in practice you spot confounding by its ***symptom***: the effect of one independent variable changes in the presence of another
+-   This can happen even when the two are not correlated enough to cause any variance problems - **confounding and multicollinearity are different things**
+-   **Looking for confounding effects is a crucial part of model building - how do the coefficients of your model change when you introduce other variables?**
+-   But a word of warning, which we will come back to after mediation: *a coefficient changing* is the symptom of **more than one** underlying
     structure
 
-## Confounding
+## Confounding {.smaller}
 
 ```{r}
 #| echo: false
@@ -1074,8 +1059,10 @@ export_summs(lm_fit_a, lm_fit_b, lm_fit1, error_format = "",error_pos = "same" )
 
 ```
 
--   In the presence of Overall Absence, the effect of disadvantage is confounded (and *vice versa*)
--   Both variables together, however, explain much more variation in Attainment 8 - both part of the story
+-   **Disadvantage is the common cause here.** Poverty makes it harder to get to school - so it drives **absence** - *and* it depresses attainment by other routes entirely: family support, resources, housing, health
+-   So when we ask *"what is the effect of absence on attainment?"*, disadvantage is a **confounder**. Part of what looks like absence doing the work is really disadvantage showing through both
+-   Which is exactly why the absence coefficient **shrinks** once disadvantage joins the model
+-   Both variables together explain much more variation in Attainment 8 - both are part of the story
 
 ## Confounding
 
@@ -1088,13 +1075,14 @@ plot_summs(lm_fit_a, lm_fit_b, lm_fit1, robust = "HC3", coefs = coef_names)
 
 ```
 
-## Confounding
+## Confounding {.smaller}
 
--   The coefficient for log(PTFSM6CLA1A) - disadvantage - shrinks dramatically, from -0.21 down to -0.11 (a 44.5% reduction in effect)
--   While the coefficient for log(PERCTOT) - Overall Absence - also shrinks from -0.54 to -0.41 this is just a 24.6% reduction
--   The confounding effect of Overall Absence on disadvantage is ***almost double*** the confounding effect of disadvantage on Overall Absence
--   So the estimate for disadvantage depends far more on whether absence is in the model than the other way around
--   **Resist the urge to call one of these the "right" answer.** Which one you want depends on what you are asking - and we come back to that in two slides
+-   Disadvantage - log(PTFSM6CLA1A) - shrinks dramatically, from -0.21 to -0.11, a **44.5% reduction**
+-   Overall Absence - log(PERCTOT) - shrinks from -0.54 to -0.41, just **24.6%**
+-   **The two shrinkages are not the same kind of thing**, because the causal arrows do not run both ways:
+    -   Absence shrinks because **disadvantage was confounding it** - some of what looked like absence was poverty showing through
+    -   Disadvantage shrinks *more* because **absence is carrying part of disadvantage's own effect** - that is mediation, not bias
+-   **Resist the urge to call either one the "right" answer.** Which you want depends on what you are asking - and we settle that after mediation
 
 ## Confounding
 
@@ -1202,6 +1190,32 @@ disadvantage's effect that runs **through attendance**, which is the part an
 attendance policy could actually reach.
 :::
 
+
+## One picture, two readings {.smaller}
+
+Earlier we said **disadvantage confounds absence**. Just now we said **absence
+mediates disadvantage**. Both are true, and it is the same diagram:
+
+$$\text{Disadvantage} \rightarrow \text{Absence} \rightarrow \text{Attainment}
+\qquad \text{Disadvantage} \rightarrow \text{Attainment}$$
+
+. . .
+
+::: {style="font-size: 0.95em"}
+| If the effect you want is... | ...then absence/disadvantage is a | ...and you should |
+|---|---|---|
+| **Absence** $\rightarrow$ Attainment | disadvantage is a **confounder** | **control for it** - or you credit absence with poverty's work |
+| **Disadvantage** $\rightarrow$ Attainment | absence is a **mediator** | **decide** - include it for the direct effect, leave it out for the total |
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;"}
+**Confounder and mediator are not properties of a variable.** They are
+properties of a variable *relative to the effect you are trying to estimate*.
+Change the question and the same variable changes role - which is why you
+cannot work this out from the data, only from the question.
+:::
 ## Interaction Effects
 
 -   Put simply, an interaction term allows the model to answer the question: ***"Does the effect of disadvantage/Overall Absence on a school's Attainment 8 score change from region to region?"***
