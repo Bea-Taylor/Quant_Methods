@@ -16,6 +16,7 @@ format:
     slide-number: TRUE
     preview-links: auto
     theme: ../../css/casa-slides.scss
+    mermaid-format: png
     
 filters:
  - code-visibility
