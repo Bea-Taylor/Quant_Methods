@@ -748,15 +748,16 @@ flowchart TD
 ## Step 2 - Method {transition="convex-in none-out" transition-speed="fast"}
 
 ```{mermaid}
-flowchart TD
-    I{Choosing a <br/>statistical test} -->
-    A[How Many Variables?] -->
-    C(2?) & G(More than 2?)
-    C -->|Categorical?| D(Chi Squared <br/>or Similar e.g. T-test)
-    C -->|Scale or Ratio?| E(Pearson Correlation <br/>or Spearman's Rank)
-    C -->|Both?| F(Ask Google)
-    G --> H(REGRESSION - everything else, <br/>get in the bin)
-    
+%%| fig-width: 11
+%%{init: {"flowchart": {"useMaxWidth": false, "nodeSpacing": 30, "rankSpacing": 70}, "themeVariables": {"fontSize": "18px"}} }%%
+flowchart LR
+    I{"Choosing a<br/>statistical test"} --> A["How many<br/>variables?"]
+    A --> C("Two")
+    A --> G("More than two")
+    C -->|"Categorical"| D("Chi-squared<br/>or t-test")
+    C -->|"Scale or ratio"| E("Pearson or<br/>Spearman's rank")
+    C -->|"One of each"| F("Ask Google")
+    G --> H("<b>REGRESSION</b><br/>everything else,<br/>get in the bin")
 ```
 
 <!-- ## Step 2 - Method {transition="convex-in none-out" transition-speed="fast"} -->
