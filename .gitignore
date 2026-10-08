@@ -31,6 +31,7 @@ cloud-config.yml
 sessions/**/*.rmarkdown
 sessions/*.rmarkdown
 sessions/**/*.html
+sessions/**/*.ipynb
 
 /.luarc.json
 
