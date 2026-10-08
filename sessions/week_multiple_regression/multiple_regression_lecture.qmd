@@ -1023,9 +1023,30 @@ Confound: "to fail to discern differences between : mix up"
 
 ## Confounding
 
--   Confounding is the change in the effect on the dependent variable of the independent variables in the presence of each other
--   Can occur when we know some independent variables might effect each other (such as disadvantage on absence) **even when their joint presence doesn't cause variance issues**
--   **Looking for confounding effects is a crucial part of model building - how do the coefficients of your model change when you introduce other variables?**
+-   Look at the arrows in that picture. The confounder is **not** sitting
+    between the two variables - it is sitting **above both of them**, with an
+    arrow running down to each
+-   That is what makes something a confounder: it is a ***common cause***. It
+    causes the independent variable **and** it causes the dependent variable
+-   The result is that $X$ and $Y$ move together **without** $X$ doing anything
+    to $Y$. Some - or all - of the association you can see is really the
+    confounder showing through both of them
+-   Drop the confounder into the model and that borrowed association is handed
+    back to its owner, so the coefficient on $X$ **changes**
+
+## Confounding
+
+-   So in practice you spot confounding by its ***symptom***: the effect of one
+    independent variable changes in the presence of another
+-   This can happen even when the two are not correlated enough to cause any
+    variance problems - **confounding and multicollinearity are different
+    things**
+-   **Looking for confounding effects is a crucial part of model building - how
+    do the coefficients of your model change when you introduce other
+    variables?**
+-   But a word of warning, which we will come back to after mediation: *a
+    coefficient changing* is the symptom of **more than one** underlying
+    structure
 
 ## Confounding
 
@@ -1064,7 +1085,8 @@ plot_summs(lm_fit_a, lm_fit_b, lm_fit1, robust = "HC3", coefs = coef_names)
 -   The coefficient for log(PTFSM6CLA1A) - disadvantage - shrinks dramatically, from -0.21 down to -0.11 (a 44.5% reduction in effect)
 -   While the coefficient for log(PERCTOT) - Overall Absence - also shrinks from -0.54 to -0.41 this is just a 24.6% reduction
 -   The confounding effect of Overall Absence on disadvantage is ***almost double*** the confounding effect of disadvantage on Overall Absence
--   This means that the relationship between disadvantage and Attainment 8 is much more biased by the omission of overall absence from the model than the other way around
+-   So the estimate for disadvantage depends far more on whether absence is in the model than the other way around
+-   **Resist the urge to call one of these the "right" answer.** Which one you want depends on what you are asking - and we come back to that in two slides
 
 ## Confounding
 
@@ -1116,6 +1138,61 @@ Disadvantage $\rightarrow$ Absence $\rightarrow$ Attainment
 -   **Step 2:** Absence to Attainment (M $\rightarrow$ Y): Model consistently show a large, highly significant negative effect of Absence on Attainment
 -   **Step 3:** Disadvantage to Attainment (X $\rightarrow$ Y): The effect of Disadvantage is significantly reduced but still exists
 -   Some of the detrimental effect of poverty is channelled through the mechanism of higher unauthorised absence
+
+## Confounder or mediator? The warning from earlier
+
+Both structures produce **exactly the same symptom** - add the third variable,
+and the coefficient on your first one shrinks. But they are opposites:
+
+::: {style="font-size: 0.9em"}
+|  | Confounder (**C**) | Mediator (**M**) |
+|---|---|---|
+| Structure | C $\rightarrow$ X **and** C $\rightarrow$ Y | X $\rightarrow$ M $\rightarrow$ Y |
+| Where it sits | **above** both | **between** them |
+| The shrinkage is... | a false signal being removed | a real effect being split up |
+| So you should... | **control for it** | **think hard first** |
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;"}
+**No amount of staring at the data will tell you which one you have.** The
+coefficients move identically either way. Only your knowledge of the system -
+what plausibly causes what - can tell you.
+:::
+
+## So which is absence?
+
+::: {style="font-size: 0.95em"}
+Our two slides have told two different stories about the same pair of
+variables, so let us settle it. Disadvantage plausibly **causes** absence -
+poor health, transport, housing instability, disengagement. Absence then
+**causes** lower attainment.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+That is X $\rightarrow$ M $\rightarrow$ Y. **Absence is substantially a
+mediator, not a confounder** - which means neither coefficient was ever
+"biased":
+:::
+
+::: {style="font-size: 0.92em"}
+| What you fitted | What it is | What it answers |
+|---|---|---|
+| Disadvantage alone: **-0.21** | the **total** effect | *How much worse off is a disadvantaged school, all in?* |
+| With absence added: **-0.11** | the **direct** effect | *...and how much of that is left once absence is accounted for?* |
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+**Both numbers are correct.** Which you report depends on the question - and
+for policy it matters enormously. The gap between them is the part of
+disadvantage's effect that runs **through attendance**, which is the part an
+attendance policy could actually reach.
+:::
 
 ## Interaction Effects
 
