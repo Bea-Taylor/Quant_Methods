@@ -2,7 +2,7 @@
 format: html
 date: last-modified
 author: "Adam Dennett"
-title: "Week 6 - Prof D's Regression Sessions Vol 1"
+title: "Week 5 - Prof D's Regression Sessions Vol 1"
 ---
 
 ![](../images/regression2.PNG)
@@ -15,7 +15,7 @@ Because of its popularity, regression is also one of the most widely misused mod
 
 Like baking a cake, getting a regression model right is theoretically no more challenging than following a baking recipe - almost anyone can follow the instructions. However, like baking an amazing cake, skill, experience and understanding gained through hours of experimentation, failures, the odd amazing success and lots of perseverance are what make the difference between a great model and a soggy bottom!
 
-[![](L6_images/soggybottom.webp){width="40%"}](https://www.youtube.com/watch?v=F8yx453Lgh4)
+[![](../images/soggybottom.webp){width="40%"}](https://www.youtube.com/watch?v=F8yx453Lgh4)
 
 ## Learning Objectives
 
