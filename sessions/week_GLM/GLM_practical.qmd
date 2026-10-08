@@ -32,14 +32,12 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 ## Preamble
 
-Three volumes of the Regression Sessions have all rested on one quiet
-assumption: that the thing we are trying to predict is a continuous number
-that can wander up and down a straight line without ever embarrassing us.
+Three volumes of the Regression Sessions have all relied on the idea that the thing we are trying to predict is a continuous number. That number can wander up and down a straight line without ever embarrassing us by predicting something mad!
 
-Today we break it. Our outcome is a **yes/no**: is this school rated below
+It's one of the core assumptions of ordinary least squares linear regression, but today we are going to break it. Our outcome is a **yes/no**: is this school rated below
 Good by Ofsted? A straight line is the wrong tool for that job, and the
 first task of the practical is to watch it fail - properly, on real data,
-with numbers you can point at - before we reach for the thing that fixes it.
+with numbers you can point at - before we reach for a totally different tool that fixes it.
 
 ## Practical aims
 
@@ -84,6 +82,7 @@ here that are worth noticing rather than skimming:
     Measures*, and 0 for *Good* and *Outstanding*.
 -   **We keep mainstream secondaries only**, so that we are comparing
     schools that are doing roughly the same job.
+-   Also note how we generate a new binary variable from OFSTEDRATING for schools that are below good and the rest. This is created differently in R and Python. 
 
 ::: {.multicode}
 #### ![](../images/Rlogo.png){width="41" height="30"}
@@ -232,6 +231,8 @@ fitted_lpm <- fitted(lpm)
 range(fitted_lpm)
 sum(fitted_lpm < 0)
 sum(fitted_lpm > 1)
+
+summary(lpm)
 ```
 
 #### ![](../images/python-logo-only.png){width="30"}
@@ -522,9 +523,7 @@ here on differs a little from the lecture's:
 | Majority-class baseline | 85.3% | **86.9%** |
 | AUC | 0.818 | **0.812** |
 
-Do not go hunting for a bug. The conclusion is the same in both, and here it
-is sharper: in the lecture the model beat the baseline by 0.9 points, and on
-this split it does not beat it **at all**.
+Do not go hunting for a bug. The conclusion is the same in both, and here it is even clearer: in the lecture the model beat the baseline by 0.9 points, and on this split it does not beat it **at all**.
 :::
 
 ## Task 7 - Say all six out loud
@@ -554,24 +553,16 @@ Write one plain-English sentence per predictor. Then answer two harder
 questions:
 
 1.  `PERCTOT` (overall absence) has an odds ratio above 1, and
-    `PTFSM6CLA1A` (free school meals) has one just below. Does that mean
-    absence matters and poverty does not? What else changed when you moved
-    from one predictor to six?
+    `PTFSM6CLA1A` (free school meals) has one just below. Does that mean absence matters and poverty does not? What else changed when you moved from one predictor to six?
 2.  The intercept is now the odds for a school with Progress 8 of zero,
-    **zero free school meals, zero absence, zero prior-high-attainers and a
-    cohort of one pupil** - because `log(TPUP)` is 0 when `TPUP` is 1. How
-    many such schools exist? What does that tell you about quoting the
-    intercept in a write-up?
+    **zero free school meals, zero absence, zero prior-high-attainers and a cohort of one pupil** - because `log(TPUP)` is 0 when `TPUP` is 1. How many such schools exist? What does that tell you about quoting the intercept in a write-up?
 :::
 
 ## Task 8 - Centre the predictors, and get an intercept worth quoting
 
-Task 7 left you with a useless intercept: the odds for a school with a cohort
-of one pupil, no absence and no disadvantaged pupils. No such school exists.
+Task 7 left you with a useless intercept: the odds for a school with a cohort of one pupil, no absence and no disadvantaged pupils. No such school exists.
 
-There is a standard fix. **Subtract each predictor's mean from itself**, so
-that zero stops meaning *none* and starts meaning *average*. Progress 8
-already arrives this way - that is why it behaved sensibly in Task 3.
+There is a standard fix. **Subtract each predictor's mean from itself**, so that zero stops meaning *none* and starts meaning *average*. Progress 8 already arrives this way - that is why it behaved sensibly in Task 3.
 
 ::: {.multicode}
 #### ![](../images/Rlogo.png){width="41" height="30"}
