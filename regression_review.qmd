@@ -256,7 +256,7 @@ All checked.
 |------------------------|------------------------------------------------|
 | `week_regression/index.qmd` | `L6_images/soggybottom.webp` — **broken image**. The file exists at `../images/soggybottom.webp`; the refactor missed this path |
 | `week_regression/regression_lecture.qmd` | `L6_images/being_interdisciplinary.jpg` — **broken image**, same cause |
-| `multilevel_regression_practical.qmd` line 136 | Student download link points to `github.com/adamdennett/QM/.../sessions/L6_data/...` — **dead**, that path no longer exists after the refactor |
+| `multilevel_regression_practical.qmd` line 136 | Student download link points at `github.com/adamdennett/QM/.../sessions/L6_data/...`. It still resolves — that is a **separate, older repo** which kept the pre-refactor layout — but it serves a frozen copy from another project rather than this course's own data |
 | `multiple_regression_lecture.qmd` | `::sunglasses::` (double colons) appears twice on the diagnostics slides — renders as literal text, not an emoji |
 | all three lecture front matters | `date-as-string: "1st August 2024"` — stale in **all three** |
 
@@ -443,7 +443,7 @@ duplication is worth resolving deliberately rather than by accident:
 
 **Before the sessions run**
 
-1.  Fix the two broken image paths and the dead GitHub download link
+1.  Fix the two broken image paths, and repoint the student download link at this repo rather than the older `adamdennett/QM` copy
 2.  Fix the p-value wording ([§1](#p-value)) — this is the one that does
     lasting damage
 3.  Fix the typos in slide titles and the `::sunglasses::` emoji

@@ -690,7 +690,7 @@ flowchart TD
 :::
 
 ::: {.column width="50%"}
-[![](L6_images/being_interdisciplinary.jpg){width="50%"}](https://uclpress.co.uk/book/being-interdisciplinary/)
+[![](../images/being_interdisciplinary.jpg){width="50%"}](https://uclpress.co.uk/book/being-interdisciplinary/)
 :::
 :::::
 

@@ -132,8 +132,10 @@ dataset and added a few extra spicy variables about teachers and
 schools' workforce in there for fun. All of that data is from here:
 <https://explore-education-statistics.service.gov.uk/data-catalogue?themeId=b601b9ea-b1c7-4970-b354-d1f695c446f1&sortBy=newest&geographicLevel=SCH>
 
-To save time, you might just want to download it directly from here:
-https://github.com/adamdennett/QM/blob/main/sessions/L6_data/Performancetables_130242/2022-2023/school_data_2223.csv
+To save time, you might just want to download it directly from this
+course's own repository:
+
+<https://raw.githubusercontent.com/Bea-Taylor/Quant_Methods/main/sessions/data/Performancetables_130242/2022-2023/school_data_2223.csv>
 
 ::: multicode
 #### ![](../images/python-logo-only.png){width="30"}
