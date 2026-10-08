@@ -25,9 +25,12 @@ Applied since this review was written:
 -   All typos, the `::sunglasses::` emoji, and the stale dates in all three
     lectures
 
-Still open: the Vol 3 grouping factor ([§4](#grouping) — needs a decision, see
-below), Python parity in Vols 2 and 3, the Dropbox file, the Progress 8 /
-Attainment 8 inconsistency, and the `include: false` audit.
+Also applied since: the Vol 3 grouping warning and the local-authority
+comparison ([§4](#grouping)), and the Python mixed-model code in the Vol 3
+practical.
+
+Still open: Python parity more broadly in Vols 2 and 3, the Dropbox file, the
+Progress 8 / Attainment 8 inconsistency, and the `include: false` audit.
 :::
 ## How this review was done
 
@@ -181,7 +184,7 @@ Volume 3 uses `OFSTEDRATING` as the random effect throughout — the null
 model, the ICC, the random-intercept model and the random-slope model.
 There are two problems.
 
-**It has too few groups, and two are tiny.** Counting from the data:
+**It has too few groups, and two are tiny.** Counting from the data (the figures below are for the Attainment 8 subset; on the Progress 8 rows the lecture actually models, the two smallest groups are smaller still, at **16** and **22** schools):
 
 | Ofsted rating | Schools |
 |---------------|---------|
@@ -230,10 +233,11 @@ Both fit fine. The nested version is the one that tells a story about
 geography and policy; the Ofsted version tells a story about a grading
 system grading itself.
 
-**If you want to keep Ofsted**, the honest framing is to use it as a
-*second, crossed* random effect alongside local authority and say out
-loud why it is a strange one — which is a good discussion and now ties
-directly into Vol 4.
+**Resolved**: Ofsted is kept, because five groups genuinely do make the
+intercept plots legible, but two slides after the ICC now say plainly why
+it is a strange choice and show the same null model grouped by local
+authority for comparison (ICC 0.177 from 151 groups, against 0.647 from
+5).
 
 ### 5. A small but misleading sentence about shrinkage
 

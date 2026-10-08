@@ -1163,6 +1163,122 @@ I'll reproduce the table below:
 -   I have played around with a few additional variables too, you don't
     have to do this, but you can if you wish.
 
+### Doing this in Python — more than one grouping factor
+
+Up to now every model has had **one** grouping factor, and `smf.mixedlm()`
+has coped happily with its `groups=` argument. The Final Task breaks that:
+
+``` r
+lmer(log(ATT8SCR) ~ ... + (1 | OFSTEDRATING) + (1 | gor_name/LANAME), data = ...)
+```
+
+That is **two** grouping factors, one of which is nested. `MixedLM` only takes
+a single `groups=`, so there is nowhere obvious to put the second one. This is
+where most people give up and assume Python cannot do it.
+
+**It can.** The answer is `vc_formula` — *variance components* — and there are
+two idioms that cover everything you will need.
+
+::: {.callout-important title="One trap first"}
+When you pass `vc_formula`, statsmodels **silently drops the grouping
+intercept** unless you ask for it with `re_formula="1"`. If your `cov_re`
+comes back empty, this is why.
+:::
+
+#### Nested — `(1 | gor_name/LANAME)`
+
+Put the **top** level in `groups`, the **lower** level in `vc_formula`:
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| eval: false
+lme_nested <- lmer(log(ATT8SCR) ~ log(PTFSM6CLA1A) + log(PERCTOT) +
+                     (1 | gor_name/LANAME),
+                   data = england_filtered_clean)
+VarCorr(lme_nested)
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| eval: false
+nested = smf.mixedlm("log_ATT8 ~ log_FSM + log_ABS",
+                     data=d,
+                     groups=d["gor_name"],                 # top level
+                     re_formula="1",                       # its intercept
+                     vc_formula={"LA": "0 + C(LANAME)"}    # nested inside it
+                    ).fit()
+print(nested.summary())
+```
+:::
+
+#### Crossed — `(1 | OFSTEDRATING) + (1 | LANAME)`
+
+Ofsted rating and local authority are **not** nested - a school's rating tells
+you nothing about which authority it sits in. So there is no top level to put
+in `groups`. The trick is to give `groups` a **constant** column and put
+*everything* in `vc_formula`:
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| eval: false
+lme_crossed <- lmer(log(ATT8SCR) ~ log(PTFSM6CLA1A) + log(PERCTOT) +
+                      (1 | OFSTEDRATING) + (1 | LANAME),
+                    data = england_filtered_clean)
+VarCorr(lme_crossed)
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| eval: false
+d["one"] = 1                                   # one group containing everything
+
+crossed = smf.mixedlm("log_ATT8 ~ log_FSM + log_ABS",
+                      data=d,
+                      groups=d["one"],
+                      re_formula="0",          # no intercept for the fake group
+                      vc_formula={"la":     "0 + C(LANAME)",
+                                  "ofsted": "0 + C(OFSTEDRATING)"}
+                     ).fit()
+print(crossed.summary())
+```
+:::
+
+#### Does it actually agree with `lmer`?
+
+Yes. Both were run on the same 2,908 schools from `school_data_2223.csv`:
+
+| Model | Component | `lmer` | `statsmodels` |
+|---------|------------------|-----------|---------------|
+| Nested | region | 0.00141 | 0.00141 |
+|  | LA within region | 0.00168 | 0.00168 |
+|  | residual | 0.00796 | 0.00796 |
+| Crossed | local authority | 0.00266 | 0.00266 |
+|  | Ofsted rating | 0.00363 | 0.00364 |
+|  | residual | 0.00733 | 0.00733 |
+
+::: {.callout-note title="Two differences in how the output reads"}
+-   statsmodels lists variance components **alphabetically**, whatever order
+    you wrote them in the dictionary - so `la` appears above `ofsted`
+-   it reports **variances**; `lmer`'s printed summary gives you the variance
+    *and* the standard deviation, so take the square root if you want to
+    compare directly
+:::
+
+::: {.callout-tip title="Why not just use pymer4?"}
+`pymer4` wraps R's `lme4` so you can call it from Python, and it does work -
+but it needs `rpy2`, a working R installation, R's DLL folder on your `PATH`,
+and a consistent R package library. If you are choosing the Python route, you
+probably do not want to have to maintain an R installation to make it work.
+`statsmodels` does the job on its own.
+:::
+
+
 ```{r}
 #| eval: false
 #| include: false
