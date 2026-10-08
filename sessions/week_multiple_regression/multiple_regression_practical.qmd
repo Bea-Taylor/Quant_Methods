@@ -139,7 +139,7 @@ This week we won't look at individual local authorities, but will focus on the w
 ### 4. Evaluation
 
 -   When you have your 'best' model, how do you interpret the coefficients?
-    -   Which variable(s) has(have) the most explanatory power (check t-values for this)?
+    -   Which variable(s) has(have) the most explanatory power? Start with the t-values, then test that answer properly in **Task 4b**
     -   How do you interpret the combined explanatory power of variables in your model?
     -   What kind of confounding do you observe as you add more variables (if any)?
     -   Do you have any issues of multicollinearity or residual independence? Does your model pass the standard tests?
@@ -815,7 +815,7 @@ england_filtered_clean$fitted7 <- fitted_vals
 ## Task 4 - Evaluation
 
 -   When you have your 'best' model, how do you interpret the coefficients?
-    -   Which variable(s) has(have) the most explanatory power (check t-values for this)?
+    -   Which variable(s) has(have) the most explanatory power? Start with the t-values, then test that answer properly in **Task 4b**
     -   How do you interpret the combined explanatory power of variables in your model?
     -   What kind of confounding do you observe as you add more variables (if any)?
     -   Do you have any issues of multicollinearity or residual independence? Does your model pass the standard tests?
@@ -961,6 +961,164 @@ ggplot(brighton_residuals, aes(x = reorder(SCHNAME.x, residual), y = residual)) 
   )
 ```
 
+
+
+## Task 4b - Which variable *really* matters most?
+
+The first question in Task 4 asked you to check the t-values. That is the
+usual answer, and it is shakier than it looks - as the lecture showed, a
+t-value is $\frac{\text{Estimate}}{\text{SE}}$, so it mixes **how big** an
+effect is with **how precisely** you have measured it. With a few thousand
+schools, everything is precise.
+
+The deeper problem is that your predictors **overlap**. Disadvantage and
+absence share a great deal of their explanatory power, and the model has to
+split that shared portion between them somehow.
+
+### How much is actually shared?
+
+Fit each predictor on its own and compare with the full model:
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| eval: false
+r2_of <- function(vs) {
+  rhs <- if (length(vs) == 0) "1" else paste(vs, collapse = " + ")
+  summary(lm(as.formula(paste("log(ATT8SCR) ~", rhs)),
+             data = england_filtered_clean))$r.squared
+}
+
+r2_of("log(PTFSM6CLA1A)")                      # disadvantage alone
+r2_of("log(PERCTOT)")                          # absence alone
+r2_of(c("log(PTFSM6CLA1A)", "log(PERCTOT)"))   # both together
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| eval: false
+def r2_of(vs):
+    rhs = " + ".join(vs) if vs else "1"
+    return smf.ols(f"np.log(ATT8SCR) ~ {rhs}", data=england_filtered_clean).fit().rsquared
+
+r2_of(["np.log(PTFSM6CLA1A)"])
+r2_of(["np.log(PERCTOT)"])
+r2_of(["np.log(PTFSM6CLA1A)", "np.log(PERCTOT)"])
+```
+:::
+
+::: {.callout-tip title="Do the arithmetic before reading on"}
+Add the two solo $R^2$ values together, then compare with the $R^2$ of the
+model containing both. The sum will come out **well above** the joint figure.
+The difference is variance the two predictors **share** - explained by either
+one of them, owned by neither.
+:::
+
+### Splitting the shared variance fairly - the LMG / Shapley decomposition
+
+Rather than letting the model carve up the shared portion arbitrarily, we can
+**average each variable's contribution over every possible order of entry**.
+Add disadvantage first then absence; then absence first then disadvantage;
+average what each gained. That average is the **Shapley value**, known in
+regression as the **LMG decomposition**.
+
+The function below does it for any number of predictors. There is a package
+for this - `relaimpo::calc.relimp(model, type = "lmg")` - but it is not
+installed here, and writing it out shows you exactly what is being averaged.
+
+::: {.multicode}
+#### ![](../images/Rlogo.png){width="41" height="30"}
+
+```{r}
+#| eval: false
+lmg_shares <- function(outcome, predictors, data) {
+  r2 <- function(vs) {
+    rhs <- if (length(vs) == 0) "1" else paste(vs, collapse = " + ")
+    summary(lm(as.formula(paste(outcome, "~", rhs)), data = data))$r.squared
+  }
+  k <- length(predictors)
+  phi <- setNames(numeric(k), predictors)
+  for (i in seq_len(k)) {
+    others <- predictors[-i]
+    for (size in 0:(k - 1)) {
+      subsets <- if (size == 0) list(character(0)) else
+        split(t(combn(others, size)), seq_len(choose(k - 1, size)))
+      w <- factorial(size) * factorial(k - size - 1) / factorial(k)
+      for (S in subsets)
+        phi[i] <- phi[i] + w * (r2(c(S, predictors[i])) - r2(S))
+    }
+  }
+  tibble(variable = predictors, lmg = as.numeric(phi),
+         share = as.numeric(phi) / sum(phi))
+}
+
+lmg_shares("log(ATT8SCR)",
+           c("log(PTFSM6CLA1A)", "log(PERCTOT)", "log(PNUMEAL)"),
+           england_filtered_clean)
+```
+
+#### ![](../images/python-logo-only.png){width="30"}
+
+```{python}
+#| eval: false
+from itertools import combinations
+from math import factorial
+
+def lmg_shares(outcome, predictors, data):
+    def r2(vs):
+        rhs = " + ".join(vs) if vs else "1"
+        return smf.ols(f"{outcome} ~ {rhs}", data=data).fit().rsquared
+    k = len(predictors)
+    phi = {}
+    for v in predictors:
+        others = [p for p in predictors if p != v]
+        total = 0.0
+        for size in range(k):
+            w = factorial(size) * factorial(k - size - 1) / factorial(k)
+            for S in combinations(others, size):
+                total += w * (r2(list(S) + [v]) - r2(list(S)))
+        phi[v] = total
+    s = sum(phi.values())
+    return pd.DataFrame({"variable": list(phi), "lmg": list(phi.values()),
+                         "share": [x / s for x in phi.values()]})
+
+lmg_shares("np.log(ATT8SCR)",
+           ["np.log(PTFSM6CLA1A)", "np.log(PERCTOT)", "np.log(PNUMEAL)"],
+           england_filtered_clean)
+```
+:::
+
+::: {.callout-important title="What you should get"}
+On the three-predictor model above, both languages give the same answer:
+
+| Variable | $R^2$ alone | LMG | Share of explained |
+|---|---:|---:|---:|
+| % Disadvantaged | 0.469 | 0.301 | **41.6%** |
+| % Overall Absence | 0.610 | 0.401 | **55.5%** |
+| % EAL | 0.009 | 0.021 | **3.0%** |
+
+The LMG values **sum to 0.724**, which is exactly the $R^2$ of the full
+three-predictor model. Nothing is lost and nothing is counted twice - that is
+the property that makes the decomposition worth having.
+:::
+
+::: {.callout-tip title="Questions"}
+1.  Run this on **your own** best model. Does the LMG ordering agree with the
+    ordering you would have given from the t-values? Where it disagrees, which
+    do you believe?
+2.  Look at **% EAL**. On its own it explains 0.9% of the variation, but its
+    LMG share is 3.0% - *larger* than its solo $R^2$. How can a variable
+    contribute more in company than it does alone? *(This is the mirror image
+    of confounding: the other predictors are soaking up variation that was
+    masking EAL's contribution.)*
+3.  A Shapley share has **no sign**. Why does that mean you must always report
+    it alongside the coefficients rather than instead of them?
+4.  The cost grows as $2^k$ - every extra predictor doubles the number of
+    models to fit. Time it on three predictors, then on five. Would you want
+    to run this on a twenty-predictor model?
+:::
 
 ## Task 5 - Interacting Variables (Extension activity)
 

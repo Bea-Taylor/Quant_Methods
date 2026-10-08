@@ -760,7 +760,7 @@ shap["abs"] <- mean(c(r2_of(c("fsm","abs")) - r2_of("fsm"), r2_of("abs")))
 `relaimpo::calc.relimp(model, type = "lmg")` does this for you. Shapley (1953); Lindeman, Merenda & Gold (1980); Grömping (2007) *The American Statistician* 61(2) 139-147
 :::
 
-## What the decomposition says
+## What the decomposition says {.smaller}
 
 ```{r}
 #| echo: false
@@ -771,21 +771,13 @@ knitr::kable(data.frame(
 ), col.names = c("", "Shapley $R^2$", "Share of explained"), align = "lrr")
 ```
 
+::: {style="font-size: 0.82em"}
 -   The shares **sum exactly to the model's $R^2$**
     (`r sprintf("%.3f", r2_both)`) - nothing is lost or double-counted
--   Absence takes `r sprintf("%.0f%%", shap_pct[[2]])` of the explanation,
-    disadvantage `r sprintf("%.0f%%", shap_pct[[1]])`
-
-. . .
-
--   **Here the ranking happens to agree with the t-values** - but now it is a
-    defensible number rather than a side-effect of sample size, and we also know
-    that `r sprintf("%.0f%%", 100 * r2_share / r2_both)` of the explanation is
-    shared between the two
--   **Two warnings**: a Shapley share has **no sign** (it cannot tell you
-    whether an effect is positive or negative), so always report it *alongside*
-    the coefficients - and the cost grows as $2^k$, so it gets slow with many
-    predictors
+-   Absence takes `r sprintf("%.0f%%", shap_pct[[2]])` of the explanation, disadvantage `r sprintf("%.0f%%", shap_pct[[1]])`
+-   **Here the ranking happens to agree with the t-values** - but now it is a defensible number rather than a side-effect of sample size, and we also know that `r sprintf("%.0f%%", 100 * r2_share / r2_both)` of the explanation is shared between the two
+-   **Two warnings**: a Shapley share has **no sign** (it cannot tell you whether an effect is positive or negative), so always report it *alongside* the coefficients - and the cost grows as $2^k$, so it gets slow with many predictors
+:::
 
 ## Linear Regression - Diagnostics
 
