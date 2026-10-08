@@ -746,18 +746,18 @@ knitr::kable(data.frame(
 ```{r}
 #| echo: true
 #| eval: false
-r2_of <- function(vs) {                     # R² of a model with these variables
+r2_of <- function(vs) {# R² of a model with these variables
   rhs <- if (length(vs) == 0) "1" else paste(vs, collapse = " + ")
   summary(lm(as.formula(paste("log(ATT8SCR) ~", rhs)), data = decomp_data))$r.squared
 }
 
 # average each variable's gain across both orders of entry
-shap["fsm"] <- mean(c(r2_of("fsm"),            r2_of(c("abs","fsm")) - r2_of("abs")))
+shap["fsm"] <- mean(c(r2_of("fsm"), r2_of(c("abs","fsm")) - r2_of("abs")))
 shap["abs"] <- mean(c(r2_of(c("fsm","abs")) - r2_of("fsm"), r2_of("abs")))
 ```
 
 ::: footer
-`relaimpo::calc.relimp(model, type = "lmg")` does this for you. Shapley (1953); Lindeman, Merenda & Gold (1980); Grömping (2007) *The American Statistician* 61(2) 139-147
+In R, `relaimpo::calc.relimp(model, type = "lmg")` does this for you. Shapley (1953); Lindeman, Merenda & Gold (1980); Grömping (2007) *The American Statistician* 61(2) 139-147
 :::
 
 ## What the decomposition says {.smaller}
@@ -922,6 +922,8 @@ model_data <- model_data %>%
 -   South East as contrast - London's log(ATT8SCR) is 0.09 higher
 -   This equals (exp(0.095655) - 1) \* 100 = 10% - London's average Attainment 8 is 10% higher than the South East
 
+## Dummy Variables
+
 ```{r}
 # Fit linear model and get predicted values
 model_data$gor_name <- relevel(factor(model_data$gor_name), ref = "South East")
@@ -1021,7 +1023,7 @@ Confound: "to fail to discern differences between : mix up"
 
 ## Confounding
 
-![](../images/confound2.png)
+![](../images/confound3.png)
 
 ## Confounding
 
@@ -1035,6 +1037,10 @@ Confound: "to fail to discern differences between : mix up"
     confounder showing through both of them
 -   Drop the confounder into the model and that borrowed association is handed
     back to its owner, so the coefficient on $X$ **changes**
+-   **In the picture**: the Buckfast makes the rainy glen *look* glorious, and
+    it makes the man happy. Glen and mood move together - but the glen is not
+    what is cheering him up. Take the Buckfast away and the association goes
+    with it
 
 ## Confounding
 
