@@ -82,7 +82,7 @@ here that are worth noticing rather than skimming:
     Measures*, and 0 for *Good* and *Outstanding*.
 -   **We keep mainstream secondaries only**, so that we are comparing
     schools that are doing roughly the same job.
--   Also note how we generate a new binary variable from OFSTEDRATING for schools that are below good and the rest. This is created differently in R and Python. 
+-   Also note how we generate a new binary variable from OFSTEDRATING for schools that are below Good and the rest. This is created differently in R and Python. 
 
 ::: {.multicode}
 #### ![](../images/Rlogo.png){width="41" height="30"}

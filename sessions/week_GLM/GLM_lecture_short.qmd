@@ -2144,6 +2144,79 @@ are different claims, and the deck spent an hour on why.
 :::
 :::
 
+## So why does any of this matter in Brighton? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+::: {style="font-size: 0.95em"}
+Volumes 1 to 3 asked **what drives attainment**, and the council's answer was
+*social mixing*.
+
+But families do not choose a school from a regression table. In Brighton they
+choose largely on two things: a school's **Ofsted rating** and its **raw
+Attainment 8**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+So it is worth turning the question around and asking what drives **the
+label** — because the label is what actually moves people.
+
+That is the question this whole lecture has been answering.
+:::
+
+## How much of the rating is just the intake? {.smaller transition="convex-in none-out" transition-speed="fast"}
+
+```{r}
+#| label: intake-models
+#| echo: false
+#| message: false
+#| warning: false
+auc_for <- function(f) {
+  m <- glm(as.formula(f), data = train, family = binomial)
+  auc_of(predict(m, newdata = test, type = "response"), test$below_good)
+}
+a_full   <- auc_for("below_good ~ P8MEA + PTFSM6CLA1A + PERCTOT + PPERSABS10 + log(TPUP) + PTPRIORHI + MINORGROUP")
+a_noP8   <- auc_for("below_good ~ PTFSM6CLA1A + PERCTOT + PPERSABS10 + log(TPUP) + PTPRIORHI + MINORGROUP")
+a_intake <- auc_for("below_good ~ PTFSM6CLA1A + log(TPUP) + PTPRIORHI + MINORGROUP")
+```
+
+Strip the model back and watch what survives:
+
+::: {style="font-size: 0.9em"}
+| What the model is allowed to see | AUC |
+|---|:---:|
+| Everything, including **Progress 8** | **`r sprintf("%.3f", a_full)`** |
+| Drop Progress 8, keep absence | `r sprintf("%.3f", a_noP8)` |
+| **Intake only** — disadvantage, size, prior attainment, school type | **`r sprintf("%.3f", a_intake)`** |
+:::
+
+. . .
+
+::: {style="font-size: 0.9em"}
+Most of the ranking does come from Progress 8 — the thing inspectors read
+before they visit. **But intake alone still ranks at
+`r sprintf("%.3f", a_intake)`**, against `0.5` for a coin toss.
+
+That is **modest, and it is real**: before a school does anything at all, who
+walks through its doors already shifts the odds on its Ofsted rating.
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.88em;"}
+Which means choosing "a school with a Good rating" is **partly** choosing an
+intake. Advantaged intakes make favourable labels slightly more likely, the
+labels attract advantaged families, and the sorting repeats.
+
+**That is the mechanism the admissions policy in Volume 1 was trying to
+interrupt** — and we have arrived at it from completely the other end.
+:::
+
+::: {style="font-size: 0.78em"}
+Careful: this is association, not causation, and it is emphatically *not* a
+claim that inspectors are getting it wrong.
+:::
+
 ## The bit the software will never do for you {transition="convex-in none-out" transition-speed="fast"}
 
 ::: {style="font-size: 0.95em"}
