@@ -4,7 +4,7 @@ subtitle: "In the mix - the linear mix(ed effects model lecture)"
 author: 
   - name: "Adam Dennett"
 email: "a.dennett@ucl.ac.uk"
-date-as-string: "1st August 2024"
+date-as-string: "2025-26"
 other: "CASA0007 Quantitative Methods"
 from: markdown+emoji
 format:
@@ -639,7 +639,7 @@ In order to model these grouping factors more explicitly and understand their ge
 -   Random effects, (random intercepts and slopes) represent the deviations of each group's effect from the overall fixed-effect average.
     -   When you model a grouping factor (like Ofsted Rating) as a random effect, you are not estimating five separate coefficients (one for each rating).
     -   Instead, you estimate a variance term ($\sigma^2_{\text{group}}$) that quantifies how much the true group effects (intercepts and/or slopes) scatter around the overall mean effect.
-    -   Remember: Higher variance = Higher uncertainty, so higher variance groups have less weight in the model
+    -   Remember: a group's mean is uncertain mainly because it has **few observations**, so small groups get pulled furthest towards the overall average
     -   This allows the model to "borrow strength" across groups to stabilise estimates (the principle of shrinkage).
 
 ## Random Effects vs Dummy Variables
@@ -1043,6 +1043,93 @@ icc(lme1, by_group = T)
 -   The remaining 35% is due to variation ***within*** those groups (i.e. between individual schools)
 -   ICC of 65% is very high - Schools in the same OFSTED category tend to have very similar Progress 8 scores
 -   High ICC means clustering is important. Ignoring it (e.g., using OLS) would underestimate uncertainty - justifies using a LME model
+
+## A warning about *this* grouping factor {.smaller}
+
+```{r}
+#| label: grouping-warning
+#| echo: false
+#| message: false
+#| warning: false
+grp_dat <- england_filtered_clean |>
+  dplyr::filter(!is.na(P8MEA), !is.na(OFSTEDRATING), !is.na(LANAME))
+
+icc_of <- function(g) {
+  m <- lme4::lmer(as.formula(paste0("P8MEA ~ 1 + (1|", g, ")")), data = grp_dat)
+  v <- as.data.frame(lme4::VarCorr(m))
+  b <- v$vcov[v$grp == g]; w <- v$vcov[v$grp == "Residual"]
+  c(between = b, within = w, icc = b / (b + w),
+    groups = dplyr::n_distinct(grp_dat[[g]]))
+}
+g_ofsted <- icc_of("OFSTEDRATING")
+g_la     <- icc_of("LANAME")
+ofsted_small <- sort(table(grp_dat$OFSTEDRATING))[1:2]
+```
+
+We have used Ofsted rating all the way through because **five groups make the
+plots legible** - you can actually see the intercepts move. But look again at
+that ICC of **`r sprintf("%.3f", g_ofsted[["icc"]])`**.
+
+. . .
+
+::: {style="font-size: 0.95em"}
+**65% of the variation in Progress 8 sitting *between* Ofsted ratings is not a
+triumph. It is a clue.**
+
+An Ofsted rating is in large part a *judgement about* a school's results -
+inspectors read Progress 8 **before** they visit. So we are explaining Progress
+8 using a grading of Progress 8. The grouping factor is **downstream of the
+outcome**.
+:::
+
+. . .
+
+::: {style="font-size: 0.95em"}
+And it is thin: only **`r g_ofsted[["groups"]]` groups**, two of which contain
+just **`r ofsted_small[[1]]`** and **`r ofsted_small[[2]]`** schools. You want
+comfortably more groups than that before you trust a between-group variance.
+:::
+
+## The same model, grouped by local authority {.smaller}
+
+```{r}
+#| echo: true
+#| eval: false
+lme_la <- lmer(P8MEA ~ 1 + (1 | LANAME), data = england_filtered_clean)
+icc(lme_la)
+```
+
+```{r}
+#| echo: false
+knitr::kable(data.frame(
+  Grouping = c("Ofsted rating", "Local authority"),
+  Groups   = c(g_ofsted[["groups"]], g_la[["groups"]]),
+  Between  = sprintf("%.4f", c(g_ofsted[["between"]], g_la[["between"]])),
+  Within   = sprintf("%.4f", c(g_ofsted[["within"]],  g_la[["within"]])),
+  ICC      = sprintf("%.3f", c(g_ofsted[["icc"]],     g_la[["icc"]]))
+), col.names = c("Grouped by", "Groups", "Between", "Within", "ICC"),
+   align = "lrrrr")
+```
+
+::: {style="font-size: 0.92em"}
+-   Local authority gives an ICC of **`r sprintf("%.3f", g_la[["icc"]])`** -
+    about **`r sprintf("%.0f%%", 100 * g_la[["icc"]])`** of the variation in
+    Progress 8 is between authorities
+-   That is a much more believable figure for a *geographical* clustering
+    effect, and it comes from **`r g_la[["groups"]]` groups** rather than
+    `r g_ofsted[["groups"]]`
+-   Crucially, **a school's local authority is not a judgement about its
+    results** - it exists quite independently of the outcome
+:::
+
+. . .
+
+::: {style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;"}
+**Rule of thumb for choosing a grouping factor:** it should exist
+*independently of your outcome*, and there should be *enough groups* to
+estimate a variance from. Ofsted rating fails both tests - we are using it
+because it draws well, and you should know that.
+:::
 
 ## NULL Model Visualisation
 
@@ -1963,7 +2050,7 @@ Fixed Effects
 -   Reducing absence is significantly more likely to improve Attainment 8 than reducing levels of disadvantage in a school
 -   In terms of random effects, while not causal a jump between Ofsted ratings is worth, on average, about 2.5 GSCE points - similar to a reduction in disadvanage in a school from 20%-10%.
 
-## Back to our Week 6 Reserarch Question(s)
+## Back to our Week 6 Research Question(s)
 
 -   What are the factors that affect school-level educational attainment in Brighton and Hove?
 -   To what extent is attainment driven by social mixing?
@@ -2158,14 +2245,17 @@ knitr::kable(
 ## Conclusions
 
 -   Linear Mixed Effects Models are just one useful extension to OLS standard regression. They work well particularly when there are logical groups, hierarchies or repeated measurements within your data
--   Other regression variants (not yet covered in this course) might be more appropriate in other situations:
-    -   Generalised Linear Models 
-        -   Logistic Regression (binary or multinomial outcomes)
-        -   Poisson Regression / Negative Binomal Regression (count data)
-        -   Generalised Additive Models (non-linear relationships)
+-   Next week we break the assumption we have never questioned - that the thing we are predicting is a continuous, roughly normal number - with **Generalised Linear Models**:
+    -   Logistic Regression (binary, ordered or unordered categorical outcomes)
+    -   Poisson / Negative Binomial Regression (count data)
+
+## Conclusions
+
+-   Other regression variants, beyond the scope of this course, might be more appropriate in other situations:
+    -   Generalised Additive Models (non-linear relationships)
     -   Geographically Weighted or Spatial Regression Models
     -   Lasso and Ridge Regression (incorporating shrinkage)
--   Now you have a good grounding in the basics of linear regression, these other methods should be much easier learn in future
+-   Now you have a good grounding in the basics of linear regression, these other methods should be much easier to learn in future
 
 ## Today's Practical
 

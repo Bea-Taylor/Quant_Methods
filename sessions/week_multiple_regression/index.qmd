@@ -2,7 +2,7 @@
 format: html
 date: last-modified
 author: "Adam Dennett"
-title: "Week 7 - Prof D's Regression Sessions Vol 2"
+title: "Week 6 - Prof D's Regression Sessions Vol 2"
 ---
 
 ![](../images/regression2.PNG)

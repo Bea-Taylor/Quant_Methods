@@ -1,0 +1,501 @@
+---
+title: "The Regression Sessions — a critical review"
+subtitle: "Vols 1–3: regression, multiple regression, multilevel models"
+author: "Review notes"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+
+::: {.callout-note title="Status — what has been applied"}
+Applied since this review was written:
+
+-   Both broken image paths, and the data download link repointed at this repo
+-   The p-value wording ([§1](#p-value)) and the standard-error interval (§2)
+-   The t-value importance claim (§3) — now made provisional and answered
+    properly by the new **Shapley decomposition** slides in Vol 2
+-   The shrinkage sentence (§5) and the `PctOverallAbsence` renaming (§6)
+-   All typos, the `::sunglasses::` emoji, and the stale dates in all three
+    lectures
+
+Also applied since: the Vol 3 grouping warning and the local-authority
+comparison ([§4](#grouping)), and the Python mixed-model code in the Vol 3
+practical.
+
+Still open: Python parity more broadly in Vols 2 and 3, the Dropbox file, the
+Progress 8 / Attainment 8 inconsistency, and the `include: false` audit.
+:::
+## How this review was done
+
+I read all six files — three lectures and three practicals, about 9,900
+lines — and ran code where a claim could be checked rather than taken on
+trust. Every number quoted below was produced by running something, not
+read off a slide. Where I say a link or a path is broken, I checked it.
+
+The headline: **this is a strong, unusually honest three-lecture series
+with a real case study and a genuine argument running through it.** Most
+of what follows is small corrections and one substantial recommendation
+about grouping factors. The Python problem in Volume 3 turns out to be
+solvable without changing packages, and that is in [its own
+section](#the-python-mixed-models-problem).
+
+------------------------------------------------------------------------
+
+## What is good — and worth protecting
+
+These are the things I would not change, because they are what makes the
+series work.
+
+**The recipe framing earns its keep.** "Step 1 — Ingredients" spends an
+entire third of Volume 1 on EDA before a model is fitted, and the slide
+that says *the process of exploring your data should take much longer
+than the modelling at the end* is the single most useful sentence in the
+series. Most regression teaching inverts this.
+
+**The case study has real stakes.** Brighton and Hove Council made an
+actual admissions policy decision on the basis of Gorard's work, and the
+lectures are explicitly an argument about whether the evidence supports
+it. Students are not modelling a toy dataset; they are auditing a live
+policy. The "**So the council was right? Well, not quite...**" beat in
+Volume 1 is the moment the series stops being a stats course.
+
+**"A regression model is nothing more than a description of a scatter
+plot."** This is the right first sentence about regression and it is
+followed properly — line of best fit, residuals, R², slope and intercept
+all built visually from the same plot before any algebra appears.
+
+**The degrees-of-freedom sequence is excellent.** Building from 2 points
+to 3 to 4 to 5, showing the line pivoting, makes "degrees of freedom" a
+thing you can see rather than a number in an output. I have not seen it
+taught this way elsewhere and it works.
+
+**The deliberate failure in Volume 1.** Fitting on 10 Brighton schools,
+getting a satisfying R² of 0.69, and then showing that three *plausible*
+policy changes flatten the relationship to nothing — and that the model
+goes statistically insignificant — is the best teaching in the series. It
+makes overfitting visceral instead of abstract.
+
+**The diagnostics scoreboard** carried from Volume 1 into Volume 2, with
+the emoji going from 😭 to 😎 as each assumption gets addressed, gives the
+two lectures a spine. Students always know where they are.
+
+**The VIF intuition.** *"If two variables are highly correlated and both
+appear to affect the outcome, the model makes an arbitrary split. Small
+changes in the data could make the split go either way — thus inflating
+the variance."* That is the clearest one-paragraph explanation of
+multicollinearity I have read in a course.
+
+**"ALWAYS MAP YOUR RESIDUALS IF MODELLING SPATIAL DATA"**, with the
+London effect visible on the map, is a lesson that will outlive the
+course.
+
+**The confounding section quantifies itself.** Showing the disadvantage
+coefficient shrink from −0.21 to −0.11 (44.5%) while absence shrinks from
+−0.54 to −0.41 (24.6%), and concluding that disadvantage is *almost
+twice* as biased by the omission, is exactly the right level of rigour.
+
+**The Gabber/Hakken mediation example** is genuinely funny and will be
+remembered. Keep it.
+
+**Volume 3's shrinkage treatment** — that groups with few observations
+get pulled toward the global mean, and that this is a *feature* which
+avoids overfitting to small groups — is well judged, and the paired
+visualisations do real work.
+
+------------------------------------------------------------------------
+
+## Things that are wrong and should be fixed
+
+### 1. The p-value is defined correctly and then immediately inverted {#p-value}
+
+Volume 1 gets it right first:
+
+> The $P$-value — probability of observing a t-value as extreme as the one
+> calculated **if there were no relationship** between the independent and
+> the dependent variable
+
+and then, on the same slide:
+
+> A small $P$-value (typically $p$ \< 0.05) indicates **\<5% chance that
+> $X$ is not really explaining variation in $Y$**
+
+and on the next slide:
+
+> $P$ \<0.001 = \<0.1% $P$-robability that 62.3 **occurred by random
+> chance**
+
+The second and third statements are the inverse-probability fallacy —
+they say $P(\text{no relationship} \mid \text{data})$ when the p-value is
+$P(\text{data} \mid \text{no relationship})$. This is *the* most common
+misconception about p-values, students will carry it into their
+dissertations, and it is being stated here immediately after the correct
+definition.
+
+**Suggested fix** — keep the first definition and rephrase the others as:
+
+> A small p-value means data like ours would be **surprising** if there
+> were really no relationship. It does not tell us the probability that
+> there is no relationship — for that you would need to know how likely a
+> relationship was before you looked.
+
+### 2. The standard-error interval is a 68% interval presented as if it were the interval
+
+> SE of 0.15 for the estimate of −0.63 means the change could vary between
+> **−0.48 and −0.78**
+
+That is estimate ± 1 SE, which is roughly a 68% interval. The
+conventional 95% interval is ±1.96 SE, i.e. **−0.34 to −0.92** — nearly
+twice as wide, and a much more honest picture of the uncertainty in a
+model with 8 degrees of freedom. Either widen it or say explicitly that
+this is a one-standard-error range.
+
+### 3. Comparing predictor "importance" by t-value
+
+Both Volume 1 and Volume 2 use t-values to rank predictors:
+
+> t-values indicate that the % Overall Absence variable (−50.49) has a
+> **stronger effect** than the % Disadvantaged Students variable (−31.16)
+
+A t-value is $\hat\beta/\text{SE}$, so it confounds effect size with
+precision. With n ≈ 3,000 both are overwhelmingly significant and the
+ratio mostly reflects how well each coefficient is pinned down, not how
+much each matters.
+
+**There is a better move available, and the lecture has already set it
+up.** Both variables are logged, so their coefficients are
+**elasticities** and *are* directly comparable: a 1% rise in absence is
+associated with a 0.41% fall in Attainment 8, against 0.11% for
+disadvantage. That is a cleaner comparison than the t-values, it needs no
+caveat, and it reinforces the elasticity idea introduced a few slides
+earlier.
+
+### 4. Ofsted rating is the wrong grouping factor for Volume 3 {#grouping}
+
+This is the one substantive recommendation in this review.
+
+Volume 3 uses `OFSTEDRATING` as the random effect throughout — the null
+model, the ICC, the random-intercept model and the random-slope model.
+There are two problems.
+
+**It has too few groups, and two are tiny.** Counting from the data (the figures below are for the Attainment 8 subset; on the Progress 8 rows the lecture actually models, the two smallest groups are smaller still, at **16** and **22** schools):
+
+| Ofsted rating | Schools |
+|---------------|---------|
+| Good | 2,235 |
+| Outstanding | 468 |
+| Requires improvement | 407 |
+| Serious Weaknesses | **44** |
+| Special Measures | **32** |
+
+Five groups is at the very bottom of what will support a between-group
+variance estimate — the usual guidance is a minimum of five and a
+preference for considerably more — and two of them are small enough that
+their intercepts are almost entirely shrinkage. The lecture teaches
+shrinkage beautifully and then picks a grouping factor where shrinkage
+does nearly all the work.
+
+**And it is close to circular.** An Ofsted rating is in part a *judgement
+about attainment*. Modelling attainment as clustered within Ofsted rating
+asks how much of the variation in attainment is explained by a grading of
+attainment. This is precisely the circularity the new GLM lecture (Vol 4)
+now warns about in its closing slides, where Progress 8 turns out to be
+something inspectors read before they visit.
+
+**What to use instead.** The same data has much better candidates:
+
+| Grouping factor | Groups | Comment |
+|-----------------|--------|---------|
+| `LANAME` (local authority) | **152** | Genuine nesting, policy-relevant, matches the Brighton framing |
+| DfE region | **25** | Good higher level; picks up the London effect from Vol 2 |
+| `OFSTEDRATING` | 5 | Currently used |
+
+Local authority is the natural choice: it is a real administrative
+hierarchy, it has 152 groups, it connects directly to the Brighton and
+Hove question the series opens with, and `(1 | region/LANAME)` gives a
+genuine three-level model to demonstrate nesting properly.
+
+I fitted both to check this is not just theory. With
+`log(ATT8) ~ log(FSM)`:
+
+| Model | Between-group variance | Residual variance |
+|-------|------------------------|-------------------|
+| `(1 \| region/LANAME)` | region 0.00669, LA-within-region 0.00261 | 0.01354 |
+| `(1 \| OFSTEDRATING) + (1 \| LANAME)` | Ofsted 0.01206, LA 0.00593 | 0.01101 |
+
+Both fit fine. The nested version is the one that tells a story about
+geography and policy; the Ofsted version tells a story about a grading
+system grading itself.
+
+**Resolved**: Ofsted is kept, because five groups genuinely do make the
+intercept plots legible, but two slides after the ICC now say plainly why
+it is a strange choice and show the same null model grouped by local
+authority for comparison (ICC 0.177 from 151 groups, against 0.647 from
+5).
+
+### 5. A small but misleading sentence about shrinkage
+
+> Remember: Higher variance = Higher uncertainty, so **higher variance
+> groups have less weight** in the model
+
+What determines how much a group is shrunk is the *sampling variance of
+that group's mean* — roughly $\sigma^2/n_j$ — so it is mostly about
+**group size**. As written it reads as though the between-group variance
+$\sigma^2_{\text{group}}$ is what pulls a group in, which is the opposite:
+a large between-group variance means groups are shrunk *less*. Suggest:
+
+> Groups with **few observations** have unreliable means, so they get
+> pulled furthest toward the global average.
+
+### 6. The equations label a variable the models do not use
+
+Volume 2 writes:
+
+$$\log(\text{Attainment8}) = \beta_0 + \beta_1\log(\text{PctDisadvantage}) + \beta_2\log(\text{PctPersistentAbsence}) + \epsilon$$
+
+and the interaction equations use `PctPersistentAbsence` too. But the
+models, the code and the interpretation all use `PERCTOT`, which is
+**overall absence**, not persistent absence — `PPERSABS10` is the
+persistent-absence variable and is not in these models. The slides'
+prose says "overall absence" correctly while the maths above it says
+something else. Rename to `PctOverallAbsence` throughout.
+
+------------------------------------------------------------------------
+
+## Things that are broken
+
+All checked.
+
+| Where | Problem |
+|------------------------|------------------------------------------------|
+| `week_regression/index.qmd` | `L6_images/soggybottom.webp` — **broken image**. The file exists at `../images/soggybottom.webp`; the refactor missed this path |
+| `week_regression/regression_lecture.qmd` | `L6_images/being_interdisciplinary.jpg` — **broken image**, same cause |
+| `multilevel_regression_practical.qmd` line 136 | Student download link points at `github.com/adamdennett/QM/.../sessions/L6_data/...`. It still resolves — that is a **separate, older repo** which kept the pre-refactor layout — but it serves a frozen copy from another project rather than this course's own data |
+| `multiple_regression_lecture.qmd` | `::sunglasses::` (double colons) appears twice on the diagnostics slides — renders as literal text, not an emoji |
+| all three lecture front matters | `date-as-string: "1st August 2024"` — stale in **all three** |
+
+**Typos**, all in slide titles or headings where they are most visible:
+"Rese**r**arch Question(s)" (Vols 1 and 3), "Deg**ress** of Freedom", "Variance
+Infl**action** Factor" (three slide titles), "Go**rd**ard" (should be
+Gorard), "the **mode** generic notation", "but **does is** satisfy".
+
+------------------------------------------------------------------------
+
+## The Python mixed-models problem {#the-python-mixed-models-problem}
+
+**Short answer: statsmodels can do it, including the crossed and nested
+random effects you got stuck on. You do not need to change packages.**
+
+You said you could not find Python equivalents for the R code. The place
+this bites is the Final Task in Volume 3's practical, which asks students
+to extend the model with
+
+``` r
+lmer(log(ATT8SCR) ~ ... + (1 | OFSTEDRATING) + (1 | gor_name/LANAME), data = ...)
+```
+
+That is **two grouping factors, one of them nested**. `statsmodels`'
+`MixedLM` takes a single `groups=` argument, so the obvious translation
+has nowhere to put the second factor — which I assume is exactly where
+you stopped.
+
+The way through is `vc_formula` (variance components), which is
+documented but not at all obvious. Two idioms cover everything in the
+practical.
+
+### Nested random effects — `(1 | region/LA)`
+
+Put the **top** level in `groups` and the **lower** level in
+`vc_formula`. Note `re_formula="1"` is required: without it statsmodels
+silently drops the group-level intercept when `vc_formula` is present,
+which is a trap worth knowing about.
+
+``` python
+m = smf.mixedlm("log_ATT8 ~ log_FSM",
+                data=d,
+                groups=d["region_name"],
+                re_formula="1",                          # region intercept
+                vc_formula={"LA": "0 + C(LANAME)"}       # LA within region
+               ).fit()
+```
+
+### Crossed random effects — `(1 | OFSTEDRATING) + (1 | LANAME)`
+
+There is no group hierarchy, so put *everything* in `vc_formula` and give
+`groups` a constant column:
+
+``` python
+d["one"] = 1
+m = smf.mixedlm("log_ATT8 ~ log_FSM",
+                data=d,
+                groups=d["one"],                         # one group: all rows
+                re_formula="0",                          # no group intercept
+                vc_formula={"ofsted": "0 + C(OFSTEDRATING)",
+                            "la":     "0 + C(LANAME)"}
+               ).fit()
+```
+
+### It gives the same answers as lme4
+
+I ran both against `lmer` on 3,186 schools. These are the actual outputs:
+
+**Nested, `(1 | region/LANAME)`**
+
+| Component | lme4 | statsmodels |
+|---------------------|-----------|-------------|
+| region variance | 0.006688 | 0.006687 |
+| LA within region | 0.002605 | 0.002605 |
+| residual | 0.013538 | 0.013538 |
+| intercept | 4.65677 | 4.65676 |
+| slope | −0.26297 | −0.26297 |
+
+**Crossed, `(1 | OFSTEDRATING) + (1 | LANAME)`**
+
+| Component | lme4 | statsmodels |
+|---------------------|-----------|-------------|
+| LANAME variance | 0.005934 | 0.005933 |
+| OFSTED variance | 0.012058 | 0.012036 |
+| residual | 0.011010 | 0.011010 |
+| intercept | 4.49769 | 4.49769 |
+| slope | −0.22686 | −0.22686 |
+
+Agreement to four or five decimal places, and the crossed model fits in
+**0.9 seconds**. Two notes for the practical: statsmodels orders the
+variance components **alphabetically** in the output (`la` before
+`ofsted`), regardless of dictionary order; and it reports **variances**
+where `lmer`'s default print shows variance *and* standard deviation.
+
+### Why not pymer4
+
+You offered to refactor around `pymer4`, and I tested it properly before
+answering. It does work on this machine, but the cost is high:
+
+-   `pip install pymer4` alone is not enough — its dependency metadata is
+    incomplete, and it additionally needs `polars`, `rpy2` and
+    `great_tables` installed by hand
+-   `rpy2` needs `R_HOME` set **and** `R_HOME/bin/x64` added to the DLL
+    search path on Windows, or R's `stats.dll` fails to load
+-   it has to be run with the project's `renv` profile disabled, or R
+    exhausts its cons memory on startup
+-   it then failed on an R-side version conflict (`rlang` 1.1.6 installed,
+    ≥ 1.1.7 required)
+
+**And the decisive objection:** `pymer4` is a wrapper around R's `lme4`
+via `rpy2`. Every student would need a working R installation *and* a
+consistent R package library *and* the Windows DLL path set — which
+defeats the purpose of offering a Python route at all. The students most
+likely to choose the Python tab are precisely those least likely to have
+a working R toolchain.
+
+I installed all of it to test, confirmed the above, and then removed
+`pymer4`, `rpy2`, `polars`, `great_tables` and `tzlocal` again so the
+virtual environment still matches `requirements.txt`.
+
+------------------------------------------------------------------------
+
+## Structural observations
+
+### Python coverage collapses exactly where it is needed most
+
+Counting code chunks by language:
+
+| Practical | R chunks | Python chunks | Parity |
+|---------------------------|----------|---------------|--------|
+| Vol 1 — regression | 25 | 22 | **88%** |
+| Vol 2 — multiple regression | 17 | 9 | **53%** |
+| Vol 3 — multilevel | 21 | 11 | **52%** |
+
+A student who picks the Python tab gets a good experience in week one and
+is increasingly abandoned thereafter. Given that the fix above removes the
+main technical blocker in Vol 3, closing this gap is now mostly
+transcription work rather than research.
+
+### A 65 MB download on a personal Dropbox link
+
+The Volume 3 lecture reads `edubasealldata20241003.csv` from a Dropbox
+share. I checked: it is live and returns **64.8 MB**. That is a single
+point of failure owned by one person's account, fetched on every render,
+and if a class of students hits it at once a free Dropbox account can be
+rate-limited. Worth moving into `sessions/data/` with the rest, or
+reducing to just the columns the lecture uses.
+
+### Volume 3 switches outcome variable mid-lecture
+
+The null-model section says it is partitioning the variance in **Progress
+8 (P8MEA)**, but the worked models and the practical use **Attainment 8
+(ATT8SCR)**. Pick one. Progress 8 is arguably the better choice for a
+multilevel treatment since it is already adjusted for intake, but
+whichever you choose it should be consistent.
+
+### Volume 3 carries a lot of hidden code
+
+`multilevel_regression_lecture.qmd` has 5 chunks set `eval: false` and 8
+set `include: false`; the practical has 3 and 7. Some of that is
+deliberate, but several of the `include: false` chunks in the practical's
+Final Task are substantial models whose output never appears. Worth a pass
+to work out which are scaffolding and which are dead.
+
+### Overlap with the new GLM lecture
+
+Vol 4 now covers three things these lectures also touch, and the
+duplication is worth resolving deliberately rather than by accident:
+
+-   **Overfitting** — Vol 1 does it with the three Brighton schools, Vol 4
+    with an interpolating spline. Both are good and they are complementary;
+    a one-line cross-reference in each direction would help.
+-   **Comparing against a baseline** — Vol 4 makes this a rule. Vols 1–3
+    never compare a model against doing nothing, which would be a natural
+    addition to the Vol 2 evaluation task.
+-   **Circularity of the predictors** — Vol 4 closes on it. As noted
+    [above](#grouping), Vol 3's choice of grouping factor is an unflagged
+    instance of the same problem, and connecting the two would strengthen
+    both.
+
+------------------------------------------------------------------------
+
+## Suggested priority order
+
+**Before the sessions run**
+
+1.  Fix the two broken image paths, and repoint the student download link at this repo rather than the older `adamdennett/QM` copy
+2.  Fix the p-value wording ([§1](#p-value)) — this is the one that does
+    lasting damage
+3.  Fix the typos in slide titles and the `::sunglasses::` emoji
+
+**Worth doing properly**
+
+4.  Switch Vol 3's grouping factor to local authority, or add it alongside
+    Ofsted and discuss why Ofsted is a strange choice ([§4](#grouping))
+5.  Add the Python mixed-model code above to the Vol 3 practical and close
+    the Final Task gap
+6.  Rename `PctPersistentAbsence` to `PctOverallAbsence` in the Vol 2
+    equations
+7.  Replace the t-value "importance" comparison with the elasticity
+    comparison
+
+**When there is time**
+
+8.  Bring Python parity in Vols 2 and 3 up toward Vol 1's level
+9.  Move the 65 MB Dropbox file into the repo's own data folder
+10. Settle on Progress 8 or Attainment 8 in Vol 3
+11. Audit the `include: false` chunks
+12. Add cross-references to and from Vol 4
+
+------------------------------------------------------------------------
+
+## One thing I would not change
+
+The series takes a position. It opens with a council that has made a
+policy decision, builds a model that appears to support it, and then
+spends two and a half lectures showing why the first answer was too
+simple — small samples, confounding, omitted geography, clustered
+errors — without ever concluding that the council was simply wrong. That
+argumentative spine is rare in quantitative methods teaching and it is
+what will make students remember the statistics. Everything above is in
+service of it.
