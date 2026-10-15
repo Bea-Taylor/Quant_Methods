@@ -220,7 +220,7 @@
 
 <p><span style="margin:0px; font-weight:700;" class="author">Adam Dennett</span> - a.dennett@ucl.ac.uk </p>
 
-<p style="opacity: 0.8">1st August 2024</p>
+<p style="opacity: 0.8">2025-26</p>
 
 <p style="opacity:0.8;">CASA0007 Quantitative Methods</p>
 
@@ -373,7 +373,7 @@
 <ul>
 <li>When you model a grouping factor (like Ofsted Rating) as a random effect, you are not estimating five separate coefficients (one for each rating).</li>
 <li>Instead, you estimate a variance term (<span class="math inline">\(\sigma^2_{\text{group}}\)</span>) that quantifies how much the true group effects (intercepts and/or slopes) scatter around the overall mean effect.</li>
-<li>Remember: Higher variance = Higher uncertainty, so higher variance groups have less weight in the model</li>
+<li>Remember: a group’s mean is uncertain mainly because it has <strong>few observations</strong>, so small groups get pulled furthest towards the overall average</li>
 <li>This allows the model to “borrow strength” across groups to stabilise estimates (the principle of shrinkage).</li>
 </ul></li>
 </ul>
@@ -649,13 +649,78 @@ OFSTEDRATING | 0.647</code></pre>
 <li>High ICC means clustering is important. Ignoring it (e.g., using OLS) would underestimate uncertainty - justifies using a LME model</li>
 </ul>
 </section>
+<section id="a-warning-about-this-grouping-factor" class="slide level2 smaller">
+<h2>A warning about <em>this</em> grouping factor</h2>
+<p>We have used Ofsted rating all the way through because <strong>five groups make the plots legible</strong> - you can actually see the intercepts move. But look again at that ICC of <strong>0.647</strong>.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>65% of the variation in Progress 8 sitting <em>between</em> Ofsted ratings is not a triumph. It is a clue.</strong></p>
+<p>An Ofsted rating is in large part a <em>judgement about</em> a school’s results - inspectors read Progress 8 <strong>before</strong> they visit. So we are explaining Progress 8 using a grading of Progress 8. The grouping factor is <strong>downstream of the outcome</strong>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>And it is thin: only <strong>5 groups</strong>, two of which contain just <strong>16</strong> and <strong>22</strong> schools. You want comfortably more groups than that before you trust a between-group variance.</p>
+</div>
+</div>
+</section>
+<section id="the-same-model-grouped-by-local-authority" class="slide level2 smaller">
+<h2>The same model, grouped by local authority</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a>lme_la <span class="ot">&lt;-</span> <span class="fu">lmer</span>(P8MEA <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> LANAME), <span class="at">data =</span> england_filtered_clean)</span>
+<span id="cb5-2"><a aria-label="2"></a><span class="fu">icc</span>(lme_la)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Grouped by</th>
+<th style="text-align: right;">Groups</th>
+<th style="text-align: right;">Between</th>
+<th style="text-align: right;">Within</th>
+<th style="text-align: right;">ICC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ofsted rating</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.3146</td>
+<td style="text-align: right;">0.1718</td>
+<td style="text-align: right;">0.647</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Local authority</td>
+<td style="text-align: right;">151</td>
+<td style="text-align: right;">0.0474</td>
+<td style="text-align: right;">0.2210</td>
+<td style="text-align: right;">0.177</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.92em">
+<ul>
+<li>Local authority gives an ICC of <strong>0.177</strong> - about <strong>18%</strong> of the variation in Progress 8 is between authorities</li>
+<li>That is a much more believable figure for a <em>geographical</em> clustering effect, and it comes from <strong>151 groups</strong> rather than 5</li>
+<li>Crucially, <strong>a school’s local authority is not a judgement about its results</strong> - it exists quite independently of the outcome</li>
+</ul>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;">
+<p><strong>Rule of thumb for choosing a grouping factor:</strong> it should exist <em>independently of your outcome</em>, and there should be <em>enough groups</em> to estimate a variance from. Ofsted rating fails both tests - we are using it because it draws well, and you should know that.</p>
+</div>
+</div>
+</section>
 <section id="null-model-visualisation" class="slide level2">
 <h2>NULL Model Visualisation</h2>
 <div class="cell" data-align="center">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-19-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-19-1.png" style="width:80.0%"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-21-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-21-1.png" style="width:80.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -677,7 +742,7 @@ OFSTEDRATING | 0.647</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-22-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -722,8 +787,8 @@ PTFSM6CLA1A -0.071</code></pre>
 <section id="model-with-a-fixed-effect-predictor-3" class="slide level2">
 <h2>Model with a Fixed Effect Predictor</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="co"># Random effects (BLUPs): deviations from the global intercept, by group</span></span>
-<span id="cb6-2"><a aria-label="2"></a><span class="fu">ranef</span>(lme1)<span class="sc">$</span>OFSTEDRATING</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="co"># Random effects (BLUPs): deviations from the global intercept, by group</span></span>
+<span id="cb7-2"><a aria-label="2"></a><span class="fu">ranef</span>(lme1)<span class="sc">$</span>OFSTEDRATING</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                     (Intercept)
 Special Measures      -0.5358379
@@ -744,7 +809,7 @@ Outstanding            0.8595982</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-25-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-25-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -765,7 +830,7 @@ Outstanding            0.8595982</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-24-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-26-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-26-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -818,22 +883,22 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 <section id="random-intercept-and-random-slope-model-3" class="slide level2">
 <h2>Random Intercept and Random Slope Model</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a><span class="co"># Extract random effects for each OFSTED group</span></span>
-<span id="cb9-2"><a aria-label="2"></a>ranef_values <span class="ot">&lt;-</span> <span class="fu">ranef</span>(lme3)<span class="sc">$</span>OFSTEDRATING</span>
-<span id="cb9-3"><a aria-label="3"></a></span>
-<span id="cb9-4"><a aria-label="4"></a><span class="co"># Fixed slope</span></span>
-<span id="cb9-5"><a aria-label="5"></a>fixed_slope <span class="ot">&lt;-</span> <span class="fu">fixef</span>(lme3)[<span class="st">"PTFSM6CLA1A"</span>]</span>
-<span id="cb9-6"><a aria-label="6"></a></span>
-<span id="cb9-7"><a aria-label="7"></a><span class="co"># Add random deviations to get group-specific slopes</span></span>
-<span id="cb9-8"><a aria-label="8"></a>group_slopes <span class="ot">&lt;-</span> fixed_slope <span class="sc">+</span> ranef_values<span class="sc">$</span>PTFSM6CLA1A</span>
-<span id="cb9-9"><a aria-label="9"></a></span>
-<span id="cb9-10"><a aria-label="10"></a><span class="co"># Combine into a tidy data frame</span></span>
-<span id="cb9-11"><a aria-label="11"></a>slopes_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-12"><a aria-label="12"></a>  <span class="at">OFSTEDRATING =</span> <span class="fu">rownames</span>(ranef_values),</span>
-<span id="cb9-13"><a aria-label="13"></a>  <span class="at">slope =</span> group_slopes</span>
-<span id="cb9-14"><a aria-label="14"></a>)</span>
-<span id="cb9-15"><a aria-label="15"></a></span>
-<span id="cb9-16"><a aria-label="16"></a><span class="fu">print</span>(slopes_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a><span class="co"># Extract random effects for each OFSTED group</span></span>
+<span id="cb10-2"><a aria-label="2"></a>ranef_values <span class="ot">&lt;-</span> <span class="fu">ranef</span>(lme3)<span class="sc">$</span>OFSTEDRATING</span>
+<span id="cb10-3"><a aria-label="3"></a></span>
+<span id="cb10-4"><a aria-label="4"></a><span class="co"># Fixed slope</span></span>
+<span id="cb10-5"><a aria-label="5"></a>fixed_slope <span class="ot">&lt;-</span> <span class="fu">fixef</span>(lme3)[<span class="st">"PTFSM6CLA1A"</span>]</span>
+<span id="cb10-6"><a aria-label="6"></a></span>
+<span id="cb10-7"><a aria-label="7"></a><span class="co"># Add random deviations to get group-specific slopes</span></span>
+<span id="cb10-8"><a aria-label="8"></a>group_slopes <span class="ot">&lt;-</span> fixed_slope <span class="sc">+</span> ranef_values<span class="sc">$</span>PTFSM6CLA1A</span>
+<span id="cb10-9"><a aria-label="9"></a></span>
+<span id="cb10-10"><a aria-label="10"></a><span class="co"># Combine into a tidy data frame</span></span>
+<span id="cb10-11"><a aria-label="11"></a>slopes_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-12"><a aria-label="12"></a>  <span class="at">OFSTEDRATING =</span> <span class="fu">rownames</span>(ranef_values),</span>
+<span id="cb10-13"><a aria-label="13"></a>  <span class="at">slope =</span> group_slopes</span>
+<span id="cb10-14"><a aria-label="14"></a>)</span>
+<span id="cb10-15"><a aria-label="15"></a></span>
+<span id="cb10-16"><a aria-label="16"></a><span class="fu">print</span>(slopes_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          OFSTEDRATING        slope
 1     Special Measures -0.018639324
@@ -853,7 +918,7 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-27-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-27-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-29-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-29-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -960,18 +1025,18 @@ F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2>A Linear Mixed Effects Revision</h2>
 <p>“He threw everything but the kitchen sink at it!”</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a>lme9 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
-<span id="cb12-2"><a aria-label="2"></a>  <span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> </span>
-<span id="cb12-3"><a aria-label="3"></a>    <span class="fu">log</span>(PTFSM6CLA1A) <span class="sc">+</span></span>
-<span id="cb12-4"><a aria-label="4"></a>    <span class="fu">log</span>(PERCTOT) <span class="sc">+</span></span>
-<span id="cb12-5"><a aria-label="5"></a>    <span class="fu">log</span>(PNUMEAL) <span class="sc">+</span></span>
-<span id="cb12-6"><a aria-label="6"></a>    PTPRIORLO <span class="sc">+</span></span>
-<span id="cb12-7"><a aria-label="7"></a>    ADMPOL_PT <span class="sc">+</span></span>
-<span id="cb12-8"><a aria-label="8"></a>    (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span></span>
-<span id="cb12-9"><a aria-label="9"></a>    (<span class="dv">1</span> <span class="sc">|</span> gor_name <span class="sc">/</span> LANAME),</span>
-<span id="cb12-10"><a aria-label="10"></a>  <span class="at">data =</span> england_filtered_clean,</span>
-<span id="cb12-11"><a aria-label="11"></a>  <span class="at">na.action =</span> na.exclude</span>
-<span id="cb12-12"><a aria-label="12"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a>lme9 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
+<span id="cb13-2"><a aria-label="2"></a>  <span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> </span>
+<span id="cb13-3"><a aria-label="3"></a>    <span class="fu">log</span>(PTFSM6CLA1A) <span class="sc">+</span></span>
+<span id="cb13-4"><a aria-label="4"></a>    <span class="fu">log</span>(PERCTOT) <span class="sc">+</span></span>
+<span id="cb13-5"><a aria-label="5"></a>    <span class="fu">log</span>(PNUMEAL) <span class="sc">+</span></span>
+<span id="cb13-6"><a aria-label="6"></a>    PTPRIORLO <span class="sc">+</span></span>
+<span id="cb13-7"><a aria-label="7"></a>    ADMPOL_PT <span class="sc">+</span></span>
+<span id="cb13-8"><a aria-label="8"></a>    (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span></span>
+<span id="cb13-9"><a aria-label="9"></a>    (<span class="dv">1</span> <span class="sc">|</span> gor_name <span class="sc">/</span> LANAME),</span>
+<span id="cb13-10"><a aria-label="10"></a>  <span class="at">data =</span> england_filtered_clean,</span>
+<span id="cb13-11"><a aria-label="11"></a>  <span class="at">na.action =</span> na.exclude</span>
+<span id="cb13-12"><a aria-label="12"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Not quite everything, but:</li>
@@ -1032,7 +1097,7 @@ ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-33-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1042,7 +1107,7 @@ ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1057,7 +1122,7 @@ ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-35-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1067,7 +1132,7 @@ ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-36-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-38-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-38-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1080,7 +1145,7 @@ ADMPOL_PTSE -0.254  0.180  0.015 -0.215  0.286  0.554</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-37-1.png" width="960"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1200,7 +1265,7 @@ Outstanding           0.08137964</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-39-1.png" style="width:80.0%"></a></p>
+<p><a href="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-41-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="multilevel_regression_lecture_files/figure-revealjs/unnamed-chunk-41-1.png" style="width:80.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1351,8 +1416,8 @@ Outstanding           0.08137964</code></pre>
 <li>In terms of random effects, while not causal a jump between Ofsted ratings is worth, on average, about 2.5 GSCE points - similar to a reduction in disadvanage in a school from 20%-10%.</li>
 </ul>
 </section>
-<section id="back-to-our-week-6-reserarch-questions" class="slide level2">
-<h2>Back to our Week 6 Reserarch Question(s)</h2>
+<section id="back-to-our-week-6-research-questions" class="slide level2">
+<h2>Back to our Week 6 Research Question(s)</h2>
 <ul>
 <li>What are the factors that affect school-level educational attainment in Brighton and Hove?</li>
 <li>To what extent is attainment driven by social mixing?</li>
@@ -1513,18 +1578,23 @@ Table&nbsp;1
 <h2>Conclusions</h2>
 <ul>
 <li>Linear Mixed Effects Models are just one useful extension to OLS standard regression. They work well particularly when there are logical groups, hierarchies or repeated measurements within your data</li>
-<li>Other regression variants (not yet covered in this course) might be more appropriate in other situations:
+<li>Next week we break the assumption we have never questioned - that the thing we are predicting is a continuous, roughly normal number - with <strong>Generalised Linear Models</strong>:
 <ul>
-<li>Generalised Linear Models
-<ul>
-<li>Logistic Regression (binary or multinomial outcomes)</li>
-<li>Poisson Regression / Negative Binomal Regression (count data)</li>
-<li>Generalised Additive Models (non-linear relationships)</li>
+<li>Logistic Regression (binary, ordered or unordered categorical outcomes)</li>
+<li>Poisson / Negative Binomial Regression (count data)</li>
 </ul></li>
+</ul>
+</section>
+<section id="conclusions-3" class="slide level2">
+<h2>Conclusions</h2>
+<ul>
+<li>Other regression variants, beyond the scope of this course, might be more appropriate in other situations:
+<ul>
+<li>Generalised Additive Models (non-linear relationships)</li>
 <li>Geographically Weighted or Spatial Regression Models</li>
 <li>Lasso and Ridge Regression (incorporating shrinkage)</li>
 </ul></li>
-<li>Now you have a good grounding in the basics of linear regression, these other methods should be much easier learn in future</li>
+<li>Now you have a good grounding in the basics of linear regression, these other methods should be much easier to learn in future</li>
 </ul>
 </section>
 <section id="todays-practical" class="slide level2">

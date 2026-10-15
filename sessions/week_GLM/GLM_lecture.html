@@ -249,6 +249,7 @@
 <li>Meet the <strong>Generalised Linear Model (GLM)</strong> - one framework, three moving parts</li>
 <li><strong>Logistic regression</strong> for binary outcomes, then ordinal and multinomial versions for categories</li>
 <li><strong>Poisson regression</strong> for counts, offsets for rates, and what to do about overdispersion</li>
+<li><strong>How to judge one</strong> when there is no R² - deviance, AIC, the pseudo-R²s, and whether the predictions are actually any use</li>
 <li>Throughout: can we predict a school’s Ofsted rating from everything else we know about it?</li>
 </ul>
 </section>
@@ -374,9 +375,56 @@
 <p>OLS is just the GLM where the distribution is Normal and the link function does nothing at all.</p>
 </div>
 </section>
+<section id="a-quick-word-on-ey" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A quick word on <span class="math inline">\(E[y]\)</span></h2>
+<p>With GLMs there is an <span class="math inline">\(E\)</span> in most of the equations. <strong><span class="math inline">\(E\)</span> is for expectation</strong>, and <span class="math inline">\(E[y_i]\)</span> reads <em>“the expected value of y for school i”</em>.</p>
+<ul>
+<li class="fragment">It is essentially <strong>an average</strong> — but a theoretical one. Your sample mean is a fact about the 3,000 schools you happen to have; an expected value is a fact about the <strong>process that produced them</strong></li>
+<li class="fragment"><strong>“Expected” is a poor name.</strong> It need not be a value you could ever observe — the expected value of a dice roll is 3.5, and the expected number of children per family is about 1.8</li>
+<li class="fragment"><strong>The little <span class="math inline">\(i\)</span> matters.</strong> <span class="math inline">\(E[y_i]\)</span> is <em>that school’s own</em> expected value, and it depends on that school’s predictors. There are thousands of them, one per school — not a single average across the dataset</li>
+</ul>
+</section>
+<section id="you-have-been-using-it-all-along" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>You have been using it all along</h2>
+<p>Ordinary regression, exactly as we wrote it in Vol 1:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_i + \epsilon_i\]</span></p>
+<div class="fragment">
+<p>The errors average out to zero. So take the average of both sides, and the error term disappears:</p>
+<p><span class="math display">\[E[y_i] = \beta_0 + \beta_1x_i\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>That is the line you have been drawing through scatter plots since week 5.</strong> - A regression line was never an exact school prediction — It is a prediction of what the <em>average</em> school like it does - this is the expected value</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.88em;">
+<p>So <span class="math inline">\(\log(E[y_i])\)</span> is <strong>not anything new or different</strong>. Just more formalised in the GLM equation.</p>
+</div>
+</div>
+</section>
 <section id="what-a-link-function-actually-does" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>What a link function actually does</h2>
-<p>The right-hand side of any regression is a straight line, and a straight line will cheerfully produce <strong>any number at all</strong>. The thing we are trying to predict usually cannot.</p>
+<p>Every regression we have fitted works the same way: take each predictor, multiply it by a number, and add the results up.</p>
+<p><span class="math display">\[y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+<ul>
+<li>The model is <strong>just arithmetic</strong></li>
+<li>But arithmetic ignores the reality of your data
+<ul>
+<li>feed in a big enough <span class="math inline">\(x\)</span> and the sum (<span class="math inline">\(y\)</span>) comes out as 14.2.</li>
+<li>feed in a small enough <span class="math inline">\(x\)</span> and it comes out as <span class="math inline">\(-3\)</span>.</li>
+</ul></li>
+<li>Both are perfectly good numbers</li>
+<li>But the thing we are <em>predicting</em> (<span class="math inline">\(y\)</span>) is usually not free to be <strong>any</strong> number, even though the maths would allow it.
+<ul>
+<li>A probability can’t be <span class="math inline">\(-3\)</span>.</li>
+<li>A count of schools can’t be <span class="math inline">\(-3\)</span> either.</li>
+</ul></li>
+<li><strong>The sum on the right of the equation has more freedom than the outcome does</strong></li>
+</ul>
+</section>
+<section id="what-a-link-function-actually-does-1" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What a link function actually does</h2>
 <div style="font-size: 0.95em">
 <table class="caption-top">
 <colgroup>
@@ -417,35 +465,408 @@
 </div>
 <div class="fragment">
 <div style="font-size: 0.95em">
-<p><strong>The link is a translator.</strong> It stretches a squashed scale out onto the whole number line, so the straight line has somewhere sensible to live. The top row needs no stretching - which is exactly why OLS is a GLM with the boring link.</p>
+<ul>
+<li><strong>The link is a translator.</strong> It stretches a squashed natural range out onto the whole number line, so the straight line has somewhere sensible to live.</li>
+<li>The top row needs no stretching, because a continuous outcome already has the same freedom the sum does — which is exactly why <strong>OLS is a GLM with the boring link</strong>.</li>
+</ul>
 </div>
 </div>
 </section>
+<section id="without-a-link-and-with-one" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Without a link, and with one</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_files/figure-revealjs/link-vs-nolink-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="GLM_lecture_files/figure-revealjs/link-vs-nolink-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.82em">
+<ul>
+<li>Same data, same predictor. The straight line is heading somewhere impossible — follow it left and it promises a <strong>negative number of schools</strong>.</li>
+<li>The log link bends the same relationship so it flattens towards zero instead, and can never cross it.</li>
+</ul>
+</div>
+<!-- ## Same numbers, two scales {.smaller transition="convex-in none-out" transition-speed="fast"} -->
+<!-- ```{r} -->
+<!-- #| label: link-stretch -->
+<!-- #| echo: false -->
+<!-- #| message: false -->
+<!-- #| warning: false -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 3.3 -->
+<!-- #| fig-align: center -->
+<!-- # The same nine probabilities plotted on their own scale (top) and on the -->
+<!-- # log-odds scale the model actually works on (bottom). The connecting lines -->
+<!-- # fan out at the edges, which IS the stretching. -->
+<!-- pts  <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99) -->
+<!-- lo   <- qlogis(pts) -->
+<!-- rng  <- max(abs(lo)) -->
+<!-- lk <- tibble(p = pts, logodds = lo, -->
+<!--              x_top = p, -->
+<!--              x_bot = (lo + rng) / (2 * rng)) -->
+<!-- ggplot(lk) + -->
+<!--   annotate("segment", x = 0, xend = 1, y = 1, yend = 1, -->
+<!--            colour = "grey55", linewidth = 0.5) + -->
+<!--   annotate("segment", x = 0, xend = 1, y = 0, yend = 0, -->
+<!--            colour = "grey55", linewidth = 0.5) + -->
+<!--   geom_segment(aes(x = x_top, xend = x_bot, y = 0.94, yend = 0.06), -->
+<!--                colour = casa_teal, alpha = 0.55, linewidth = 0.5) + -->
+<!--   geom_point(aes(x = x_top, y = 1), colour = casa_purple, size = 2.6) + -->
+<!--   geom_point(aes(x = x_bot, y = 0), colour = casa_pink, size = 2.6) + -->
+<!--   geom_text(aes(x = x_top, y = 1, label = p), vjust = -1.2, size = 3.1) + -->
+<!--   geom_text(aes(x = x_bot, y = 0, label = sprintf("%.1f", logodds)), -->
+<!--             vjust = 2.1, size = 3.1) + -->
+<!--   annotate("text", x = -0.02, y = 1, hjust = 1, size = 3.4, fontface = "bold", -->
+<!--            label = "probability") + -->
+<!--   annotate("text", x = -0.02, y = 0, hjust = 1, size = 3.4, fontface = "bold", -->
+<!--            label = "log-odds") + -->
+<!--   scale_x_continuous(limits = c(-0.16, 1.03)) + -->
+<!--   scale_y_continuous(limits = c(-0.35, 1.35)) + -->
+<!--   theme_void(base_size = 11) -->
+<!-- ``` -->
+<!-- ::: {style="font-size: 0.84em"} -->
+<!-- **Same nine numbers, twice.** On top, crowded against the walls at 0 -->
+<!-- and 1. On the bottom, the *identical* values on the log-odds scale — -->
+<!-- spread out, with room at both ends and no walls to hit. -->
+<!-- ::: -->
+<!-- . . . -->
+<!-- ::: {style="font-size: 0.88em"} -->
+<!-- Near the middle the two scales move together. **Out at the edges they do -->
+<!-- not** — 0.95 to 0.99 is a much bigger step than 0.5 to 0.54, even though -->
+<!-- both are four percentage points. -->
+<!-- ::: -->
+</section>
 <section id="careful---this-is-not-the-same-as-logging-your-data" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Careful - this is not the same as logging your data</h2>
-<p>Back in <strong>Vol 1</strong> we fixed a curved relationship by taking logs of Attainment 8 and of % disadvantaged, then fitting OLS to the transformed values.</p>
+<p>Back in <strong>Vol 1</strong>, when a relationship came out curved, we took logs of the variables and fitted OLS to the transformed numbers. That also puts a log in the model. <strong>It is not the same thing</strong>, and the difference is worth ten minutes.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><strong>Transforming the data</strong></p>
+<p><strong>What we did in Vol 1 - log(lm)</strong></p>
 <p><span class="math display">\[\log(y_i) = \beta_0 + \beta_1x_i + \epsilon_i\]</span></p>
-<ul>
-<li>We change <strong>every observation</strong></li>
-<li>Then fit an ordinary model to the new numbers</li>
-<li>Errors are assumed Normal <em>on the logged scale</em></li>
-</ul>
+<p><em>Change the data, then model it.</em></p>
+<ol type="1">
+<li>Take every value of <span class="math inline">\(y\)</span> and log it</li>
+<li>Fit an ordinary regression to those new numbers</li>
+<li>You are now modelling the <strong>average of the logged values</strong></li>
+</ol>
 </div><div class="column" style="width:50%;">
-<p><strong>A GLM</strong></p>
+<p><strong>What a GLM does</strong></p>
 <p><span class="math display">\[\log\big(E[y_i]\big) = \beta_0 + \beta_1x_i\]</span></p>
+<p><em>Model the data, and put the log on the model.</em></p>
+<ol type="1">
+<li>Leave every value of <span class="math inline">\(y\)</span> exactly as it is</li>
+<li>Work out its <strong>average</strong>, then log <em>that</em></li>
+<li>You are modelling the <strong>log of the average</strong></li>
+</ol>
+</div></div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Read those two third points again. <em>Average of the logs</em> versus <em>log of the average</em>. They sound like the same sentence in a different order.</p>
+</div>
+</div>
+</section>
+<section id="the-average-of-the-logs-is-not-the-log-of-the-average" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The average of the logs is not the log of the average</h2>
+<p>It comes down to <strong>which one you do first</strong>. Take three schools, with 1, 10 and 100 disadvantaged pupils.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>lm - Log first, then average</strong></p>
+<p><em>(what transforming the data does)</em></p>
+<ol type="1">
+<li>Log each one: 0.00, 2.30, 4.61</li>
+<li>Average those: 2.30</li>
+<li>Undo the log: <strong>10</strong></li>
+</ol>
+</div><div class="column" style="width:50%;">
+<p><strong>GLM - Average first, then log</strong></p>
+<p><em>(what a log link does)</em></p>
+<ol type="1">
+<li>Add them up and divide: <strong>37</strong></li>
+<li>The model logs <em>that</em>: 3.61</li>
+</ol>
+</div></div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Same three numbers. <strong>10 against 37.</strong> Nothing has gone wrong — the order of operations simply matters, and <span class="math inline">\(\log\)</span> is the reason why.</p>
+</div>
+</div>
+</section>
+<section id="the-same-thing-on-our-data" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The same thing, on our data</h2>
+<p>The <strong>number of disadvantaged pupils</strong> across our 3,168 schools:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>What you do</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>LM - Log first, then average</strong></td>
+<td>log each school, average, undo the log</td>
+<td><strong>38.2</strong> pupils</td>
+</tr>
+<tr class="even">
+<td><strong>GLM - Average first, then log</strong></td>
+<td>add them up and divide</td>
+<td><strong>46.3</strong> pupils</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div style="font-size: 0.95em">
 <ul>
-<li>The data are left <strong>completely alone</strong></li>
-<li>The link is applied to the <strong>expected value</strong></li>
-<li>The distribution does the work the transformation used to</li>
+<li><strong>8.1 pupils apart — about 17%.</strong> Not a rounding error, and not a mistake in either calculation. They are answers to <em>different questions</em>.</li>
+<li>Logging first gives you the <strong>geometric</strong> mean. Whenever a variable is skewed, it sits below the ordinary mean — and the more skewed it is, the bigger the gap.</li>
 </ul>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<ul>
+<li>A model fitted to logged data is not predicting the average number of disadvantaged pupils.</li>
+<li>It is predicting something smaller (geometric mean), and you have to remember to say so. <strong>A log-link GLM predicts the average you actually meant.</strong></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="the-same-gap-inside-a-model" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The same gap, inside a model</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_files/figure-revealjs/two-routes-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="GLM_lecture_files/figure-revealjs/two-routes-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p>Same 3,168 schools, same predictor, both models with a log in them — and <strong>two different curves</strong>. For a cohort of 50 the left-hand route predicts about <strong>23% fewer</strong> disadvantaged pupils than the right-hand one. The two converge as schools get bigger, which is exactly what you would expect: the more skewed the slice of data, the wider the gap.</p>
+</div>
+</section>
+<section id="so-which-one-is-right" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So which one is right?</h2>
+<p>For <strong>counts, yes/no outcomes and proportions</strong> this is not a matter of taste. Logging is the wrong tool and a GLM is the right one.</p>
+<p>For a <strong>continuous, strictly positive</strong> outcome both are defensible, and they answer slightly different questions. Four things to ask:</p>
+<ol type="1">
+<li class="fragment"><strong>What does the number have to do?</strong> If it must <em>add up</em> — totals, budgets, headcounts — you need the arithmetic mean, so you need the GLM. <strong>Geometric means do not aggregate.</strong> Average logged predictions across 150 LAs, convert back, and the total will be wrong</li>
+<li class="fragment"><strong>What type is the outcome?</strong> Logging a count does not make it continuous. It makes it a logged discrete thing</li>
+<li class="fragment"><strong>Are there zeros?</strong> Then there is no decision to make</li>
+<li class="fragment"><strong>What do you believe about the noise?</strong> This is the real test, and it is checkable</li>
+</ol>
+</section>
+<section id="it-comes-down-to-the-errors" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>It comes down to the errors</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Logging assumes</strong> the error is <strong>multiplicative</strong> — roughly constant spread on the log scale.</p>
+<p><em>A school is 20% above expectation, whatever its size.</em></p>
+</div><div class="column" style="width:50%;">
+<p><strong>A log-link GLM assumes</strong> the variance <strong>grows with the mean</strong>.</p>
+<p><em>Bigger schools vary more in absolute terms — which is what counts actually do.</em></p>
 </div></div>
 <div class="fragment">
 <div style="font-size: 0.92em">
-<p>Which matters, because you <em>cannot</em> transform a binary outcome. A school is rated below Good or it is not - and <span class="math inline">\(\log\left(\frac{0}{1-0}\right)\)</span> is undefined. There is nothing to take the log of.</p>
-<p><strong>The GLM never asks you to.</strong> It models the probability behind the 0s and 1s, and leaves your data exactly as you found them.</p>
+<p>Plot the residuals against the fitted values. If the spread fans out on the raw scale but is flat once logged, logging is honest. If the variance tracks the mean, you want Poisson. <strong>This is a question you can answer with a plot, not a preference.</strong></p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;">
+<p><strong>The published rule of thumb.</strong> O’Hara &amp; Kotze simulated count data and compared the two approaches. Transformations performed poorly <em>except when dispersion was small and the mean counts were large</em>; Poisson and negative binomial models performed well throughout.</p>
+<p>Which is exactly what the previous slide showed — 23% apart at a cohort of 50, converging to almost nothing by 400. <strong>Large counts, small gap. Small counts, big gap.</strong></p>
+</div>
+<div style="font-size:0.52em; color:#666; margin-top:0.4em;">
+<p>O’Hara, R.B. &amp; Kotze, D.J. (2010) Do not log-transform count data. <em>Methods in Ecology and Evolution</em>, <strong>1</strong>(2), 118–122. <a href="https://doi.org/10.1111/j.2041-210X.2010.00021.x">doi:10.1111/j.2041-210X.2010.00021.x</a></p>
+</div>
+<aside class="notes">
+<p>Reference: O’Hara, R.B. &amp; Kotze, D.J. (2010) “Do not log-transform count data”, Methods in Ecology and Evolution 1(2): 118-122. doi:10.1111/j.2041-210X.2010.00021.x</p>
+<p>If a student asks for a one-line answer: the GLM is the safer default and for counts it is the correct one. Logging is legitimate when the outcome is continuous, positive, has no zeros, and the noise really is multiplicative - and then it answers a question about the typical case rather than the average case. If you cannot say which of those you want, you want the average, so use the GLM.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="and-sometimes-you-cannot-transform-at-all" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>And sometimes you cannot transform at all</h2>
+<p>Even if you are happy with the geometric mean, transforming only works if every value <em>can</em> be logged. Often they cannot.</p>
+<ul>
+<li class="fragment"><strong>Zeros.</strong> <span class="math inline">\(\log(0)\)</span> is <span class="math inline">\(-\infty\)</span>. 2 of our schools have no disadvantaged pupils at all, and 24 local authorities have no below-Good schools. Every one of those rows drops out, silently</li>
+<li class="fragment"><strong>Yes/no outcomes.</strong> A school is rated below Good or it is not. There is no scale to compress — <span class="math inline">\(\log(0)\)</span> and <span class="math inline">\(\log(1)\)</span> are <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(0\)</span>, and neither is any use</li>
+<li class="fragment"><strong>The usual bodge</strong> is to log <span class="math inline">\(y + 1\)</span> instead. It works, and it quietly changes the thing you are modelling, by an amount that depends on how big your counts are</li>
+</ul>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;">
+<p><strong>A GLM never asks you to touch the data.</strong> The zeros stay zeros, the 0s and 1s stay 0s and 1s, and the link function does its work on the <em>average</em> instead — where there is nothing awkward to divide by and nothing to drop.</p>
+</div>
+</div>
+</section>
+<section id="but-hang-on-what-about-the-x-variables" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>But hang on — what about the x variables?</h2>
+<p>In <strong>Vol 1</strong> we did not just log the outcome. We logged the predictor too:</p>
+<p><span class="math display">\[\log(y_i) = \beta_0 + \beta_1 \log(x_i) + \epsilon_i\]</span></p>
+<p>A Poisson GLM looks different. The log sits on the <strong>left-hand side only</strong>:</p>
+<p><span class="math display">\[\log\big(E[y_i]\big) = \beta_0 + \beta_1 x_i\]</span></p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>The link is a statement about the outcome’s type.</strong> Counts cannot go negative, so we use a log link. That is <em>all</em> it says — and in particular it says <strong>nothing whatsoever about the predictors</strong>.</p>
+<p>You are still free to log them, or not, exactly as you always were. That choice is untouched by the link, and we come to it next.</p>
+</div>
+</div>
+</section>
+<section id="logging-a-predictor-is-still-available" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Logging a predictor is still available</h2>
+<p>It is just a <strong>separate decision</strong>, made for the same old reason — the relationship is curved — and completely independent of the link.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>What goes in</th>
+<th>How you read it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n_below ~ mean_abs</code></td>
+<td>absence, raw</td>
+<td>one <strong>percentage point</strong> more absence multiplies the rate by <strong>1.25</strong></td>
+</tr>
+<tr class="even">
+<td><code>n_below ~ log(mean_abs)</code></td>
+<td>absence, logged</td>
+<td><strong>doubling</strong> absence multiplies the rate by <strong>4.75</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>Both are Poisson models with a log link. Both leave the <em>outcome</em> untouched. They differ only in whether the predictor enters raw or logged — and that changes the sentence you write, from <em>per unit</em> to <em>per doubling</em>.</p>
+<p>Here the logged version fits slightly better (AIC 756 against 761), so it is a real choice, not a formality.</p>
+<p><span style="font-size:0.85em; color:#666;"><em>AIC is a score for comparing models fitted to the same data — lower is better. We take it apart properly later today.</em></span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.85em;">
+<p><strong>One predictor we always log.</strong> Later today we add <code>offset(log(n_schools))</code> to account for how many schools an LA has. That is a logged predictor with its coefficient <em>fixed at 1</em> — and it is what turns a model of counts into a model of rates.</p>
+</div>
+</div>
+</section>
+<section id="so-should-i-log-a-skewed-predictor" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So should I log a skewed predictor?</h2>
+<p>Tempting, and a very common habit — but <strong>not because it is skewed</strong>.</p>
+<div style="font-size: 0.95em">
+<p>Regression makes <strong>no assumption whatsoever about the distribution of your predictors</strong>. The assumptions are about the <em>errors</em>. A skewed <code>x</code> breaks nothing and is not, on its own, a problem to be fixed.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Three things that <strong>are</strong> real reasons to log a predictor:</p>
+<ol type="1">
+<li><strong>The relationship is curved.</strong> Straightening it is the main reason, and the only one you can see on a scatter plot</li>
+<li><strong>A handful of extreme values are dragging the fit around.</strong> Logging pulls in a long tail and reduces their leverage</li>
+<li><strong>You want a proportional reading</strong> — <em>per 10% more</em> rather than <em>per unit more</em></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="skew-does-not-predict-whether-logging-helps" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Skew does not predict whether logging helps</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Predictor</th>
+<th style="text-align: right;">Skew</th>
+<th style="text-align: left;">Does logging help?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pupils in the cohort</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: left;">Yes, clearly</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">% disadvantaged</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: left;">Yes, clearly</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">% English as an additional language</td>
+<td style="text-align: right;">1.59</td>
+<td style="text-align: left;">No - it makes it worse</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.92em">
+<p>The <strong>least</strong> skewed predictor here is one where logging clearly helps. The <strong>most</strong> skewed is the one where logging actively makes the model worse.</p>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>Look at the relationship, not at the histogram of x.</strong> Skew in a predictor tells you how its values are spread out. It tells you nothing at all about whether its relationship with the outcome is straight — and that is the thing you are actually trying to fix.</p>
+</div>
+</div>
+</section>
+<section id="so-how-do-you-tell-draw-it-twice" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So how do you tell? Draw it twice</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_files/figure-revealjs/straighter-which-way-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="GLM_lecture_files/figure-revealjs/straighter-which-way-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.78em">
+<p>Schools split into 18 equal groups along the x-axis; each <strong>teal dot</strong> is one group’s average. <strong>Dashed</strong> is the straight line the model would fit. Where the dots wander away from the dashed line, the relationship is curved.</p>
+</div>
+</section>
+<section id="the-tip-worth-remembering" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The tip worth remembering</h2>
+<div style="font-size: 0.95em">
+<p><strong>Plot your outcome against the predictor twice — once raw, once logged — and keep whichever is straighter.</strong></p>
+<p>Put the outcome on a <strong>log axis</strong> while you do it, because that is the scale a log-link model actually works on. Straight on that plot means straight where the model cares.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>On the previous slide, look at the <strong>top row</strong>: raw, the dots curve away from the line; logged, they drop neatly onto it. That is a predictor worth logging, and you can see it before fitting anything.</p>
+<p>The <strong>bottom row</strong> does not improve. Logging the EAL figures just moves the scatter around — which is exactly why the AIC got <em>worse</em> when we logged it.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;">
+<p><strong>Three habits that will serve you all term</strong></p>
+<ol type="1">
+<li>Draw it before you model it — curvature is obvious in a picture and invisible in a coefficient</li>
+<li>Add a <strong>smoother</strong> alongside the straight line. If they agree, a straight line is fine; if they diverge, you have found something</li>
+<li>If logging a predictor does not visibly straighten anything, <strong>leave it alone</strong>. A transformation you cannot justify is one more thing to explain in your write-up</li>
+</ol>
 </div>
 </div>
 </section></section>
@@ -457,11 +878,11 @@
 <section id="our-question-for-today" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Our question for today</h2>
 <ul>
-<li><p>We have used Ofsted ratings as a <strong>predictor</strong> and as a <strong>grouping variable</strong> already</p></li>
-<li><p>Today we turn it around and make it the <strong>outcome</strong></p></li>
-<li><p><em>Given everything else we know about a school - its results, its intake, its absence rates, its size - can we predict what Ofsted said about it?</em></p></li>
-<li><p>And if we can, what does that tell us about what Ofsted is actually measuring?</p></li>
-<li><p><strong>Note</strong>, <em>Ofsted has changed how it rates schools now, so single-word ratings are no longer given</em></p></li>
+<li>We have used Ofsted ratings as a <strong>predictor</strong> and as a <strong>grouping variable</strong> already</li>
+<li>Today we turn it around and make it the <strong>outcome</strong></li>
+<li><em>Given everything else we know about a school - its results, its intake, its absence rates, its size - can we predict what Ofsted said about it?</em></li>
+<li>And if we can, what does that tell us about what Ofsted is actually measuring?</li>
+<li><strong>Note</strong>, <em>Ofsted has changed how it rates schools now, so single-word ratings are no longer given</em></li>
 </ul>
 </section>
 <section id="the-outcome-variable" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
@@ -470,7 +891,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-1-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-4-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -522,7 +943,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-4-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-7-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -614,21 +1035,104 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="why-the-coefficient-is-a-ratio" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Why the coefficient <em>is</em> a ratio</h2>
+<p><strong>First, where the “one” comes from.</strong> A slope always answers the same question, in every model you have ever fitted:</p>
+<blockquote>
+<p><em>If the predictor goes up by <strong>one unit</strong>, what happens to the outcome?</em></p>
+</blockquote>
+<p>In Vol 1 that was <em>“one more percentage point of absence costs 0.38 Attainment 8 points”</em>. The <strong>one</strong> is not special — it is just the step size we have always quoted coefficients in.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So picture <strong>two schools, identical in every respect</strong>, except the second has one more unit of <span class="math inline">\(x\)</span> — one more percentage point of absence, say.</p>
+</div>
+</div>
+</section>
+<section id="why-the-coefficient-is-a-ratio-1" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Why the coefficient <em>is</em> a ratio</h2>
 <p>Our model says the log-odds are a straight line:</p>
 <p><span class="math display">\[\log(\text{odds}) = \beta_0 + \beta_1 x\]</span></p>
-<ul>
-<li class="fragment">At <span class="math inline">\(x\)</span>, the log-odds are <span class="math inline">\(\beta_0 + \beta_1x\)</span></li>
-<li class="fragment">At <span class="math inline">\(x+1\)</span>, they are <span class="math inline">\(\beta_0 + \beta_1x + \beta_1\)</span></li>
-<li class="fragment">So the <strong>difference in log-odds is just</strong> <span class="math inline">\(\beta_1\)</span></li>
-<li class="fragment">And subtracting logs is the same as dividing…</li>
-</ul>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>Predictor</th>
+<th>Its log-odds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>School A</strong></td>
+<td><span class="math inline">\(x\)</span></td>
+<td><span class="math inline">\(\beta_0 + \beta_1x\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>School B</strong></td>
+<td><span class="math inline">\(x+1\)</span></td>
+<td><span class="math inline">\(\beta_0 + \beta_1x + \beta_1\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="fragment">
-<p><span class="math display">\[e^{\beta_1} = \frac{\text{odds at } x+1}{\text{odds at } x}\]</span></p>
-<p><strong>A ratio of two odds</strong> - because the coefficient was a difference of two log-odds all along.</p>
+<p>Subtract one from the other, and everything cancels except <span class="math inline">\(\beta_1\)</span>:</p>
+<p><span class="math display">\[\log(\text{odds}_B) - \log(\text{odds}_A) = \beta_1\]</span></p>
+<div style="font-size: 0.92em">
+<p><strong>So the coefficient is a difference of two log-odds.</strong> Not a difference in probability, and not a difference in odds — a difference in <em>logged</em> odds.</p>
+</div>
+</div>
+</section>
+<section id="from-a-difference-to-a-ratio" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>From a difference to a ratio</h2>
+<p>We have a <strong>difference of logs</strong>. There is a rule from school algebra for exactly that:</p>
+<p><span class="math display">\[\log(M) - \log(N) = \log\!\left(\frac{M}{N}\right)\]</span></p>
+<p><span style="font-size:0.8em; color:#666;">Deliberately <em>not</em> A and B — those are taken. <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span> are just placeholders for “whatever you are subtracting”.</span></p>
+<div class="fragment">
+<p>Ours was <span class="math inline">\(\log(\text{odds}_B) - \log(\text{odds}_A)\)</span>, so <span class="math inline">\(M\)</span> is <strong>School B’s</strong> odds and <span class="math inline">\(N\)</span> is <strong>School A’s</strong>:</p>
+<p><span class="math display">\[\beta_1 = \log(\text{odds}_B) - \log(\text{odds}_A) = \log\!\left(\frac{\text{odds}_B}{\text{odds}_A}\right)\]</span></p>
+</div>
+<div class="fragment">
+<p>Now undo the log on both sides — exponentiate:</p>
+<p><span class="math display">\[e^{\beta_1} = \frac{\text{odds}_B}{\text{odds}_A}\]</span></p>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;">
+<p><strong>That is the whole thing.</strong> A ratio of two odds — because subtracting logs <em>is</em> dividing, and the coefficient was a difference of logs all along. Nothing was smuggled in: just a one-unit step, and one rule about logarithms.</p>
+</div>
 </div>
 </section>
 <section id="see-it-in-our-own-data" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>See it in our own data</h2>
+<p>That curve we drew a few slides ago had a model behind it. Here it is — the same single predictor we gave <code>lm()</code>, fitted properly:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a>glm1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(below_good <span class="sc">~</span> P8MEA, <span class="at">data =</span> model_data, <span class="at">family =</span> binomial)</span>
+<span id="cb3-2"><a aria-label="2"></a><span class="fu">coef</span>(glm1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)       P8MEA 
+  -2.323537   -2.698673 </code></pre>
+</div>
+</div>
+<div style="font-size: 0.95em">
+<p><strong>Two numbers. That is the entire model</strong>, and it says:</p>
+<p><span class="math display">\[\log(\text{odds}) = -2.32 + (-2.70 \times \text{Progress 8})\]</span></p>
+</div>
+</section>
+<section id="from-those-two-numbers-to-a-probability" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>From those two numbers to a probability</h2>
+<p>Take a school with a Progress 8 of <strong>0</strong> and turn the handle. Three steps, and each one undoes a bit of the link function:</p>
+<ol type="1">
+<li class="fragment"><strong>Log-odds</strong> — put 0 into the equation: <span class="math inline">\(-2.32 + (-2.70 \times 0) = -2.32\)</span></li>
+<li class="fragment"><strong>Odds</strong> — undo the log with <span class="math inline">\(\exp\)</span>: <span class="math inline">\(e^{-2.32} = 0.0979\)</span></li>
+<li class="fragment"><strong>Probability</strong> — undo the odds with <span class="math inline">\(\frac{\text{odds}}{1+\text{odds}}\)</span>: <span class="math inline">\(0.0979 \div 1.0979 = 0.089\)</span></li>
+</ol>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>So a school on exactly average progress has about a <strong>9% chance</strong> of being rated below Good.</p>
+</div>
+</div>
+</section>
+<section id="see-it-in-our-own-data-1" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>See it in our own data</h2>
+<p><strong>Every row below is those same three steps</strong>, done at a different Progress 8 score.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
@@ -669,9 +1173,14 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table>
 </div>
 </div>
+<div style="font-size: 0.86em">
+<p>Check the <strong>Progress 8 = 0</strong> row against the slide before: probability 0.089, odds 0.0979. The last column simply divides each row’s odds by the one above it.</p>
+</div>
+<div class="fragment">
 <div style="font-size: 0.9em">
 <p>The coefficient on Progress 8 is <strong>-2.70</strong>, and <span class="math inline">\(e^{-2.70}\)</span> = <strong>0.067</strong>.</p>
 <p>That is the last column, every time. <strong>One coefficient, one odds ratio, valid wherever you start from.</strong> Now look at the probabilities - they fall 0.59 → 0.09 → 0.007, doing nothing so tidy. Which is exactly why <em>“the probability falls by X”</em> is never a safe reading of a logistic coefficient.</p>
+</div>
 </div>
 </section></section>
 <section>
@@ -679,13 +1188,16 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h1>Binary logistic regression</h1>
 
 </section>
-<section id="running-the-model" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<section id="running-the-model" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Running the model</h2>
 <p>Same formula interface you have used for three weeks. Two differences: <code>glm()</code> not <code>lm()</code>, and a <code>family</code> argument.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a>logit_below <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">update</span>(predictors, below_good <span class="sc">~</span> .),</span>
-<span id="cb3-2"><a aria-label="2"></a>                   <span class="at">data   =</span> train,</span>
-<span id="cb3-3"><a aria-label="3"></a>                   <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a>logit_below <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb5-2"><a aria-label="2"></a>  below_good <span class="sc">~</span> P8MEA <span class="sc">+</span> PTFSM6CLA1A <span class="sc">+</span> PERCTOT <span class="sc">+</span> PPERSABS10 <span class="sc">+</span></span>
+<span id="cb5-3"><a aria-label="3"></a>               <span class="fu">log</span>(TPUP) <span class="sc">+</span> PTPRIORHI <span class="sc">+</span> MINORGROUP,</span>
+<span id="cb5-4"><a aria-label="4"></a>  <span class="at">data   =</span> train,</span>
+<span id="cb5-5"><a aria-label="5"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb5-6"><a aria-label="6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
 <div class="cell">
@@ -763,7 +1275,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_below)[<span class="st">"P8MEA"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_below)[<span class="st">"P8MEA"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    P8MEA 
 0.1051278 </code></pre>
@@ -782,7 +1294,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:92.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:92.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -791,11 +1303,208 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Anything whose interval crosses <strong>1</strong> is doing nothing detectable. Note how much work Progress 8 is doing compared with everything else.</p>
 </div>
 </section>
+<section id="how-do-you-score-a-model-like-this" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>How do you score a model like this?</h2>
+<p>For three weeks we judged models with <strong>R²</strong> — the share of the variation in the outcome the model managed to explain.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>That worked because the outcome was a <em>number</em>, with variation in it to explain. Ours is a <strong>yes or no</strong>. There is no spread to account for, and R² as you know it simply does not exist here.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So we ask <strong>two</strong> questions instead, and they are genuinely different:</p>
+<ol type="1">
+<li><strong>Does the model fit the data?</strong> — likelihood, deviance, AIC, the pseudo-R²s, Hosmer–Lemeshow</li>
+<li><strong>Does it make good decisions?</strong> — accuracy, the confusion matrix, ROC and AUC</li>
+</ol>
+<p>A model can do respectably on one and badly on the other. We take them in turn.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="does-the-model-fit" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>1. Does the model fit?</h1>
+
+</section>
+<section id="likelihood-how-surprised-is-the-model" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Likelihood: how surprised is the model?</h2>
+<p>Every school in the data either was or was not rated below Good. The model assigns each one a probability. <strong>Likelihood</strong> asks the obvious question:</p>
+<blockquote>
+<p><em>Given these coefficients, how probable was the data we actually saw?</em></p>
+</blockquote>
+<ul>
+<li class="fragment">A school that <em>was</em> below Good, which the model gave 0.9 — good, that was likely</li>
+<li class="fragment">A school that was <strong>not</strong>, which the model gave 0.9 — bad, the model was confidently wrong</li>
+<li class="fragment">Multiply all 2,219 of those probabilities together and you have the <strong>likelihood</strong> of the whole dataset</li>
+</ul>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>Fitting the model <em>is</em> choosing the coefficients that make this number as large as possible — <strong>maximum likelihood</strong>. We report its log, because multiplying 2,219 probabilities together gives a number too small for a computer to hold.</p>
+<p>For our model: <strong>log-likelihood = -717.2</strong>. Always negative; closer to zero is better.</p>
+</div>
+</div>
+</section>
+<section id="deviance-distance-from-a-perfect-fit" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Deviance: distance from a perfect fit</h2>
+<p>A log-likelihood on its own is hard to read. <strong>Deviance</strong> rescales it into something more like an error score — <em>how far this model sits from one that predicted every school perfectly</em>.</p>
+<p><span class="math display">\[\text{deviance} = -2 \times \text{log-likelihood}\]</span></p>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Null deviance</strong></td>
+<td>1883.4</td>
+<td>with <strong>no predictors at all</strong> — just the overall rate</td>
+</tr>
+<tr class="even">
+<td><strong>Residual deviance</strong></td>
+<td>1434.3</td>
+<td>with our seven predictors in</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Lower is better</strong>, and the drop — 449 — is what the predictors bought us. This is the direct equivalent of the sum-of-squares drop you used to read off an OLS table.</p>
+</div>
+<aside class="notes">
+<p>Deviance is also the statistic behind the overdispersion check later in the Poisson section: residual deviance divided by residual degrees of freedom. Worth flagging forward so it is not a surprise there.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="aic-fit-minus-a-fine-for-complexity" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>AIC: fit, minus a fine for complexity</h2>
+<p>There is a problem with judging a model on deviance alone: <strong>adding any predictor, however useless, will always lower it slightly.</strong> Left to itself, deviance always says “more variables”.</p>
+<div class="fragment">
+<p>So we charge for them:</p>
+<p><span class="math display">\[\text{AIC} = \text{deviance} + 2k \quad\text{where } k = \text{number of coefficients}\]</span></p>
+<div style="font-size: 0.95em">
+<p>For our model: 1434.3 + 2 × 8 = <strong>1450.3</strong>. A predictor only improves the AIC if it reduces the deviance by more than the 2 points it costs.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>AIC has no meaning on its own.</strong> 1450 is neither good nor bad — it is only useful for <strong>comparing models fitted to the same data</strong>. Lower wins. That is exactly how we used it earlier to choose between a raw and a logged predictor.</p>
+</div>
+</div>
+</section>
+<section id="the-pseudo-r²s" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The pseudo-R²s</h2>
+<p>People badly want an R², so several substitutes exist. The two you will meet in software output:</p>
+<div style="font-size: 0.95em">
+<p><strong>Cox &amp; Snell</strong> — built from the likelihood ratio between your model and the null model. For us: <strong>0.183</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>That looks dismal — until you learn its catch. <strong>Cox &amp; Snell cannot reach 1.</strong> With a binary outcome its ceiling here is <strong>0.572</strong>, so 0.183 is really 0.183 out of a possible 0.572.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Nagelkerke</strong> fixes precisely that, by dividing by the ceiling:</p>
+<p><span class="math display">\[R^2_{\text{Nagelkerke}} = \frac{0.183}{0.572} = \mathbf{0.320}\]</span></p>
+<p>Now it can reach 1, and it reads much more like the R² you are used to.</p>
+</div>
+</div>
+</section>
+<section id="and-how-much-to-trust-them" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>…and how much to trust them</h2>
+<div style="font-size: 0.95em">
+<p>Report them if the journal or the marker expects them — but know what you are saying.</p>
+<ul>
+<li class="fragment"><strong>They are not “variance explained”.</strong> Nothing here is variance. The name is borrowed, and the interpretation does not come with it</li>
+<li class="fragment"><strong>They are not comparable across datasets</strong>, and barely across models. A Nagelkerke of 0.32 is not “half as good” as one of 0.64</li>
+<li class="fragment"><strong>There is no accepted threshold</strong> for a good one. Values that would be embarrassing in OLS are routine here</li>
+</ul>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p>Treat a pseudo-R² as a <strong>rough indication that the predictors are doing something</strong>, and nothing more. If you want to know whether the model is actually any use, ask the second question — the one we come to next.</p>
+</div>
+</div>
+</section>
+<section id="hosmerlemeshow-does-it-fit-everywhere" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Hosmer–Lemeshow: does it fit everywhere?</h2>
+<p>Everything so far gives one number for the whole model. <strong>Hosmer–Lemeshow</strong> asks something more specific: <em>is the model well calibrated across the whole range of risk, or only in parts of it?</em></p>
+<div style="font-size: 0.95em">
+<ol type="1">
+<li>Sort the schools by predicted probability and cut them into <strong>10 equal groups</strong></li>
+<li>In each group, compare <strong>how many actually were</strong> below Good with <strong>how many the model expected</strong></li>
+<li>Add up the discrepancies into a chi-squared statistic</li>
+</ol>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Ours: <span class="math inline">\(\chi^2\)</span> = <strong>11.3</strong> on 8 df, <strong>p = 0.186</strong>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.84em;">
+<p><strong>Read the direction carefully — it is the opposite of most tests.</strong> A <em>small</em> p-value means the model fits <strong>badly</strong>. Ours is 0.19, so there is no evidence of poor fit.</p>
+<p>And “no evidence of poor fit” is <strong>not</strong> the same as “good fit”. The test is known to be sensitive to how many groups you choose, and to have little power on small samples. It is a flag worth checking, not a certificate.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="does-it-make-good-decisions" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>2. Does it make good decisions?</h1>
+
+</section>
+<section id="dont-mark-your-own-homework" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Don’t mark your own homework</h2>
+<p>The obvious way to answer that is to run the model over our schools and count how often it got the answer right.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>The problem: it has already seen those schools.</strong> The coefficients were chosen to fit them as closely as possible. Scoring a model on the data it was fitted to is revising with the exam paper in front of you — you will do well, and it tells you nothing about the next paper.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="co"># Split the schools in two, before fitting anything</span></span>
+<span id="cb8-2"><a aria-label="2"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb8-3"><a aria-label="3"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(model_data), <span class="fu">floor</span>(<span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">nrow</span>(model_data)))</span>
+<span id="cb8-4"><a aria-label="4"></a>train <span class="ot">&lt;-</span> model_data[train_idx, ]   <span class="co"># fit the model on these</span></span>
+<span id="cb8-5"><a aria-label="5"></a>test  <span class="ot">&lt;-</span> model_data[<span class="sc">-</span>train_idx, ]  <span class="co"># judge it on these</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="font-size: 0.92em">
+<p>2,219 schools to <strong>learn</strong> from, 951 kept back to <strong>test</strong> on. The model never sees the second group while it is being fitted, so how it does there is a fair sitting of a fresh paper.</p>
+<p>That is what <strong>test-set accuracy</strong> means: of the 951 schools it had never met, what share did it classify correctly?</p>
+</div>
+</div>
+</section>
 <section id="so-how-good-is-it" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>So how good is it?</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a>p_below <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_below, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb6-2"><a aria-label="2"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>((p_below <span class="sc">&gt;</span> <span class="fl">0.5</span>) <span class="sc">==</span> test<span class="sc">$</span>below_good)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a>p_below <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_below, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb9-2"><a aria-label="2"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>((p_below <span class="sc">&gt;</span> <span class="fl">0.5</span>) <span class="sc">==</span> test<span class="sc">$</span>below_good)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a>baseline <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">mean</span>(test<span class="sc">$</span>below_good), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>(test<span class="sc">$</span>below_good))</span>
+<span id="cb10-2"><a aria-label="2"></a>auc_below <span class="ot">&lt;-</span> <span class="fu">auc_of</span>(p_below, test<span class="sc">$</span>below_good)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="font-size: 1.1em">
 <p><strong>Test-set accuracy: 86.2%</strong></p>
@@ -817,7 +1526,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-12-1.png" style="width:90.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-18-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-18-1.png" style="width:90.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -831,27 +1540,35 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 28%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
-<th style="text-align: right;">Below Good</th>
-<th style="text-align: right;">Good or better</th>
+<th style="text-align: right;">Predicted below Good</th>
+<th style="text-align: right;">Predicted Good or better</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Below Good</td>
+<td style="text-align: left;"><strong>Actually</strong> Below Good</td>
 <td style="text-align: right;">32</td>
 <td style="text-align: right;">108</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Good or better</td>
+<td style="text-align: left;"><strong>Actually</strong> Good or better</td>
 <td style="text-align: right;">23</td>
 <td style="text-align: right;">788</td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
+<div style="font-size: 0.75em">
+<p>The 951 <strong>test</strong> schools — the ones the model never saw while it was being fitted.</p>
 </div>
 <ul>
 <li class="fragment">Only <strong>140</strong> of the 951 test schools are actually below Good - the class is <strong>rare</strong></li>
@@ -862,6 +1579,133 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><strong>Always, always compare your accuracy against the majority-class baseline.</strong> On imbalanced data, accuracy on its own is not evidence of anything.</p>
 </div>
 </section>
+<section id="was-a-choice-not-a-law" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>0.5 was a choice, not a law</h2>
+<p>The model does not output yes or no. It outputs a <strong>probability</strong> for every school. We turned that into a yes/no by flagging anything above <strong>0.5</strong> — and nothing made 0.5 the right number.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 32%">
+<col style="width: 17%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Flag if probability above</th>
+<th style="text-align: right;">Struggling schools caught</th>
+<th style="text-align: right;">…and missed</th>
+<th style="text-align: right;">False alarms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.50</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.30</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0.20</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">134</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.10</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">316</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>Drop the threshold and you catch far more struggling schools — <strong>32 up to 121</strong> of the 140. But the false alarms go from <strong>23 to 316</strong>.</p>
+<p><strong>There is no setting that is simply best.</strong> Which error hurts more is a policy question, and the model cannot answer it for you.</p>
+</div>
+</div>
+</section>
+<section id="every-threshold-at-once-the-roc-curve" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Every threshold at once: the ROC curve</h2>
+<p>Rather than argue about one cut-off, plot <strong>all of them</strong>. Two numbers per threshold:</p>
+<div style="font-size: 0.92em">
+<ul>
+<li><strong>True positive rate</strong> — of the schools that <em>really are</em> below Good, what share did we flag? <em>(we want this high)</em></li>
+<li><strong>False positive rate</strong> — of the schools that are <em>fine</em>, what share did we flag anyway? <em>(we want this low)</em></li>
+</ul>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_files/figure-revealjs/roc-explained-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="GLM_lecture_files/figure-revealjs/roc-explained-1.png" class="quarto-figure quarto-figure-center" width="595"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p><strong>Each red dot is one row of the table above.</strong> Sweep the threshold from 1 down to 0 and you trace the whole curve. The dashed diagonal is what you would get by <strong>guessing at random</strong> — the further above it you sit, the more the model knows.</p>
+</div>
+</section>
+<section id="and-auc-is-the-area-underneath-it" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>And AUC is the area underneath it</h2>
+<div style="font-size: 0.95em">
+<p>One curve is awkward to quote in a sentence, so we summarise it by the <strong>area under it</strong> — the <em>AUC</em>.</p>
+</div>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>AUC</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0.5</strong></td>
+<td>the diagonal — no better than tossing a coin</td>
+</tr>
+<tr class="even">
+<td><strong>0.7–0.8</strong></td>
+<td>useful</td>
+</tr>
+<tr class="odd">
+<td><strong>0.9+</strong></td>
+<td>very strong</td>
+</tr>
+<tr class="even">
+<td><strong>1.0</strong></td>
+<td>perfect: every struggling school scored above every healthy one</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>It also has a reading that needs no curve at all:</p>
+<blockquote>
+<p><strong>Pick one struggling school and one healthy school at random. AUC is the probability the model gives the struggling one the higher score.</strong></p>
+</blockquote>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;">
+<p>Notice what that does <strong>not</strong> depend on: any threshold. AUC asks whether the model puts schools in the right <strong>order</strong>, which is a different and fairer question from whether it labels them correctly at one arbitrary cut-off.</p>
+</div>
+</div>
+</section>
 <section id="but-the-model-is-not-useless" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>But the model is not useless</h2>
 <p>Accuracy asks “did you get it right?” at one arbitrary cut-off. A better question is “<strong>do you rank schools sensibly?</strong>”</p>
@@ -869,7 +1713,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-20-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -884,7 +1728,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-21-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-21-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -972,7 +1816,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-17-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -984,8 +1828,11 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="running-it" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Running it</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb7-2"><a aria-label="2"></a>ord <span class="ot">&lt;-</span> <span class="fu">polr</span>(<span class="fu">update</span>(predictors, rating4 <span class="sc">~</span> .), <span class="at">data =</span> train, <span class="at">Hess =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-label="1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb11-2"><a aria-label="2"></a>ord <span class="ot">&lt;-</span> <span class="fu">polr</span>(</span>
+<span id="cb11-3"><a aria-label="3"></a>  rating4 <span class="sc">~</span> P8MEA <span class="sc">+</span> PTFSM6CLA1A <span class="sc">+</span> PERCTOT <span class="sc">+</span> PPERSABS10 <span class="sc">+</span></span>
+<span id="cb11-4"><a aria-label="4"></a>            <span class="fu">log</span>(TPUP) <span class="sc">+</span> PTPRIORHI <span class="sc">+</span> MINORGROUP,</span>
+<span id="cb11-5"><a aria-label="5"></a>  <span class="at">data =</span> train, <span class="at">Hess =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1164,9 +2011,11 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="the-comparison" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>The comparison</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="fu">library</span>(nnet)</span>
-<span id="cb8-2"><a aria-label="2"></a>multi <span class="ot">&lt;-</span> <span class="fu">multinom</span>(<span class="fu">update</span>(predictors, <span class="fu">factor</span>(rating4, <span class="at">ordered =</span> <span class="cn">FALSE</span>) <span class="sc">~</span> .),</span>
-<span id="cb8-3"><a aria-label="3"></a>                  <span class="at">data =</span> train, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb12-2"><a aria-label="2"></a>multi <span class="ot">&lt;-</span> <span class="fu">multinom</span>(</span>
+<span id="cb12-3"><a aria-label="3"></a>  <span class="fu">factor</span>(rating4, <span class="at">ordered =</span> <span class="cn">FALSE</span>) <span class="sc">~</span> P8MEA <span class="sc">+</span> PTFSM6CLA1A <span class="sc">+</span> PERCTOT <span class="sc">+</span></span>
+<span id="cb12-4"><a aria-label="4"></a>                  PPERSABS10 <span class="sc">+</span> <span class="fu">log</span>(TPUP) <span class="sc">+</span> PTPRIORHI <span class="sc">+</span> MINORGROUP,</span>
+<span id="cb12-5"><a aria-label="5"></a>  <span class="at">data =</span> train, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1228,7 +2077,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-23-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-29-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-29-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1239,23 +2088,96 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="but-first---counts-or-rates" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>But first - counts or rates?</h2>
-<p>Straight from week 1. Lancashire has 22 below-Good schools and Bury has 6.</p>
-<div class="fragment">
-<p><strong>Is Lancashire worse?</strong> It has 78 secondary schools. Bury has 13.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Local authority</th>
+<th style="text-align: right;">Secondary schools</th>
+<th style="text-align: right;">Rated below Good</th>
+<th style="text-align: right;">As a share</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Lancashire</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">28%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bury</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">46%</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="fragment">
 <div style="font-size: 0.95em">
-<p>We need to account for how many schools each LA had the <em>opportunity</em> to get wrong. In a count model that is called an <strong>offset</strong> - a term we force into the model with a coefficient fixed at 1:</p>
-<p><span class="math display">\[\log(\text{expected count}) = \beta_0 + \beta_1x_1 + \dots + \log(\text{number of schools})\]</span></p>
-<p>Move it to the other side and you are modelling a <strong>rate</strong>, not a count.</p>
+<p><strong>On the raw count, Lancashire looks nearly four times worse.</strong> On the share, Bury is the one in trouble.</p>
+<p>A count on its own tells you very little, because it depends on how many chances there were to begin with. Lancashire has six times as many schools, so it would take more below-Good ones even if nothing were wrong.</p>
+</div>
+</div>
+</section>
+<section id="so-why-not-just-divide" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So why not just divide?</h2>
+<p>The obvious move is to model the share — <code>n_below / n_schools</code> — and be done with it. Two reasons not to:</p>
+<ul>
+<li class="fragment"><strong>Poisson describes whole numbers.</strong> <code>22/79 = 0.28</code> is not a count of anything. We would be using a distribution for something it does not describe</li>
+<li class="fragment"><strong>Dividing throws away how much evidence you have.</strong> Bury’s 46% rests on <strong>13</strong> schools. Lancashire’s 28% rests on <strong>79</strong>. We should be far more confident about Lancashire — but once both are just “a percentage”, the model can no longer tell them apart</li>
+</ul>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>An <strong>offset</strong> gets us both: the outcome stays a genuine count, so Poisson still applies and the sample sizes still count for something — but the model does the dividing internally.</p>
+</div>
+</div>
+</section>
+<section id="what-an-offset-actually-is" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What an offset actually is</h2>
+<p>Three lines of algebra, and nothing clever happens in any of them.</p>
+<div style="font-size: 0.95em">
+<p><strong>1. What we actually want to model</strong> — a rate, not a count:</p>
+<p><span class="math display">\[\log\left(\frac{\text{expected count}}{\text{number of schools}}\right) = \beta_0 + \beta_1x\]</span></p>
+<p><strong>2. The log of a ratio is a difference of logs</strong> — ordinary school algebra:</p>
+<p><span class="math display">\[\log(\text{expected count}) - \log(\text{number of schools}) = \beta_0 + \beta_1x\]</span></p>
+<p><strong>3. Move that term across to the other side:</strong></p>
+<p><span class="math display">\[\log(\text{expected count}) = \beta_0 + \beta_1x + \log(\text{number of schools})\]</span></p>
+<p>That final term — <span class="math inline">\(\log(\text{number of schools})\)</span> — <strong>is the offset</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So an offset is just <strong>a division, rewritten as an addition</strong> so it can sit inside a model that works on the log scale. In R that is <code>offset(log(n_schools))</code>.</p>
+</div>
+</div>
+</section>
+<section id="fixed-not-estimated" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Fixed, not estimated</h2>
+<p>Look at line 3 again. Every other term on the right gets a <span class="math inline">\(\beta\)</span> in front of it that the model <strong>chooses</strong>. The offset does not — it is stuck there with a coefficient of exactly <strong>1</strong>, because that is how it arrived.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>In plain words, we are <strong>telling</strong> the model something rather than asking it:</p>
+<blockquote>
+<p><em>Twice as many schools, twice as many below-Good ones expected, all else being equal.</em></p>
+</blockquote>
+<p>That is a claim about arithmetic, not about education policy, so we spend no parameter finding it out.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.86em;">
+<p><strong>Is that a fair thing to assume?</strong> Put <code>log(n_schools)</code> in as an ordinary predictor and let the model estimate it instead. It comes back with <strong>0.95</strong>, with a 95% interval of 0.82 to 1.09 — 1 sits comfortably inside it. The assumption holds, and fixing it saves us a parameter.</p>
+<p><strong>Always worth checking.</strong> If that interval had excluded 1, the offset would have been the wrong tool.</p>
 </div>
 </div>
 </section>
 <section id="running-a-poisson-model" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Running a Poisson model</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a>pois <span class="ot">&lt;-</span> <span class="fu">glm</span>(n_below <span class="sc">~</span> mean_fsm <span class="sc">+</span> mean_abs <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(n_schools)),</span>
-<span id="cb9-2"><a aria-label="2"></a>            <span class="at">data =</span> la, <span class="at">family =</span> poisson)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a>pois <span class="ot">&lt;-</span> <span class="fu">glm</span>(n_below <span class="sc">~</span> mean_fsm <span class="sc">+</span> mean_abs <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(n_schools)),</span>
+<span id="cb13-2"><a aria-label="2"></a>            <span class="at">data =</span> la, <span class="at">family =</span> poisson)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1301,8 +2223,8 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2>Checking the Poisson assumption</h2>
 <p>The Poisson distribution assumes something quite strong: that the <strong>variance equals the mean</strong>. Real data often disagrees.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a>dispersion <span class="ot">&lt;-</span> pois<span class="sc">$</span>deviance <span class="sc">/</span> pois<span class="sc">$</span>df.residual</span>
-<span id="cb10-2"><a aria-label="2"></a>dispersion</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a aria-label="1"></a>dispersion <span class="ot">&lt;-</span> pois<span class="sc">$</span>deviance <span class="sc">/</span> pois<span class="sc">$</span>df.residual</span>
+<span id="cb14-2"><a aria-label="2"></a>dispersion</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.306901</code></pre>
 </div>
@@ -1356,7 +2278,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-28-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-28-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-34-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1411,8 +2333,8 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="modelling-it-properly" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
 <h2>Modelling it properly</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a>dest_glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(OVERALL_DEST, not_sust) <span class="sc">~</span> PTFSM6CLA1A,</span>
-<span id="cb12-2"><a aria-label="2"></a>                <span class="at">data =</span> dest, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a aria-label="1"></a>dest_glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(OVERALL_DEST, not_sust) <span class="sc">~</span> PTFSM6CLA1A,</span>
+<span id="cb16-2"><a aria-label="2"></a>                <span class="at">data =</span> dest, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="font-size: 1.05em">
 <p>Note the <code>cbind()</code> - we hand the model <strong>successes and failures</strong>, not a proportion, so it knows a school of 30 carries less weight than a school of 300.</p>
@@ -1429,7 +2351,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-32-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-32-1.png" style="width:95.0%"></a></p>
+<p><a href="GLM_lecture_files/figure-revealjs/unnamed-chunk-38-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="GLM_lecture_files/figure-revealjs/unnamed-chunk-38-1.png" style="width:95.0%"></a></p>
 </figure>
 </div>
 </div>

@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="XXX">
-<meta name="dcterms.date" content="2026-10-07">
+<meta name="author" content="Adam Dennett">
+<meta name="dcterms.date" content="2026-10-15">
 
-<title>Week XXX – Quantitative Methods</title>
+<title>Week 8 - Prof D’s Regression Sessions Vol 4 – Quantitative Methods</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -55,6 +55,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -84,9 +87,9 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<meta property="og:title" content="Week XXX – Quantitative Methods">
+<meta property="og:title" content="Week 8 - Prof D’s Regression Sessions Vol 4 – Quantitative Methods">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_GLM/img/logo/full_sm.png">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/images/regression2.PNG">
 <meta property="og:site_name" content="Quantitative Methods">
 <meta property="og:locale" content="en_GB">
 </head>
@@ -205,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Week XXX</h1>
+          <h1 class="quarto-secondary-nav-title">Week 8 - Prof D’s Regression Sessions Vol 4</h1>
         </a>     
     </div>
   </nav>
@@ -345,7 +348,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Week XXX</h1>
+<h1 class="title d-none d-lg-block">Week 8 - Prof D’s Regression Sessions Vol 4</h1>
 </div>
 
 
@@ -355,14 +358,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>XXX </p>
+             <p>Adam Dennett </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 7, 2026</p>
+      <p class="date">October 15, 2026</p>
     </div>
   </div>
   
@@ -374,26 +377,84 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p><a href="../images/regression2.PNG" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/regression2.PNG" class="img-fluid"></a></p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This week will introduce XXX.</p>
+<p>For three weeks the Regression Sessions have rested on an assumption we never questioned: that the thing we are trying to predict is a continuous number, free to wander up and down a straight line without ever embarrassing us.</p>
+<p>This week we break it. <strong><em>Generalised Linear Models</em></strong> keep everything you already know - the linear predictor, the formula interface, the coefficient table - and add two pieces that let the outcome be something other than a continuous, roughly normal number: a <strong><em>distribution</em></strong> suited to the outcome, and a <strong><em>link function</em></strong> that connects the two.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 33%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Ordinary Least Squares (OLS)</th>
+<th>Generalised Linear Model (GLM)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Outcome</strong></td>
+<td>Continuous, roughly normal</td>
+<td>Binary, count, proportion, category - whatever you have</td>
+</tr>
+<tr class="even">
+<td><strong>Distribution</strong></td>
+<td>Normal, always</td>
+<td>Chosen to match the outcome (binomial, Poisson, …)</td>
+</tr>
+<tr class="odd">
+<td><strong>Link function</strong></td>
+<td>None (the identity link)</td>
+<td>Stretches a bounded outcome onto the whole number line</td>
+</tr>
+<tr class="even">
+<td><strong>Fitted by</strong></td>
+<td>Least squares</td>
+<td>Maximum likelihood</td>
+</tr>
+<tr class="odd">
+<td><strong>Goodness of fit</strong></td>
+<td>R², residual plots</td>
+<td>Deviance, AIC, pseudo-R²</td>
+</tr>
+<tr class="even">
+<td><strong>Example</strong></td>
+<td>Predicting attainment from school intake</td>
+<td>Predicting <em>whether</em> a school is rated below Good</td>
+</tr>
+</tbody>
+</table>
+<p>OLS is not a different thing from a GLM - it is the GLM with a Normal distribution and the boring link.</p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
-<p>By the end of this week, you will be able to:</p>
+<p>By the end of this week, you will:</p>
 <ol type="1">
-<li>XXX</li>
-<li>XXX</li>
-<li>XXX</li>
+<li>Be able to tell, from the outcome variable alone, which member of the GLM family you need - the Week 1 material on data types turns out not to have been an academic exercise</li>
+<li>Understand what a <strong><em>link function</em></strong> actually does, and be able to show why a straight line fitted to a 0/1 outcome produces impossible predictions</li>
+<li>Be able to fit a <strong><em>binary logistic regression</em></strong> and, more importantly, explain an <strong><em>odds ratio</em></strong> out loud in a sentence a non-statistician would understand</li>
+<li>Know how to judge whether the model <strong><em>fits</em></strong>, using the log-likelihood, deviance, AIC and the pseudo-R²s - and know what each of them does not tell you</li>
+<li>Know how to judge whether the model makes good <strong><em>decisions</em></strong>, against a majority-class baseline, with a confusion matrix, and with ROC and AUC - a set of ideas that applies well beyond logistic regression</li>
+<li>Understand the difference between <strong><em>explaining</em></strong> and <strong><em>predicting</em></strong>, and why deciding which one you are doing changes what counts as a good model</li>
+<li>Be able to say what a model of this kind <em>cannot</em> tell you, and why that judgement comes from your own knowledge of the data rather than from the output</li>
 </ol>
 </section>
 <section id="lecture" class="level2">
 <h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
-<p>To access the lecture notes: <a href="weekXXX_lecture.qmd">Lecture</a></p>
+<p>To access the lecture notes: <a href="GLM_lecture_short.html">Lecture</a></p>
+<p>Two optional extras, for anyone who wants to go further:</p>
+<ul>
+<li><a href="GLM_lecture.html">Extended version</a> - the same material at greater length, including ordinal and multinomial logistic regression</li>
+<li><a href="GLM_NB.html">Volume 5: counts, rates and the negative binomial</a> - Poisson regression, offsets, overdispersion and the negative binomial</li>
+</ul>
 </section>
 <section id="quiz" class="level2">
 <h2 class="anchored" data-anchor-id="quiz">Quiz</h2>
-<p>To access the quiz on Moodle, please check <a href="https://moodle.ucl.ac.uk/course/view.php?id=53568">Moodle page</a>.</p>
+<p>To access the quiz on Moodle, please check <a href="https://moodle.ucl.ac.uk/course/view.php?id=61867">Moodle page</a>.</p>
 </section>
 <section id="practical" class="level2">
 <h2 class="anchored" data-anchor-id="practical">Practical</h2>
@@ -407,17 +468,21 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To save a copy of notebook to your own GitHub Repo: follow the GitHub link, click on <code>Raw</code> and then <code>Save File As...</code> to save it to your own computer. Make sure to change the extension from <code>.ipynb.txt</code> (which will probably be the default) to <code>.ipynb</code>before adding the file to <em>your</em> GitHub repository.</p>
+<p>To save a copy of notebook to your own GitHub Repo: follow the GitHub link, click on <code>Raw</code> and then <code>Save File As...</code> to save it to your own computer. Make sure to change the extension from <code>.ipynb.txt</code> (which will probably be the default) to <code>.ipynb</code> before adding the file to <em>your</em> GitHub repository.</p>
 </div>
 </div>
 <p>To access the practical:</p>
 <ol type="1">
-<li><a href="weekX_practical.html">Preview</a></li>
-<li><a href="weekX_practical.ipynb">Download</a></li>
+<li><a href="GLM_practical.html">Main Practical Page</a></li>
+<li><a href="GLM_practical.ipynb">Download</a></li>
 </ol>
 </section>
 <section id="further-resources" class="level2">
 <h2 class="anchored" data-anchor-id="further-resources">Further resources</h2>
+<ul>
+<li>Shmueli, G. (2010) <a href="https://doi.org/10.1214/10-STS330">To Explain or to Predict?</a> <em>Statistical Science</em>, 25(3), 289-310 - the distinction underneath the whole final section of the lecture</li>
+<li>O’Hara, R. B. and Kotze, D. J. (2010) <a href="https://doi.org/10.1111/j.2041-210X.2010.00021.x">Do not log-transform count data</a> <em>Methods in Ecology and Evolution</em>, 1(2), 118-122 - why a Poisson GLM beats logging the outcome</li>
+</ul>
 
 
 </section>
@@ -862,6 +927,38 @@ Note
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

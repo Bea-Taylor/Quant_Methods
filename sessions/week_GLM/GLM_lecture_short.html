@@ -1,0 +1,2661 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<link href="../..//img/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-3f418c0a1af92b3d03a8c930c3125fbd.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
+
+  <meta name="author" content="Adam Dennett">
+  <title>Quantitative Methods – Prof D’s Regression Sessions - Vol 4</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3903353f5457d2a8a8c48812a6ae8559.css">
+  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+<meta property="og:title" content="Prof D’s Regression Sessions - Vol 4 – Quantitative Methods">
+<meta property="og:description" content="Good Skool / Bad Skool Breaks - GLMs and logistic regression">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_GLM/img/logo/full_sm.png">
+<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:locale" content="en_GB">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="title-slide" data-background-color="#4e3c56" data-background-image="../images/regression.png" data-background-opacity="0.08" data-background-size="stretch" style="height:100%" class="center">
+
+<br>
+<br>
+
+<h1 class="title">Prof D’s Regression Sessions - Vol 4</h1>
+
+  <h3 style="opacity:0.8;" class="subtitle">Good Skool / Bad Skool Breaks - GLMs and logistic regression</h3>
+
+<p><span style="margin:0px; font-weight:700;" class="author">Adam Dennett</span> - a.dennett@ucl.ac.uk </p>
+
+<p style="opacity: 0.8">Week GLM</p>
+
+<p style="opacity:0.8;">CASA0007 Quantitative Methods</p>
+
+</section>
+<section id="recap" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Recap</h2>
+<ul>
+<li>Over three weeks we built a regression model up from a single scatter plot to a linear mixed effects model with random intercepts and random slopes</li>
+<li>We learned a <strong>recipe</strong> - understand your data, start simple, add complexity only when it earns its place, and check your assumptions at every step</li>
+<li>Last week we relaxed one particular assumption: that our observations were <strong>independent</strong>. Schools sit inside local authorities, and that grouping matters</li>
+</ul>
+</section>
+<section id="but-one-thing-never-changed" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>But one thing never changed</h2>
+<ul>
+<li>Every single model we have fitted has had a <strong>continuous outcome variable</strong></li>
+<li>Attainment 8. Progress 8. Numbers that can take any value, that are roughly bell-shaped, and that happily sit on either side of a straight line</li>
+<li>This choice let us use Ordinary Least Squares throughout - but we know that our data don’t always look like this</li>
+<li>What happens when the thing you want to explain is a <em>yes/no</em>, a <em>category</em>, or a <em>count</em>?</li>
+</ul>
+</section>
+<section id="this-weeks-session-aims" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>This week’s session aims</h2>
+<ul>
+<li>Understand why OLS fails when the outcome is not continuous, and see it fail</li>
+<li>Meet the <strong>Generalised Linear Model (GLM)</strong> - one framework, three moving parts</li>
+<li><strong>Logistic regression</strong> for binary outcomes - in depth, because if you understand this one the rest follow</li>
+<li>Where <strong>counts and ordered categories</strong> fit in, and where to go for them</li>
+<li><strong>How to judge one</strong> when there is no R² - deviance, AIC, the pseudo-R²s, and whether the predictions are actually any use</li>
+<li>Throughout: can we predict a school’s Ofsted rating from everything else we know about it?</li>
+</ul>
+</section>
+<section>
+<section id="back-to-week-1" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>Back to Week 1</h1>
+
+</section>
+<section id="remember-these" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Remember these?</h2>
+<p>In week 1 we spent a long time on <strong>types of data</strong>, and on the <strong>distributions</strong> that go with them.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Data type</th>
+<th>Example from our data</th>
+<th>Distribution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Real-valued</td>
+<td>Attainment 8</td>
+<td>Normal</td>
+</tr>
+<tr class="even">
+<td>Binary</td>
+<td>Is this school single-sex?</td>
+<td>Bernoulli / Binomial</td>
+</tr>
+<tr class="odd">
+<td>Count</td>
+<td>How many pupils on free school meals?</td>
+<td>Poisson</td>
+</tr>
+<tr class="even">
+<td>Count, overdispersed</td>
+<td>… when the variance exceeds the mean</td>
+<td>Negative binomial</td>
+</tr>
+<tr class="odd">
+<td>Ordinal</td>
+<td>Ofsted rating</td>
+<td><em>(no single answer)</em></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>We then spent three weeks modelling <strong>only the first row</strong>!</p>
+</div>
+</section>
+<section id="the-whole-idea-of-a-glm-in-one-table" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The whole idea of a GLM, in one table</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>If your outcome is…</th>
+<th>…its distribution is</th>
+<th>…the model is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A continuous number</td>
+<td>Normal</td>
+<td><strong>OLS</strong> - weeks 5, 6, 7</td>
+</tr>
+<tr class="even">
+<td>A yes/no</td>
+<td>Binomial</td>
+<td><strong>Logistic regression</strong></td>
+</tr>
+<tr class="odd">
+<td>A proportion out of a known total</td>
+<td>Binomial</td>
+<td><strong>Logistic regression</strong></td>
+</tr>
+<tr class="even">
+<td>An ordered category</td>
+<td>-</td>
+<td><strong>Ordinal logistic</strong></td>
+</tr>
+<tr class="odd">
+<td>An unordered category</td>
+<td>-</td>
+<td><strong>Multinomial logistic</strong></td>
+</tr>
+<tr class="even">
+<td>A count</td>
+<td>Poisson</td>
+<td><strong>Poisson regression</strong></td>
+</tr>
+<tr class="odd">
+<td>A count that is too variable</td>
+<td>Negative binomial</td>
+<td><strong>Negative binomial regression</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>This is not seven new methods.</strong> It is one method, with a slot you fill differently depending on what you are trying to explain.</p>
+</div>
+</section>
+<section id="what-actually-changes" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What actually changes</h2>
+<p>Every GLM has exactly three pieces. You already know the middle one.</p>
+<ol type="1">
+<li class="fragment"><strong>The random component</strong> - what distribution does the outcome follow? (Normal, binomial, Poisson…)</li>
+<li class="fragment"><strong>The linear predictor</strong> - <span class="math inline">\(\beta_0 + \beta_1x_1 + \beta_2x_2 + ...\)</span> . This is <em>identical</em> to everything we have done for three weeks</li>
+<li class="fragment"><strong>The link function</strong> - the bit of maths that connects the two, so that a straight line on one scale becomes a sensible prediction on the other</li>
+</ol>
+<div class="fragment">
+<p>OLS is just the GLM where the distribution is Normal and the link function does nothing at all.</p>
+</div>
+</section>
+<section id="what-a-link-function-actually-does" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What a link function actually does</h2>
+<p>Every regression we have fitted works the same way: take each predictor, multiply it by a number, and add the results up.</p>
+<p><span class="math display">\[y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+<ul>
+<li>The model is <strong>just arithmetic</strong></li>
+<li>But arithmetic ignores the reality of your data
+<ul>
+<li>feed in a big enough <span class="math inline">\(x\)</span> and the sum (<span class="math inline">\(y\)</span>) comes out as 14.2.</li>
+<li>feed in a small enough <span class="math inline">\(x\)</span> and it comes out as <span class="math inline">\(-3\)</span>.</li>
+</ul></li>
+<li>Both are perfectly good numbers</li>
+<li>But the thing we are <em>predicting</em> (<span class="math inline">\(y\)</span>) is usually not free to be <strong>any</strong> number, even though the maths would allow it.
+<ul>
+<li>A probability can’t be <span class="math inline">\(-3\)</span>.</li>
+<li>A count of schools can’t be <span class="math inline">\(-3\)</span> either.</li>
+</ul></li>
+<li><strong>The sum on the right of the equation has more freedom than the outcome does</strong></li>
+</ul>
+</section>
+<section id="what-a-link-function-actually-does-1" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What a link function actually does</h2>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th>Its natural range</th>
+<th>Link stretches it with</th>
+<th>To get back, apply</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A continuous number</td>
+<td><span class="math inline">\(-\infty\)</span> to <span class="math inline">\(+\infty\)</span></td>
+<td><em>nothing needed</em></td>
+<td><em>nothing</em></td>
+</tr>
+<tr class="even">
+<td>A probability</td>
+<td>0 to 1</td>
+<td><span class="math inline">\(\log\left(\frac{p}{1-p}\right)\)</span></td>
+<td>the logistic curve</td>
+</tr>
+<tr class="odd">
+<td>A count</td>
+<td>0 to <span class="math inline">\(+\infty\)</span></td>
+<td><span class="math inline">\(\log\)</span></td>
+<td><span class="math inline">\(\exp\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<ul>
+<li><strong>The link is a translator.</strong> It stretches a squashed natural range out onto the whole number line, so the straight line has somewhere sensible to live.</li>
+<li>The top row needs no stretching, because a continuous outcome already has the same freedom the sum does — which is exactly why <strong>OLS is a GLM with the boring link</strong>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="the-same-model-three-times" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The same model, three times</h2>
+<p>Written out in full, with the <strong>right-hand side identical every time</strong>. Only the left changes.</p>
+<div style="font-size: 0.95em">
+<p><strong>Ordinary regression</strong> — the outcome goes in as it is:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \epsilon_i\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Logistic regression</strong> — the <em>probability</em> goes in, through the logit:</p>
+<p><span class="math display">\[\log\!\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Poisson regression</strong> — the <em>average count</em> goes in, through a log:</p>
+<p><span class="math display">\[\log\big(E[y_i]\big) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+<p><span style="font-size:0.85em; color:#666;"><span class="math inline">\(E[y_i]\)</span> is standard notation for the <strong>expected value</strong> of <span class="math inline">\(y\)</span> — the average count for a school like this one.</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p>Notice what is <strong>missing</strong> from the bottom two: the <span class="math inline">\(\epsilon\)</span>. OLS adds an error term on the end; a GLM does not, because the randomness is already described by the distribution you chose. <strong>That is the swap</strong> — an error term for a distribution.</p>
+</div>
+</div>
+</section>
+<section id="without-a-link-and-with-one" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Without a link, and with one</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/link-vs-nolink-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="GLM_lecture_short_files/figure-revealjs/link-vs-nolink-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.82em">
+<ul>
+<li>Same data, same predictor. The straight line is heading somewhere impossible — follow it left and it promises a <strong>negative number of schools</strong>.</li>
+<li>The log link bends the same relationship so it flattens towards zero instead, and can never cross it.</li>
+</ul>
+</div>
+<!-- ## Same numbers, two scales {.smaller transition="convex-in none-out" transition-speed="fast"} -->
+<!-- ```{r} -->
+<!-- #| label: link-stretch -->
+<!-- #| echo: false -->
+<!-- #| message: false -->
+<!-- #| warning: false -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 3.3 -->
+<!-- #| fig-align: center -->
+<!-- # The same nine probabilities plotted on their own scale (top) and on the -->
+<!-- # log-odds scale the model actually works on (bottom). The connecting lines -->
+<!-- # fan out at the edges, which IS the stretching. -->
+<!-- pts  <- c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99) -->
+<!-- lo   <- qlogis(pts) -->
+<!-- rng  <- max(abs(lo)) -->
+<!-- lk <- tibble(p = pts, logodds = lo, -->
+<!--              x_top = p, -->
+<!--              x_bot = (lo + rng) / (2 * rng)) -->
+<!-- ggplot(lk) + -->
+<!--   annotate("segment", x = 0, xend = 1, y = 1, yend = 1, -->
+<!--            colour = "grey55", linewidth = 0.5) + -->
+<!--   annotate("segment", x = 0, xend = 1, y = 0, yend = 0, -->
+<!--            colour = "grey55", linewidth = 0.5) + -->
+<!--   geom_segment(aes(x = x_top, xend = x_bot, y = 0.94, yend = 0.06), -->
+<!--                colour = casa_teal, alpha = 0.55, linewidth = 0.5) + -->
+<!--   geom_point(aes(x = x_top, y = 1), colour = casa_purple, size = 2.6) + -->
+<!--   geom_point(aes(x = x_bot, y = 0), colour = casa_pink, size = 2.6) + -->
+<!--   geom_text(aes(x = x_top, y = 1, label = p), vjust = -1.2, size = 3.1) + -->
+<!--   geom_text(aes(x = x_bot, y = 0, label = sprintf("%.1f", logodds)), -->
+<!--             vjust = 2.1, size = 3.1) + -->
+<!--   annotate("text", x = -0.02, y = 1, hjust = 1, size = 3.4, fontface = "bold", -->
+<!--            label = "probability") + -->
+<!--   annotate("text", x = -0.02, y = 0, hjust = 1, size = 3.4, fontface = "bold", -->
+<!--            label = "log-odds") + -->
+<!--   scale_x_continuous(limits = c(-0.16, 1.03)) + -->
+<!--   scale_y_continuous(limits = c(-0.35, 1.35)) + -->
+<!--   theme_void(base_size = 11) -->
+<!-- ``` -->
+<!-- ::: {style="font-size: 0.84em"} -->
+<!-- **Same nine numbers, twice.** On top, crowded against the walls at 0 -->
+<!-- and 1. On the bottom, the *identical* values on the log-odds scale — -->
+<!-- spread out, with room at both ends and no walls to hit. -->
+<!-- ::: -->
+<!-- . . . -->
+<!-- ::: {style="font-size: 0.88em"} -->
+<!-- Near the middle the two scales move together. **Out at the edges they do -->
+<!-- not** — 0.95 to 0.99 is a much bigger step than 0.5 to 0.54, even though -->
+<!-- both are four percentage points. -->
+<!-- ::: -->
+</section></section>
+<section>
+<section id="can-we-predict-school-ofsted-ratings" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>Can we predict School Ofsted ratings?</h1>
+
+</section>
+<section id="our-question-for-today" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Our question for today</h2>
+<ul>
+<li>We have used Ofsted ratings as a <strong>predictor</strong> and as a <strong>grouping variable</strong> already</li>
+<li>Today we turn it around and make it the <strong>outcome</strong></li>
+<li><em>Given everything else we know about a school - its results, its intake, its absence rates, its size - can we predict what Ofsted said about it?</em></li>
+<li>And if we can, what does that tell us about what Ofsted is actually measuring?</li>
+<li><strong>Note</strong>, <em>Ofsted has changed how it rates schools now, so single-word ratings are no longer given</em></li>
+</ul>
+</section>
+<section id="the-outcome-variable" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The outcome variable</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-1-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p>3,170 schools with complete data. Note immediately how <strong>lopsided</strong> this is - we will come back to that, because it causes more trouble than anything else today.</p>
+</div>
+</section>
+<section id="first-attempt-just-use-ols" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>First attempt: just use OLS?</h2>
+<ul>
+<li>Let’s re-code our ratings: “below Good” as <strong>1</strong> and “Good or better” as <strong>0</strong></li>
+<li>We can regress it on Progress 8 exactly as we have been doing for the last three weeks.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a>lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(below_good <span class="sc">~</span> P8MEA, <span class="at">data =</span> model_data)</span>
+<span id="cb1-2"><a aria-label="2"></a><span class="fu">summary</span>(lpm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = below_good ~ P8MEA, data = model_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.05109 -0.19520 -0.10193  0.03523  1.13124 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.145824   0.005812   25.09   &lt;2e-16 ***
+P8MEA       -0.274324   0.011145  -24.61   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3271 on 3168 degrees of freedom
+Multiple R-squared:  0.1606,    Adjusted R-squared:  0.1603 
+F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p>The model runs. It produces coefficients. It produces an R². Nothing errors.</p>
+<p><strong>And its fitted values run from -0.504 to 1.051.</strong></p>
+</div>
+</div>
+</section>
+<section id="a-probability-of-minus-fifty-percent" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A probability of minus fifty percent?</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-4-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<ul>
+<li>The straight line gives <strong>457 schools a negative probability</strong> of being rated below good.</li>
+<li>At a Progress 8 of +1 it predicts a probability of being rated below good of about <strong>-13%</strong> (impossible).</li>
+<li>The logistic curve cannot do this - it is bounded at 0 and 1 by construction.</li>
+</ul>
+</div>
+</section>
+<section id="where-the-curve-comes-from" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Where the curve comes from</h2>
+<p>We need something that takes a straight line, which runs from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(+\infty\)</span>, and squashes it into <span class="math inline">\([0,1]\)</span>.</p>
+<ul>
+<li class="fragment">Start with the <strong>probability</strong> <span class="math inline">\(p\)</span> - bounded at 0 and 1, e.g.&nbsp;0.4 (40%), awkward</li>
+<li class="fragment">Turn it into <strong>odds</strong>, <span class="math inline">\(\frac{p}{1-p} = \frac{probability of happening}{probability of NOT happening}\)</span> or <span class="math inline">\(\frac{0.4}{0.6} = 0.67\)</span> - now bounded at 0 and <span class="math inline">\(+\infty\)</span>, better</li>
+<li class="fragment">Take the <strong>log</strong> of that (<span class="math inline">\(\log\left(\frac{0.4}{0.6}\right) = -0.40\)</span>) - now unbounded in both directions <span class="emoji" data-emoji="tada">🎉</span></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+<ul>
+<li>That left-hand side is the <strong>logit</strong>, and it <strong><em>is</em></strong> the link function. The right-hand side is exactly the model we have been fitting since week 5.</li>
+<li>A <strong>logit</strong> simply is a mathematical function that converts a probability (between 0 and 1) into a log-odds value that can range from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(+\infty\)</span></li>
+<li>The link-function converts the expected value of the outcome (the mean) into something a straight line can cope with</li>
+</ul>
+</div>
+</section>
+<section id="enough-theory-lets-fit-one" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Enough theory — let’s fit one</h2>
+<p>The simplest possible version: <strong>is a school rated below Good</strong>, predicted from <strong>Progress 8</strong> and nothing else.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a>glm1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(below_good <span class="sc">~</span> P8MEA, <span class="at">data =</span> model_data, <span class="at">family =</span> binomial)</span>
+<span id="cb3-2"><a aria-label="2"></a><span class="fu">coef</span>(<span class="fu">summary</span>(glm1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Estimate Std. Error   z value      Pr(&gt;|z|)
+(Intercept) -2.323537 0.07385577 -31.46047 3.019107e-217
+P8MEA       -2.698673 0.13672741 -19.73761  1.025074e-86</code></pre>
+</div>
+</div>
+<div style="font-size: 0.9em">
+<p>The <strong><code>Std. Error</code></strong>, <strong><code>z value</code></strong> and <strong><code>Pr(&gt;|z|)</code></strong> columns do exactly what their equivalents did in OLS — how precise the estimate is, and whether it is distinguishable from zero. It is the <strong><code>Estimate</code></strong> column that needs new thinking.</p>
+</div>
+</section>
+<section id="so-what-is-that-coefficient" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So what <em>is</em> that coefficient?</h2>
+<p>Put the estimates back into the equation from the last slide:</p>
+<p><span class="math display">\[\log\left(\frac{p}{1-p}\right) = -2.32 + (-2.70 \times \text{Progress 8})\]</span></p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>The left-hand side is <strong>log-odds</strong>. So whatever is multiplying Progress 8 must be <em>in log-odds too</em>:</p>
+<blockquote>
+<p><strong>-2.70 is the amount the log-odds change for each extra Progress 8 point.</strong></p>
+</blockquote>
+<p>One more point of Progress 8, and the log-odds of being rated below Good drop by 2.70.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>And the <strong>intercept</strong> is just the same thing at zero: a school with a Progress 8 of exactly 0 has log-odds of <strong>-2.32</strong>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;">
+<p><strong>Both of those sentences are true, and both are useless.</strong> Nobody has an intuition for log-odds — you cannot tell a head teacher their log-odds fell by 2.70. The next few slides are entirely about turning this number into something you can say out loud.</p>
+</div>
+</div>
+</section>
+<section id="so-we-undo-the-log" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So we undo the log</h2>
+<p>We only took a logarithm in the first place <strong>to give the straight line somewhere to live</strong>. It was a convenience for the maths — nothing obliges us to <em>report</em> our answer on that scale.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So undo it. The opposite of a log is <span class="math inline">\(\exp\)</span>, and once you exponentiate a coefficient it stops <strong>adding</strong> and starts <strong>multiplying</strong>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;">
+<p>That one move — <code>exp()</code> — turns a number nobody can read into a sentence you could say to a head teacher.</p>
+<p><strong>Here is the recipe.</strong></p>
+</div>
+</div>
+</section>
+<section id="a-recipe-for-reading-your-model" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A recipe for reading your model</h2>
+<p>You have run <code>glm(..., family = binomial)</code> and you are staring at a table of coefficients. <strong>Four steps, every time:</strong></p>
+<ol type="1">
+<li class="fragment"><strong>Ignore the raw coefficients.</strong> They are log-odds. Nobody can read them, including me</li>
+<li class="fragment"><strong>Exponentiate them</strong> — <code>exp(coef(model))</code>. Each one is now an <strong>odds ratio</strong></li>
+<li class="fragment"><strong>Read each as a multiplier</strong>, for a <strong>one unit</strong> increase in that predictor:
+<ul>
+<li class="fragment">above <strong>1</strong> → the odds go <strong>up</strong></li>
+<li class="fragment">below <strong>1</strong> → the odds go <strong>down</strong></li>
+<li class="fragment">exactly <strong>1</strong> → that predictor is doing nothing</li>
+</ul></li>
+<li class="fragment"><strong>Say it in a sentence.</strong> <em>“One more unit of x multiplies the odds of the outcome by [OR].”</em> If the OR is below 1, a cut is easier to hear: <span class="math inline">\(1 - \text{OR}\)</span></li>
+</ol>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>That is the whole job. Everything else on the next few slides is just this recipe, done on our data.</p>
+</div>
+</div>
+</section>
+<section id="step-2-and-3-on-our-model" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 2 and 3, on our model</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(glm1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)       P8MEA 
+ 0.09792662  0.06729478 </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>The one we care about is <strong>Progress 8: 0.067</strong>. It is <strong>below 1</strong>, so more progress means <strong>lower</strong> odds of being rated below Good.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.95em;">
+<p><strong>Step 4 — the sentence:</strong></p>
+<blockquote>
+<p>One more Progress 8 point <strong>multiplies</strong> the odds of being rated below Good by <strong>0.067</strong>.</p>
+</blockquote>
+<p>Or, since that is under 1, say it as a cut: <span class="math inline">\(1 - 0.067 = 0.93\)</span> —</p>
+<blockquote>
+<p>One more Progress 8 point <strong>cuts</strong> those odds by about <strong>93%</strong>.</p>
+</blockquote>
+</div>
+</div>
+</section>
+<section id="why-it-is-called-a-ratio" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Why it is called a <em>ratio</em></h2>
+<p>Because that is literally what it is. <strong>Work out the odds for two schools, and divide.</strong> Our model, from a few slides back:</p>
+<p><span class="math display">\[\log(\text{odds}) = -2.32 + (-2.70 \times x)\]</span></p>
+<div style="font-size: 0.85em">
+<p>where <strong><span class="math inline">\(x\)</span> is the school’s Progress 8 score</strong> — the only thing that changes from school to school. −2.32 is the <strong>intercept</strong> and −2.70 is the <strong>coefficient on Progress 8</strong>; both stay put.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p>So put three values of <span class="math inline">\(x\)</span> through it, one step at a time:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(x\)</span> (Progress 8)</th>
+<th style="text-align: center;">coefficient <span class="math inline">\(\times\ x\)</span></th>
+<th style="text-align: center;">log-odds <span class="math inline">\(=\)</span> intercept <span class="math inline">\(+\)</span> (coefficient <span class="math inline">\(\times\ x\)</span>)</th>
+<th style="text-align: center;">odds <span class="math inline">\(= e^{\text{log-odds}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>−1</strong></td>
+<td style="text-align: center;">−2.70 × (−1) = <strong>+2.70</strong></td>
+<td style="text-align: center;">−2.32 + (+2.70) = <strong>0.38</strong></td>
+<td style="text-align: center;"><strong>1.4552</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>0</strong></td>
+<td style="text-align: center;">−2.70 × (0) = <strong>0.00</strong></td>
+<td style="text-align: center;">−2.32 + (0.00) = <strong>−2.32</strong></td>
+<td style="text-align: center;"><strong>0.0979</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>+1</strong></td>
+<td style="text-align: center;">−2.70 × (+1) = <strong>−2.70</strong></td>
+<td style="text-align: center;">−2.32 + (−2.70) = <strong>−5.02</strong></td>
+<td style="text-align: center;"><strong>0.0066</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="and-now-divide" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>And now divide</h2>
+<p>Take the <strong>odds</strong> column from that table and divide each row by the one above it:</p>
+<div style="font-size: 0.95em">
+<p><span class="math display">\[\frac{0.0979}{1.4552} = 0.067
+\qquad
+\frac{0.0066}{0.0979} = 0.067\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>The same number both times.</strong> Going from −1 to 0 multiplies the odds by 0.067, and so does going from 0 to +1.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;">
+<p>And <strong>0.067</strong> is exactly <span class="math inline">\(e^{-2.70}\)</span> — the exponentiated coefficient. <strong>You never need the table.</strong> The coefficient already <em>is</em> the ratio, and it is the same one wherever you start.</p>
+</div>
+</div>
+</section>
+<section id="a-warning-about-that-intercept" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A warning about that intercept</h2>
+<p>With <strong>one</strong> predictor, <span class="math inline">\(e^{\beta_0}\)</span> was genuinely useful — the odds for a school on average progress. That worked because <strong>Progress 8 is already centred</strong>: zero means <em>expected progress</em>, not <em>no progress</em>.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Add more predictors and the intercept becomes the odds when <strong>every single predictor is zero at once</strong>. In our seven-predictor model that is a school with:</p>
+<ul>
+<li>no disadvantaged pupils, <strong>no absence at all</strong>, no persistent absence</li>
+<li>no high prior attainers</li>
+<li>and <code>log(cohort) = 0</code>, meaning a cohort of <strong>one pupil</strong></li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>No such school exists.</strong> In our data, 0 schools have a cohort of one and 0 have zero absence. The intercept there — <span class="math inline">\(e^{-5.09}\)</span> = 0.0062 — is a <strong>mathematical anchor</strong>, not a description of anything.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>If you want an interpretable intercept, centre your predictors</strong> — subtract each one’s mean, so zero means <em>average</em> rather than <em>none</em>. Then <span class="math inline">\(e^{\beta_0}\)</span> is the odds for a thoroughly average school, which is a sentence worth saying. Progress 8 arrives centred already, which is why it worked here for free.</p>
+</div>
+</div>
+</section>
+<section id="and-if-you-want-a-probability" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>And if you want a probability</h2>
+<p>Odds ratios are for <strong>comparing</strong>. If you want a plain answer for <strong>one</strong> school — <em>what are the chances?</em> — do not do it by hand. Ask the model:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="fu">predict</span>(glm1,</span>
+<span id="cb7-2"><a aria-label="2"></a>        <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">P8MEA =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb7-3"><a aria-label="3"></a>        <span class="at">type    =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          1           2           3 
+0.592699378 0.089192317 0.006546807 </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.93em">
+<p><strong><code>type = "response"</code> means “answer on the scale of the thing I measured”.</strong> Here that is a <strong>probability between 0 and 1 that the school is rated below Good</strong>. Leave it out and R gives you log-odds — which is where we came in.</p>
+<p>The three numbers are the three schools you asked about, in the order you asked for them:</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 53%">
+<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">P8MEA</th>
+<th style="text-align: left;">Which school?</th>
+<th style="text-align: right;">log-odds</th>
+<th style="text-align: right;">odds</th>
+<th style="text-align: right;">probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">−1</td>
+<td style="text-align: left;">one point <strong>below</strong> the national average</td>
+<td style="text-align: right;">0.375</td>
+<td style="text-align: right;">1.4552</td>
+<td style="text-align: right;"><strong>59.3%</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"><strong>exactly</strong> the national average</td>
+<td style="text-align: right;">-2.324</td>
+<td style="text-align: right;">0.0979</td>
+<td style="text-align: right;"><strong>8.9%</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">+1</td>
+<td style="text-align: left;">one point <strong>above</strong> the national average</td>
+<td style="text-align: right;">-5.022</td>
+<td style="text-align: right;">0.0066</td>
+<td style="text-align: right;"><strong>0.7%</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.86em">
+<p>Read the last column only. The two middle ones are the scales we passed through on the way — and <code>type = "response"</code> is what saves you from making that journey by hand.</p>
+</div>
+</div>
+</section>
+<section id="the-reason-we-report-ratios-not-probabilities" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The reason we report ratios, not probabilities</h2>
+<p>Look down the two right-hand columns of that table again.</p>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Going from</th>
+<th>The <strong>odds</strong></th>
+<th>The <strong>probability</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>−1 → 0</td>
+<td>×0.067</td>
+<td>59.3% → 8.9%</td>
+</tr>
+<tr class="even">
+<td>0 → +1</td>
+<td>×0.067</td>
+<td>8.9% → 0.7%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>The odds fall by the same multiplier every time</strong> — that multiplier <em>is</em> our odds ratio, and it is the same whatever school you start from.</p>
+<p><strong>The probabilities do not.</strong> The first step costs 50 percentage points, the second costs 8. Same one-point change in Progress 8, wildly different effect on the probability.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;">
+<p>That is why we report an <strong>odds ratio</strong> and never “the probability changes by X%”. There is no single such number — <strong>it depends entirely on where the school started.</strong></p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="more-than-one-predictor" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>More than one predictor</h1>
+
+</section>
+<section id="same-recipe-more-predictors" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Same recipe, more predictors</h2>
+<p>One predictor answered <em>“what does Progress 8 do?”</em>. A real question needs <strong>controls</strong> — what does Progress 8 do, <em>for schools otherwise alike</em>?</p>
+<p>Same formula interface you have used for three weeks. Two differences: <code>glm()</code> not <code>lm()</code>, and a <code>family</code> argument.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a>logit_below <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb9-2"><a aria-label="2"></a>  below_good <span class="sc">~</span> P8MEA <span class="sc">+</span> PTFSM6CLA1A <span class="sc">+</span> PERCTOT <span class="sc">+</span> PPERSABS10 <span class="sc">+</span></span>
+<span id="cb9-3"><a aria-label="3"></a>               <span class="fu">log</span>(TPUP) <span class="sc">+</span> PTPRIORHI <span class="sc">+</span> MINORGROUP,</span>
+<span id="cb9-4"><a aria-label="4"></a>  <span class="at">data   =</span> train,</span>
+<span id="cb9-5"><a aria-label="5"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb9-6"><a aria-label="6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a><span class="fu">printCoefmat</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(logit_below)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                              Estimate Std. Error z value  Pr(&gt;|z|)    
+(Intercept)                 -5.0873362  1.0287222 -4.9453 7.603e-07 ***
+P8MEA                       -2.2525783  0.2254148 -9.9930 &lt; 2.2e-16 ***
+PTFSM6CLA1A                 -0.0190684  0.0062864 -3.0333  0.002419 ** 
+PERCTOT                      0.0717345  0.0798043  0.8989  0.368716    
+PPERSABS10                   0.0477336  0.0249613  1.9123  0.055838 .  
+log(TPUP)                    0.2654518  0.1759237  1.5089  0.131324    
+PTPRIORHI                   -0.0055148  0.0097352 -0.5665  0.571066    
+MINORGROUPMaintained school -0.0405095  0.1704089 -0.2377  0.812099    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div style="font-size: 0.86em">
+<p><em>(That is the coefficients block of <code>summary(logit_below)</code> — which also prints the call, the deviance and the AIC. We come back to those later.)</em></p>
+<p>Eight numbers, all in log-odds, all unreadable. <strong>Step 1 of the recipe: ignore them.</strong></p>
+</div>
+</div>
+</section>
+<section id="step-2-exponentiate-the-lot" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 2: exponentiate the lot</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_below))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                (Intercept)                       P8MEA 
+                0.006174446                 0.105127821 
+                PTFSM6CLA1A                     PERCTOT 
+                0.981112244                 1.074370086 
+                 PPERSABS10                   log(TPUP) 
+                1.048891173                 1.304020028 
+                  PTPRIORHI MINORGROUPMaintained school 
+                0.994500370                 0.960300013 </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p><strong>Step 3 — sort them by which side of 1 they fall:</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>Odds ratio</th>
+<th>Which means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Progress 8</td>
+<td>0.105</td>
+<td>well <strong>below 1</strong> — odds drop sharply</td>
+</tr>
+<tr class="even">
+<td>% disadvantaged</td>
+<td>0.981</td>
+<td>just below 1</td>
+</tr>
+<tr class="odd">
+<td>% persistently absent</td>
+<td>1.049</td>
+<td>just <strong>above 1</strong> — odds rise</td>
+</tr>
+<tr class="even">
+<td>the rest</td>
+<td>≈ 1</td>
+<td>nothing detectable</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="step-4-say-them-out-loud" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 4: say them out loud</h2>
+<div style="font-size: 0.95em">
+<blockquote>
+<p><strong>Progress 8.</strong> One more point multiplies the odds of being rated below Good by <strong>0.105</strong> — a cut of about <strong>89%</strong>.</p>
+</blockquote>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<blockquote>
+<p><strong>Persistent absence.</strong> One more percentage point multiplies those odds by <strong>1.049</strong> — a rise of about <strong>5%</strong>.</p>
+</blockquote>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p><strong>Small ratios compound.</strong> 1.049 sounds trivial, but it applies <em>per percentage point</em>. Ten points worse is 1.049<sup>10</sup> = <strong>1.61</strong> — the odds over half as big again.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>And note Progress 8 has changed.</strong> On its own it was 0.067; here it is 0.105. Same arithmetic, <strong>different claim</strong> — this one holds absence, disadvantage, size and school type constant. Always say which one you mean.</p>
+</div>
+</div>
+</section>
+<section id="reading-odds-ratios" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Reading odds ratios</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:92.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p>Anything whose interval crosses <strong>1</strong> is doing nothing detectable. Note how much work Progress 8 is doing compared with everything else.</p>
+</div>
+</section>
+<section id="how-do-you-score-a-model-like-this" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>How do you score a model like this?</h2>
+<p>For three weeks we judged models with <strong>R²</strong> — the share of the variation in the outcome the model managed to explain.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>That worked because the outcome was a <em>number</em>, with variation in it to explain. Ours is a <strong>yes or no</strong>. There is no spread to account for, and R² as you know it simply does not exist here.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So we ask <strong>two</strong> questions instead, and they are genuinely different:</p>
+<ol type="1">
+<li><strong>Does the model fit the data?</strong> — likelihood, deviance, AIC, the pseudo-R²s, Hosmer–Lemeshow</li>
+<li><strong>Does it make good decisions?</strong> — accuracy, the confusion matrix, ROC and AUC</li>
+</ol>
+<p>A model can do respectably on one and badly on the other. We take them in turn.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="does-the-model-fit" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>1. Does the model fit?</h1>
+
+</section>
+<section id="likelihood-the-probability-of-what-happened" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Likelihood: the probability of what happened</h2>
+<p>Every school in the data <strong>either was or was not</strong> rated below Good — no ambiguity. And the model gives every school a probability. So we can ask one question of each school in turn:</p>
+<blockquote>
+<p><em>What probability did the model put on the thing that actually happened?</em></p>
+</blockquote>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 25%">
+<col style="width: 24%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">School</th>
+<th style="text-align: left;">What actually happened</th>
+<th style="text-align: left;">Model’s P(below Good)</th>
+<th style="text-align: right;">Probability it put on what happened</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: left;">Below Good</td>
+<td style="text-align: left;">0.80</td>
+<td style="text-align: right;"><strong>0.80</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: left;">Good or better</td>
+<td style="text-align: left;">0.05</td>
+<td style="text-align: right;"><strong>0.95</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: left;">Below Good</td>
+<td style="text-align: left;">0.03</td>
+<td style="text-align: right;"><strong>0.03</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.86em">
+<p><strong>The last column is the whole idea.</strong> For <strong>A</strong> and <strong>B</strong> the model was confident and right, so it put a high probability on the truth. For <strong>C</strong> it was confident and <em>wrong</em> — it gave that school only 0.03 of being below Good, and below Good is exactly what it was.</p>
+</div>
+</section>
+<section id="from-three-schools-to-one-number" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>From three schools to one number</h2>
+<p>Do that for <strong>every</strong> school, then <strong>multiply the last column together</strong>. That product is the <strong>likelihood</strong> of the whole dataset.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>And now the definition of fitting falls out of it:</p>
+<blockquote>
+<p><strong>Fitting the model <em>is</em> choosing the coefficients that make that number as large as possible.</strong></p>
+</blockquote>
+<p>That is all <strong>maximum likelihood</strong> means. There is no formula to solve as there was in OLS — the computer searches until it cannot make the number any bigger.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>We report its <strong>log</strong>, for a blunt practical reason: multiplying 2,219 numbers that are all smaller than 1 gives a result far too small for a computer to hold. Taking logs turns that product into a sum.</p>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a aria-label="1"></a><span class="fu">logLik</span>(logit_below)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'log Lik.' -717.1662 (df=8)</code></pre>
+</div>
+</div>
+<div style="font-size: 0.86em">
+<p><strong>Always negative, and closer to zero is better.</strong> You will also hear this described as how <em>surprised</em> the model is: school <strong>C</strong> above was a nasty surprise, and surprises are what drag the number down.</p>
+</div>
+</div>
+</section>
+<section id="deviance-distance-from-a-perfect-fit" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Deviance: distance from a perfect fit</h2>
+<p>A log-likelihood on its own is hard to read. <strong>Deviance</strong> rescales it into something more like an error score — <em>how far this model sits from one that predicted every school perfectly</em>.</p>
+<p><span class="math display">\[\text{deviance} = -2 \times \text{log-likelihood}\]</span></p>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Null deviance</strong></td>
+<td>1883.4</td>
+<td>with <strong>no predictors at all</strong> — just the overall rate</td>
+</tr>
+<tr class="even">
+<td><strong>Residual deviance</strong></td>
+<td>1434.3</td>
+<td>with our seven predictors in</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a aria-label="1"></a>logit_below<span class="sc">$</span>null.deviance    <span class="co"># no predictors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1883.425</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a aria-label="1"></a>logit_below<span class="sc">$</span>deviance         <span class="co"># our model</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1434.332</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Lower is better</strong>, and the drop — 449 — is what the predictors bought us. This is the direct equivalent of the sum-of-squares drop you used to read off an OLS table.</p>
+</div>
+<aside class="notes">
+<p>Deviance is also the statistic behind the overdispersion check later in the Poisson section: residual deviance divided by residual degrees of freedom. Worth flagging forward so it is not a surprise there.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="aic-fit-minus-a-fine-for-complexity" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>AIC: fit, minus a fine for complexity</h2>
+<p>There is a problem with judging a model on deviance alone: <strong>adding any predictor, however useless, will always lower it slightly.</strong> Left to itself, deviance always says “more variables”.</p>
+<div class="fragment">
+<p>So we charge for them:</p>
+<p><span class="math display">\[\text{AIC} = \text{deviance} + 2k \quad\text{where } k = \text{number of coefficients}\]</span></p>
+<div style="font-size: 0.95em">
+<p>For our model: 1434.3 + 2 × 8 = <strong>1450.3</strong>. A predictor only improves the AIC if it reduces the deviance by more than the 2 points it costs.</p>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a aria-label="1"></a><span class="fu">AIC</span>(logit_below)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1450.332</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>AIC has no meaning on its own.</strong> 1450 is neither good nor bad — it is only useful for <strong>comparing models fitted to the same data</strong>. Lower wins. That is exactly how we used it earlier to choose between a raw and a logged predictor.</p>
+</div>
+</div>
+</section>
+<section id="the-pseudo-r²s" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The pseudo-R²s</h2>
+<p>People badly want an R², so several substitutes exist. The two you will meet in software output:</p>
+<div style="font-size: 0.95em">
+<p><strong>Cox &amp; Snell</strong> — built from the likelihood ratio between your model and the null model. For us: <strong>0.183</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>That looks dismal — until you learn its catch. <strong>Cox &amp; Snell cannot reach 1.</strong> With a binary outcome its ceiling here is <strong>0.572</strong>, so 0.183 is really 0.183 out of a possible 0.572.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Nagelkerke</strong> fixes precisely that, by dividing by the ceiling:</p>
+<p><span class="math display">\[R^2_{\text{Nagelkerke}} = \frac{0.183}{0.572} = \mathbf{0.320}\]</span></p>
+<p>Now it can reach 1, and it reads much more like the R² you are used to.</p>
+</div>
+</div>
+</section>
+<section id="getting-them-in-r" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Getting them in R</h2>
+<p>Unlike <code>logLik()</code>, <code>AIC()</code> and the deviances, the pseudo-R²s are <strong>not in base R</strong> — <code>summary()</code> will not give you one. The <code>performance</code> package will:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a aria-label="1"></a>performance<span class="sc">::</span><span class="fu">r2_coxsnell</span>(logit_below)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cox &amp; Snell's R2 
+       0.1832199 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a aria-label="1"></a>performance<span class="sc">::</span><span class="fu">r2_nagelkerke</span>(logit_below)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Nagelkerke's R2 
+      0.3202809 </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>So the whole fit toolkit is four lines:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>What</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Log-likelihood</td>
+<td><code>logLik(model)</code></td>
+</tr>
+<tr class="even">
+<td>Deviances</td>
+<td><code>model$null.deviance</code>, <code>model$deviance</code></td>
+</tr>
+<tr class="odd">
+<td>AIC</td>
+<td><code>AIC(model)</code></td>
+</tr>
+<tr class="even">
+<td>Pseudo-R²</td>
+<td><code>performance::r2_nagelkerke(model)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p><code>summary(model)</code> prints the deviances and the AIC for you at the bottom of its output — you have been looking at them all along without knowing what they were.</p>
+</div>
+</div>
+</section>
+<section id="and-the-same-four-in-python" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>…and the same four in Python</h2>
+<p>In <code>statsmodels</code> the first three are <strong>attributes</strong> of the fitted model rather than functions — no brackets:</p>
+<div style="font-size: 0.9em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>What</th>
+<th>R</th>
+<th>Python (<code>statsmodels</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Log-likelihood</td>
+<td><code>logLik(model)</code></td>
+<td><code>model.llf</code></td>
+</tr>
+<tr class="even">
+<td>Deviances</td>
+<td><code>model$null.deviance</code> / <code>model$deviance</code></td>
+<td><code>model.null_deviance</code> / <code>model.deviance</code></td>
+</tr>
+<tr class="odd">
+<td>AIC</td>
+<td><code>AIC(model)</code></td>
+<td><code>model.aic</code></td>
+</tr>
+<tr class="even">
+<td>Pseudo-R²</td>
+<td><code>performance::r2_nagelkerke(model)</code></td>
+<td><strong>nothing built in</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p>For the pseudo-R²s you write them out. Two lines, and they agree with <code>performance</code> to six decimal places:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a aria-label="1"></a>n   <span class="op">=</span> model.nobs</span>
+<span id="cb26-2"><a aria-label="2"></a>cs  <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> np.exp((model.llnull <span class="op">-</span> model.llf) <span class="op">*</span> <span class="dv">2</span> <span class="op">/</span> n)   <span class="co"># Cox &amp; Snell</span></span>
+<span id="cb26-3"><a aria-label="3"></a>nag <span class="op">=</span> cs <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> np.exp(<span class="dv">2</span> <span class="op">*</span> model.llnull <span class="op">/</span> n))          <span class="co"># Nagelkerke</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="one-trap-worth-knowing-about" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>One trap worth knowing about</h2>
+<div style="font-size: 0.95em">
+<p>Fit with <code>smf.logit()</code> instead of <code>smf.glm()</code> and Python <em>does</em> hand you a <code>.prsquared</code>. It is tempting. <strong>Do not assume it is the one we just calculated.</strong></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><code>.prsquared</code> is <strong>McFadden’s</strong> pseudo-R² — a different measure, built a different way. On our model:</p>
+<table class="caption-top">
+<tbody>
+<tr class="odd">
+<td>Nagelkerke</td>
+<td><strong>0.320</strong></td>
+</tr>
+<tr class="even">
+<td>McFadden (<code>.prsquared</code>)</td>
+<td><strong>0.238</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.92em;">
+<p>Same data, same model, same fit — <strong>different number</strong>, because they are different quantities with the same nickname.</p>
+<p>Whichever you report, <strong>name it</strong>. “Pseudo-R² = 0.3” tells your reader almost nothing on its own.</p>
+</div>
+</div>
+</section>
+<section id="and-how-much-to-trust-them" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>…and how much to trust them</h2>
+<div style="font-size: 0.95em">
+<p>Report them if the journal or the marker expects them — but know what you are saying.</p>
+<ul>
+<li class="fragment"><strong>They are not “variance explained”.</strong> Nothing here is variance. The name is borrowed, and the interpretation does not come with it</li>
+<li class="fragment"><strong>They are not comparable across datasets</strong>, and barely across models. A Nagelkerke of 0.32 is not “half as good” as one of 0.64</li>
+<li class="fragment"><strong>There is no accepted threshold</strong> for a good one. Values that would be embarrassing in OLS are routine here</li>
+</ul>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p>Treat a pseudo-R² as a <strong>rough indication that the predictors are doing something</strong>, and nothing more. If you want to know whether the model is actually any use, ask the second question — the one we come to next.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="does-it-make-good-decisions" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>2. Does it make good decisions?</h1>
+
+</section>
+<section id="pause-this-part-is-not-just-for-logistic-regression" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Pause — this part is not just for logistic regression</h2>
+<p>Everything in this section applies to <strong>any model you will ever fit</strong> — the OLS models from Vol 1 and 2, the mixed effects models from Vol 3, and every machine learning method you go on to meet.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>What transfers, unchanged:</strong></p>
+<ul>
+<li><strong>Hold data back.</strong> Fit on some, judge on the rest. A model marked on its own training data flatters itself, whatever kind of model it is</li>
+<li><strong>Compare against a baseline.</strong> Never ask <em>“is this good?”</em> — ask <em>“is this better than the dumbest thing I could have done?”</em></li>
+<li><strong>Fit and prediction are different questions.</strong> A model can describe this data well and still be useless on the next school</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="but-the-scoreboard-changes" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>…but the scoreboard changes</h2>
+<p><strong>What does <em>not</em> transfer is how you keep score.</strong> Accuracy, the confusion matrix and AUC all need a <strong>categorical</strong> outcome — none of them means anything if you are predicting a number.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Swap the outcome type and you swap the metric:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>If the outcome is…</th>
+<th>Baseline to beat</th>
+<th>Typical metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A <strong>category</strong></td>
+<td>always predict the commonest class</td>
+<td>accuracy, AUC, precision/recall</td>
+</tr>
+<tr class="even">
+<td>A <strong>number</strong></td>
+<td>always predict the mean</td>
+<td>RMSE, MAE, R² <strong>on held-out data</strong></td>
+</tr>
+<tr class="odd">
+<td>A <strong>count</strong></td>
+<td>always predict the mean count</td>
+<td>RMSE, or deviance on held-out data</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;">
+<p>So learn the <strong>shape</strong> of what follows, not just the logistic version of it. We come back to what this means for the earlier lectures at the end.</p>
+</div>
+</div>
+</section>
+<section id="a-recipe-for-judging-the-decisions" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A recipe for judging the decisions</h2>
+<p>Same shape as the fit recipe. <strong>Six steps, and the order matters:</strong></p>
+<ol type="1">
+<li class="fragment"><strong>Hold data back</strong> — fit on some schools, judge on the rest</li>
+<li class="fragment"><strong>Predict</strong> on the ones it never saw</li>
+<li class="fragment"><strong>Compare against a baseline</strong> — never quote accuracy on its own</li>
+<li class="fragment"><strong>Read the confusion matrix</strong> — <em>which kind</em> of mistake is it making?</li>
+<li class="fragment"><strong>Check the ranking with AUC</strong> — this needs no cut-off at all</li>
+<li class="fragment"><strong>Only then pick a cut-off</strong> — and that is a policy decision, not a statistical one</li>
+</ol>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>Steps 5 and 6 are the ones people skip, and they are where the interesting part lives.</p>
+</div>
+</div>
+</section>
+<section id="first-the-thing-we-are-guarding-against" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>First, the thing we are guarding against</h2>
+<p>Here are fifteen points, and two models fitted to them. The <strong>red</strong> one is better at its job — it passes through every single point and makes <strong>no error at all</strong>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/overfitting-figure-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="GLM_lecture_short_files/figure-revealjs/overfitting-figure-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.86em">
+<p>On the <strong>left</strong> the red model is flawless and the teal one is not. On the <strong>right</strong> — the same two models, fifteen points neither has seen — the red one is now <strong>the worse of the two</strong>, by a distance.</p>
+</div>
+</section>
+<section id="overfitting" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Overfitting</h2>
+<div style="font-size: 0.95em">
+<p>The red model did not learn the <strong>pattern</strong>. It learned the <strong>noise</strong> — the particular wobbles of the particular fifteen points it was handed, which the next fifteen do not share.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>And here is the uncomfortable part. <strong>You can always make the fit better.</strong> Add a predictor, add an interaction, add a squared term — the fit to the data in front of you never gets worse. Push it far enough and you reach error 0.00, like the red line.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.95em;">
+<p>So <strong>“it fits well” is not evidence of very much on its own</strong> — and a <em>perfect</em> fit is not a triumph, it is a warning sign.</p>
+<p>The only honest test is data the model has <strong>never seen</strong>. Which is exactly what we do next.</p>
+</div>
+</div>
+</section>
+<section id="steps-1-and-2-dont-mark-your-own-homework" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Steps 1 and 2: don’t mark your own homework</h2>
+<p>So we split the schools <strong>before</strong> fitting anything: learn from one part, judge on the other.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a aria-label="1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb27-2"><a aria-label="2"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(model_data), <span class="fu">floor</span>(<span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">nrow</span>(model_data)))</span>
+<span id="cb27-3"><a aria-label="3"></a>train <span class="ot">&lt;-</span> model_data[train_idx, ]   <span class="co"># fit the model on these</span></span>
+<span id="cb27-4"><a aria-label="4"></a>test  <span class="ot">&lt;-</span> model_data[<span class="sc">-</span>train_idx, ]  <span class="co"># judge it on these</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>2,219 schools to <strong>learn</strong> from. 951 kept back to <strong>test</strong> on.</p>
+<p><strong>Test-set accuracy</strong> is then one question: “of the 951 schools the model never met, what share did it guess were below good, correctly?</p>
+</div>
+</div>
+</section>
+<section id="step-3-from-a-probability-to-a-yes-or-a-no" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 3: from a probability to a yes or a no</h2>
+<p>The model does not hand back a <strong>yes</strong> or a <strong>no</strong>. For each school it hands back a <strong>probability</strong> — a number between 0 and 1.</p>
+<p>To count how often it was <em>right</em>, we first have to turn each of those into an answer. That needs a <strong>cut-off</strong>.</p>
+<div class="fragment">
+<div style="font-size: 0.93em">
+<p>We will use <strong>0.5</strong>, which is just this rule:</p>
+<blockquote>
+<p><em>If <strong>this school’s</strong> probability is above 0.5, call it <strong>below Good</strong>. Otherwise call it <strong>Good or better</strong>.</em></p>
+</blockquote>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.9em;">
+<p><strong>0.5 is not “half the time”.</strong> It is a line drawn on each school’s own probability, one school at a time — and most schools are nowhere near it.</p>
+<p>Applied to all 951 test schools, it flags <strong>55</strong> of them. Not 476.</p>
+</div>
+</div>
+</section>
+<section id="so-one-school-at-a-time" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So, one school at a time</h2>
+<p>Four of our 951 test schools, taken through the rule:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 23%">
+<col style="width: 13%">
+<col style="width: 20%">
+<col style="width: 23%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">School</th>
+<th style="text-align: right;">Model’s probability</th>
+<th style="text-align: center;">Above 0.5?</th>
+<th style="text-align: center;">So we predict…</th>
+<th style="text-align: center;">It actually was…</th>
+<th style="text-align: center;">Right?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: center;">no</td>
+<td style="text-align: center;">Good or better</td>
+<td style="text-align: center;">Good or better</td>
+<td style="text-align: center;"><strong>✔</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">Below Good</td>
+<td style="text-align: center;">Below Good</td>
+<td style="text-align: center;"><strong>✔</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: center;">no</td>
+<td style="text-align: center;">Good or better</td>
+<td style="text-align: center;">Below Good</td>
+<td style="text-align: center;"><strong>✘</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">0.59</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">Below Good</td>
+<td style="text-align: center;">Good or better</td>
+<td style="text-align: center;"><strong>✘</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.82em">
+<p><strong>C</strong> was missed and <strong>D</strong> was a false alarm. Each school is judged on <strong>its own</strong> probability — the cut-off simply sorts them either side of the line, one at a time.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.93em">
+<p>Now do that for <strong>every</strong> school and <strong>count the ticks</strong>.</p>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a aria-label="1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>((p_below <span class="sc">&gt;</span> <span class="fl">0.5</span>) <span class="sc">==</span> test<span class="sc">$</span>below_good)</span>
+<span id="cb28-2"><a aria-label="2"></a>baseline <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">mean</span>(test<span class="sc">$</span>below_good), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>(test<span class="sc">$</span>below_good))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="font-size: 1.05em">
+<p><strong>820 ticks out of 951 — test-set accuracy 86.2%.</strong> Nearly nine schools in ten.</p>
+</div>
+</div>
+<div class="fragment">
+<div class="fragment" style="font-size: 1.15em; color: #C94C4C">
+<p><strong>Now watch.</strong></p>
+</div>
+</div>
+</section>
+<section id="the-single-most-important-slide-today" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The single most important slide today</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-24-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="GLM_lecture_short_files/figure-revealjs/unnamed-chunk-24-1.png" style="width:88.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.92em">
+<p>A model that makes <strong>the same prediction every single time</strong> scores 85.3%. Ours beats it by <strong>0.9 percentage points</strong>.</p>
+</div>
+<div style="font-size: 0.8em">
+<p><strong>And that red bar is a model you have already met.</strong> <code>glm(below_good ~ 1)</code> fits an intercept and nothing else, so it predicts the base rate — 0.151 — for every school. Under 0.5, so it answers “not below Good” to all of them. Its deviance is the <strong>null deviance</strong> (1883) from the fit section: R has been fitting this model for you every time you call <code>glm()</code>.</p>
+</div>
+</section>
+<section id="step-4-why-accuracy-lied-to-us" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 4: why accuracy lied to us</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/confusion-pair-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="GLM_lecture_short_files/figure-revealjs/confusion-pair-1.png" style="width:94.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.78em">
+<p><strong>Teal = right, red = wrong.</strong> Both models are judged on the same 951 test schools.</p>
+</div>
+<ul>
+<li class="fragment">The baseline <strong>never flags a single school</strong> — its entire left-hand column is zero — and still scores <strong>85.3%</strong></li>
+<li class="fragment">Ours flags 55 schools and gets 32 of them right. <strong>That is the whole of the 0.9-point gain</strong></li>
+<li class="fragment">It still misses 108 of the 140 really below Good — close to useless for deciding where to send inspectors <em>at this threshold</em></li>
+</ul>
+</section>
+<section id="step-5-judge-the-ranking-not-the-labels" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 5: judge the ranking, not the labels</h2>
+<p>Everything so far hung on <strong>0.5</strong> — and nothing made 0.5 the right cut-off. Move it and the accuracy, the catches and the false alarms all move with it.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So ask a question that <strong>does not depend on the cut-off at all</strong>:</p>
+<blockquote>
+<p><em>Does the model put schools in the right <strong>order</strong>? Are the struggling ones nearer the top of the list than the healthy ones?</em></p>
+</blockquote>
+<p>A model that ranks well is useful whatever cut-off you eventually pick. That is what <strong>ROC</strong> and <strong>AUC</strong> measure.</p>
+</div>
+</div>
+</section>
+<section id="what-a-roc-curve-actually-is" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What a ROC curve actually is</h2>
+<p><strong>ROC</strong> stands for <strong>Receiver Operating Characteristic</strong> — a name that makes no sense until you know where it came from.</p>
+<div style="font-size: 0.86em">
+<p>It was invented by radar engineers during the Second World War. The <em>receiver</em> was the radar set, and the problem was exactly ours: an operator watching a screen has to decide what is a real aircraft and what is noise. Catch more aircraft and you also raise more false alarms. Where you set that dial is the <em>operating characteristic</em>.</p>
+</div>
+<div class="fragment">
+<p>Same idea here. Slide the cut-off from 1 all the way down to 0, and at <strong>every</strong> setting write down two numbers:</p>
+<div style="font-size: 0.92em">
+<ul>
+<li><strong>How many struggling schools did we catch?</strong> <em>(of those that really are below Good — we want this high)</em></li>
+<li><strong>How many healthy schools did we wrongly flag?</strong> <em>(of those that are fine — we want this low)</em></li>
+</ul>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="GLM_lecture_short_files/figure-revealjs/roc-explained-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="GLM_lecture_short_files/figure-revealjs/roc-explained-1.png" class="quarto-figure quarto-figure-center" width="576"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p>Plot one against the other and you get the curve. <strong>Each red dot is one cut-off.</strong> The dashed diagonal is what pure guessing would give you — the further above it the curve sits, the more the model knows.</p>
+</div>
+</div>
+</section>
+<section id="auc-one-number-for-the-whole-curve" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>AUC — one number for the whole curve</h2>
+<p>A curve is awkward to quote in a sentence, so we summarise it by the <strong>area underneath it</strong> — which is all <strong>AUC</strong> stands for: <strong>Area Under the Curve</strong>. You will also see it written <strong>AUROC</strong>, <em>area under the ROC curve</em>; same thing.</p>
+<div style="font-size: 0.95em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>AUC</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0.5</strong></td>
+<td>the diagonal — no better than tossing a coin</td>
+</tr>
+<tr class="even">
+<td><strong>0.7–0.8</strong></td>
+<td>useful</td>
+</tr>
+<tr class="odd">
+<td><strong>0.9+</strong></td>
+<td>very strong</td>
+</tr>
+<tr class="even">
+<td><strong>1.0</strong></td>
+<td>perfect — every struggling school ranked above every healthy one</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a aria-label="1"></a>roc <span class="ot">&lt;-</span> performance<span class="sc">::</span><span class="fu">performance_roc</span>(logit_below, <span class="at">new_data =</span> test)</span>
+<span id="cb29-2"><a aria-label="2"></a>bayestestR<span class="sc">::</span><span class="fu">area_under_curve</span>(roc<span class="sc">$</span>Specificity, roc<span class="sc">$</span>Sensitivity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8183283</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="what-our-auc-says" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What our AUC says</h2>
+<div style="background-color:#2e6260; color:white; padding:11px; border-radius:5px; font-size:0.9em;">
+<p><strong>Ours is 0.818</strong>, which reads as:</p>
+<blockquote>
+<p><em>Pick one school that really is below Good and one that really is not. The model gives the struggling one the <strong>higher predicted probability of being below Good</strong> 82% of the time.</em></p>
+</blockquote>
+</div>
+<div style="font-size: 0.85em">
+<p><strong>“Predicted probability” means the model’s own output</strong> — the 0-to-1 number from <code>predict(..., type = "response")</code> that we have been cutting at 0.5. Not Progress 8, and not any of the predictors: a <em>higher</em> number means <em>more likely to be below Good</em>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>Remember accuracy said this model was barely better than useless. <strong>It ranks well; we were just reading it at the wrong cut-off.</strong></p>
+</div>
+</div>
+</section>
+<section id="step-6-now-choose-your-cut-off" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Step 6: now choose your cut-off</h2>
+<p>The ROC curve showed you <strong>every</strong> cut-off at once. Choosing one just means deciding <strong>which point on that curve you want to sit at.</strong></p>
+<div style="font-size: 0.92em">
+<p>Here are the three red dots from that curve, written out as counts:</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 32%">
+<col style="width: 17%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Flag if probability above</th>
+<th style="text-align: right;">Struggling schools caught</th>
+<th style="text-align: right;">…and missed</th>
+<th style="text-align: right;">False alarms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.50</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.30</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0.10</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">316</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="font-size: 0.9em">
+<p>Lower the cut-off and you move <strong>up and to the right</strong> along the curve: more struggling schools caught, more healthy ones wrongly flagged. <strong>There is no point on the curve that is simply best.</strong></p>
+</div>
+</section>
+<section id="the-bit-auc-cannot-do-for-you" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The bit AUC cannot do for you</h2>
+<div style="font-size: 0.95em">
+<p><strong>AUC told you the curve was worth picking from.</strong> A model with an AUC of 0.5 has nothing to offer at <em>any</em> cut-off. Ours ranks well, so some point on it is worth using.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>But AUC cannot tell you where to sit on it</strong>, because that is not a statistical question:</p>
+<ul>
+<li>If a missed school means children let down — <strong>catch more</strong>, and accept the false alarms.</li>
+<li>If a false alarm means a wasted inspection — <strong>flag fewer</strong>, and accept the misses.</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div class="fragment" style="font-size: 1.05em; color: #C94C4C">
+<p><strong>The model cannot tell you which of those matters more. You have to.</strong></p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="the-three-you-did-not-get-today" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The three you did not get today</h2>
+<p>Everything we have done generalises, and <strong>the hard part is behind you</strong>. Each of these is the same machinery with a different family:</p>
+<div style="font-size: 0.92em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>If your outcome is…</th>
+<th>Use</th>
+<th>And the coefficients are</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>An <strong>ordered</strong> category — Ofsted’s four grades, a Likert scale</td>
+<td><code>MASS::polr()</code></td>
+<td>odds of landing in a <em>higher</em> category</td>
+</tr>
+<tr class="even">
+<td>An <strong>unordered</strong> category — which region, which destination</td>
+<td><code>nnet::multinom()</code></td>
+<td>odds against a reference category</td>
+</tr>
+<tr class="odd">
+<td>A <strong>count</strong> — pupils excluded, schools below Good in an LA</td>
+<td><code>glm(family = poisson)</code></td>
+<td><strong>rate ratios</strong>, read just like odds ratios</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p>Two things to know if you reach for the count model:</p>
+<ul>
+<li>An <strong>offset</strong> — <code>offset(log(pupils))</code> — turns a model of counts into a model of <em>rates</em>, which is almost always what you want</li>
+<li>Check for <strong>overdispersion</strong> (residual deviance ÷ residual df). Much above 1 and you want <code>quasipoisson</code> or <code>MASS::glm.nb()</code></li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.85em;">
+<p><strong>The practical covers these</strong>, and the reading goes further. You already have the two ideas that make them work: a <strong>link function</strong>, and coefficients you have to <strong>exponentiate</strong> before they mean anything.</p>
+</div>
+</div>
+</section>
+<section id="the-family-in-one-slide" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The family, in one slide</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th><code>family =</code></th>
+<th>Link</th>
+<th>Interpret coefficients as</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous</td>
+<td><code>gaussian</code></td>
+<td>identity</td>
+<td>Units of y per unit of x</td>
+</tr>
+<tr class="even">
+<td>Yes / no</td>
+<td><code>binomial</code></td>
+<td>logit</td>
+<td>Odds ratios</td>
+</tr>
+<tr class="odd">
+<td>x out of n</td>
+<td><code>binomial</code></td>
+<td>logit</td>
+<td>Odds ratios</td>
+</tr>
+<tr class="even">
+<td>Ordered categories</td>
+<td><code>MASS::polr()</code></td>
+<td>logit</td>
+<td>Odds of being in a higher category</td>
+</tr>
+<tr class="odd">
+<td>Unordered categories</td>
+<td><code>nnet::multinom()</code></td>
+<td>logit</td>
+<td>Odds vs a reference category</td>
+</tr>
+<tr class="even">
+<td>Count</td>
+<td><code>poisson</code></td>
+<td>log</td>
+<td>Rate ratios</td>
+</tr>
+<tr class="odd">
+<td>Overdispersed count</td>
+<td><code>MASS::glm.nb()</code></td>
+<td>log</td>
+<td>Rate ratios</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>One framework.</strong> Change the family, change the link, and everything you learned about building and interpreting a linear model still applies.</p>
+</div>
+</section>
+<section id="what-carried-over-and-what-didnt" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What carried over, and what didn’t</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Still true</strong></p>
+<ul>
+<li>The recipe: start simple, add complexity that earns its place</li>
+<li>Confounding, mediation, interactions</li>
+<li>Multicollinearity and VIF</li>
+<li>Thinking hard about what belongs in the model</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Different now</strong></p>
+<ul>
+<li>No R² - use AIC, deviance, or predictive performance</li>
+<li>Coefficients need exponentiating before they mean anything</li>
+<li>Residual plots look strange and need different diagnostics</li>
+<li>Accuracy is a trap on imbalanced outcomes</li>
+</ul>
+</div></div>
+</section>
+<section id="where-you-can-go-next" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Where you can go next</h2>
+<ul>
+<li><strong>Generalised additive models (GAMs)</strong> - when the relationship is smooth but not a straight line</li>
+<li><strong><code>glmer()</code></strong> - the intersection of this week and last week: a GLM with random effects, for grouped non-normal data</li>
+<li><strong>Spatial and geographically weighted regression</strong> - when the relationship itself varies over space</li>
+<li><strong>Ridge and lasso</strong> - when you have too many predictors and need the model to choose</li>
+</ul>
+<div class="fragment">
+<p>You now have the two big extensions to OLS: last week we relaxed <strong>independence</strong>, this week we relaxed <strong>normality</strong>. Almost everything else is a combination of the two.</p>
+</div>
+</section>
+<section id="explaining-or-predicting" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Explaining, or predicting?</h2>
+<p>Worth noticing what changed across these four sessions — because it was not just the model.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Vols 1–3: explaining</strong></p>
+<p>R², residual plots, VIF, AIC, significance.</p>
+<p>Every one of those is computed on <strong>the data you fitted to</strong>. The question is <em>does this model describe the process I am looking at?</em></p>
+</div><div class="column" style="width:50%;">
+<p><strong>Today: predicting</strong></p>
+<p>Train/test split, accuracy against a baseline, AUC.</p>
+<p>All computed on data the model <strong>has never seen</strong>. The question is <em>will this work on the next school?</em></p>
+</div></div>
+<div class="fragment">
+<div style="font-size: 0.92em">
+<p><strong>Both are legitimate. They are not the same job</strong>, and they can disagree — a model packed with significant coefficients can predict badly, and a model that predicts well can be uninterpretable.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p><strong>Decide which one you are doing before you start</strong>, because it changes what counts as a good model. For the assessment, say which — <em>“I am explaining why schools differ”</em> and <em>“I am predicting which schools will struggle”</em> are different claims and need different evidence.</p>
+</div>
+<div style="font-size:0.52em; color:#666; margin-top:0.4em;">
+<p>Shmueli, G. (2010) To Explain or to Predict? <em>Statistical Science</em>, <strong>25</strong>(3), 289–310. <a href="https://doi.org/10.1214/10-STS330">doi:10.1214/10-STS330</a></p>
+</div>
+</div>
+</section>
+<section id="so-can-we-predict-school-ofsted-ratings" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So — can we predict School Ofsted ratings?</h2>
+<p>We asked that on slide one. The honest answer is <strong>partly</strong>, and the model is specific about which part.</p>
+<div style="font-size: 0.9em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Our model</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ranking</strong> — AUC</td>
+<td>0.818</td>
+<td>Good. It puts a struggling school above a healthy one 82% of the time</td>
+</tr>
+<tr class="even">
+<td><strong>Labelling</strong> — accuracy at 0.5</td>
+<td>86.2% vs a do-nothing baseline of 85.3%</td>
+<td>Almost worthless</td>
+</tr>
+<tr class="odd">
+<td><strong>Fit</strong> — Nagelkerke R²</td>
+<td>0.320 (Cox &amp; Snell 0.183)</td>
+<td>Respectable for cross-sectional social data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p>And on the <strong>variables</strong>: Progress 8 dominates everything else (OR 0.105), persistent absence adds a little per percentage point (OR 1.049), and most of the rest have intervals crossing 1 — <em>doing nothing detectable</em>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.9em;">
+<p><strong>In one line: a decent ranking device, and a poor labelling device.</strong> Those are different claims, and the deck spent an hour on why.</p>
+</div>
+</div>
+</section>
+<section id="and-here-is-what-it-cannot-tell-you" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>…and here is what it cannot tell you</h2>
+<div style="font-size: 0.88em">
+<ul>
+<li class="fragment"><strong>Circularity.</strong> Inspectors read Progress 8 <em>before</em> they visit. We are not independently predicting a judgement — we are partly recovering one of its own inputs. Our strongest coefficient is the one we should trust least.</li>
+<li class="fragment"><strong>Timing.</strong> Ratings here span <strong>2011–2024</strong>; the results are 2022-23. Some ratings were handed out a decade <em>before</em> the data we are “predicting” them with.</li>
+<li class="fragment"><strong>Causation.</strong> Nothing here says that raising a school’s Progress 8 would change its rating. We have an association, measured on log-odds.</li>
+<li class="fragment"><strong>Rarity.</strong> Only 15% of schools are below Good. The model inherits that, and so does every accuracy figure you quote from it.</li>
+</ul>
+</div>
+</section>
+<section id="so-why-does-any-of-this-matter-in-brighton" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So why does any of this matter in Brighton?</h2>
+<div style="font-size: 0.95em">
+<p>Volumes 1 to 3 asked <strong>what drives attainment</strong>, and the council’s answer was <em>social mixing</em>.</p>
+<p>But families do not choose a school from a regression table. In Brighton they choose largely on two things: a school’s <strong>Ofsted rating</strong> and its <strong>raw Attainment 8</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So it is worth turning the question around and asking what drives <strong>the label</strong> — because the label is what actually moves people.</p>
+<p>That is the question this whole lecture has been answering.</p>
+</div>
+</div>
+</section>
+<section id="how-much-of-the-rating-is-just-the-intake" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>How much of the rating is just the intake?</h2>
+<p>Strip the model back and watch what survives:</p>
+<div style="font-size: 0.9em">
+<table class="caption-top">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 62%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>What the model is allowed to see</th>
+<th style="text-align: center;">AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Everything, including <strong>Progress 8</strong></td>
+<td style="text-align: center;"><strong>0.818</strong></td>
+</tr>
+<tr class="even">
+<td>Drop Progress 8, keep absence</td>
+<td style="text-align: center;">0.747</td>
+</tr>
+<tr class="odd">
+<td><strong>Intake only</strong> — disadvantage, size, prior attainment, school type</td>
+<td style="text-align: center;"><strong>0.656</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p>Most of the ranking does come from Progress 8 — the thing inspectors read before they visit. <strong>But intake alone still ranks at 0.656</strong>, against <code>0.5</code> for a coin toss.</p>
+<p>That is <strong>modest, and it is real</strong>: before a school does anything at all, who walks through its doors already shifts the odds on its Ofsted rating.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.88em;">
+<p>Which means choosing “a school with a Good rating” is <strong>partly</strong> choosing an intake. Advantaged intakes make favourable labels slightly more likely, the labels attract advantaged families, and the sorting repeats.</p>
+<p><strong>That is the mechanism the admissions policy in Volume 1 was trying to interrupt</strong> — and we have arrived at it from completely the other end.</p>
+</div>
+<div style="font-size: 0.78em">
+<p>Careful: this is association, not causation, and it is emphatically <em>not</em> a claim that inspectors are getting it wrong.</p>
+</div>
+</div>
+</section>
+<section id="the-bit-the-software-will-never-do-for-you" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The bit the software will never do for you</h2>
+<div style="font-size: 0.95em">
+<p>Every number on the last two slides is <strong>correct</strong>. The code ran, the maths is right, the AUC is genuinely 0.82.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>None of it tells you whether the model is any use.</strong> That verdict came from knowing something R does not: <em>how an Ofsted inspection actually works</em>.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#4e3c56; color:white; padding:11px; border-radius:5px; font-size:0.95em;">
+<p>These methods will carry you a long way, and they will show you things you could not have seen by eye. But they measure <strong>associations in the data you happened to collect</strong> — they cannot tell you where that data came from, who made it, or what it would mean to act on it.</p>
+<p><strong>That part is yours as an expert analyst.</strong></p>
+</div>
+</div>
+</section>
+<section id="conclusions" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Conclusions</h2>
+<ul>
+<li><strong>Look at your outcome variable before you choose a model.</strong> Week 1’s data types were not an academic exercise - they determine what you are allowed to do</li>
+<li>A GLM is not a new method, it is the same linear predictor with a different distribution and a link function bolted on</li>
+<li><strong>Always compare against a baseline.</strong> A model that beats “predict the majority every time” by half a percentage point has not learned much</li>
+<li>Check your assumptions, and remember the threshold is a choice you make rather than one the model makes for you</li>
+<li>And ask where your predictors came from. Our best one turned out to be something Ofsted had already read</li>
+</ul>
+</section>
+<section id="todays-practical" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Today’s Practical</h2>
+<ul>
+<li>Building and interpreting your own logistic and Poisson models on the schools data</li>
+<li>Practice at the bit that matters most: <strong>interpreting odds ratios and rate ratios</strong> in plain English</li>
+<li>And deciding, for an outcome of your own choosing, which member of the family you actually need</li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="../../img/logo/full.svg" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>© CASA &nbsp; | &nbsp; <a href="https://www.ucl.ac.uk/bartlett/casa">ucl.ac.uk/bartlett/casa</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/bea-taylor\.com\/quant_methods");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>

@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Review notes">
+<meta name="dcterms.date" content="2026-10-15">
+
+<title>The Regression Sessions — a critical review – Quantitative Methods</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href=".//img/favicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="The Regression Sessions — a critical review – Quantitative Methods">
+<meta property="og:description" content="Vols 1–3: regression, multiple regression, multilevel models">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/img/logo/full_sm.png">
+<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image:height" content="102">
+<meta property="og:image:width" content="77">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-md " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content">
+    <img src="./img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Quantitative Methods</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./setup/index.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-week-by-week" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Week-by-Week</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-week-by-week">    
+        <li>
+    <a class="dropdown-item" href="./sessions/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 1: Quantitative Basics</li>
+        <li>
+    <a class="dropdown-item" href="./sessions/week_EDA1/index.html">
+ <span class="dropdown-text">1. Exploratory Data Analysis #1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_EDA2/index.html">
+ <span class="dropdown-text">2. Exploratory Data Analysis #2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_hyp_test/index.html">
+ <span class="dropdown-text">3. Hypothesis Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_linear_alg/index.html">
+ <span class="dropdown-text">4. Introduction to Linear Algebra</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 2: Regression</li>
+        <li>
+    <a class="dropdown-item" href="./sessions/week_regression/index.html">
+ <span class="dropdown-text">5. Introduction to Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_multiple_regression/index.html">
+ <span class="dropdown-text">6. Multiple Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_multilevel_regression/index.html">
+ <span class="dropdown-text">7. Multilevel Regression</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_GLM/index.html">
+ <span class="dropdown-text">8. Generalised Linear Model</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Part 3: Dimension Reduction &amp; Clustering</li>
+        <li>
+    <a class="dropdown-item" href="./sessions/week_PCA/index.html">
+ <span class="dropdown-text">9. Dimension Reduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/week_clustering/index.html">
+ <span class="dropdown-text">10. Clustering</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-assessments" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Assessments</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-assessments">    
+        <li>
+    <a class="dropdown-item" href="./assessments/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./help/help.html"> 
+<span class="menu-text">Getting Help</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-this-review-was-done" id="toc-how-this-review-was-done" class="nav-link active" data-scroll-target="#how-this-review-was-done">How this review was done</a></li>
+  <li><a href="#what-is-good-and-worth-protecting" id="toc-what-is-good-and-worth-protecting" class="nav-link" data-scroll-target="#what-is-good-and-worth-protecting">What is good — and worth protecting</a></li>
+  <li><a href="#things-that-are-wrong-and-should-be-fixed" id="toc-things-that-are-wrong-and-should-be-fixed" class="nav-link" data-scroll-target="#things-that-are-wrong-and-should-be-fixed">Things that are wrong and should be fixed</a>
+  <ul class="collapse">
+  <li><a href="#p-value" id="toc-p-value" class="nav-link" data-scroll-target="#p-value">1. The p-value is defined correctly and then immediately inverted</a></li>
+  <li><a href="#the-standard-error-interval-is-a-68-interval-presented-as-if-it-were-the-interval" id="toc-the-standard-error-interval-is-a-68-interval-presented-as-if-it-were-the-interval" class="nav-link" data-scroll-target="#the-standard-error-interval-is-a-68-interval-presented-as-if-it-were-the-interval">2. The standard-error interval is a 68% interval presented as if it were the interval</a></li>
+  <li><a href="#comparing-predictor-importance-by-t-value" id="toc-comparing-predictor-importance-by-t-value" class="nav-link" data-scroll-target="#comparing-predictor-importance-by-t-value">3. Comparing predictor “importance” by t-value</a></li>
+  <li><a href="#grouping" id="toc-grouping" class="nav-link" data-scroll-target="#grouping">4. Ofsted rating is the wrong grouping factor for Volume 3</a></li>
+  <li><a href="#a-small-but-misleading-sentence-about-shrinkage" id="toc-a-small-but-misleading-sentence-about-shrinkage" class="nav-link" data-scroll-target="#a-small-but-misleading-sentence-about-shrinkage">5. A small but misleading sentence about shrinkage</a></li>
+  <li><a href="#the-equations-label-a-variable-the-models-do-not-use" id="toc-the-equations-label-a-variable-the-models-do-not-use" class="nav-link" data-scroll-target="#the-equations-label-a-variable-the-models-do-not-use">6. The equations label a variable the models do not use</a></li>
+  </ul></li>
+  <li><a href="#things-that-are-broken" id="toc-things-that-are-broken" class="nav-link" data-scroll-target="#things-that-are-broken">Things that are broken</a></li>
+  <li><a href="#the-python-mixed-models-problem" id="toc-the-python-mixed-models-problem" class="nav-link" data-scroll-target="#the-python-mixed-models-problem">The Python mixed-models problem</a>
+  <ul class="collapse">
+  <li><a href="#nested-random-effects-1-regionla" id="toc-nested-random-effects-1-regionla" class="nav-link" data-scroll-target="#nested-random-effects-1-regionla">Nested random effects — <code>(1 | region/LA)</code></a></li>
+  <li><a href="#crossed-random-effects-1-ofstedrating-1-laname" id="toc-crossed-random-effects-1-ofstedrating-1-laname" class="nav-link" data-scroll-target="#crossed-random-effects-1-ofstedrating-1-laname">Crossed random effects — <code>(1 | OFSTEDRATING) + (1 | LANAME)</code></a></li>
+  <li><a href="#it-gives-the-same-answers-as-lme4" id="toc-it-gives-the-same-answers-as-lme4" class="nav-link" data-scroll-target="#it-gives-the-same-answers-as-lme4">It gives the same answers as lme4</a></li>
+  <li><a href="#why-not-pymer4" id="toc-why-not-pymer4" class="nav-link" data-scroll-target="#why-not-pymer4">Why not pymer4</a></li>
+  </ul></li>
+  <li><a href="#structural-observations" id="toc-structural-observations" class="nav-link" data-scroll-target="#structural-observations">Structural observations</a>
+  <ul class="collapse">
+  <li><a href="#python-coverage-collapses-exactly-where-it-is-needed-most" id="toc-python-coverage-collapses-exactly-where-it-is-needed-most" class="nav-link" data-scroll-target="#python-coverage-collapses-exactly-where-it-is-needed-most">Python coverage collapses exactly where it is needed most</a></li>
+  <li><a href="#a-65-mb-download-on-a-personal-dropbox-link" id="toc-a-65-mb-download-on-a-personal-dropbox-link" class="nav-link" data-scroll-target="#a-65-mb-download-on-a-personal-dropbox-link">A 65 MB download on a personal Dropbox link</a></li>
+  <li><a href="#volume-3-switches-outcome-variable-mid-lecture" id="toc-volume-3-switches-outcome-variable-mid-lecture" class="nav-link" data-scroll-target="#volume-3-switches-outcome-variable-mid-lecture">Volume 3 switches outcome variable mid-lecture</a></li>
+  <li><a href="#volume-3-carries-a-lot-of-hidden-code" id="toc-volume-3-carries-a-lot-of-hidden-code" class="nav-link" data-scroll-target="#volume-3-carries-a-lot-of-hidden-code">Volume 3 carries a lot of hidden code</a></li>
+  <li><a href="#overlap-with-the-new-glm-lecture" id="toc-overlap-with-the-new-glm-lecture" class="nav-link" data-scroll-target="#overlap-with-the-new-glm-lecture">Overlap with the new GLM lecture</a></li>
+  </ul></li>
+  <li><a href="#suggested-priority-order" id="toc-suggested-priority-order" class="nav-link" data-scroll-target="#suggested-priority-order">Suggested priority order</a></li>
+  <li><a href="#one-thing-i-would-not-change" id="toc-one-thing-i-would-not-change" class="nav-link" data-scroll-target="#one-thing-i-would-not-change">One thing I would not change</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Regression Sessions — a critical review</h1>
+<p class="subtitle lead">Vols 1–3: regression, multiple regression, multilevel models</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Review notes </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 15, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Status — what has been applied">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Status — what has been applied
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Applied since this review was written:</p>
+<ul>
+<li>Both broken image paths, and the data download link repointed at this repo</li>
+<li>The p-value wording (<a href="#p-value">§1</a>) and the standard-error interval (§2)</li>
+<li>The t-value importance claim (§3) — now made provisional and answered properly by the new <strong>Shapley decomposition</strong> slides in Vol 2</li>
+<li>The shrinkage sentence (§5) and the <code>PctOverallAbsence</code> renaming (§6)</li>
+<li>All typos, the <code>::sunglasses::</code> emoji, and the stale dates in all three lectures</li>
+</ul>
+<p>Also applied since: the Vol 3 grouping warning and the local-authority comparison (<a href="#grouping">§4</a>), and the Python mixed-model code in the Vol 3 practical.</p>
+<p>Still open: Python parity more broadly in Vols 2 and 3, the Dropbox file, the Progress 8 / Attainment 8 inconsistency, and the <code>include: false</code> audit.</p>
+</div>
+</div>
+<section id="how-this-review-was-done" class="level2">
+<h2 class="anchored" data-anchor-id="how-this-review-was-done">How this review was done</h2>
+<p>I read all six files — three lectures and three practicals, about 9,900 lines — and ran code where a claim could be checked rather than taken on trust. Every number quoted below was produced by running something, not read off a slide. Where I say a link or a path is broken, I checked it.</p>
+<p>The headline: <strong>this is a strong, unusually honest three-lecture series with a real case study and a genuine argument running through it.</strong> Most of what follows is small corrections and one substantial recommendation about grouping factors. The Python problem in Volume 3 turns out to be solvable without changing packages, and that is in <a href="#the-python-mixed-models-problem">its own section</a>.</p>
+<hr>
+</section>
+<section id="what-is-good-and-worth-protecting" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-good-and-worth-protecting">What is good — and worth protecting</h2>
+<p>These are the things I would not change, because they are what makes the series work.</p>
+<p><strong>The recipe framing earns its keep.</strong> “Step 1 — Ingredients” spends an entire third of Volume 1 on EDA before a model is fitted, and the slide that says <em>the process of exploring your data should take much longer than the modelling at the end</em> is the single most useful sentence in the series. Most regression teaching inverts this.</p>
+<p><strong>The case study has real stakes.</strong> Brighton and Hove Council made an actual admissions policy decision on the basis of Gorard’s work, and the lectures are explicitly an argument about whether the evidence supports it. Students are not modelling a toy dataset; they are auditing a live policy. The “<strong>So the council was right? Well, not quite…</strong>” beat in Volume 1 is the moment the series stops being a stats course.</p>
+<p><strong>“A regression model is nothing more than a description of a scatter plot.”</strong> This is the right first sentence about regression and it is followed properly — line of best fit, residuals, R², slope and intercept all built visually from the same plot before any algebra appears.</p>
+<p><strong>The degrees-of-freedom sequence is excellent.</strong> Building from 2 points to 3 to 4 to 5, showing the line pivoting, makes “degrees of freedom” a thing you can see rather than a number in an output. I have not seen it taught this way elsewhere and it works.</p>
+<p><strong>The deliberate failure in Volume 1.</strong> Fitting on 10 Brighton schools, getting a satisfying R² of 0.69, and then showing that three <em>plausible</em> policy changes flatten the relationship to nothing — and that the model goes statistically insignificant — is the best teaching in the series. It makes overfitting visceral instead of abstract.</p>
+<p><strong>The diagnostics scoreboard</strong> carried from Volume 1 into Volume 2, with the emoji going from 😭 to 😎 as each assumption gets addressed, gives the two lectures a spine. Students always know where they are.</p>
+<p><strong>The VIF intuition.</strong> <em>“If two variables are highly correlated and both appear to affect the outcome, the model makes an arbitrary split. Small changes in the data could make the split go either way — thus inflating the variance.”</em> That is the clearest one-paragraph explanation of multicollinearity I have read in a course.</p>
+<p><strong>“ALWAYS MAP YOUR RESIDUALS IF MODELLING SPATIAL DATA”</strong>, with the London effect visible on the map, is a lesson that will outlive the course.</p>
+<p><strong>The confounding section quantifies itself.</strong> Showing the disadvantage coefficient shrink from −0.21 to −0.11 (44.5%) while absence shrinks from −0.54 to −0.41 (24.6%), and concluding that disadvantage is <em>almost twice</em> as biased by the omission, is exactly the right level of rigour.</p>
+<p><strong>The Gabber/Hakken mediation example</strong> is genuinely funny and will be remembered. Keep it.</p>
+<p><strong>Volume 3’s shrinkage treatment</strong> — that groups with few observations get pulled toward the global mean, and that this is a <em>feature</em> which avoids overfitting to small groups — is well judged, and the paired visualisations do real work.</p>
+<hr>
+</section>
+<section id="things-that-are-wrong-and-should-be-fixed" class="level2">
+<h2 class="anchored" data-anchor-id="things-that-are-wrong-and-should-be-fixed">Things that are wrong and should be fixed</h2>
+<section id="p-value" class="level3">
+<h3 class="anchored" data-anchor-id="p-value">1. The p-value is defined correctly and then immediately inverted</h3>
+<p>Volume 1 gets it right first:</p>
+<blockquote class="blockquote">
+<p>The <span class="math inline">\(P\)</span>-value — probability of observing a t-value as extreme as the one calculated <strong>if there were no relationship</strong> between the independent and the dependent variable</p>
+</blockquote>
+<p>and then, on the same slide:</p>
+<blockquote class="blockquote">
+<p>A small <span class="math inline">\(P\)</span>-value (typically <span class="math inline">\(p\)</span> &lt; 0.05) indicates <strong>&lt;5% chance that <span class="math inline">\(X\)</span> is not really explaining variation in <span class="math inline">\(Y\)</span></strong></p>
+</blockquote>
+<p>and on the next slide:</p>
+<blockquote class="blockquote">
+<p><span class="math inline">\(P\)</span> &lt;0.001 = &lt;0.1% <span class="math inline">\(P\)</span>-robability that 62.3 <strong>occurred by random chance</strong></p>
+</blockquote>
+<p>The second and third statements are the inverse-probability fallacy — they say <span class="math inline">\(P(\text{no relationship} \mid \text{data})\)</span> when the p-value is <span class="math inline">\(P(\text{data} \mid \text{no relationship})\)</span>. This is <em>the</em> most common misconception about p-values, students will carry it into their dissertations, and it is being stated here immediately after the correct definition.</p>
+<p><strong>Suggested fix</strong> — keep the first definition and rephrase the others as:</p>
+<blockquote class="blockquote">
+<p>A small p-value means data like ours would be <strong>surprising</strong> if there were really no relationship. It does not tell us the probability that there is no relationship — for that you would need to know how likely a relationship was before you looked.</p>
+</blockquote>
+</section>
+<section id="the-standard-error-interval-is-a-68-interval-presented-as-if-it-were-the-interval" class="level3">
+<h3 class="anchored" data-anchor-id="the-standard-error-interval-is-a-68-interval-presented-as-if-it-were-the-interval">2. The standard-error interval is a 68% interval presented as if it were the interval</h3>
+<blockquote class="blockquote">
+<p>SE of 0.15 for the estimate of −0.63 means the change could vary between <strong>−0.48 and −0.78</strong></p>
+</blockquote>
+<p>That is estimate ± 1 SE, which is roughly a 68% interval. The conventional 95% interval is ±1.96 SE, i.e.&nbsp;<strong>−0.34 to −0.92</strong> — nearly twice as wide, and a much more honest picture of the uncertainty in a model with 8 degrees of freedom. Either widen it or say explicitly that this is a one-standard-error range.</p>
+</section>
+<section id="comparing-predictor-importance-by-t-value" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-predictor-importance-by-t-value">3. Comparing predictor “importance” by t-value</h3>
+<p>Both Volume 1 and Volume 2 use t-values to rank predictors:</p>
+<blockquote class="blockquote">
+<p>t-values indicate that the % Overall Absence variable (−50.49) has a <strong>stronger effect</strong> than the % Disadvantaged Students variable (−31.16)</p>
+</blockquote>
+<p>A t-value is <span class="math inline">\(\hat\beta/\text{SE}\)</span>, so it confounds effect size with precision. With n ≈ 3,000 both are overwhelmingly significant and the ratio mostly reflects how well each coefficient is pinned down, not how much each matters.</p>
+<p><strong>There is a better move available, and the lecture has already set it up.</strong> Both variables are logged, so their coefficients are <strong>elasticities</strong> and <em>are</em> directly comparable: a 1% rise in absence is associated with a 0.41% fall in Attainment 8, against 0.11% for disadvantage. That is a cleaner comparison than the t-values, it needs no caveat, and it reinforces the elasticity idea introduced a few slides earlier.</p>
+</section>
+<section id="grouping" class="level3">
+<h3 class="anchored" data-anchor-id="grouping">4. Ofsted rating is the wrong grouping factor for Volume 3</h3>
+<p>This is the one substantive recommendation in this review.</p>
+<p>Volume 3 uses <code>OFSTEDRATING</code> as the random effect throughout — the null model, the ICC, the random-intercept model and the random-slope model. There are two problems.</p>
+<p><strong>It has too few groups, and two are tiny.</strong> Counting from the data (the figures below are for the Attainment 8 subset; on the Progress 8 rows the lecture actually models, the two smallest groups are smaller still, at <strong>16</strong> and <strong>22</strong> schools):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Ofsted rating</th>
+<th>Schools</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Good</td>
+<td>2,235</td>
+</tr>
+<tr class="even">
+<td>Outstanding</td>
+<td>468</td>
+</tr>
+<tr class="odd">
+<td>Requires improvement</td>
+<td>407</td>
+</tr>
+<tr class="even">
+<td>Serious Weaknesses</td>
+<td><strong>44</strong></td>
+</tr>
+<tr class="odd">
+<td>Special Measures</td>
+<td><strong>32</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Five groups is at the very bottom of what will support a between-group variance estimate — the usual guidance is a minimum of five and a preference for considerably more — and two of them are small enough that their intercepts are almost entirely shrinkage. The lecture teaches shrinkage beautifully and then picks a grouping factor where shrinkage does nearly all the work.</p>
+<p><strong>And it is close to circular.</strong> An Ofsted rating is in part a <em>judgement about attainment</em>. Modelling attainment as clustered within Ofsted rating asks how much of the variation in attainment is explained by a grading of attainment. This is precisely the circularity the new GLM lecture (Vol 4) now warns about in its closing slides, where Progress 8 turns out to be something inspectors read before they visit.</p>
+<p><strong>What to use instead.</strong> The same data has much better candidates:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 23%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grouping factor</th>
+<th>Groups</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>LANAME</code> (local authority)</td>
+<td><strong>152</strong></td>
+<td>Genuine nesting, policy-relevant, matches the Brighton framing</td>
+</tr>
+<tr class="even">
+<td>DfE region</td>
+<td><strong>25</strong></td>
+<td>Good higher level; picks up the London effect from Vol 2</td>
+</tr>
+<tr class="odd">
+<td><code>OFSTEDRATING</code></td>
+<td>5</td>
+<td>Currently used</td>
+</tr>
+</tbody>
+</table>
+<p>Local authority is the natural choice: it is a real administrative hierarchy, it has 152 groups, it connects directly to the Brighton and Hove question the series opens with, and <code>(1 | region/LANAME)</code> gives a genuine three-level model to demonstrate nesting properly.</p>
+<p>I fitted both to check this is not just theory. With <code>log(ATT8) ~ log(FSM)</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 48%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Between-group variance</th>
+<th>Residual variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(1 \| region/LANAME)</code></td>
+<td>region 0.00669, LA-within-region 0.00261</td>
+<td>0.01354</td>
+</tr>
+<tr class="even">
+<td><code>(1 \| OFSTEDRATING) + (1 \| LANAME)</code></td>
+<td>Ofsted 0.01206, LA 0.00593</td>
+<td>0.01101</td>
+</tr>
+</tbody>
+</table>
+<p>Both fit fine. The nested version is the one that tells a story about geography and policy; the Ofsted version tells a story about a grading system grading itself.</p>
+<p><strong>Resolved</strong>: Ofsted is kept, because five groups genuinely do make the intercept plots legible, but two slides after the ICC now say plainly why it is a strange choice and show the same null model grouped by local authority for comparison (ICC 0.177 from 151 groups, against 0.647 from 5).</p>
+</section>
+<section id="a-small-but-misleading-sentence-about-shrinkage" class="level3">
+<h3 class="anchored" data-anchor-id="a-small-but-misleading-sentence-about-shrinkage">5. A small but misleading sentence about shrinkage</h3>
+<blockquote class="blockquote">
+<p>Remember: Higher variance = Higher uncertainty, so <strong>higher variance groups have less weight</strong> in the model</p>
+</blockquote>
+<p>What determines how much a group is shrunk is the <em>sampling variance of that group’s mean</em> — roughly <span class="math inline">\(\sigma^2/n_j\)</span> — so it is mostly about <strong>group size</strong>. As written it reads as though the between-group variance <span class="math inline">\(\sigma^2_{\text{group}}\)</span> is what pulls a group in, which is the opposite: a large between-group variance means groups are shrunk <em>less</em>. Suggest:</p>
+<blockquote class="blockquote">
+<p>Groups with <strong>few observations</strong> have unreliable means, so they get pulled furthest toward the global average.</p>
+</blockquote>
+</section>
+<section id="the-equations-label-a-variable-the-models-do-not-use" class="level3">
+<h3 class="anchored" data-anchor-id="the-equations-label-a-variable-the-models-do-not-use">6. The equations label a variable the models do not use</h3>
+<p>Volume 2 writes:</p>
+<p><span class="math display">\[\log(\text{Attainment8}) = \beta_0 + \beta_1\log(\text{PctDisadvantage}) + \beta_2\log(\text{PctPersistentAbsence}) + \epsilon\]</span></p>
+<p>and the interaction equations use <code>PctPersistentAbsence</code> too. But the models, the code and the interpretation all use <code>PERCTOT</code>, which is <strong>overall absence</strong>, not persistent absence — <code>PPERSABS10</code> is the persistent-absence variable and is not in these models. The slides’ prose says “overall absence” correctly while the maths above it says something else. Rename to <code>PctOverallAbsence</code> throughout.</p>
+<hr>
+</section>
+</section>
+<section id="things-that-are-broken" class="level2">
+<h2 class="anchored" data-anchor-id="things-that-are-broken">Things that are broken</h2>
+<p>All checked.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Where</th>
+<th>Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>week_regression/index.qmd</code></td>
+<td><code>L6_images/soggybottom.webp</code> — <strong>broken image</strong>. The file exists at <code>../images/soggybottom.webp</code>; the refactor missed this path</td>
+</tr>
+<tr class="even">
+<td><code>week_regression/regression_lecture.qmd</code></td>
+<td><code>L6_images/being_interdisciplinary.jpg</code> — <strong>broken image</strong>, same cause</td>
+</tr>
+<tr class="odd">
+<td><code>multilevel_regression_practical.qmd</code> line 136</td>
+<td>Student download link points at <code>github.com/adamdennett/QM/.../sessions/L6_data/...</code>. It still resolves — that is a <strong>separate, older repo</strong> which kept the pre-refactor layout — but it serves a frozen copy from another project rather than this course’s own data</td>
+</tr>
+<tr class="even">
+<td><code>multiple_regression_lecture.qmd</code></td>
+<td><code>::sunglasses::</code> (double colons) appears twice on the diagnostics slides — renders as literal text, not an emoji</td>
+</tr>
+<tr class="odd">
+<td>all three lecture front matters</td>
+<td><code>date-as-string: "1st August 2024"</code> — stale in <strong>all three</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Typos</strong>, all in slide titles or headings where they are most visible: “Rese<strong>r</strong>arch Question(s)” (Vols 1 and 3), “Deg<strong>ress</strong> of Freedom”, “Variance Infl<strong>action</strong> Factor” (three slide titles), “Go<strong>rd</strong>ard” (should be Gorard), “the <strong>mode</strong> generic notation”, “but <strong>does is</strong> satisfy”.</p>
+<hr>
+</section>
+<section id="the-python-mixed-models-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-python-mixed-models-problem">The Python mixed-models problem</h2>
+<p><strong>Short answer: statsmodels can do it, including the crossed and nested random effects you got stuck on. You do not need to change packages.</strong></p>
+<p>You said you could not find Python equivalents for the R code. The place this bites is the Final Task in Volume 3’s practical, which asks students to extend the model with</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(<span class="fu">log</span>(ATT8SCR) <span class="sc">~</span> ... <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> OFSTEDRATING) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> gor_name<span class="sc">/</span>LANAME), <span class="at">data =</span> ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That is <strong>two grouping factors, one of them nested</strong>. <code>statsmodels</code>’ <code>MixedLM</code> takes a single <code>groups=</code> argument, so the obvious translation has nowhere to put the second factor — which I assume is exactly where you stopped.</p>
+<p>The way through is <code>vc_formula</code> (variance components), which is documented but not at all obvious. Two idioms cover everything in the practical.</p>
+<section id="nested-random-effects-1-regionla" class="level3">
+<h3 class="anchored" data-anchor-id="nested-random-effects-1-regionla">Nested random effects — <code>(1 | region/LA)</code></h3>
+<p>Put the <strong>top</strong> level in <code>groups</code> and the <strong>lower</strong> level in <code>vc_formula</code>. Note <code>re_formula="1"</code> is required: without it statsmodels silently drops the group-level intercept when <code>vc_formula</code> is present, which is a trap worth knowing about.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                data<span class="op">=</span>d,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                groups<span class="op">=</span>d[<span class="st">"region_name"</span>],</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                re_formula<span class="op">=</span><span class="st">"1"</span>,                          <span class="co"># region intercept</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                vc_formula<span class="op">=</span>{<span class="st">"LA"</span>: <span class="st">"0 + C(LANAME)"</span>}       <span class="co"># LA within region</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>               ).fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="crossed-random-effects-1-ofstedrating-1-laname" class="level3">
+<h3 class="anchored" data-anchor-id="crossed-random-effects-1-ofstedrating-1-laname">Crossed random effects — <code>(1 | OFSTEDRATING) + (1 | LANAME)</code></h3>
+<p>There is no group hierarchy, so put <em>everything</em> in <code>vc_formula</code> and give <code>groups</code> a constant column:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"one"</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                data<span class="op">=</span>d,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                groups<span class="op">=</span>d[<span class="st">"one"</span>],                         <span class="co"># one group: all rows</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                re_formula<span class="op">=</span><span class="st">"0"</span>,                          <span class="co"># no group intercept</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                vc_formula<span class="op">=</span>{<span class="st">"ofsted"</span>: <span class="st">"0 + C(OFSTEDRATING)"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"la"</span>:     <span class="st">"0 + C(LANAME)"</span>}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>               ).fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="it-gives-the-same-answers-as-lme4" class="level3">
+<h3 class="anchored" data-anchor-id="it-gives-the-same-answers-as-lme4">It gives the same answers as lme4</h3>
+<p>I ran both against <code>lmer</code> on 3,186 schools. These are the actual outputs:</p>
+<p><strong>Nested, <code>(1 | region/LANAME)</code></strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>lme4</th>
+<th>statsmodels</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>region variance</td>
+<td>0.006688</td>
+<td>0.006687</td>
+</tr>
+<tr class="even">
+<td>LA within region</td>
+<td>0.002605</td>
+<td>0.002605</td>
+</tr>
+<tr class="odd">
+<td>residual</td>
+<td>0.013538</td>
+<td>0.013538</td>
+</tr>
+<tr class="even">
+<td>intercept</td>
+<td>4.65677</td>
+<td>4.65676</td>
+</tr>
+<tr class="odd">
+<td>slope</td>
+<td>−0.26297</td>
+<td>−0.26297</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Crossed, <code>(1 | OFSTEDRATING) + (1 | LANAME)</code></strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>lme4</th>
+<th>statsmodels</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LANAME variance</td>
+<td>0.005934</td>
+<td>0.005933</td>
+</tr>
+<tr class="even">
+<td>OFSTED variance</td>
+<td>0.012058</td>
+<td>0.012036</td>
+</tr>
+<tr class="odd">
+<td>residual</td>
+<td>0.011010</td>
+<td>0.011010</td>
+</tr>
+<tr class="even">
+<td>intercept</td>
+<td>4.49769</td>
+<td>4.49769</td>
+</tr>
+<tr class="odd">
+<td>slope</td>
+<td>−0.22686</td>
+<td>−0.22686</td>
+</tr>
+</tbody>
+</table>
+<p>Agreement to four or five decimal places, and the crossed model fits in <strong>0.9 seconds</strong>. Two notes for the practical: statsmodels orders the variance components <strong>alphabetically</strong> in the output (<code>la</code> before <code>ofsted</code>), regardless of dictionary order; and it reports <strong>variances</strong> where <code>lmer</code>’s default print shows variance <em>and</em> standard deviation.</p>
+</section>
+<section id="why-not-pymer4" class="level3">
+<h3 class="anchored" data-anchor-id="why-not-pymer4">Why not pymer4</h3>
+<p>You offered to refactor around <code>pymer4</code>, and I tested it properly before answering. It does work on this machine, but the cost is high:</p>
+<ul>
+<li><code>pip install pymer4</code> alone is not enough — its dependency metadata is incomplete, and it additionally needs <code>polars</code>, <code>rpy2</code> and <code>great_tables</code> installed by hand</li>
+<li><code>rpy2</code> needs <code>R_HOME</code> set <strong>and</strong> <code>R_HOME/bin/x64</code> added to the DLL search path on Windows, or R’s <code>stats.dll</code> fails to load</li>
+<li>it has to be run with the project’s <code>renv</code> profile disabled, or R exhausts its cons memory on startup</li>
+<li>it then failed on an R-side version conflict (<code>rlang</code> 1.1.6 installed, ≥ 1.1.7 required)</li>
+</ul>
+<p><strong>And the decisive objection:</strong> <code>pymer4</code> is a wrapper around R’s <code>lme4</code> via <code>rpy2</code>. Every student would need a working R installation <em>and</em> a consistent R package library <em>and</em> the Windows DLL path set — which defeats the purpose of offering a Python route at all. The students most likely to choose the Python tab are precisely those least likely to have a working R toolchain.</p>
+<p>I installed all of it to test, confirmed the above, and then removed <code>pymer4</code>, <code>rpy2</code>, <code>polars</code>, <code>great_tables</code> and <code>tzlocal</code> again so the virtual environment still matches <code>requirements.txt</code>.</p>
+<hr>
+</section>
+</section>
+<section id="structural-observations" class="level2">
+<h2 class="anchored" data-anchor-id="structural-observations">Structural observations</h2>
+<section id="python-coverage-collapses-exactly-where-it-is-needed-most" class="level3">
+<h3 class="anchored" data-anchor-id="python-coverage-collapses-exactly-where-it-is-needed-most">Python coverage collapses exactly where it is needed most</h3>
+<p>Counting code chunks by language:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Practical</th>
+<th>R chunks</th>
+<th>Python chunks</th>
+<th>Parity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vol 1 — regression</td>
+<td>25</td>
+<td>22</td>
+<td><strong>88%</strong></td>
+</tr>
+<tr class="even">
+<td>Vol 2 — multiple regression</td>
+<td>17</td>
+<td>9</td>
+<td><strong>53%</strong></td>
+</tr>
+<tr class="odd">
+<td>Vol 3 — multilevel</td>
+<td>21</td>
+<td>11</td>
+<td><strong>52%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A student who picks the Python tab gets a good experience in week one and is increasingly abandoned thereafter. Given that the fix above removes the main technical blocker in Vol 3, closing this gap is now mostly transcription work rather than research.</p>
+</section>
+<section id="a-65-mb-download-on-a-personal-dropbox-link" class="level3">
+<h3 class="anchored" data-anchor-id="a-65-mb-download-on-a-personal-dropbox-link">A 65 MB download on a personal Dropbox link</h3>
+<p>The Volume 3 lecture reads <code>edubasealldata20241003.csv</code> from a Dropbox share. I checked: it is live and returns <strong>64.8 MB</strong>. That is a single point of failure owned by one person’s account, fetched on every render, and if a class of students hits it at once a free Dropbox account can be rate-limited. Worth moving into <code>sessions/data/</code> with the rest, or reducing to just the columns the lecture uses.</p>
+</section>
+<section id="volume-3-switches-outcome-variable-mid-lecture" class="level3">
+<h3 class="anchored" data-anchor-id="volume-3-switches-outcome-variable-mid-lecture">Volume 3 switches outcome variable mid-lecture</h3>
+<p>The null-model section says it is partitioning the variance in <strong>Progress 8 (P8MEA)</strong>, but the worked models and the practical use <strong>Attainment 8 (ATT8SCR)</strong>. Pick one. Progress 8 is arguably the better choice for a multilevel treatment since it is already adjusted for intake, but whichever you choose it should be consistent.</p>
+</section>
+<section id="volume-3-carries-a-lot-of-hidden-code" class="level3">
+<h3 class="anchored" data-anchor-id="volume-3-carries-a-lot-of-hidden-code">Volume 3 carries a lot of hidden code</h3>
+<p><code>multilevel_regression_lecture.qmd</code> has 5 chunks set <code>eval: false</code> and 8 set <code>include: false</code>; the practical has 3 and 7. Some of that is deliberate, but several of the <code>include: false</code> chunks in the practical’s Final Task are substantial models whose output never appears. Worth a pass to work out which are scaffolding and which are dead.</p>
+</section>
+<section id="overlap-with-the-new-glm-lecture" class="level3">
+<h3 class="anchored" data-anchor-id="overlap-with-the-new-glm-lecture">Overlap with the new GLM lecture</h3>
+<p>Vol 4 now covers three things these lectures also touch, and the duplication is worth resolving deliberately rather than by accident:</p>
+<ul>
+<li><strong>Overfitting</strong> — Vol 1 does it with the three Brighton schools, Vol 4 with an interpolating spline. Both are good and they are complementary; a one-line cross-reference in each direction would help.</li>
+<li><strong>Comparing against a baseline</strong> — Vol 4 makes this a rule. Vols 1–3 never compare a model against doing nothing, which would be a natural addition to the Vol 2 evaluation task.</li>
+<li><strong>Circularity of the predictors</strong> — Vol 4 closes on it. As noted <a href="#grouping">above</a>, Vol 3’s choice of grouping factor is an unflagged instance of the same problem, and connecting the two would strengthen both.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="suggested-priority-order" class="level2">
+<h2 class="anchored" data-anchor-id="suggested-priority-order">Suggested priority order</h2>
+<p><strong>Before the sessions run</strong></p>
+<ol type="1">
+<li>Fix the two broken image paths, and repoint the student download link at this repo rather than the older <code>adamdennett/QM</code> copy</li>
+<li>Fix the p-value wording (<a href="#p-value">§1</a>) — this is the one that does lasting damage</li>
+<li>Fix the typos in slide titles and the <code>::sunglasses::</code> emoji</li>
+</ol>
+<p><strong>Worth doing properly</strong></p>
+<ol start="4" type="1">
+<li>Switch Vol 3’s grouping factor to local authority, or add it alongside Ofsted and discuss why Ofsted is a strange choice (<a href="#grouping">§4</a>)</li>
+<li>Add the Python mixed-model code above to the Vol 3 practical and close the Final Task gap</li>
+<li>Rename <code>PctPersistentAbsence</code> to <code>PctOverallAbsence</code> in the Vol 2 equations</li>
+<li>Replace the t-value “importance” comparison with the elasticity comparison</li>
+</ol>
+<p><strong>When there is time</strong></p>
+<ol start="8" type="1">
+<li>Bring Python parity in Vols 2 and 3 up toward Vol 1’s level</li>
+<li>Move the 65 MB Dropbox file into the repo’s own data folder</li>
+<li>Settle on Progress 8 or Attainment 8 in Vol 3</li>
+<li>Audit the <code>include: false</code> chunks</li>
+<li>Add cross-references to and from Vol 4</li>
+</ol>
+<hr>
+</section>
+<section id="one-thing-i-would-not-change" class="level2">
+<h2 class="anchored" data-anchor-id="one-thing-i-would-not-change">One thing I would not change</h2>
+<p>The series takes a position. It opens with a council that has made a policy decision, builds a model that appears to support it, and then spends two and a half lectures showing why the first answer was too simple — small samples, confounding, omitted geography, clustered errors — without ever concluding that the council was simply wrong. That argumentative spine is rare in quantitative methods teaching and it is what will make students remember the statistics. Everything above is in service of it.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bea-taylor\.com\/quant_methods");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 2025–, Huanfa Chen, Adam Dennett, Bea Taylor</p>
+</div>   
+    <div class="nav-footer-center">
+<p><img src="./img/logo/logo_only_sm.png" height="25"> Quantitative Methods</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Bea-Taylor/Quant_Methods">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/huanfa-chen/">
+      <i class="bi bi-LinkedIn" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

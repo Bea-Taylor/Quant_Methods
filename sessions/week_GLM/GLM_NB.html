@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<link href="../..//img/favicon.ico" rel="icon">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-3f418c0a1af92b3d03a8c930c3125fbd.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
+
+  <meta name="author" content="Adam Dennett">
+  <title>Quantitative Methods – Prof D’s Regression Sessions - Vol 5</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3903353f5457d2a8a8c48812a6ae8559.css">
+  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+<meta property="og:title" content="Prof D’s Regression Sessions - Vol 5 – Quantitative Methods">
+<meta property="og:description" content="Counts, rates and the negative binomial">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_GLM/img/logo/full_sm.png">
+<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:locale" content="en_GB">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="title-slide" data-background-color="#4e3c56" data-background-image="../images/regression.png" data-background-opacity="0.08" data-background-size="stretch" style="height:100%" class="center">
+
+<br>
+<br>
+
+<h1 class="title">Prof D’s Regression Sessions - Vol 5</h1>
+
+  <h3 style="opacity:0.8;" class="subtitle">Counts, rates and the negative binomial</h3>
+
+<p><span style="margin:0px; font-weight:700;" class="author">Adam Dennett</span> - a.dennett@ucl.ac.uk </p>
+
+<p style="opacity: 0.8">Week GLM</p>
+
+<p style="opacity:0.8;">CASA0007 Quantitative Methods</p>
+
+</section>
+<section id="last-time" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Last time</h2>
+<ul>
+<li>We met the <strong>Generalised Linear Model</strong> — one framework, three moving parts: a distribution, a linear predictor, and a <strong>link function</strong></li>
+<li>We spent the session on <strong>logistic regression</strong>, because once you can read an odds ratio the rest of the family follows</li>
+<li>And we left three outcome types on the table. This session picks up the biggest of them: <strong>counts</strong></li>
+</ul>
+</section>
+<section id="this-session" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>This session</h2>
+<ul>
+<li class="fragment"><strong><span class="math inline">\(E[y]\)</span></strong> — the notation the count models are written in, and why it is nothing new</li>
+<li class="fragment"><strong>Poisson regression</strong> for counts, and how to read a rate ratio</li>
+<li class="fragment"><strong>Offsets</strong> — the thing that turns a model of counts into a model of <em>rates</em>, which is almost always what you actually wanted</li>
+<li class="fragment"><strong>Overdispersion</strong>, and the <strong>negative binomial</strong> model that deals with it</li>
+<li class="fragment"><strong>Proportions</strong> — <em>x out of n</em> — which turn out to be a binomial problem in disguise</li>
+</ul>
+<div class="fragment">
+<p>Same dataset, same schools. The only thing changing is what we put on the left-hand side.</p>
+</div>
+</section>
+<section>
+<section id="first-a-word-on-notation" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>First, a word on notation</h1>
+
+</section>
+<section id="a-quick-word-on-ey" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A quick word on <span class="math inline">\(E[y]\)</span></h2>
+<p>With GLMs there is an <span class="math inline">\(E\)</span> in most of the equations. <strong><span class="math inline">\(E\)</span> is for expectation</strong>, and <span class="math inline">\(E[y_i]\)</span> reads <em>“the expected value of y for school i”</em>.</p>
+<ul>
+<li class="fragment">It is essentially <strong>an average</strong> — but a theoretical one. Your sample mean is a fact about the 3,000 schools you happen to have; an expected value is a fact about the <strong>process that produced them</strong></li>
+<li class="fragment"><strong>“Expected” is a poor name.</strong> It need not be a value you could ever observe — the expected value of a dice roll is 3.5, and the expected number of children per family is about 1.8</li>
+<li class="fragment"><strong>The little <span class="math inline">\(i\)</span> matters.</strong> <span class="math inline">\(E[y_i]\)</span> is <em>that school’s own</em> expected value, and it depends on that school’s predictors. There are thousands of them, one per school — not a single average across the dataset</li>
+</ul>
+</section>
+<section id="you-have-been-using-it-all-along" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>You have been using it all along</h2>
+<p>Ordinary regression, exactly as we wrote it in Vol 1:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_i + \epsilon_i\]</span></p>
+<div class="fragment">
+<p>The errors average out to zero. So take the average of both sides, and the error term disappears:</p>
+<p><span class="math display">\[E[y_i] = \beta_0 + \beta_1x_i\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>That is the line you have been drawing through scatter plots since week 5.</strong> - A regression line was never an exact school prediction — It is a prediction of what the <em>average</em> school like it does - this is the expected value</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:8px; border-radius:5px; font-size:0.88em;">
+<p>So <span class="math inline">\(\log(E[y_i])\)</span> is <strong>not anything new or different</strong>. Just more formalised in the GLM equation.</p>
+</div>
+</div>
+</section>
+<section id="the-same-model-three-times" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The same model, three times</h2>
+<p>Written out in full, with the <strong>right-hand side identical every time</strong>. Only the left changes.</p>
+<div style="font-size: 0.95em">
+<p><strong>Ordinary regression</strong> — the outcome goes in as it is:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots + \epsilon_i\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Logistic regression</strong> — last session. The <em>probability</em> goes in, through the logit:</p>
+<p><span class="math display">\[\log\!\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>Poisson regression</strong> — today. The <em>expected count</em> goes in, through a log:</p>
+<p><span class="math display">\[\log\big(E[y_i]\big) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots\]</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.86em;">
+<p>Notice what is <strong>missing</strong> from the bottom two: the <span class="math inline">\(\epsilon\)</span>. OLS adds an error term on the end; a GLM does not, because the randomness is already described by the distribution you chose. <strong>That is the swap</strong> — an error term for a distribution.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="counting-things" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>Counting things</h1>
+
+</section>
+<section id="a-different-kind-of-outcome" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>A different kind of outcome</h2>
+<p>Let’s change the question and move up a level.</p>
+<div style="font-size: 1.05em">
+<p><em>How many below-Good schools does each local authority have?</em></p>
+</div>
+<ul>
+<li class="fragment">That is a <strong>count</strong>: 0, 1, 2, 3… never negative, never fractional</li>
+<li class="fragment">Most LAs have a few; some have none at all; a couple have a lot</li>
+<li class="fragment">A straight line will happily predict minus two struggling schools, which is not a thing</li>
+</ul>
+</section>
+<section id="what-counts-look-like" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What counts look like</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_NB_files/figure-revealjs/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="GLM_NB_files/figure-revealjs/unnamed-chunk-1-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.85em">
+<p>Discrete, non-negative, right-skewed, with a pile-up at the low end - <strong>24</strong> LAs have no below-Good schools at all. This is a Poisson-shaped problem, exactly as week 1 described.</p>
+</div>
+</section>
+<section id="but-first---counts-or-rates" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>But first - counts or rates?</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Local authority</th>
+<th style="text-align: right;">Secondary schools</th>
+<th style="text-align: right;">Rated below Good</th>
+<th style="text-align: right;">As a share</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Lancashire</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">28%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bury</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">46%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p><strong>On the raw count, Lancashire looks nearly four times worse.</strong> On the share, Bury is the one in trouble.</p>
+<p>A count on its own tells you very little, because it depends on how many chances there were to begin with. Lancashire has six times as many schools, so it would take more below-Good ones even if nothing were wrong.</p>
+</div>
+</div>
+</section>
+<section id="so-why-not-just-divide" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>So why not just divide?</h2>
+<p>The obvious move is to model the share — <code>n_below / n_schools</code> — and be done with it. Two reasons not to:</p>
+<ul>
+<li class="fragment"><strong>Poisson describes whole numbers.</strong> <code>22/79 = 0.28</code> is not a count of anything. We would be using a distribution for something it does not describe</li>
+<li class="fragment"><strong>Dividing throws away how much evidence you have.</strong> Bury’s 46% rests on <strong>13</strong> schools. Lancashire’s 28% rests on <strong>79</strong>. We should be far more confident about Lancashire — but once both are just “a percentage”, the model can no longer tell them apart</li>
+</ul>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>An <strong>offset</strong> gets us both: the outcome stays a genuine count, so Poisson still applies and the sample sizes still count for something — but the model does the dividing internally.</p>
+</div>
+</div>
+</section>
+<section id="what-an-offset-actually-is" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>What an offset actually is</h2>
+<p>Three lines of algebra, and nothing clever happens in any of them.</p>
+<div style="font-size: 0.95em">
+<p><strong>1. What we actually want to model</strong> — a rate, not a count:</p>
+<p><span class="math display">\[\log\left(\frac{\text{expected count}}{\text{number of schools}}\right) = \beta_0 + \beta_1x\]</span></p>
+<p><strong>2. The log of a ratio is a difference of logs</strong> — ordinary school algebra:</p>
+<p><span class="math display">\[\log(\text{expected count}) - \log(\text{number of schools}) = \beta_0 + \beta_1x\]</span></p>
+<p><strong>3. Move that term across to the other side:</strong></p>
+<p><span class="math display">\[\log(\text{expected count}) = \beta_0 + \beta_1x + \log(\text{number of schools})\]</span></p>
+<p>That final term — <span class="math inline">\(\log(\text{number of schools})\)</span> — <strong>is the offset</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>So an offset is just <strong>a division, rewritten as an addition</strong> so it can sit inside a model that works on the log scale. In R that is <code>offset(log(n_schools))</code>.</p>
+</div>
+</div>
+</section>
+<section id="fixed-not-estimated" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Fixed, not estimated</h2>
+<p>Look at line 3 again. Every other term on the right gets a <span class="math inline">\(\beta\)</span> in front of it that the model <strong>chooses</strong>. The offset does not — it is stuck there with a coefficient of exactly <strong>1</strong>, because that is how it arrived.</p>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>In plain words, we are <strong>telling</strong> the model something rather than asking it:</p>
+<blockquote>
+<p><em>Twice as many schools, twice as many below-Good ones expected, all else being equal.</em></p>
+</blockquote>
+<p>That is a claim about arithmetic, not about education policy, so we spend no parameter finding it out.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:10px; border-radius:5px; font-size:0.86em;">
+<p><strong>Is that a fair thing to assume?</strong> Put <code>log(n_schools)</code> in as an ordinary predictor and let the model estimate it instead. It comes back with <strong>0.95</strong>, with a 95% interval of 0.82 to 1.09 — 1 sits comfortably inside it. The assumption holds, and fixing it saves us a parameter.</p>
+<p><strong>Always worth checking.</strong> If that interval had excluded 1, the offset would have been the wrong tool.</p>
+</div>
+</div>
+</section>
+<section id="running-a-poisson-model" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Running a Poisson model</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a>pois <span class="ot">&lt;-</span> <span class="fu">glm</span>(n_below <span class="sc">~</span> mean_fsm <span class="sc">+</span> mean_abs <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(n_schools)),</span>
+<span id="cb1-2"><a aria-label="2"></a>            <span class="at">data =</span> la, <span class="at">family =</span> poisson)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Term</th>
+<th style="text-align: right;">Coefficient</th>
+<th style="text-align: right;">Rate ratio</th>
+<th style="text-align: left;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-4.4903</td>
+<td style="text-align: right;">0.011</td>
+<td style="text-align: left;">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mean % disadvantaged</td>
+<td style="text-align: right;">-0.0017</td>
+<td style="text-align: right;">0.998</td>
+<td style="text-align: left;">0.751</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mean % absence</td>
+<td style="text-align: right;">0.2834</td>
+<td style="text-align: right;">1.328</td>
+<td style="text-align: left;">&lt;0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<p>The link function here is <span class="math inline">\(\log\)</span>, so exponentiating gives a <strong>rate ratio</strong>. And note the result: once average absence is in the model, <strong>average disadvantage adds nothing detectable</strong> - a confounding story of exactly the kind we met in week 6.</p>
+</div>
+</div>
+</section>
+<section id="checking-the-poisson-assumption" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Checking the Poisson assumption</h2>
+<p>The Poisson distribution assumes something quite strong: that the <strong>variance equals the mean</strong>. Real data often disagrees.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a>dispersion <span class="ot">&lt;-</span> pois<span class="sc">$</span>deviance <span class="sc">/</span> pois<span class="sc">$</span>df.residual</span>
+<span id="cb2-2"><a aria-label="2"></a>dispersion</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.306901</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.95em">
+<p>A value near <strong>1</strong> means the assumption holds. Much above 1 means <strong>overdispersion</strong> - the data are more variable than Poisson allows, your standard errors are too small, and you will think results are significant when they are not.</p>
+<p>Here we get <strong>1.31</strong>, which is mild. So Poisson is adequate - but we should check rather than assume.</p>
+</div>
+</div>
+</section>
+<section id="when-it-is-not-adequate" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>When it is not adequate</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: left;">SE on absence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Poisson</td>
+<td style="text-align: right;">577</td>
+<td style="text-align: left;">0.0485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Negative binomial</td>
+<td style="text-align: right;">575</td>
+<td style="text-align: left;">0.0528</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>The <strong>negative binomial</strong> is the Poisson’s more forgiving cousin - it adds a parameter that lets the variance exceed the mean</li>
+<li>This is exactly the distribution we met in week 1, and this is what it is for</li>
+<li>Here the two models are essentially tied, so we keep the simpler one</li>
+</ul>
+<div class="fragment">
+<p><strong>Fit the Poisson, check the dispersion, escalate only if you need to.</strong></p>
+</div>
+</section>
+<section id="the-fun-bit-who-beats-their-own-odds" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The fun bit: who beats their own odds?</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_NB_files/figure-revealjs/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="GLM_NB_files/figure-revealjs/unnamed-chunk-6-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.8em">
+<p>Given their intake, some LAs have far <strong>more</strong> struggling schools than expected and some far <strong>fewer</strong>. The residuals of a count model are not a diagnostic afterthought here - they are the finding.</p>
+</div>
+</section></section>
+<section>
+<section id="one-more-outcome-type" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>One more outcome type</h1>
+
+</section>
+<section id="proportions-out-of-a-known-total" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Proportions out of a known total</h2>
+<p>Back down to school level, and to a file we have not touched yet: <strong>what happens to pupils after Year 11?</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Schools</td>
+<td style="text-align: left;">3,081</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Median cohort</td>
+<td style="text-align: left;">175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Median % sustaining a destination</td>
+<td style="text-align: left;">94.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Schools at exactly 100%</td>
+<td style="text-align: left;">48 (1.6%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>Each school gives us “<strong>x</strong> of <strong>n</strong> pupils went on to education, employment or training”</li>
+<li>That is not really a percentage - it is a <strong>count out of a known total</strong>, which is exactly what the binomial distribution describes</li>
+</ul>
+</section>
+<section id="modelling-it-properly" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Modelling it properly</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a>dest_glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(OVERALL_DEST, not_sust) <span class="sc">~</span> PTFSM6CLA1A,</span>
+<span id="cb4-2"><a aria-label="2"></a>                <span class="at">data =</span> dest, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="font-size: 1.05em">
+<p>Note the <code>cbind()</code> - we hand the model <strong>successes and failures</strong>, not a proportion, so it knows a school of 30 carries less weight than a school of 300.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 1.05em">
+<p><strong>Every 10 percentage points more disadvantage is associated with a 23% fall in the odds of a pupil sustaining a destination.</strong></p>
+</div>
+</div>
+</section>
+<section id="does-it-matter-compare-the-predictions" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Does it matter? Compare the predictions</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="GLM_NB_files/figure-revealjs/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="GLM_NB_files/figure-revealjs/unnamed-chunk-10-1.png" style="width:95.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="font-size: 0.85em">
+<p>They agree almost exactly through the middle and <strong>diverge at the top end</strong> - the schools policy cares about most. Here OLS is not obviously broken. It is quietly wrong at the edges, and <strong>nothing in its output tells you so</strong>.</p>
+</div>
+</section>
+<section id="and-check-the-dispersion-again" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>And check the dispersion again</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 14%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: left;">Dispersion</th>
+<th style="text-align: left;">Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">LA below-Good counts (Poisson)</td>
+<td style="text-align: left;">1.31</td>
+<td style="text-align: left;">Mild - Poisson is fine</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Destinations (binomial)</td>
+<td style="text-align: left;">2.72</td>
+<td style="text-align: left;">Overdispersed - use quasibinomial</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Two models, two different answers.</strong> The check is not a formality you tick off</li>
+<li>For the destinations model, switching to <code>family = quasibinomial</code> widens the standard errors by about 60% - the coefficients are unchanged, but our confidence in them was overstated</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1 center" data-background-color="#4e3c56">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="the-family-in-one-slide" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>The family, in one slide</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th><code>family =</code></th>
+<th>Link</th>
+<th>Interpret coefficients as</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous</td>
+<td><code>gaussian</code></td>
+<td>identity</td>
+<td>Units of y per unit of x</td>
+</tr>
+<tr class="even">
+<td>Yes / no</td>
+<td><code>binomial</code></td>
+<td>logit</td>
+<td>Odds ratios</td>
+</tr>
+<tr class="odd">
+<td><strong>x out of n</strong></td>
+<td><code>binomial</code></td>
+<td>logit</td>
+<td>Odds ratios</td>
+</tr>
+<tr class="even">
+<td>Ordered categories</td>
+<td><code>MASS::polr()</code></td>
+<td>logit</td>
+<td>Odds of being in a higher category</td>
+</tr>
+<tr class="odd">
+<td>Unordered categories</td>
+<td><code>nnet::multinom()</code></td>
+<td>logit</td>
+<td>Odds vs a reference category</td>
+</tr>
+<tr class="even">
+<td><strong>Count</strong></td>
+<td><code>poisson</code></td>
+<td>log</td>
+<td><strong>Rate ratios</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Overdispersed count</strong></td>
+<td><code>MASS::glm.nb()</code></td>
+<td>log</td>
+<td><strong>Rate ratios</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>One framework.</strong> Change the family, change the link, and everything you learned about building and interpreting a linear model still applies.</p>
+</div>
+</section>
+<section id="conclusions" class="slide level2 smaller" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Conclusions</h2>
+<ul>
+<li class="fragment">A <strong>count</strong> is not a continuous number. It cannot go negative, it comes in whole units, and its variance grows with its mean — so it gets a log link and a Poisson distribution</li>
+<li class="fragment"><strong>An offset is a division in disguise.</strong> It turns counts into rates, and it is the single most commonly forgotten piece of a count model</li>
+<li class="fragment"><strong>Always check the dispersion.</strong> Much above 1 and your standard errors are too small, which means significance you have not earned</li>
+<li class="fragment">A <strong>proportion out of a known total</strong> is a binomial, not a percentage to be modelled with OLS — <code>cbind(successes, failures)</code> keeps the sample sizes in the model where they belong</li>
+</ul>
+<div class="fragment">
+<div style="background-color:#2e6260; color:white; padding:9px; border-radius:5px; font-size:0.88em;">
+<p>And the thread running through both sessions: <strong>look at your outcome variable before you choose a model.</strong> Week 1’s data types were never an academic exercise — they decide what you are allowed to do.</p>
+</div>
+</div>
+</section>
+<section id="todays-practical" class="slide level2" data-transition="convex-in none-out" data-transition-speed="fast">
+<h2>Today’s Practical</h2>
+<ul>
+<li>Fitting Poisson models to the schools data, with and without an offset, and seeing what the offset changes</li>
+<li>Checking dispersion, and deciding whether you need the negative binomial</li>
+<li>Reading <strong>rate ratios</strong> out loud in plain English — the same skill as odds ratios, one family along</li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="../../img/logo/full.svg" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>© CASA &nbsp; | &nbsp; <a href="https://www.ucl.ac.uk/bartlett/casa">ucl.ac.uk/bartlett/casa</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/bea-taylor\.com\/quant_methods");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>
