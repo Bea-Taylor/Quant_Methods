@@ -2,9 +2,9 @@
 title: "Hypothesis Testing"
 subtitle: "Establishing and evaluating research hypotheses"
 author: 
-  - name: "Beatrice Taylor"
+  - name: "Bea Taylor"
 email: "beatrice.taylor@ucl.ac.uk"
-date-as-string: "8th October 2025"
+date-as-string: "20th October 2026"
 from: markdown+emoji
 format: revealjs
 ---
@@ -14,12 +14,12 @@ format: revealjs
 
 Continued concepts from exploratory data analysis, in particular probability distributions. 
 
-- Representative data 
 - Normal distribution
 - Binomial distribution 
 - Poisson distribution 
 - Exponentials 
 - Logarithms 
+- Representative data 
 
 # This week 
 
