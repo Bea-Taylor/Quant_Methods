@@ -21,7 +21,7 @@ By the end of this week, you will be able to:
 
 ## Lecture 
 
-To access the lecture notes: [Lecture](hyp_test_lecture.qmd)
+The lecture slides are available [here](hyp_test_lecture.qmd).
 
 ## Quiz
 
@@ -31,8 +31,8 @@ To access the quiz on Moodle, please check [Moodle page](https://moodle.ucl.ac.u
 
 To access the practical:
 
-1. [Preview](hyp_test_practical.html)
-2. [Download](hyp_test_practical.ipynb)
+1. You can [preview](hyp_test_practical.html) the practical - which includes the code in both R and Python.
+2. You can [download](https://github.com/Bea-Taylor/Quant_Methods/tree/main/practicals) the practical here as a python notebook (.ipynb) - ready for you to run the code yourself.
 
 :::{.callout-note}
 

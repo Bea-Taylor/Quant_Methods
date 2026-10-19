@@ -16,7 +16,7 @@ format:
     slide-number: TRUE
     preview-links: auto
     theme: ../../css/casa-slides.scss
-    mermaid-format: png
+    # mermaid-format: png  # needs headless Chrome; hangs the GitHub Pages build
     
 filters:
  - code-visibility
