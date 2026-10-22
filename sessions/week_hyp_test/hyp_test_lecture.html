@@ -654,6 +654,58 @@ The observations are the evidence.
 <p><em>Example:</em> In court a defendant is found innocent despite being guilty.</p>
 </div>
 </section>
+<section id="matrix-of-errors" class="slide level2">
+<h2>Matrix of errors</h2>
+<div style="text-align:center;">
+<p><img src="../images/error_matrix.png" alt="Error matrix" style="max-width:80%"></p>
+</div>
+<aside class="notes">
+<p>Possible outcomes form a matrix. Have two good outcomes, and two bad outcomes which we want to look out for (these are the Type I and Type II errors).</p>
+<p>This is something to bear in mind when we look at evaluating our hypotheses. How good is our data, so how reliable is our outcome?</p>
+<p>Often this language is used when evaluating the outcomes of an ML classification model. Where we report the quality of a supervised model in terms of its rate of false positives and false negatives.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="false-positive-and-false-negative-rates" class="slide level2 smaller">
+<h2>False positive and false negative rates</h2>
+<p><span style="color:#49a0c4"><em>How often does each type of error happen?</em></span></p>
+<p><strong>False positive rate</strong></p>
+<p><span class="math display">\[
+\text{FPR} = \frac{\text{false positive}}{\text{false positive} + \text{true negative}}
+\]</span></p>
+<p>Of all cases where <span class="math inline">\(H_0\)</span> is true, the proportion where we wrongly reject it.</p>
+<div class="fragment">
+<p><strong>False negative rate</strong></p>
+<p><span class="math display">\[
+\text{FNR} = \frac{\text{false negative}}{\text{false negative} + \text{true positive}}
+\]</span></p>
+<p>Of all cases where <span class="math inline">\(H_0\)</span> is false, the proportion where we wrongly fail to reject it.</p>
+<aside class="notes">
+<p>Each rate is calculated within one column of the table: the FPR only looks at cases where the null is true, the FNR only at cases where it is false.</p>
+<p>The FPR is the Type I error rate, which is what we set with the significance level alpha. The FNR is the Type II error rate, beta, and 1 minus beta is the power of the test.</p>
+<p>In the court example: the FPR is the proportion of innocent defendants who are convicted, and the FNR is the proportion of guilty defendants who are acquitted.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
 <section id="example-mammograms" class="slide level2">
 <h2>Example: Mammograms</h2>
 <div style="text-align: center;">
@@ -688,10 +740,9 @@ The observations are the evidence.
 <ul>
 <li>In 2020-2021, 4.0% of those screened had an abnormal results and were referred for assessment.</li>
 <li>Of these, 77.1% were found to not have breast cancer at follow up assessment.</li>
-<li>Leading to a <strong>false positive rate of 3.1%.</strong></li>
+<li>So about <strong>3.1% of all women screened received a false positive result</strong> (4.0% × 77.1%).</li>
 </ul>
 <aside class="notes">
-<p>This false positive rate is calculated as 4% times 77.1%</p>
 <p>False positive is bad as you might pursue a healthcare treatment which is actually unecessary for the patient.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -716,27 +767,6 @@ The observations are the evidence.
 </ul>
 <aside class="notes">
 <p>False negative - in healthcare context this is the worst outcome - as goes undiagnosed and hence untreated.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="matrix-of-errors" class="slide level2">
-<h2>Matrix of errors</h2>
-<div style="text-align:center;">
-<p><img src="../images/error_matrix.png" alt="Error matrix" style="max-width:80%"></p>
-</div>
-<aside class="notes">
-<p>Possible outcomes form a matrix. Have two good outcomes, and two bad outcomes which we want to look out for (these are the Type I and Type II errors).</p>
-<p>This is something to bear in mind when we look at evaluating our hypotheses. How good is our data, so how reliable is our outcome?</p>
-<p>Often this language is used when evaluating the outcomes of an ML classification model. Where we report the quality of a supervised model in terms of its rate of false positives and false negatives.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1387,7 +1417,7 @@ D_{n,m} = \sup_x \, | F_n(x) - G_m(x) |
 <section id="kde-of-simulated-heights" class="slide level2">
 <h2>KDE of simulated heights</h2>
 <p>It’s easy to fit a KDE to data in Python:</p>
-<div id="82811942" class="cell" data-execution_count="1">
+<div id="99b54f98" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a aria-label="2"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb4-3"><a aria-label="3"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
@@ -1511,18 +1541,20 @@ df = n_1 + n_2 - 2 = 95 + 103 - 2 = 196
 <section id="example---step-4---calculate-the-p-value" class="slide level2">
 <h2>Example - step 4 - calculate the p value</h2>
 <p>Traditionally this uses look up tables - we’re going to use Python.</p>
-<div id="6f40ecd4" class="cell" data-execution_count="2">
+<div id="8a5fb4ed" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a aria-label="1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
 <span id="cb5-2"><a aria-label="2"></a></span>
 <span id="cb5-3"><a aria-label="3"></a>t_val <span class="op">=</span> <span class="op">-</span><span class="fl">12.7</span></span>
-<span id="cb5-4"><a aria-label="4"></a>df <span class="op">=</span> <span class="dv">18</span></span>
+<span id="cb5-4"><a aria-label="4"></a>df <span class="op">=</span> <span class="dv">196</span></span>
 <span id="cb5-5"><a aria-label="5"></a></span>
-<span id="cb5-6"><a aria-label="6"></a><span class="co"># Two-tailed p-value</span></span>
-<span id="cb5-7"><a aria-label="7"></a>p_value_two_tailed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.t.cdf(<span class="bu">abs</span>(t_val), df))</span>
+<span id="cb5-6"><a aria-label="6"></a><span class="co"># Two-tailed p-value (sf = 1 - cdf, computed without precision loss)</span></span>
+<span id="cb5-7"><a aria-label="7"></a>p_value_two_tailed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> stats.t.sf(<span class="bu">abs</span>(t_val), df)</span>
 <span id="cb5-8"><a aria-label="8"></a></span>
-<span id="cb5-9"><a aria-label="9"></a><span class="bu">print</span>(<span class="st">"Two-tailed p-value:"</span>, p_value_two_tailed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-9"><a aria-label="9"></a><span class="bu">print</span>(<span class="st">"Two-tailed p-value:"</span>, p_value_two_tailed)</span>
+<span id="cb5-10"><a aria-label="10"></a><span class="bu">print</span>(<span class="ss">f"Two-tailed p-value: </span><span class="sc">{</span>p_value_two_tailed<span class="sc">:.3e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Two-tailed p-value: 2.0151302848603336e-10</code></pre>
+<pre><code>Two-tailed p-value: 2.346330669603961e-27
+Two-tailed p-value: 2.346e-27</code></pre>
 </div>
 </div>
 </section>
@@ -1534,7 +1566,7 @@ df = n_1 + n_2 - 2 = 95 + 103 - 2 = 196
 <h2>Example - step 5</h2>
 <p><strong>Compare p-value with hypothesis level</strong></p>
 <p>Now we need to compare the p-value to our siginificance level.</p>
-<p>p-value = <span class="math inline">\(2.0151302848603336e-10 &lt; 0.05\)</span> = alpha</p>
+<p>p-value = <span class="math inline">\(2.346e-27 &lt; 0.05\)</span> = alpha</p>
 <div class="fragment">
 <p>…we reject <span class="math inline">\(H_0\)</span>!</p>
 </div>
