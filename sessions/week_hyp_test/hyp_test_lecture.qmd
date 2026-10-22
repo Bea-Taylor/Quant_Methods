@@ -399,7 +399,53 @@ This is also called a **false negative**.
 
 <br>
 
-*Example:* In court a defendant is found innocent despite being guilty.  
+*Example:* In court a defendant is found innocent despite being guilty. 
+
+
+## Matrix of errors 
+
+<div style="text-align:center;">
+  <img src="../images/error_matrix.png" alt="Error matrix" style="max-width:80%">
+</div>
+
+::: {.notes}
+Possible outcomes form a matrix. Have two good outcomes, and two bad outcomes which we want to look out for (these are the Type I and Type II errors).
+
+This is something to bear in mind when we look at evaluating our hypotheses. How good is our data, so how reliable is our outcome? 
+
+Often this language is used when evaluating the outcomes of an ML classification model. Where we report the quality of a supervised model in terms of its rate of false positives and false negatives. 
+:::
+
+## False positive and false negative rates {.smaller}
+[*How often does each type of error happen?*]{style="color:#49a0c4"} 
+
+
+**False positive rate**
+
+$$
+\text{FPR} = \frac{\text{false positive}}{\text{false positive} + \text{true negative}}
+$$
+
+Of all cases where $H_0$ is true, the proportion where we wrongly reject it.
+
+. . .
+
+**False negative rate**
+
+$$
+\text{FNR} = \frac{\text{false negative}}{\text{false negative} + \text{true positive}}
+$$
+
+Of all cases where $H_0$ is false, the proportion where we wrongly fail to reject it.
+
+
+::: {.notes}
+Each rate is calculated within one column of the table: the FPR only looks at cases where the null is true, the FNR only at cases where it is false.
+
+The FPR is the Type I error rate, which is what we set with the significance level alpha. The FNR is the Type II error rate, beta, and 1 minus beta is the power of the test.
+
+In the court example: the FPR is the proportion of innocent defendants who are convicted, and the FNR is the proportion of guilty defendants who are acquitted.
+:::
 
 
 ## Example: Mammograms
@@ -432,11 +478,9 @@ From [NHS digital](https://digital.nhs.uk/data-and-information/publications/stat
 
 - In 2020-2021, 4.0% of those screened had an abnormal results and were referred for assessment. 
 - Of these, 77.1% were found to not have breast cancer at follow up assessment. 
-- Leading to a **false positive rate of 3.1%.**
+- So about **3.1% of all women screened received a false positive result** (4.0% × 77.1%).
 
 :::{.notes}
-This false positive rate is calculated as 4% times 77.1%
-
 False positive is bad as you might pursue a healthcare treatment which is actually unecessary for the patient.
 :::
 
@@ -452,20 +496,6 @@ From [NHS digital](https://digital.nhs.uk/data-and-information/publications/stat
 
 ::: {.notes}
 False negative - in healthcare context this is the worst outcome - as goes undiagnosed and hence untreated. 
-:::
-
-## Matrix of errors 
-
-<div style="text-align:center;">
-  <img src="../images/error_matrix.png" alt="Error matrix" style="max-width:80%">
-</div>
-
-::: {.notes}
-Possible outcomes form a matrix. Have two good outcomes, and two bad outcomes which we want to look out for (these are the Type I and Type II errors).
-
-This is something to bear in mind when we look at evaluating our hypotheses. How good is our data, so how reliable is our outcome? 
-
-Often this language is used when evaluating the outcomes of an ML classification model. Where we report the quality of a supervised model in terms of its rate of false positives and false negatives. 
 :::
 
 # A good hypothesis or a bad hypothesis? 
@@ -1128,12 +1158,13 @@ Traditionally this uses look up tables - we're going to use Python.
 from scipy import stats
 
 t_val = -12.7
-df = 18
+df = 196
 
-# Two-tailed p-value
-p_value_two_tailed = 2 * (1 - stats.t.cdf(abs(t_val), df))
+# Two-tailed p-value (sf = 1 - cdf, computed without precision loss)
+p_value_two_tailed = 2 * stats.t.sf(abs(t_val), df)
 
 print("Two-tailed p-value:", p_value_two_tailed)
+print(f"Two-tailed p-value: {p_value_two_tailed:.3e}")
 ```
 
 ## Example - step 4 - *simplified* 
@@ -1145,7 +1176,7 @@ We can do all the previous calulations in one step using the `scipy' library - w
 
 Now we need to compare the p-value to our siginificance level. 
 
-p-value = $2.0151302848603336e-10 < 0.05$ = alpha
+p-value = $2.346e-27 < 0.05$ = alpha
 
 . . .
 
