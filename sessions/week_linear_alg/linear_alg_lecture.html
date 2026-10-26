@@ -10,7 +10,7 @@
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-3f418c0a1af92b3d03a8c930c3125fbd.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.10.19">
 
-  <meta name="author" content="Beatrice Taylor">
+  <meta name="author" content="Bea Taylor">
   <title>Quantitative Methods – Linear Algebra</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -40,6 +40,8 @@
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
     .reveal div.sourceCode {
@@ -146,9 +148,9 @@
 <h1 class="title">Linear Algebra</h1>
 
 
-<p><span style="margin:0px; font-weight:700;" class="author">Beatrice Taylor</span> - beatrice.taylor@ucl.ac.uk </p>
+<p><span style="margin:0px; font-weight:700;" class="author">Bea Taylor</span> - beatrice.taylor@ucl.ac.uk </p>
 
-<p style="opacity: 0.8">22nd October 2025</p>
+<p style="opacity: 0.8">27th October 2026</p>
 
 
 </section>
@@ -167,14 +169,24 @@
 <h1>This week</h1>
 
 </section>
-<section id="back-to-the-start" class="slide level2">
-<h2>Back to the start</h2>
-<p>Maths underpins quantitative methods</p>
+<section id="back-to-the-starting-point---maths" class="slide level2">
+<h2>Back to the starting point - Maths!</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div style="text-align:center;">
+<img src="https://imgs.xkcd.com/comics/machine_learning.png" alt="XKCD - Machine Learning" style="width:450px">
+<div style="font-size:0.8em; color: #555; margin-top:4px;">
+<pre><code>Image credit: [xkcd](https://xkcd.com/1838/)</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
 <ul>
-<li class="fragment">quantitative methods includes data analysis and machine learning</li>
-<li class="fragment">focused on algorithms and methodologies</li>
-<li class="fragment"><strong>AND</strong> practical examples of how these can be applied</li>
+<li>quantitative methods include data analysis and machine learning</li>
+<li>mostly focused on methodologies</li>
+<li><strong>AND</strong> practical examples of how these can be applied</li>
+<li><strong>BUT</strong> helpful to understand the underlying mathematics</li>
 </ul>
+</div></div>
 <aside class="notes">
 <p>This week focussing on the maths. Not going to be directly examined on the maths - this isn’t a maths course.</p>
 <p>Rather the idea is to help with the basics which will facilitate understanding of subsequent weeks.</p>
@@ -189,23 +201,6 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-<section id="maths-underpins-it" class="slide level2">
-<h2>Maths underpins it</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div style="text-align:center;">
-<img src="https://imgs.xkcd.com/comics/machine_learning.png" alt="XKCD - Machine Learning" style="width:450px">
-<div style="font-size:0.8em; color: #555; margin-top:4px;">
-<pre><code>Image credit: [xkcd](https://xkcd.com/1838/)</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>This lecture covers some of the key concepts</li>
-<li>The goal is to facilitate deeper understanding of the methods</li>
-</ul>
-</div></div>
 </section>
 <section id="maths-doesnt-bite" class="slide level2">
 <h2>Maths doesn’t bite!</h2>
@@ -232,7 +227,8 @@
 <p>By the end of this lecture you should be able to:</p>
 <ol type="1">
 <li class="fragment">Define concept of linear equations.</li>
-<li class="fragment">Compute linear algebra equations using vectors and matrices.<br>
+<li class="fragment">Compute linear algebra equations using vectors and matrices.</li>
+<li class="fragment">Translate mathematical equations into plain English.<br>
 </li>
 </ol>
 </section></section>
@@ -375,7 +371,7 @@ y = \sum_{i=1}^n \beta_i x_i
 </section>
 <section id="cheat-sheet" class="slide level2">
 <h2>Cheat sheet</h2>
-<p>Mathematical notation cheat sheet: https://www.upyesp.org/posts/makrdown-vscode-math-notation/</p>
+<p>Mathematical notation <a href="https://www.upyesp.org/posts/makrdown-vscode-math-notation/">cheat sheet</a></p>
 <div style="text-align:center;">
 <p><img src="images/cheat_sheet_QR_code.png" alt="QR code for maths cheat sheet." style="max-width:35%"></p>
 </div>
@@ -561,20 +557,15 @@ f(x) = y \text{ for } x \in X, y \in Y
 <p>In the applied sciences the domain and range are typically <span class="math inline">\(\mathbb N\)</span> or <span class="math inline">\(\mathbb Z\)</span> or <span class="math inline">\(\mathbb R\)</span></p>
 <div class="fragment">
 <ul>
-<li class="fragment"><span class="math inline">\(\mathbb N\)</span>
+<li class="fragment"><span class="math inline">\(\mathbb N\)</span> - <strong>Natural numbers</strong>
 <ul>
-<li class="fragment"><strong>Natural numbers</strong></li>
 <li class="fragment">0,1,2,3,4,5,6…</li>
 </ul></li>
-<li class="fragment"><span class="math inline">\(\mathbb Z\)</span>
+<li class="fragment"><span class="math inline">\(\mathbb Z\)</span> - <strong>Integers</strong>
 <ul>
-<li class="fragment"><strong>Integers</strong></li>
 <li class="fragment">… -4, -3, -2, -1, 0, 1, 2, 3, 4, …</li>
 </ul></li>
-<li class="fragment"><span class="math inline">\(\mathbb R\)</span>
-<ul>
-<li class="fragment"><strong>Real numbers</strong></li>
-</ul></li>
+<li class="fragment"><span class="math inline">\(\mathbb R\)</span> - <strong>Real numbers</strong></li>
 </ul>
 <aside class="notes">
 <p>The natural number are the counting numbers. The integers are the natural number extended into negative values. Then have rational numbers - which is anything that can be represented by a fraction. Finally the real numbers - think of as all numbers - so includes those which can’t be repesented by fractions, e.g.&nbsp;pi.</p>
@@ -1201,6 +1192,20 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
 <p><br></p>
 <p><strong>In plain english:</strong></p>
 <p>The outcome <span class="math inline">\(y_i\)</span> is explained by an intercept and a weighted combination of predictors, with coefficients that may change depending on the location <span class="math inline">\((u_i,v_i)\)</span>, plus some error.</p>
+<aside class="notes">
+<p>This is exactly a linear equation - but the coefficients are allowed to vary with location.</p>
+<p>We solve linear equatiosn usign linear regression - which is what we’ll see next week.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="equation-2" class="slide level2">
 <h2>Equation 2</h2>
@@ -1280,13 +1285,11 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
 <section id="practical" class="title-slide slide level1 center">
 <h1>Practical</h1>
 <p>The practical will focus on understanding mathematical equations.</p>
-<div class="fragment">
 <ul>
 <li>Have questions prepared!</li>
 </ul>
 
 
-</div>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
@@ -1303,6 +1306,7 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
   <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
   <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -1324,7 +1328,8 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1345,7 +1350,7 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1495,7 +1500,7 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
 
           RevealMath,
           RevealNotes,
