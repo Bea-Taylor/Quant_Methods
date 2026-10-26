@@ -44,7 +44,9 @@ The factory is having problems with the supply of raw materials. On a given day 
 - $b_2=750$ units of rubber,  
 - $b_3=200$ units of paint.  
 
-What is the optimal number of each bike part  that they can produce?   
+Assuming fractional quantities are allowed, what quantities of each bike part would use all three resources exactly?
+
+This is a simplified model. Real production requires non-negative whole numbers of parts and may leave resources unused. Finding an optimal plan would also require an objective, such as maximising profit.
 
 ### Linear equations  
 
@@ -68,7 +70,7 @@ $$
 
 of paint. 
 
-Given the contraints of raw materials we can have: 
+If all available resources are used exactly, we have:
 
 $$
 8x_1 + x_2 + 10x_3 = b_1 = 400
@@ -125,7 +127,7 @@ $$
 b = \begin{pmatrix}b_1\\b_2\\b_3\end{pmatrix}.
 $$
 
-### Writing this is Python 
+### Writing this in Python
 
 Let's start by importing the libraries we need in Python. 
 
@@ -147,7 +149,18 @@ M = np.array([[8, 1, 10],
 b = np.array([400, 750, 200], dtype=float)  
 ```
 
-In Python matrices are represented as an array of arrays ([] within other []) - each array [] is a row of the matrix. 
+Here we create a two-dimensional NumPy array from a list of rows. `M.shape` is `(3, 3)`, while `b.shape` is `(3,)`: NumPy represents `b` as a one-dimensional array.
+
+::: qna
+#### Question
+
+What does the entry 23 in `M` represent? What do the rows and columns represent? Discuss with a neighbour before checking the answer.
+
+#### Answer
+
+Each wheel requires 23 units of rubber. The rows represent aluminium, rubber and paint, in that order. The columns represent handlebars, brakes and wheels. Each entry gives the amount of one resource required for one unit of a product.
+:::
+
 
 ## Solving the equations 
 
@@ -155,7 +168,7 @@ We can use in-built functions in Python to solve the system of linear equations.
 
 ### Checking the determinant
 
-From the lecture we saw that in order to solve a system of linear equations the corresponding coefficient matrix must be invertible - and this requires the determinant to be non-zero. So let's start by checking the determinant of M is non-zero. 
+A square coefficient matrix with a non-zero determinant is invertible, so the system has a unique solution for every resource vector $b$. If the matrix is singular (not invertible), the system can have no solution or infinitely many solutions. Let's check the determinant of $M$.
 
 ```{python}
 # Calculate the determinant of M
@@ -164,7 +177,17 @@ det_M = np.linalg.det(M)
 print(det_M)
 ```
 
-The det(M) is non-zero! This means that matrix M is invertible. 
+
+::: qna
+#### Question
+
+The determinant is approximately -72. Does its negative sign prevent a unique solution? What would a determinant of zero tell us?
+
+#### Answer
+
+The sign does not prevent a unique solution: the determinant is non-zero, so $M$ is invertible. A zero determinant would mean that the matrix is singular. We would then need to examine the equations and resource vector to determine whether there are no solutions or infinitely many.
+:::
+
 
 ### Inverting the matrix 
 
@@ -172,7 +195,7 @@ Now let's calculate the inverse of M.
 
 :::{.callout-note}
 
-Remember: The inverse of a matrix M is denoted M^-1 and has the property that M * M^-1 = I, where I is the identity matrix.
+Remember: The inverse of a matrix $M$ is denoted $M^{-1}$ and satisfies $MM^{-1}=I$, where $I$ is the identity matrix.
 :::
 
 ```{python}
@@ -197,13 +220,14 @@ $$
 ```{python}
 # Multiply M by its inverse
 
-MM_inv = np.dot(M, M_inv)
+# @ performs matrix multiplication; * multiplies element by element
+MM_inv = M @ M_inv
 print(MM_inv)
 ```
 
 Hmmmm... that's weird. It's not quite the identity matrix. 
 
-The reason it's not quite the dientity matrix is because we are using floating point values (`dtype=float`) in `Python` - which means there's always going to be a small error - i.e. epsilon -  $\epsilon$) 
+Floating-point calculations can introduce small rounding errors. Here, entries around $10^{-17}$ are effectively zero for our purposes.
 
 Rounding the matrix we see that it is very close to the identity.
 
@@ -211,7 +235,11 @@ Rounding the matrix we see that it is very close to the identity.
 print(MM_inv.round(2))
 ```
 
-Phew - it is the identity matrix! 
+The computed product is approximately the identity matrix. Rounding changes the display; we can check numerical agreement within a tolerance using `np.allclose`:
+
+```{python}
+print(np.allclose(MM_inv, np.eye(3)))
+```
 
 ### Let's solve it!
 
@@ -221,22 +249,37 @@ $$
 x = M^{-1}b
 $$
 
-We use the function `np.dot()` to take the [dot product](https://www.mathsisfun.com/algebra/matrix-multiplying.html). 
+We use `@` again, this time to multiply the inverse matrix by the resource vector.
 
 ```{python}
-# do M^-1 * b to get x_bar
-x = np.dot(M_inv, b)
+# Multiply the inverse matrix by the resource vector
+x = M_inv @ b
 
 print(np.round(x,2))
 ```
 
-We have: $$x_1=11$$, $$x_2=0$$. and $$x_3=30$$. 
+We have approximately $x_1=11.8056$, $x_2=0$ and $x_3=30.5556$. These fractional quantities solve the exact-use equations, but do not describe a practical whole-number production plan.
 
-So we see that the optimal use of resources is to make 11 handlebrars, 0 brakes and 30 wheels. Potentially some terrifying brake-less bikes!  
+::: qna
+#### Question
+
+Can the factory manufacture the exact solution? If it produces 11 handlebars, 0 brakes and 30 wheels instead, how much of each resource remains? Could it make any additional parts?
+
+#### Answer
+
+The exact solution includes fractions of parts, so it cannot be manufactured as whole parts. The rounded-down plan uses 388 units of aluminium, 734 of rubber and 194 of paint, leaving 12, 16 and 6 respectively. It could therefore make six additional brakes. Rounding down does not establish an optimal production plan.
+
+```{python}
+x_whole = np.array([11, 0, 30])
+print("Resources used:", M @ x_whole)
+print("Resources remaining:", b - M @ x_whole)
+```
+:::
+
 
 ### Let's solve it again!
 
-So above we calculated each step of the process. Alternatively we can solve the equations using `numpy`s linear algebra solver, which skips most of the steps. 
+The inverse helps explain the algebra. For routine calculations, use NumPy's `np.linalg.solve`, which solves the system directly without explicitly constructing the inverse.
 
 ```{python}
 ## Solve the equations using numpy's linear algebra solver
@@ -245,9 +288,34 @@ x = np.linalg.solve(M, b)
 print(np.round(x, 2))
 ```
 
+Check the solution by substituting it back into the original equations. The residual `b - M @ x` should be zero apart from small numerical rounding errors.
+
+```{python}
+print("Resources used:", M @ x)
+print("Residual:", b - M @ x)
+print(np.allclose(M @ x, b))
+```
+
+::: qna
+#### Question
+
+Suppose all three resource quantities double. Predict the new solution before calculating it. Explain your reasoning and check it in Python.
+
+#### Answer
+
+The solution doubles: approximately 23.6111 handlebars, 0 brakes and 61.1111 wheels. Since $Mx=b$, we have $M(2x)=2b$. This uses the same resource requirements and still allows fractional quantities.
+
+```{python}
+b_double = 2 * b
+x_double = np.linalg.solve(M, b_double)
+print(x_double)
+print(np.allclose(x_double, 2 * x))
+```
+:::
+
 ## Visualising 
 
-In 2-dimensions and 3-dimensions we can visualise the solution to our set of equations. For two equations the solution will be the point where the two lines intersect. In three dimensiosn the solution is the intersection of the three planes described by the equation. 
+In two and three dimensions we can visualise a system of linear equations. When there is a unique solution, two lines in two dimensions or three planes in three dimensions meet at a single point. Here each plane represents exact use of one resource, and their common intersection is our solution.
 
 We can plot our equations in 3D space to see this. 
 
@@ -286,7 +354,7 @@ zaxis_title="Wheels"
 fig.show()
 ```
 
-*Note:* be careful here that you don't reassign variables!!
+*Note:* keep `M`, `b` and `x` unchanged when exploring alternative resource quantities, so that the plotted planes and solution point describe the same system.
 
 ## Conclusions 
 
@@ -306,25 +374,35 @@ df = pd.read_csv('https://raw.githubusercontent.com/huanfachen/QM/refs/heads/mai
 df.head()
 ```
 
-Choose one dependent variable ("aluminium_used", "rubber_used" or "paint_used"), and using the values for the number of items produced try to estimate the coefficients (the intercept and gradient). 
+Choose one dependent variable ("aluminium_used", "rubber_used" or "paint_used"), and using the values for the number of items produced try to estimate the coefficients (an intercept and three slopes).
 
-Essentially we are considering just one of our linear equations, and trying to find our coefficient values i.e. $M$. 
+Earlier we knew the resource requirements and solved for production quantities. Now we observe production quantities and resource use, and estimate the resource requirements: one row of $M$, plus an intercept.
+
+For aluminium, our regression model is
+
+$$
+\text{aluminium used} = \beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \varepsilon.
+$$
+
+The error term $\varepsilon$ allows observed resource use to differ from the model prediction.
 
 *Hint:* You might want to use `statsmodels` OLS package which you can read about [here](https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.OLS.html). 
 
 ::: qna
 #### Question
 
+Complete the code for one resource. Interpret the three slopes and the intercept. For aluminium, compare your estimated slopes with 8, 1 and 10. Why might they differ?
+
 ``` python
 import statsmodels.api as sm
 
-# define independent variables (productionacheived)
+# define independent variables (production quantities)
 X = ??
 
 # add constant term for intercept
 X = sm.add_constant(X)
 
-# define dependent variable (e.g. production of handlebars)
+# define dependent variable (e.g. aluminium used)
 y = ??
 
 # fit OLS regression model
@@ -336,16 +414,18 @@ print(model.summary())
 
 #### Answer
 
+Each slope estimates the additional resource use per extra unit of that product, holding the other production quantities fixed. The intercept estimates resource use when all three production quantities are zero; the original model assumes this is zero. Observed variation and estimation uncertainty mean the fitted coefficients need not match the original requirements exactly.
+
 ```{python}
 import statsmodels.api as sm
 
-# define independent variables (production acheived)
+# define independent variables (production quantities)
 X = df[["x1_handlebars",	"x2_brakes",	"x3_wheels"]]
 
 # add constant term for intercept
 X = sm.add_constant(X)
 
-# define dependent variable (e.g. production of handlebars)
+# define dependent variable (e.g. aluminium used)
 y = df["aluminium_used"]
 
 # fit OLS regression model
