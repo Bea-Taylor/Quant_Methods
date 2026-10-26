@@ -1,11 +1,20 @@
 ---
 title: "Linear Algebra"
 author: 
-  - name: "Beatrice Taylor"
+  - name: "Bea Taylor"
 email: "beatrice.taylor@ucl.ac.uk"
-date-as-string: "22nd October 2025"
+date-as-string: "27th October 2026"
 from: markdown+emoji
-format: revealjs
+format:
+  revealjs: 
+    # logo: "../images/CASA_logo.svg"
+    template-partials: 
+      - ../title-slide.html
+    transition: none
+    slide-number: TRUE
+    preview-links: auto
+    theme: ../../css/casa-slides.scss
+    chalkboard: true
 ---
 
 ## Last week
@@ -21,23 +30,7 @@ Looked at:
 
 # This week 
 
-## Back to the start
-
-Maths underpins quantitative methods
-
-::: {.incremental}
-- quantitative methods includes data analysis and machine learning 
-- focused on algorithms and methodologies 
-- **AND** practical examples of how these can be applied 
-:::
-
-:::{.notes}
-This week focussing on the maths. Not going to be directly examined on the maths - this isn't a maths course. 
-
-Rather the idea is to help with the basics which will facilitate understanding of subsequent weeks. 
-:::
-
-## Maths underpins it 
+## Back to the starting point - Maths! 
 
 :::: {.columns}
 
@@ -57,12 +50,19 @@ Rather the idea is to help with the basics which will facilitate understanding o
 
 ::: {.column width="50%"}
 
-- This lecture covers some of the key concepts
-- The goal is to facilitate deeper understanding of the methods
-
+- quantitative methods include data analysis and machine learning 
+- mostly focused on methodologies 
+- **AND** practical examples of how these can be applied 
+- **BUT** helpful to understand the underlying mathematics
 :::
 
 ::::
+
+::: {.notes}
+This week focussing on the maths. Not going to be directly examined on the maths - this isn't a maths course. 
+
+Rather the idea is to help with the basics which will facilitate understanding of subsequent weeks. 
+:::
 
 
 ## Maths doesn't bite!
@@ -82,7 +82,8 @@ By the end of this lecture you should be able to:
 
 ::: {.incremental}
 1. Define concept of linear equations. 
-2. Compute linear algebra equations using vectors and matrices.  
+2. Compute linear algebra equations using vectors and matrices.
+3. Translate mathematical equations into plain English.  
 :::
 
 # Motivation 
@@ -187,7 +188,7 @@ Provides a universal way of writing and understanding maths.
 
 ## Cheat sheet 
 
-Mathematical notation cheat sheet: https://www.upyesp.org/posts/makrdown-vscode-math-notation/
+Mathematical notation [cheat sheet](https://www.upyesp.org/posts/makrdown-vscode-math-notation/)
 
 <div style="text-align:center;">
   <img src="images/cheat_sheet_QR_code.png" alt="QR code for maths cheat sheet." style="max-width:35%">
@@ -375,14 +376,11 @@ In the applied sciences the domain and range are typically $\mathbb N$ or $\math
 . . .
 
 ::: {.incremental}
-- $\mathbb N$ 
-  - **Natural numbers** 
+- $\mathbb N$ - **Natural numbers** 
   - 0,1,2,3,4,5,6…
-- $\mathbb Z$ 
-  - **Integers** 
+- $\mathbb Z$ - **Integers** 
   - … -4, -3, -2, -1, 0, 1, 2, 3, 4, … 
-- $\mathbb R$ 
-  - **Real numbers** 
+- $\mathbb R$ - **Real numbers** 
 :::
 
 :::{.notes}
@@ -1034,6 +1032,11 @@ y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_{ik}(u_i, v_i)x_{ik} + \epsilon_i
 The outcome $y_i$ is explained by an intercept and a weighted combination of predictors,
 with coefficients that may change depending on the location $(u_i,v_i)$, plus some error.
 
+:::{.notes}
+This is exactly a linear equation - but the coefficients are allowed to vary with location. 
+
+We solve linear equatiosn usign linear regression - which is what we'll see next week.
+:::
 
 ## Equation 2
 
@@ -1124,7 +1127,5 @@ Use the maths cheat sheet!
 
 # Practical 
 The practical will focus on understanding mathematical equations.  
-
-. . .
 
 - Have questions prepared!

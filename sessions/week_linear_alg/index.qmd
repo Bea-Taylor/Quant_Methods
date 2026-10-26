@@ -16,7 +16,8 @@ Below I've linked to resources which might be helpful if you want to brush up on
 By the end of this week, you will be able to:
 
 1. Define the concept of linear equations. 
-2. Compute simple linear algebra equations using vectors and matrices.  
+2. Compute simple linear algebra equations using vectors and matrices. 
+3. Translate mathematical equations into plain English. 
 
 ## Lecture 
 
