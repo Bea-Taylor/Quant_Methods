@@ -122,7 +122,7 @@ Make sure you complete each of the tasks below, 1-4. All of these will be covere
 
 -   **edubase_schools** = this is the 'all establishment' data for every school in England and Wales
 
--   School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. [I have put this on Moodle here](https://moodle.ucl.ac.uk/mod/folder/view.php?id=8199904), but it can also be downloaded from here - <https://www.compare-school-performance.service.gov.uk/download-data>.
+-   School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. [I have put this on Moodle here](https://moodle.ucl.ac.uk/mod/folder/view.php?id=9217836), but it can also be downloaded from here - <https://www.compare-school-performance.service.gov.uk/download-data>.
 
     Download to a local drive on your computer from Moodle, unzip it and then read it in using the code supplied below. The zip folders contain the following data files in one folder and the associated metadata in the other folder:
 

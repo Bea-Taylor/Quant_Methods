@@ -1,9 +1,9 @@
 ---
 title: "Dimensionality Reduction"
 author: 
-  - name: "Huanfa Chen"
-email: "huanfa.chen@ucl.ac.uk"
-date-as-string: "17th November 2025"
+  - name: "Bea Taylor"
+email: "bea.taylor@ucl.ac.uk"
+date-as-string: "8th December 2026"
 from: markdown+emoji
 other: "CASA0007 Quantitative Methods"
 format:
@@ -39,9 +39,29 @@ Looked at:
 
 ## Objectives
 
-- Understand the motivation of dimensionality reduction
-- Understand the principle of Principal Component Analysis
-- Can apply PCA to school datasets or other datasets
+- Explain the motivation of dimensionality reduction
+- Describe the principle of Principal Component Analysis
+- Apply PCA to school datasets or other datasets
+
+# Supervised vs unsupervised learning
+
+## Supervised learning
+
+::: {.incremental}
+- We have a *target variable* (or label) to predict
+- We have a *training dataset* with known target variable values
+- We can use the training dataset to build a model to predict the target variable for new data points
+:::
+
+## Unsupervised learning
+
+::: {.incremental}
+- We do not have a target variable to predict
+- We do not have a training dataset with known target variable values
+- We want to find patterns in the data, e.g. clusters of similar data points, or a lower-dimensional representation of the data
+:::
+
+This is what we will focus on in this lecture, and next weeks lecture. 
 
 # High-dimensional data
 
