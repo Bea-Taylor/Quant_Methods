@@ -44,7 +44,8 @@ To save a copy of notebook to your own GitHub Repo: follow the GitHub link, clic
 To access the practical:
 
 1.  [Main Practical Page](regression_practical.html)
-2.  [If Quarto has rendered this properly, you might be able to download a notebook here](regression_practical.ipynb)
+2.  You can [download](https://github.com/Bea-Taylor/Quant_Methods/tree/main/practicals) the practical here as a python notebook (.ipynb) - ready for you to run the code yourself.
+
 
 ## Further resources
 
