@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,18 +74,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../..//img/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -121,17 +122,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta property="og:title" content="Practical 5: Measuring relationships – Quantitative Methods">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_correlation/correlation_practical_files/figure-html/cell-6-output-1.png">
-<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:site_name" content="Foundations">
 <meta property="og:locale" content="en_GB">
 <meta property="og:image:height" content="898">
 <meta property="og:image:width" content="1169">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-md " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-md " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
@@ -142,8 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <span class="navbar-title">Quantitative Methods</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -233,6 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -241,7 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -255,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="correlation_practical.ipynb" download="correlation_practical.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -278,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>This week is focused on measuring the relationship between two variables using Pearson/Spearman correlation coefficients.</p>
 <p>In the practical, we’re going to explore the correlation between different variables in the school dataset.</p>
-<div id="06773500" class="cell" data-execution_count="1">
+<div id="fa25fc8b" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -296,12 +297,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <p>We’re going to use a piece of filtered school data that is kindly provided by Adam. In W6, Adam will describe the source and processing of this dataset in details. For now, we just use this dataset as is.</p>
-<div id="7e59fd95" class="cell" data-execution_count="2">
+<div id="90804923" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the dataset from Github</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_school <span class="op">=</span> pd.read_csv(<span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L6_data/Performancetables_130242/2022-2023/england_filtered.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Check the shape and columns of this data frame.</p>
-<div id="d93ece71" class="cell" data-execution_count="3">
+<div id="5dd886dd" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"df_school has </span><span class="sc">{</span>df_school<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> rows and </span><span class="sc">{</span>df_school<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> columns."</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"First 5 rows:</span><span class="ch">\n</span><span class="st">"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_school.head(<span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -398,7 +399,7 @@ First 5 rows:
 36. <strong>easting</strong>: Ordnance Survey Easting coordinate of school location.<br>
 37. <strong>northing</strong>: Ordnance Survey Northing coordinate of school location.</p>
 <p>To demonstrate, we will focus on 6 columns of this dataset. 1. <strong>LANAME</strong>: local authority name 2. <strong>SCHNAME.x</strong>: school name 3. <strong>ATT8SCR</strong>: Average Attainment 8 score per pupil (0-100) 4. <strong>PERCTOT</strong>: Percentage of total absence 5. <strong>PTFSM6CLA1A</strong>: Percentage of pupils eligible for FSM6 (free school meals at any point in the last six years) and/or CLA1A (proxy for socio-economic disadvantage). CLA1A stands for <em>Children Looked After (for at least one day)</em>, which identifies pupils who have been in the care of a local authority. 6. <strong>PNUMEAL</strong>: Percentage of pupils whose first language is known or believed to be other than English.</p>
-<div id="565f07ad" class="cell" data-execution_count="4">
+<div id="dca7bbd7" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the selected columns</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_school_reduced <span class="op">=</span> df_school[[<span class="st">'LANAME'</span>, <span class="st">'SCHNAME.x'</span>, <span class="st">'ATT8SCR'</span>, <span class="st">'PERCTOT'</span>, <span class="st">'PTFSM6CLA1A'</span>, <span class="st">'PNUMEAL'</span>]]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -424,7 +425,7 @@ First 5 rows:
 <section id="first-question-is-overall-absence-related-to-average-attainment-8-score" class="level2">
 <h2 class="anchored" data-anchor-id="first-question-is-overall-absence-related-to-average-attainment-8-score">First question: is overall absence related to average attainment 8 score?</h2>
 <p>We will start with investigating the relationship between percentage of overall absence and attainment 8 score. The very first step is to make a scatterplot:</p>
-<div id="842341f9" class="cell" data-execution_count="5">
+<div id="0b4a13e1" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatterplot between PERCTOT and ATT8SCR</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(df_school_reduced[<span class="st">'PERCTOT'</span>], df_school_reduced[<span class="st">'ATT8SCR'</span>], alpha<span class="op">=</span><span class="fl">0.7</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -449,7 +450,7 @@ First 5 rows:
 </div>
 <p>The plot shows a decreasing trend: the higher total absence, the lower average attainment.</p>
 <p>The records with PERCTOT greater than 25% look like outliers, which are printed as below:</p>
-<div id="1ecf5957" class="cell" data-execution_count="6">
+<div id="60860f99" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter rows where PERCTOT &gt; 25</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>filtered_rows <span class="op">=</span> df_school_reduced[df_school_reduced[<span class="st">'PERCTOT'</span>] <span class="op">&gt;</span> <span class="dv">25</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -470,7 +471,7 @@ First 5 rows:
 </div>
 <p>For now, we are keeping these records because there is no evidence to confirm they are outliers</p>
 <p>As both variables are continous, we can use <strong>Pearson correlation</strong> to measure if they follow a linear relationship. we’ll use the <strong>pearsonr</strong> function the scipy.stats package, as this fucntion calculates the correlation coefficient and p values in one line.</p>
-<div id="998a67bc" class="cell" data-execution_count="7">
+<div id="bc5ecbde" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Pearson correlation</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>corr_coef, p_value <span class="op">=</span> pearsonr(df_school_reduced[<span class="st">'PERCTOT'</span>], df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -484,7 +485,7 @@ Two-tailed p-value: nan</code></pre>
 <p>Wait. We got an ERROR - <code>ValueError: array must not contain infs or NaNs</code>. Remember that we discussed <em>NA</em> or <em>NaN</em> values in W1. <em>You might want to remove the above code cell from the notebook, since it doesn’t run.</em></p>
 <p>Unfortunately, the <em>pearsonr</em> function doesn’t handle NaNs internally. We would have to handle NaNs before computing.</p>
 <p>The logic would be: 1. Retain the rows with no NaN in <em>PERCTOT</em> and <em>ATT8SCR</em>: <code>~np.isnan(df_school_reduced['PERCTOT']) &amp; ~np.isnan(df_school_reduced['ATT8SCR'])</code> returns a list of <strong>mask</strong>, which is <em>True</em> when no NaN values are in <em>PERCTOT</em> and <em>ATT8SCR</em>. 2. Calculate the Pearson correlation between <em>PERCTOT</em> and <em>ATT8SCR</em> in these rows.</p>
-<div id="b7352f3b" class="cell" data-execution_count="8">
+<div id="02844e46" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with NaNs in either column</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'PERCTOT'</span>]) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -515,7 +516,7 @@ Two-tailed p-value:0.00</code></pre>
 <h2 class="anchored" data-anchor-id="second-attempt-using-spearman-correlation">Second attempt: using Spearman correlation</h2>
 <p>Can we apply Spearman correlation to these two variables? Definitely - Spearman correlation is applicable to continuous variables.</p>
 <p>Following a similar procedure:</p>
-<div id="7675a4f6" class="cell" data-execution_count="9">
+<div id="0abe0c9a" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with NaNs in either column</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'PERCTOT'</span>]) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(df_school_reduced[<span class="st">'ATT8SCR'</span>])</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -543,7 +544,7 @@ Two-tailed p-value:0.00</code></pre>
 <p>The df_school_reduced dataframe contains four continous variables, and there are 6 possible pairs of variables.</p>
 <p>Is it possible to compute and visualise the correlation of all pairs in one line?</p>
 <p>The solution is to create and plot a correlation matrix, using <em>pandas</em>.</p>
-<div id="701fa858" class="cell" data-execution_count="10">
+<div id="52c14a7d" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the correlation matrix</span></span>
@@ -576,7 +577,7 @@ Two-tailed p-value:0.00</code></pre>
 <p>Interestingly, in the code above, we didn’t deal with the NaN values. The reason is that, using <code>DataFrame.corr()</code>, Pearson, Kendall, and Spearman correlation are currently computed using pairwise complete observations. In other words, this function deals with incomplete observations internally.</p>
 <p>A limitation of the code above is that it doesn’t calculate the p-value for each correlation. To calculate both correlation coefficients and p values in a batch, we can use a new package called <strong>pingouin</strong>.</p>
 <p>If you want to try out the code below, you would need to install pingouin using <code>pip install pingouin</code> on a terminal or <code>!pip install pingouin</code> in a Python notebook.</p>
-<div id="da723406" class="cell" data-execution_count="11">
+<div id="c6832f00" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install pingouin</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -605,7 +606,7 @@ Two-tailed p-value:0.00</code></pre>
 </section>
 <section id="moving-to-anova---testing-difference-in-lads" class="level2">
 <h2 class="anchored" data-anchor-id="moving-to-anova---testing-difference-in-lads">Moving to ANOVA - testing difference in LADs</h2>
-<div id="8cf4de23" class="cell" data-execution_count="12">
+<div id="ffda6850" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter dataframe</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df_filtered <span class="op">=</span> df_school_reduced[df_school_reduced[<span class="st">'LANAME'</span>].isin([<span class="st">'Camden'</span>, <span class="st">'Westminster'</span>, <span class="st">'Islington'</span>])]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -629,7 +630,7 @@ Two-tailed p-value:0.00</code></pre>
 </div>
 <p>The KDE plots of ATT8SCR for Camden, Westminster, and Islington overlap considerably, which indicates similar score distributions.</p>
 <p>We will use ANOVA to formally test if they are different.</p>
-<div id="94a6a76b" class="cell" data-execution_count="13">
+<div id="3b3d2baf" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit ANOVA model</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------</span></span>
@@ -709,7 +710,7 @@ Variances appear homogeneous.
 <li>The QQ plot of residuals shows that the residuals follow a normal distribution and there are no obvious outliers.</li>
 </ul>
 <p>To visualise the distribution of F-statistic and the p-value, we can use the following plot:</p>
-<div id="04611ac6" class="cell" data-execution_count="14">
+<div id="f16f3049" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract F statistic, p-value, and degrees of freedom from ANOVA table</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>F_stat <span class="op">=</span> anova_table[<span class="st">'F'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> anova_table[<span class="st">'PR(&gt;F)'</span>].iloc[<span class="dv">0</span>]</span>
@@ -752,7 +753,7 @@ Variances appear homogeneous.
 </div>
 </div>
 <p>We can also use <em>pingouin</em> to conduct ANOVA between <em>LANAME</em> and <em>ATT8SCR</em>. The grammar is much more concise than <em>statsmodels</em>.</p>
-<div id="8b06b3cd" class="cell" data-execution_count="15">
+<div id="59cda4a7" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-way ANOVA using Pingouin</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>anova_results <span class="op">=</span> pg.anova(dv<span class="op">=</span><span class="st">'ATT8SCR'</span>, between<span class="op">=</span><span class="st">'LANAME'</span>, data<span class="op">=</span>df_filtered, detailed<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -864,7 +865,8 @@ Variances appear homogeneous.
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -873,8 +875,69 @@ Variances appear homogeneous.
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -888,6 +951,7 @@ Variances appear homogeneous.
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1050,44 +1114,54 @@ Variances appear homogeneous.
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1185,6 +1259,9 @@ Variances appear homogeneous.
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">

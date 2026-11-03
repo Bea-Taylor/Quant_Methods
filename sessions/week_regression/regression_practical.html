@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Prof D’s Regression Sessions - Vol 1 – Quantitative Methods</title>
 <style>
@@ -70,18 +70,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../..//img/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
@@ -144,15 +145,15 @@ window.Quarto = {
 <meta property="og:title" content="Prof D’s Regression Sessions - Vol 1 – Quantitative Methods">
 <meta property="og:description" content="AKA - Applied Linear Regression - Basics">
 <meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/images/python-logo-only.png">
-<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:site_name" content="Foundations">
 <meta property="og:locale" content="en_GB">
 <meta property="og:image:height" content="326">
 <meta property="og:image:width" content="269">
 </head>
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-md " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-md " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content"><img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content"></a>
@@ -160,8 +161,7 @@ window.Quarto = {
     <span class="navbar-title">Quantitative Methods</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -251,12 +251,13 @@ window.Quarto = {
   </div>
 </a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
 <li><a href="#preamble" id="toc-preamble" class="nav-link active" data-scroll-target="#preamble">Preamble</a></li>
@@ -289,7 +290,7 @@ window.Quarto = {
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="regression_practical.ipynb" download="regression_practical.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Prof D’s Regression Sessions - Vol 1</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">AKA - Applied Linear Regression - Basics</p>
 </div>
@@ -352,7 +353,7 @@ Warning
 <li><p>School locational and attribute information, downloaded from here - <a href="https://get-information-schools.service.gov.uk/Downloads" class="uri">https://get-information-schools.service.gov.uk/Downloads</a> - or read it in using the code supplied below. This will include the following datasets:</p></li>
 <li><p><strong>edubase_schools</strong> = this is the ‘all establishment’ data for every school in England and Wales</p></li>
 <li>
-<p>School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. <a href="https://moodle.ucl.ac.uk/mod/folder/view.php?id=8199904">I have put this on Moodle here</a>, but it can also be downloaded from here - <a href="https://www.compare-school-performance.service.gov.uk/download-data" class="uri">https://www.compare-school-performance.service.gov.uk/download-data</a>.</p>
+<p>School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. <a href="https://moodle.ucl.ac.uk/mod/folder/view.php?id=9217836">I have put this on Moodle here</a>, but it can also be downloaded from here - <a href="https://www.compare-school-performance.service.gov.uk/download-data" class="uri">https://www.compare-school-performance.service.gov.uk/download-data</a>.</p>
 <p>Download to a local drive on your computer from Moodle, unzip it and then read it in using the code supplied below. The zip folders contain the following data files in one folder and the associated metadata in the other folder:</p>
 <ol type="a">
 <li><p><strong>england_ks4final</strong> = data on the 2022/23 academic year, school-level, KS4 outcomes and associated statistics</p></li>
@@ -963,7 +964,7 @@ Note
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Other variables to include in your reduced dataset">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1053,7 +1054,7 @@ Note
 <li>Select your own <span class="math inline">\(X\)</span> variable that might help explain attainment, this might relate to disadvantage, prior attainment, absence or anything else that is a <strong>continuous</strong> variable (DO NOT SELECT A CATEGORICAL VARIABLE AT THIS TIME).</li>
 <li>Once you have selected your two variables, plot them against each other on a scatter plot to see if there is an obvious relationship - again, use the code below as a guide.</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="AI tip">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1067,7 +1068,7 @@ Note
 </div>
 </div>
 <section id="exploratory-data-analysis-plots" class="level4"><h4 class="anchored" data-anchor-id="exploratory-data-analysis-plots">Exploratory Data Analysis Plots</h4>
-<div class="callout callout-style-default callout-tip callout-titled" title="Questions to Answer">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1343,8 +1344,8 @@ Note
 <span>    opacity <span class="op">=</span> <span class="fl">0.8</span></span>
 <span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-6a841c6442a80d8023bf" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-6a841c6442a80d8023bf">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",null,null,{"minZoom":0,"maxZoom":20,"maxNativeZoom":16,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"Tiles &copy; <a href=\"https://www.esri.com/\">Esri<\/a> &mdash; Esri, HERE, Garmin, &copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap<\/a> contributors"}]},{"method":"addTiles","args":["https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",null,null,{"minZoom":0,"maxZoom":20,"maxNativeZoom":16,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":""}]},{"method":"addCircleMarkers","args":[[53.83394634055382,53.84093983092549,53.85034857386938,53.85712277299099,53.82017744375353,53.90039841956449,53.75656004662164,53.74558690458779,53.8387499079027,53.76566481366035,53.74785512138476,53.76006383630605,53.80288115128293,53.81070125174928,53.79721268666177,53.79235390646338,53.79514273396459,53.78344398433403,53.78683288703903,53.8713904925365,53.84229861871142,53.81544011630753,53.83589750626852,53.81758602453261,53.81551080341188,53.85370943046657,53.81414331569527,53.74218241498903,53.79386270979967,53.91268570640318,53.73733196122085,53.7988428504004,53.85674672875195,53.7306067899343,53.79097463962646,53.88125617657391,53.79654340248619,53.80000595654007,53.78823862185425,53.92960845400619,53.72987776155618],[-1.608423239084215,-1.524073025507307,-1.551662338143588,-1.68346318744024,-1.476550927178206,-1.36196893706364,-1.382153401796083,-1.620192354862328,-1.560250705548742,-1.537818960574211,-1.532085267275583,-1.558933938220971,-1.520950890789299,-1.687351169609469,-1.484791994789932,-1.656702836658199,-1.607676318817181,-1.61998739256515,-1.391088902611243,-1.717483226940705,-1.640838474112415,-1.434796568204613,-1.595108904930247,-1.558573543807087,-1.461906770359417,-1.544329442771105,-1.654444227262337,-1.606865522760626,-1.52688289356914,-1.693852141772329,-1.459842998496006,-1.662904935937967,-1.607800074111826,-1.500854894689133,-1.53533993921077,-1.727867413822788,-1.461329674570659,-1.514485461178211,-1.534398738002605,-1.380713206258969,-1.585532609441064],[13.08621667612025,13.49914917753829,12.61769710720363,12.17300056721497,5.820192853091322,10.72773681225184,11.07714123652864,10.02098695405559,7.193987521270562,9.504821327283041,3.231423709585933,10.02098695405559,6.749290981281906,8.575723199092455,6.923993193420307,8.790130459444129,6.94781622234827,11.74418604651163,15,10.9977311401021,12.32387975042541,4.978445830969938,11.53771979580261,7.233692569483835,8.115144639818491,1,11.0850822461713,11.2597844583097,7.40045377197958,12.95121951219512,7.932501418037436,10.53715258082813,8.186613726602381,12.99092456040839,10.24333522404991,9.663641520136132,10.30686330119115,3.699943278502552,3.287010777084515,5.502552467385138,14.57912648893931],null,null,{"interactive":true,"className":"","stroke":false,"color":["#FED597","#C13B75","#FCECAD","#D5446D","#4A1079","#FEC98C","#D8456C","#FA7D5E","#FECF92","#CD4071","#808080","#F1605D","#000004","#E04C67","#782281","#BC3978","#140E36","#FB8560","#FC8961","#FE9D6C","#FCF4B6","#491078","#B1357B","#53137D","#681C81","#A9337D","#7F2482","#FCFDBF","#F66D5C","#FEC287","#FC8D63","#E44F64","#B5367A","#DA476A","#F56B5C","#FCEDAF","#EA5661","#808080","#AF357B","#F4695C","#F4695C"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["#FED597","#C13B75","#FCECAD","#D5446D","#4A1079","#FEC98C","#D8456C","#FA7D5E","#FECF92","#CD4071","#808080","#F1605D","#000004","#E04C67","#782281","#BC3978","#140E36","#FB8560","#FC8961","#FE9D6C","#FCF4B6","#491078","#B1357B","#53137D","#681C81","#A9337D","#7F2482","#FCFDBF","#F66D5C","#FEC287","#FC8D63","#E44F64","#B5367A","#DA476A","#F56B5C","#FCEDAF","#EA5661","#808080","#AF357B","#F4695C","#F4695C"],"fillOpacity":0.8},null,null,["<strong>Abbey Grange Church of England Academy<\/strong><br>Pupils: 1659","<strong>Allerton Grange School<\/strong><br>Pupils: 1711","<strong>Allerton High School<\/strong><br>Pupils: 1600","<strong>Benton Park School<\/strong><br>Pupils: 1544","<strong>Bishop Young Church of England Academy<\/strong><br>Pupils: 744","<strong>Boston Spa Academy<\/strong><br>Pupils: 1362","<strong>Brigshaw High School<\/strong><br>Pupils: 1406","<strong>Bruntcliffe Academy<\/strong><br>Pupils: 1273","<strong>Cardinal Heenan Catholic High School<\/strong><br>Pupils: 917","<strong>Cockburn John Charles Academy<\/strong><br>Pupils: 1208","<strong>Cockburn Laurence Calvert Academy<\/strong><br>Pupils: 418","<strong>Cockburn School<\/strong><br>Pupils: 1273","<strong>Co-op Academy Leeds<\/strong><br>Pupils: 861","<strong>Co-op Academy Priesthorpe<\/strong><br>Pupils: 1091","<strong>Corpus Christi Catholic College, A Voluntary Academy<\/strong><br>Pupils: 883","<strong>Crawshaw Academy<\/strong><br>Pupils: 1118","<strong>Dixons Unity Academy<\/strong><br>Pupils: 886","<strong>The Farnley Academy<\/strong><br>Pupils: 1490","<strong>Garforth Academy<\/strong><br>Pupils: 1900","<strong>Guiseley School<\/strong><br>Pupils: 1396","<strong>Horsforth School<\/strong><br>Pupils: 1563","<strong>John Smeaton Academy<\/strong><br>Pupils: 638","<strong>Lawnswood School<\/strong><br>Pupils: 1464","<strong>Leeds City Academy<\/strong><br>Pupils: 922","<strong>Leeds East Academy<\/strong><br>Pupils: 1033","<strong>Leeds Jewish Free School<\/strong><br>Pupils: 137","<strong>Leeds West Academy<\/strong><br>Pupils: 1407","<strong>The Morley Academy<\/strong><br>Pupils: 1429","<strong>Mount St Mary's Catholic High School<\/strong><br>Pupils: 943","<strong>Otley Prince Henry's Grammar School Specialist Language College<\/strong><br>Pupils: 1642","<strong>Oulton Academy<\/strong><br>Pupils: 1010","<strong>Pudsey Grammar School<\/strong><br>Pupils: 1338","<strong>Ralph Thoresby School<\/strong><br>Pupils: 1042","<strong>Rodillian Academy<\/strong><br>Pupils: 1647","<strong>The Ruth Gorse Academy<\/strong><br>Pupils: 1301","<strong>St. Mary's Menston, a Catholic Voluntary Academy<\/strong><br>Pupils: 1228","<strong>Temple Moor High School<\/strong><br>Pupils: 1309","<strong>Trinity Academy Leeds<\/strong><br>Pupils: 477","<strong>University Technical College Leeds<\/strong><br>Pupils: 425","<strong>Wetherby High School<\/strong><br>Pupils: 704","<strong>Woodkirk Academy<\/strong><br>Pupils: 1847"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["#000004 , #0C0925 6.93069306930693%, #4A1079 23.4323432343234%, #8C2981 39.9339933993399%, #D0416F 56.4356435643564%, #FA7D5E 72.9372937293729%, #FECC8F 89.4389438943894%, #FCFDBF "],"labels":["30","35","40","45","50","55"],"na_color":"#808080","na_label":"NA","opacity":0.8,"position":"bottomright","type":"numeric","title":"ATT8SCR","extra":{"p_1":0.06930693069306934,"p_n":0.8943894389438943},"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[53.72987776155618,53.92960845400619],"lng":[-1.727867413822788,-1.36196893706364]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-6bafad6de9410d2222e2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-6bafad6de9410d2222e2">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",null,null,{"minZoom":0,"maxZoom":20,"maxNativeZoom":16,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"Tiles &copy; <a href=\"https://www.esri.com/\">Esri<\/a> &mdash; Esri, HERE, Garmin, &copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap<\/a> contributors"}]},{"method":"addTiles","args":["https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",null,null,{"minZoom":0,"maxZoom":20,"maxNativeZoom":16,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":""}]},{"method":"addCircleMarkers","args":[[53.83394634055382,53.84093983092549,53.85034857386938,53.85712277299099,53.82017744375353,53.90039841956449,53.75656004662164,53.74558690458779,53.8387499079027,53.76566481366035,53.74785512138476,53.76006383630605,53.80288115128293,53.81070125174928,53.79721268666177,53.79235390646338,53.79514273396459,53.78344398433403,53.78683288703903,53.8713904925365,53.84229861871142,53.81544011630753,53.83589750626852,53.81758602453261,53.81551080341188,53.85370943046657,53.81414331569527,53.74218241498903,53.79386270979967,53.91268570640318,53.73733196122085,53.7988428504004,53.85674672875195,53.7306067899343,53.79097463962646,53.88125617657391,53.79654340248619,53.80000595654007,53.78823862185425,53.92960845400619,53.72987776155618],[-1.608423239084215,-1.524073025507307,-1.551662338143588,-1.68346318744024,-1.476550927178206,-1.36196893706364,-1.382153401796083,-1.620192354862328,-1.560250705548742,-1.537818960574211,-1.532085267275583,-1.558933938220971,-1.520950890789299,-1.687351169609469,-1.484791994789932,-1.656702836658199,-1.607676318817181,-1.61998739256515,-1.391088902611243,-1.717483226940705,-1.640838474112415,-1.434796568204613,-1.595108904930247,-1.558573543807087,-1.461906770359417,-1.544329442771105,-1.654444227262337,-1.606865522760626,-1.52688289356914,-1.693852141772329,-1.459842998496006,-1.662904935937967,-1.607800074111826,-1.500854894689133,-1.53533993921077,-1.727867413822788,-1.461329674570659,-1.514485461178211,-1.534398738002605,-1.380713206258969,-1.585532609441064],[13.08621667612025,13.49914917753829,12.61769710720363,12.17300056721497,5.820192853091322,10.72773681225184,11.07714123652864,10.02098695405559,7.193987521270562,9.504821327283041,3.231423709585933,10.02098695405559,6.749290981281906,8.575723199092455,6.923993193420307,8.790130459444129,6.94781622234827,11.74418604651163,15,10.9977311401021,12.32387975042541,4.978445830969938,11.53771979580261,7.233692569483835,8.115144639818491,1,11.0850822461713,11.2597844583097,7.40045377197958,12.95121951219512,7.932501418037436,10.53715258082813,8.186613726602381,12.99092456040839,10.24333522404991,9.663641520136132,10.30686330119115,3.699943278502552,3.287010777084515,5.502552467385138,14.57912648893931],null,null,{"interactive":true,"className":"","stroke":false,"color":["#FED597","#C13B75","#FCECAD","#D5446D","#4A1079","#FEC98C","#D8456C","#FA7D5E","#FECF92","#CD4071","#808080","#F1605D","#000004","#E04C67","#782281","#BC3978","#140E36","#FB8560","#FC8961","#FE9D6C","#FCF4B6","#491078","#B1357B","#53137D","#681C81","#A9337D","#7F2482","#FCFDBF","#F66D5C","#FEC287","#FC8D63","#E44F64","#B5367A","#DA476A","#F56B5C","#FCEDAF","#EA5661","#808080","#AF357B","#F4695C","#F4695C"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["#FED597","#C13B75","#FCECAD","#D5446D","#4A1079","#FEC98C","#D8456C","#FA7D5E","#FECF92","#CD4071","#808080","#F1605D","#000004","#E04C67","#782281","#BC3978","#140E36","#FB8560","#FC8961","#FE9D6C","#FCF4B6","#491078","#B1357B","#53137D","#681C81","#A9337D","#7F2482","#FCFDBF","#F66D5C","#FEC287","#FC8D63","#E44F64","#B5367A","#DA476A","#F56B5C","#FCEDAF","#EA5661","#808080","#AF357B","#F4695C","#F4695C"],"fillOpacity":0.8},null,null,["<strong>Abbey Grange Church of England Academy<\/strong><br>Pupils: 1659","<strong>Allerton Grange School<\/strong><br>Pupils: 1711","<strong>Allerton High School<\/strong><br>Pupils: 1600","<strong>Benton Park School<\/strong><br>Pupils: 1544","<strong>Bishop Young Church of England Academy<\/strong><br>Pupils: 744","<strong>Boston Spa Academy<\/strong><br>Pupils: 1362","<strong>Brigshaw High School<\/strong><br>Pupils: 1406","<strong>Bruntcliffe Academy<\/strong><br>Pupils: 1273","<strong>Cardinal Heenan Catholic High School<\/strong><br>Pupils: 917","<strong>Cockburn John Charles Academy<\/strong><br>Pupils: 1208","<strong>Cockburn Laurence Calvert Academy<\/strong><br>Pupils: 418","<strong>Cockburn School<\/strong><br>Pupils: 1273","<strong>Co-op Academy Leeds<\/strong><br>Pupils: 861","<strong>Co-op Academy Priesthorpe<\/strong><br>Pupils: 1091","<strong>Corpus Christi Catholic College, A Voluntary Academy<\/strong><br>Pupils: 883","<strong>Crawshaw Academy<\/strong><br>Pupils: 1118","<strong>Dixons Unity Academy<\/strong><br>Pupils: 886","<strong>The Farnley Academy<\/strong><br>Pupils: 1490","<strong>Garforth Academy<\/strong><br>Pupils: 1900","<strong>Guiseley School<\/strong><br>Pupils: 1396","<strong>Horsforth School<\/strong><br>Pupils: 1563","<strong>John Smeaton Academy<\/strong><br>Pupils: 638","<strong>Lawnswood School<\/strong><br>Pupils: 1464","<strong>Leeds City Academy<\/strong><br>Pupils: 922","<strong>Leeds East Academy<\/strong><br>Pupils: 1033","<strong>Leeds Jewish Free School<\/strong><br>Pupils: 137","<strong>Leeds West Academy<\/strong><br>Pupils: 1407","<strong>The Morley Academy<\/strong><br>Pupils: 1429","<strong>Mount St Mary's Catholic High School<\/strong><br>Pupils: 943","<strong>Otley Prince Henry's Grammar School Specialist Language College<\/strong><br>Pupils: 1642","<strong>Oulton Academy<\/strong><br>Pupils: 1010","<strong>Pudsey Grammar School<\/strong><br>Pupils: 1338","<strong>Ralph Thoresby School<\/strong><br>Pupils: 1042","<strong>Rodillian Academy<\/strong><br>Pupils: 1647","<strong>The Ruth Gorse Academy<\/strong><br>Pupils: 1301","<strong>St. Mary's Menston, a Catholic Voluntary Academy<\/strong><br>Pupils: 1228","<strong>Temple Moor High School<\/strong><br>Pupils: 1309","<strong>Trinity Academy Leeds<\/strong><br>Pupils: 477","<strong>University Technical College Leeds<\/strong><br>Pupils: 425","<strong>Wetherby High School<\/strong><br>Pupils: 704","<strong>Woodkirk Academy<\/strong><br>Pupils: 1847"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["#000004 , #0C0925 6.93069306930693%, #4A1079 23.4323432343234%, #8C2981 39.9339933993399%, #D0416F 56.4356435643564%, #FA7D5E 72.9372937293729%, #FECC8F 89.4389438943894%, #FCFDBF "],"labels":["30","35","40","45","50","55"],"na_color":"#808080","na_label":"NA","opacity":0.8,"position":"bottomright","type":"numeric","title":"ATT8SCR","extra":{"p_1":0.06930693069306934,"p_n":0.8943894389438943},"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[53.72987776155618,53.92960845400619],"lng":[-1.727867413822788,-1.36196893706364]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -1409,7 +1410,7 @@ Note
 <span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Label axes</span></span>
 <span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>g.set_axis_labels(<span class="st">"log10(PTFSM6CLA1A)"</span>, <span class="st">"log10(ATT8SCR)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x7f34eeaf9bd0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x7ff950774610&gt;</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
@@ -1542,7 +1543,7 @@ Note
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Explore Different Visualisations">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1654,8 +1655,8 @@ Tip
 Dep. Variable:            log_ATT8SCR   R-squared:                       0.576
 Model:                            OLS   Adj. R-squared:                  0.523
 Method:                 Least Squares   F-statistic:                     10.88
-Date:                Mon, 26 Oct 2026   Prob (F-statistic):             0.0109
-Time:                        17:19:25   Log-Likelihood:                 9.4809
+Date:                Tue, 03 Nov 2026   Prob (F-statistic):             0.0109
+Time:                        10:02:31   Log-Likelihood:                 9.4809
 No. Observations:                  10   AIC:                            -14.96
 Df Residuals:                       8   BIC:                            -14.36
 Df Model:                           1                                         
@@ -1742,8 +1743,8 @@ F-statistic: 10.88 on 1 and 8 DF,  p-value: 0.01088</code></pre>
 Dep. Variable:            log_ATT8SCR   R-squared:                       0.491
 Model:                            OLS   Adj. R-squared:                  0.477
 Method:                 Least Squares   F-statistic:                     35.71
-Date:                Mon, 26 Oct 2026   Prob (F-statistic):           6.77e-07
-Time:                        17:19:25   Log-Likelihood:                 26.542
+Date:                Tue, 03 Nov 2026   Prob (F-statistic):           6.77e-07
+Time:                        10:02:31   Log-Likelihood:                 26.542
 No. Observations:                  39   AIC:                            -49.08
 Df Residuals:                      37   BIC:                            -45.76
 Df Model:                           1                                         
@@ -1831,8 +1832,8 @@ F-statistic: 35.71 on 1 and 37 DF,  p-value: 6.767e-07</code></pre>
 Dep. Variable:            log_ATT8SCR   R-squared:                       0.468
 Model:                            OLS   Adj. R-squared:                  0.468
 Method:                 Least Squares   F-statistic:                     2611.
-Date:                Mon, 26 Oct 2026   Prob (F-statistic):               0.00
-Time:                        17:19:25   Log-Likelihood:                 1668.0
+Date:                Tue, 03 Nov 2026   Prob (F-statistic):               0.00
+Time:                        10:02:31   Log-Likelihood:                 1668.0
 No. Observations:                2968   AIC:                            -3332.
 Df Residuals:                    2966   BIC:                            -3320.
 Df Model:                           1                                         
@@ -2152,7 +2153,7 @@ Standard errors in parentheses.
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Questions to Answer">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2181,7 +2182,7 @@ Standard errors in parentheses.
 </ul>
 </li>
 </ol>
-<div class="callout callout-style-default callout-tip callout-titled" title="AI can help here!">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2338,7 +2339,8 @@ Standard errors in parentheses.
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -2347,8 +2349,69 @@ Standard errors in parentheses.
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -2362,6 +2425,7 @@ Standard errors in parentheses.
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -2524,44 +2588,54 @@ Standard errors in parentheses.
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -2659,6 +2733,8 @@ Standard errors in parentheses.
       }
     }
   });
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb73" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Prof D's Regression Sessions - Vol 1"</span></span>
@@ -2784,7 +2860,7 @@ Standard errors in parentheses.
 <span id="cb73-126"><a href="#cb73-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-127"><a href="#cb73-127" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**edubase_schools** = this is the 'all establishment' data for every school in England and Wales</span>
 <span id="cb73-128"><a href="#cb73-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb73-129"><a href="#cb73-129" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. <span class="co">[</span><span class="ot">I have put this on Moodle here</span><span class="co">](https://moodle.ucl.ac.uk/mod/folder/view.php?id=8199904)</span>, but it can also be downloaded from here - <span class="ot">&lt;https://www.compare-school-performance.service.gov.uk/download-data&gt;</span>.</span>
+<span id="cb73-129"><a href="#cb73-129" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>School-level Key Stage 4 (14-16 GCSE level) attainment and other attribute information. <span class="co">[</span><span class="ot">I have put this on Moodle here</span><span class="co">](https://moodle.ucl.ac.uk/mod/folder/view.php?id=9217836)</span>, but it can also be downloaded from here - <span class="ot">&lt;https://www.compare-school-performance.service.gov.uk/download-data&gt;</span>.</span>
 <span id="cb73-130"><a href="#cb73-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb73-131"><a href="#cb73-131" aria-hidden="true" tabindex="-1"></a>    Download to a local drive on your computer from Moodle, unzip it and then read it in using the code supplied below. The zip folders contain the following data files in one folder and the associated metadata in the other folder:</span>
 <span id="cb73-132"><a href="#cb73-132" aria-hidden="true" tabindex="-1"></a></span>

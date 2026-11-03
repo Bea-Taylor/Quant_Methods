@@ -7,14 +7,14 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-3f418c0a1af92b3d03a8c930c3125fbd.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9c3a1e1c6575ec7941e65798f543bd82.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.11.9">
 
   <meta name="author" content="Bea Taylor">
   <title>Quantitative Methods – Exploratory Data Analysis #2</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
   <style>
@@ -101,7 +101,7 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3903353f5457d2a8a8c48812a6ae8559.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-50bc5dbd4e6112eda73857acb04a6f15.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -199,9 +199,11 @@
   
   <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <meta property="og:title" content="Exploratory Data Analysis #2 – Quantitative Methods">
-<meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_EDA2/img/logo/full_sm.png">
-<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:image" content="https://bea-taylor.com/quant_methods/img/logo/full_sm.png">
+<meta property="og:site_name" content="Foundations">
 <meta property="og:locale" content="en_GB">
+<meta property="og:image:height" content="102">
+<meta property="og:image:width" content="77">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -269,7 +271,7 @@
 </section>
 <section id="when-descriptive-statistics-arent-enough" class="slide level2 smaller">
 <h2>When descriptive statistics aren’t enough</h2>
-<div id="3d0e901c" class="cell" data-execution_count="1">
+<div id="df949632" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-label="1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-2"><a aria-label="2"></a></span>
 <span id="cb1-3"><a aria-label="3"></a><span class="co"># read data</span></span>
@@ -751,7 +753,7 @@ p(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 </div>
 <div class="fragment">
 <p>Or the probability of a range of values by integrating the PDF:</p>
-<div id="3847c722" class="cell" data-execution_count="2">
+<div id="cb5996d0" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a aria-label="1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> sps</span>
 <span id="cb2-2"><a aria-label="2"></a></span>
 <span id="cb2-3"><a aria-label="3"></a>mu <span class="op">=</span> <span class="dv">0</span></span>
@@ -843,7 +845,7 @@ P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
 </ul></li>
 </ul>
 <div class="fragment">
-<div id="5933c8af" class="cell" data-execution_count="3">
+<div id="371b87ab" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span>
 <span id="cb4-2"><a aria-label="2"></a></span>
 <span id="cb4-3"><a aria-label="3"></a><span class="co"># P(X &gt;= 120) = P(X &gt; 119)</span></span>
@@ -940,7 +942,7 @@ P(X = k) = \frac{\lambda^k e^{- \lambda}}{k!}
 <li class="fragment">How likely is it that no bikes arrive in the next 10 minutes?</li>
 <li class="fragment">How likely is it that 8 or more bikes arrive?</li>
 </ul>
-<div id="60034d4a" class="cell" data-execution_count="4">
+<div id="49ea2fbd" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb7-2"><a aria-label="2"></a></span>
 <span id="cb7-3"><a aria-label="3"></a>lambda_10min <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="dv">10</span>  <span class="co"># expected arrivals in 10 minutes</span></span>
@@ -986,7 +988,7 @@ Probability of 8 or more arrivals: 0.1334</code></pre>
 <li class="fragment">London Plane trees are randomly distirbuted in London’s parks, with an average of 2 trees per 100m².</li>
 <li class="fragment">What is the probability of finding exactly 3 trees in a 100m² area of Hyde Park?</li>
 </ul>
-<div id="b26fc654" class="cell" data-execution_count="5">
+<div id="32539cda" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
 <span id="cb10-2"><a aria-label="2"></a></span>
 <span id="cb10-3"><a aria-label="3"></a>lambda_trees <span class="op">=</span> <span class="dv">2</span>  <span class="co"># expected trees in 100m²</span></span>
@@ -1177,7 +1179,7 @@ This is sometimes referred to as the <em>negative exponential distribution</em> 
 <li><span class="math inline">\(p(10) = 1 \times e^{-1 \times 10}\)</span></li>
 </ul></li>
 </ul>
-<div id="b612780d" class="cell" data-execution_count="6">
+<div id="d9b80fce" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a aria-label="1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> expon</span>
 <span id="cb14-2"><a aria-label="2"></a></span>
 <span id="cb14-3"><a aria-label="3"></a>lambda_1min <span class="op">=</span> <span class="dv">1</span>  <span class="co"># rate per minute</span></span>
@@ -1717,7 +1719,7 @@ log_a(a^x) = x
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"\u003ci class=\"fas fa-gear\">\u003c/i>","content":"\u003cul class=\"slide-menu-items\">\n\u003cli class=\"slide-tool-item active\" data-item=\"0\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\">\u003ckbd>f\u003c/kbd> Fullscreen\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"1\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\">\u003ckbd>s\u003c/kbd> Speaker View\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"2\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\">\u003ckbd>o\u003c/kbd> Slide Overview\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"3\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\">\u003ckbd>e\u003c/kbd> PDF Export Mode\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"4\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\">\u003ckbd>r\u003c/kbd> Scroll View Mode\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"5\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\">\u003ckbd>b\u003c/kbd> Toggle Chalkboard\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"6\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\">\u003ckbd>c\u003c/kbd> Toggle Notes Canvas\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"7\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\">\u003ckbd>d\u003c/kbd> Download Drawings\u003c/a>\u003c/li>\n\u003cli class=\"slide-tool-item\" data-item=\"8\">\u003ca href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\">\u003ckbd>?\u003c/kbd> Keyboard Help\u003c/a>\u003c/li>\n\u003c/ul>"}],"openButton":true,"openButtonLabel":"Slide menu"},
 'chalkboard': {"buttons":true},
 'smaller': false,
  
@@ -1973,7 +1975,8 @@ log_a(a^x) = x
               return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
           }
           // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          window.quartoDecorateExternalLinks = function (root) {
+         var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
           for (var i=0; i<links.length; i++) {
             const link = links[i];
             if (!isInternal(link.href)) {
@@ -1982,8 +1985,69 @@ log_a(a^x) = x
               if (link.dataset.originalHref !== undefined) {
                 link.href = link.dataset.originalHref;
               }
+              if (!link.classList.contains('no-external-icon')) {
+              }
             }
           }
+          };
+          window.quartoDecorateExternalLinks(window.document);
+        // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+        // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+        const hideOnEscAndFocusOut = {
+          name: 'hideOnEscAndFocusOut',
+          defaultValue: true,
+          fn(instance) {
+            const dismiss = () => {
+              // A show scheduled by the trigger delay would otherwise reopen it
+              instance.clearDelayTimeouts();
+              instance.hide();
+            };
+            const onKeyDown = (event) => {
+              if (event.key !== 'Escape') {
+                return;
+              }
+              // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+              // except an open reveal.js slide menu, which Esc should close too.
+              // The menu handles keys only when its keyboard option is on.
+              const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+                window.Reveal.getConfig().menu?.keyboard !== false;
+              if (!menuHandlesEsc) {
+                event.stopPropagation();
+              }
+              if (instance.popper.contains(window.document.activeElement)) {
+                // Disabled while refocusing so the focus trigger does not reopen it
+                instance.disable();
+                instance.reference.focus();
+                instance.enable();
+              }
+              dismiss();
+            };
+            const onFocusOut = (event) => {
+              const target = event.relatedTarget;
+              if (target && !instance.reference.contains(target) &&
+                  !instance.popper.contains(target)) {
+                dismiss();
+              }
+            };
+            // On the trigger too: a click trigger (code-annotations: select) has no
+            // blur handling. Attached for the instance's lifetime so leaving the
+            // trigger also cancels a show still pending on the trigger delay.
+            instance.reference.addEventListener('focusout', onFocusOut);
+            return {
+              onShow() {
+                window.document.addEventListener('keydown', onKeyDown, true);
+                instance.popper.addEventListener('focusout', onFocusOut);
+              },
+              onHide() {
+                window.document.removeEventListener('keydown', onKeyDown, true);
+                instance.popper.removeEventListener('focusout', onFocusOut);
+              },
+              onDestroy() {
+                instance.reference.removeEventListener('focusout', onFocusOut);
+              },
+            };
+          },
+        };
         function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
           const config = {
             allowHTML: true,
@@ -1997,6 +2061,7 @@ log_a(a^x) = x
             interactiveBorder: 10,
             theme: 'light-border',
             placement: 'bottom-start',
+            plugins: [hideOnEscAndFocusOut],
           };
           if (contentFn) {
             config.content = contentFn;

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,18 +74,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../..//img/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -153,17 +154,17 @@ window.Quarto = {
 <meta property="og:title" content="Practical 10: Clustering analysis – Quantitative Methods">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/week_clustering/clustering_practical_files/figure-html/cell-10-output-1.png">
-<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:site_name" content="Foundations">
 <meta property="og:locale" content="en_GB">
 <meta property="og:image:height" content="1060">
 <meta property="og:image:width" content="1370">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-md " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-md " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
@@ -174,8 +175,7 @@ window.Quarto = {
     <span class="navbar-title">Quantitative Methods</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -265,6 +265,7 @@ window.Quarto = {
   </div>
 </a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -273,7 +274,7 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -309,7 +310,7 @@ window.Quarto = {
 <div class="toc-actions"><ul><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="clustering_practical.ipynb" download="clustering_practical.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -344,7 +345,7 @@ window.Quarto = {
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>We first import the Python libraries needed for data handling, clustering, and plotting.</p>
-<div id="d04d54fd" class="cell" data-execution_count="1">
+<div id="f8d87ea4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -362,7 +363,7 @@ window.Quarto = {
 <section id="load-school-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-school-data">Load school data</h2>
 <p>We now load the DfE school dataset of 2022-2023.</p>
-<div id="80f2d01e" class="cell" data-execution_count="2">
+<div id="f19a8e87" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url_school <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L6_data/Performancetables_130242/2022-2023/england_filtered.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_school <span class="op">=</span> pd.read_csv(url_school)</span>
@@ -407,7 +408,7 @@ window.Quarto = {
 <section id="load-lad-to-county-lookup-and-filter-to-london" class="level2">
 <h2 class="anchored" data-anchor-id="load-lad-to-county-lookup-and-filter-to-london">Load LAD-to-county lookup and filter to London</h2>
 <p>We need to keep only schools in <strong>Inner London</strong> or <strong>Outer London</strong>. To do this, we join a LAD-to-county lookup table to the school data.</p>
-<div id="58f514ef" class="cell" data-execution_count="3">
+<div id="6e75b413" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw link to the lookup table</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>url_lad_county <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/huanfachen/QM/refs/heads/main/sessions/L10_data/Local_Authority_District_to_County_(December_2024)_Lookup_in_EN.csv"</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -429,7 +430,7 @@ window.Quarto = {
 </li>
 <li>Keep only rows where <code>CTY24NM</code> is <strong>Inner London</strong> or <strong>Outer London</strong>.</li>
 </ul>
-<div id="9b2d3907" class="cell" data-execution_count="4">
+<div id="6ffca750" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge school data with LAD→County lookup</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_school_london <span class="op">=</span> df_school.merge(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    df_lad_county[[<span class="st">"LAD24NM"</span>, <span class="st">"CTY24NM"</span>]],</span>
@@ -513,7 +514,7 @@ Name: count, dtype: int64</code></pre>
 </li>
 <li><strong>P8MEA_NFSM6CLA1A</strong> – Progress 8 measure for non-disadvantaged pupils.</li>
 </ol>
-<div id="bfb4721f" class="cell" data-execution_count="5">
+<div id="656f8959" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cols_for_clustering <span class="op">=</span> [</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PTFSM6CLA1A"</span>, <span class="st">"PTNOTFSM6CLA1A"</span>, <span class="st">"PNUMEAL"</span>, <span class="st">"PNUMFSMEVER"</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ATT8SCR_FSM6CLA1A"</span>, <span class="st">"ATT8SCR_NFSM6CLA1A"</span>, <span class="st">"ATT8SCR_BOYS"</span>, <span class="st">"ATT8SCR_GIRLS"</span>,</span>
@@ -618,7 +619,7 @@ Name: count, dtype: int64</code></pre>
 <section id="check-and-handle-missing-values" class="level2">
 <h2 class="anchored" data-anchor-id="check-and-handle-missing-values">Check and handle missing values</h2>
 <p>Clustering algorithms cannot directly work with missing values, so we have to handle them. We will use <strong>KNN imputation</strong>, which fills in missing values based on similar rows.</p>
-<div id="515649e5" class="cell" data-execution_count="6">
+<div id="07df7847" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_school_reduced.isna().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>PTFSM6CLA1A           11
@@ -634,7 +635,7 @@ P8MEA_NFSM6CLA1A      21
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="2996ad03" class="cell" data-execution_count="7">
+<div id="299add3e" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use K-nearest neighbours imputation (k = 5)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>imputer <span class="op">=</span> KNNImputer(n_neighbors<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -744,7 +745,7 @@ dtype: int64</code></pre>
 <section id="standardise-variables" class="level2">
 <h2 class="anchored" data-anchor-id="standardise-variables">Standardise variables</h2>
 <p>Different variables are measured on different scales (e.g.&nbsp;ratio vs scores). To avoid one variable dominating the distance measure, we standardise them so each has mean <span class="math display">\[0\]</span> and standard deviation <span class="math display">\[1\]</span>.</p>
-<div id="bafa668f" class="cell" data-execution_count="8">
+<div id="d220616f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>scaled_array <span class="op">=</span> scaler.fit_transform(df_reduced_imputed)</span>
@@ -905,7 +906,7 @@ dtype: int64</code></pre>
 </ol>
 <section id="elbow-plot-to-choose-k" class="level3">
 <h3 class="anchored" data-anchor-id="elbow-plot-to-choose-k">Elbow plot to choose <span class="math display">\[k\]</span></h3>
-<div id="45290b5b" class="cell" data-execution_count="9">
+<div id="dcfbc039" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>k_values <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)  <span class="co"># try k = 2 to 10</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -937,7 +938,7 @@ dtype: int64</code></pre>
 </section>
 <section id="fit-k-means-with-chosen-k" class="level3">
 <h3 class="anchored" data-anchor-id="fit-k-means-with-chosen-k">Fit K-means with chosen <span class="math display">\[k\]</span></h3>
-<div id="4fa0ffd3" class="cell" data-execution_count="10">
+<div id="b6d932d3" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>k_val <span class="op">=</span> <span class="dv">5</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>kmeans_final <span class="op">=</span> KMeans(</span>
@@ -968,7 +969,7 @@ Name: count, dtype: int64</code></pre>
 <section id="inspect-k-means-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="inspect-k-means-cluster-centroids">Inspect K-means cluster centroids</h3>
 <p>We will look at the <em>typical</em> school in each cluster by examining the cluster centroids back in the original units.</p>
-<div id="a12d074b" class="cell" data-execution_count="11">
+<div id="cbd906b3" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>centroids_scaled <span class="op">=</span> kmeans_final.cluster_centers_</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>centroids_original <span class="op">=</span> scaler.inverse_transform(centroids_scaled)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1006,7 +1007,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="plot-of-k-means-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="plot-of-k-means-cluster-centroids">Plot of K-means cluster centroids</h3>
 <p>We will use the following code to visualise the cluster centroids in multiple dimensions.</p>
-<div id="c09f37bb" class="cell" data-execution_count="12">
+<div id="fe9db001" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adapted from this tutorial: https://towardsdatascience.com/how-to-make-stunning-radar-charts-with-python-implemented-in-matplotlib-and-plotly-91e21801d8ca</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> radar_plot_cluster_centroids(df_cluster_centroid):</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># parameters</span></span>
@@ -1031,7 +1032,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Can you observe and describe the difference between cluster centroids?</p>
-<div id="a7aaa258" class="cell" data-execution_count="13">
+<div id="24936310" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>radar_plot_cluster_centroids(df_centroids)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1045,7 +1046,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="visualising-clusters-with-selected-variables" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-clusters-with-selected-variables">Visualising clusters with selected variables</h3>
 <p>To visualise all data points coloured by the clusters, we can pick up two variables (such as Attainment 8 for FSM vs non-FSM students) and create a scatterplot.</p>
-<div id="54eb21d2" class="cell" data-execution_count="14">
+<div id="b778f40a" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x_var <span class="op">=</span> <span class="st">"ATT8SCR_FSM6CLA1A"</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_var <span class="op">=</span> <span class="st">"ATT8SCR_NFSM6CLA1A"</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1077,7 +1078,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="helper-function-to-plot-dendrogram" class="level3">
 <h3 class="anchored" data-anchor-id="helper-function-to-plot-dendrogram">Helper function to plot dendrogram</h3>
 <p>We reconstruct a linkage matrix from the fitted model, following the pattern used in scikit-learn tutorials.</p>
-<div id="99f4b69b" class="cell" data-execution_count="15">
+<div id="259c04a1" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_dendrogram(model, <span class="op">**</span>kwargs):</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot a dendrogram for a fitted AgglomerativeClustering model.</span></span>
@@ -1108,7 +1109,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="fit-hierarchical-model" class="level3">
 <h3 class="anchored" data-anchor-id="fit-hierarchical-model">Fit hierarchical model</h3>
 <p>We first fit a model that builds the full tree so that we can draw the dendrogram.</p>
-<div id="b7c616f5" class="cell" data-execution_count="16">
+<div id="1e24e989" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>agg_full <span class="op">=</span> AgglomerativeClustering(</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    distance_threshold<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    n_clusters<span class="op">=</span><span class="va">None</span>,</span>
@@ -1122,7 +1123,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <section id="plot-truncated-dendrogram" class="level3">
 <h3 class="anchored" data-anchor-id="plot-truncated-dendrogram">Plot truncated dendrogram</h3>
 <p>We only show the top few levels so the plot is not too crowded.</p>
-<div id="74f84af5" class="cell" data-execution_count="17">
+<div id="88882970" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hierarchical Clustering Dendrogram (truncated) - London schools"</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1150,7 +1151,7 @@ Cluster 4         0.397964          0.895892  </code></pre>
 <li>A big vertical jump suggests a natural place to cut the tree into a small number of clusters.### Cut tree into a chosen number of clusters</li>
 </ul>
 <p>We now choose a number of clusters (e.g.&nbsp;5, for easier comparison with K-means).</p>
-<div id="e7b243d6" class="cell" data-execution_count="18">
+<div id="e17b55d5" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n_clusters_hier <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>agg_cut <span class="op">=</span> AgglomerativeClustering(</span>
@@ -1177,7 +1178,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="plot-of-hierarchical-cluster-centroids" class="level3">
 <h3 class="anchored" data-anchor-id="plot-of-hierarchical-cluster-centroids">Plot of hierarchical cluster centroids</h3>
-<div id="bb3a595f" class="cell" data-execution_count="19">
+<div id="e8618722" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_hc <span class="op">=</span> df_school_reduced.copy()</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df_hc <span class="op">=</span> df_hc.assign(cluster_hier<span class="op">=</span>hier_labels)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>df_hc_centroid <span class="op">=</span> df_hc.groupby(<span class="st">'cluster_hier'</span>).mean()</span>
@@ -1195,7 +1196,7 @@ Name: count, dtype: int64</code></pre>
 <section id="visualising-clusters-with-selected-variables-1" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-clusters-with-selected-variables-1">Visualising clusters with selected variables</h3>
 <p>We reuse the same two attainment variables but colour by hierarchical cluster.</p>
-<div id="a7b65907" class="cell" data-execution_count="20">
+<div id="439935e8" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df_school_london,</span>
@@ -1229,7 +1230,7 @@ Name: count, dtype: int64</code></pre>
 </ul>
 <section id="map-with-k-means-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="map-with-k-means-clusters">Map with K-means clusters</h3>
-<div id="1bf55fea" class="cell" data-execution_count="21">
+<div id="cbf0a29c" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> Polygon, MultiPolygon</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.lines <span class="im">as</span> mlines</span>
@@ -1334,7 +1335,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_35316/2539784033.py:29: DeprecationWarning: The 'unary_union' attribute is deprecated, use the 'union_all()' method instead.
+<pre><code>/tmp/ipykernel_34829/2539784033.py:29: DeprecationWarning: The 'unary_union' attribute is deprecated, use the 'union_all()' method instead.
   london_union = gdf_london.unary_union      # Polygon or MultiPolygon</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1348,7 +1349,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="map-with-hierarchical-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="map-with-hierarchical-clusters">Map with hierarchical clusters</h3>
-<div id="58c3c70c" class="cell" data-execution_count="22">
+<div id="ed839f10" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.lines <span class="im">as</span> mlines</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
@@ -1516,7 +1517,8 @@ Name: count, dtype: int64</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1525,8 +1527,69 @@ Name: count, dtype: int64</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1540,6 +1603,7 @@ Name: count, dtype: int64</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1702,44 +1766,54 @@ Name: count, dtype: int64</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1837,6 +1911,9 @@ Name: count, dtype: int64</code></pre>
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">

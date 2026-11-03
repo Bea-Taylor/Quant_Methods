@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Adam Dennett">
 <title>Prof D’s Regression Sessions - Vol 4 – Quantitative Methods</title>
@@ -71,18 +71,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../..//img/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-35855f9d86d94d7a05318ac0adf91a1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-6b4e348ad24f6cc73024e634b5ca5598.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-8eb9d65ce1e361aa139a482fb7aa2ef7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
@@ -140,15 +141,15 @@ window.Quarto = {
 <meta property="og:title" content="Prof D’s Regression Sessions - Vol 4 – Quantitative Methods">
 <meta property="og:description" content="Good Skool / Bad Skool Breaks - a logistic regression walkthrough">
 <meta property="og:image" content="https://bea-taylor.com/quant_methods/sessions/images/Rlogo.png">
-<meta property="og:site_name" content="Quantitative Methods">
+<meta property="og:site_name" content="Foundations">
 <meta property="og:locale" content="en_GB">
 <meta property="og:image:height" content="561">
 <meta property="og:image:width" content="724">
 </head>
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-md " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-md " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo light-content"><img src="../../img/logo/logo_only_sm.png" alt="" class="navbar-logo dark-content"></a>
@@ -156,8 +157,7 @@ window.Quarto = {
     <span class="navbar-title">Quantitative Methods</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -247,12 +247,13 @@ window.Quarto = {
   </div>
 </a>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
 <li><a href="#preamble" id="toc-preamble" class="nav-link active" data-scroll-target="#preamble">Preamble</a></li>
@@ -313,7 +314,7 @@ window.Quarto = {
   </ul><div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/Bea-Taylor/Quant_Methods/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="GLM_practical.ipynb" download="GLM_practical.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Prof D’s Regression Sessions - Vol 4</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">Good Skool / Bad Skool Breaks - a logistic regression walkthrough</p>
 </div>
@@ -354,7 +355,7 @@ window.Quarto = {
 <li>Take at least one of the two extensions further than the lecture went</li>
 </ol></section><section id="before-you-start-the-two-tabs" class="level2"><h2 class="anchored" data-anchor-id="before-you-start-the-two-tabs">Before you start: the two tabs</h2>
 <p>Every code block below has an <strong>R</strong> tab and a <strong>Python</strong> tab. They are not loose translations of each other - they do the same arithmetic on the same rows and produce the same numbers, to four decimal places, all the way through. If your two tabs disagree, something has gone wrong, and that is worth chasing down.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Keep the whole thing reproducible">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -506,7 +507,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Check before you go on">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -519,7 +520,7 @@ window.Quarto = {
 <p>You should have <strong>3,170 schools</strong>, and <strong>15.0%</strong> of them below Good. If you have a different number, your filters have not matched mine and every figure below will drift.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="15% is the number to remember">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -606,7 +607,7 @@ F-statistic: 605.9 on 1 and 3168 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>The model’s lowest fitted value is about <strong>-0.50</strong>. It is telling us that a school with very strong Progress 8 has a <strong>minus fifty per cent chance</strong> of being rated below Good.</p>
 <p><strong>457 schools</strong> are given a negative probability. One is given a probability above 1.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -720,8 +721,8 @@ Model:                            GLM   Df Residuals:                     3168
 Model Family:                Binomial   Df Model:                            1
 Link Function:                  Logit   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -1058.6
-Date:                Mon, 26 Oct 2026   Deviance:                       2117.2
-Time:                        17:12:18   Pearson chi2:                 3.85e+03
+Date:                Tue, 03 Nov 2026   Deviance:                       2117.2
+Time:                        09:57:41   Pearson chi2:                 3.85e+03
 No. Iterations:                     6   Pseudo R-squ. (CS):             0.1622
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -736,7 +737,7 @@ P8MEA         -2.6987      0.137    -19.738      0.000      -2.967      -2.431
 </div>
 </div>
 <p>Both languages give you an intercept of <strong>-2.3235</strong> and a Progress 8 coefficient of <strong>-2.6987</strong>. Check that yours match before going on.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="What changed, and what didn't">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -751,7 +752,7 @@ P8MEA         -2.6987      0.137    -19.738      0.000      -2.967      -2.431
 </div>
 </section><section id="task-4---the-recipe-for-reading-a-coefficient" class="level2"><h2 class="anchored" data-anchor-id="task-4---the-recipe-for-reading-a-coefficient">Task 4 - The recipe for reading a coefficient</h2>
 <p>Those coefficients are on the log-odds scale, and nobody thinks in log-odds. The recipe is three steps, and you will use it for the rest of your life:</p>
-<div class="callout callout-style-default callout-important callout-titled" title="The recipe">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -803,7 +804,7 @@ dtype: float64</code></pre>
 <blockquote class="blockquote">
 <p><em>Every one-point increase in Progress 8 multiplies a school’s odds of being rated below Good by <strong>0.067</strong> - that is, it cuts them to about a fifteenth.</em></p>
 </blockquote>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -856,7 +857,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -873,7 +874,7 @@ dtype: float64</code></pre>
 <section id="task-6---the-full-model-and-the-split" class="level2"><h2 class="anchored" data-anchor-id="task-6---the-full-model-and-the-split">Task 6 - The full model, and the split</h2>
 <p>Two things happen at once here, and it is worth being clear about why.</p>
 <p>First, we add predictors. Second - and this is new - we <strong>stop fitting to all the data</strong>. From here on the model is fitted on 70% of schools and judged on the 30% it has never seen. Everything in Part 5 depends on that separation, so we do it before we fit rather than bolting it on afterwards.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Why bother — remember the wiggly red line">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -964,8 +965,8 @@ Model:                            GLM   Df Residuals:                     2212
 Model Family:                Binomial   Df Model:                            6
 Link Function:                  Logit   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -733.58
-Date:                Mon, 26 Oct 2026   Deviance:                       1467.2
-Time:                        17:12:18   Pearson chi2:                 2.75e+03
+Date:                Tue, 03 Nov 2026   Deviance:                       1467.2
+Time:                        09:57:42   Pearson chi2:                 2.75e+03
 No. Iterations:                     7   Pseudo R-squ. (CS):             0.1899
 Covariance Type:            nonrobust                                         
 ================================================================================
@@ -985,7 +986,7 @@ PTPRIORHI       -0.0102      0.010     -1.040      0.298      -0.029       0.009
 </div>
 </div>
 <p>You should have <strong>2,219 training</strong> and <strong>951 test</strong> schools, and an intercept of <strong>-4.7376</strong>.</p>
-<div class="callout callout-style-default callout-warning callout-titled" title="Your numbers will not match the lecture's — and that is correct">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1060,7 +1061,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question - this is the exercise, not the code">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1131,7 +1132,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Compare the two intercepts">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1167,7 +1168,7 @@ dtype: float64</code></pre>
 <p>The first describes a school that does not exist. The second describes a school at the average of every predictor - and <strong>that</strong> is a sentence you can put in a report.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Questions">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1259,7 +1260,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled" title="Python trap — `.prsquared` is not the number you just computed">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1278,7 +1279,7 @@ dtype: float64</code></pre>
 <p>R users are not immune: <code><a href="https://easystats.github.io/performance/reference/r2_mcfadden.html">performance::r2_mcfadden()</a></code> sits right next to <code>r2_nagelkerke()</code> and will give you the same 0.2416.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="How to read them">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1298,7 +1299,7 @@ dtype: float64</code></pre>
 </ul>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1312,7 +1313,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </section></section><section id="part-5-does-it-make-good-decisions" class="level1"><h1>Part 5: Does it make good decisions?</h1>
-<div class="callout callout-style-default callout-important callout-titled" title="This part is not just about logistic regression">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1398,7 +1399,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="What just happened">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1449,7 +1450,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Stop here and look at those two numbers">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1505,7 +1506,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Why they are the same number">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1519,7 +1520,7 @@ dtype: float64</code></pre>
 <p>Now compare <code>null_mod$deviance</code> with the <code>null_deviance</code> you printed back in Task 9. <strong>They are the same number</strong>, because that is what null deviance <em>is</em>: the deviance of this model. R has been fitting it for you every time you call <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> - you have just never looked at it.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1570,7 +1571,7 @@ Good or better          24             802</code></pre>
 </div>
 </div>
 <p>Of the 125 schools that really are below Good, the model flags <strong>24</strong> and misses <strong>101</strong>. It also raises <strong>24</strong> false alarms. The gains and the losses cancel exactly, which is why accuracy came out identical to the baseline.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1645,7 +1646,7 @@ Good or better          24             802</code></pre>
 <p><em>Pick one school that really is below Good and one that really is not. The model gives the struggling one the higher <strong>predicted probability of being below Good</strong> 81% of the time.</em></p>
 </blockquote>
 <p>That “predicted probability” is the model’s own output - the 0-to-1 number you called <code>p_below</code> - and not Progress 8 or any other predictor.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Both things are true at once">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1706,7 +1707,7 @@ Good or better          24             802</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question - and it is the one that matters">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1723,7 +1724,7 @@ Good or better          24             802</code></pre>
 <p>Two routes out of here. <strong>Pick one</strong> - they are both a solid hour - and come back for the other if you have time. Extension A connects today to last week; Extension B connects today to the rest of the GLM family.</p>
 <section id="extension-a---take-roc-back-to-the-multilevel-model" class="level2"><h2 class="anchored" data-anchor-id="extension-a---take-roc-back-to-the-multilevel-model">Extension A - Take ROC back to the multilevel model</h2>
 <p>Last week you fitted a linear mixed effects model with local authority as a grouping variable. The obvious question is whether you can put a ROC curve on it.</p>
-<div class="callout callout-style-default callout-warning callout-titled" title="Read this before you try - the honest answer is 'not directly'">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1775,8 +1776,8 @@ Number of obs: 2219, groups:  LANAME, 151
 
 Fixed effects:
             Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -4.05177    0.36170 -11.202  &lt; 2e-16 ***
-P8MEA       -2.27607    0.22118 -10.291  &lt; 2e-16 ***
+(Intercept) -4.05177    0.36169 -11.202  &lt; 2e-16 ***
+P8MEA       -2.27607    0.22117 -10.291  &lt; 2e-16 ***
 PTFSM6CLA1A -0.01819    0.00640  -2.842  0.00448 ** 
 PERCTOT      0.23100    0.03827   6.036 1.58e-09 ***
 ---
@@ -1825,7 +1826,7 @@ Variance parameters are modeled as log standard deviations</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="A real difference between the two languages">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1903,7 +1904,7 @@ Variance parameters are modeled as log standard deviations</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="The two languages will not quite agree, and that is expected">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1916,7 +1917,7 @@ Variance parameters are modeled as log standard deviations</code></pre>
 <p>R gets a mixed-model AUC of <strong>0.8149</strong>; Python gets about <strong>0.8154</strong>. The <em>flat</em> models agree exactly, because both are ordinary <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> fits - the difference is entirely in the mixed model, where <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html">glmer()</a></code> maximises the likelihood and statsmodels runs variational Bayes. Close, not identical, and for the same reason the coefficients differed in A1.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question - and do not assume the answer">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2050,8 +2051,8 @@ Model:                            GLM   Df Residuals:                      147
 Model Family:                 Poisson   Df Model:                            2
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -283.74
-Date:                Mon, 26 Oct 2026   Deviance:                       190.24
-Time:                        17:12:23   Pearson chi2:                     183.
+Date:                Tue, 03 Nov 2026   Deviance:                       190.24
+Time:                        09:57:45   Pearson chi2:                     183.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.2031
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -2066,7 +2067,7 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2099,7 +2100,7 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb126"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pois.pearson_chi2 <span class="op">/</span> pois.df_resid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>1.2471515060731997</code></pre>
+<pre><code>1.2471515060731992</code></pre>
 </div>
 </div>
 </div>
@@ -2143,7 +2144,7 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="The result you were probably not expecting">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2158,7 +2159,7 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
 <p><strong>The negative binomial was not needed here.</strong> That is a perfectly good finding, and far more useful than reaching for the fancier model by reflex. Report the dispersion statistic, report that you checked, and keep the simpler model.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -2314,7 +2315,8 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -2323,8 +2325,69 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -2338,6 +2401,7 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -2500,44 +2564,54 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -2635,6 +2709,8 @@ mean_abs       0.2793      0.048      5.807      0.000       0.185       0.374
       }
     }
   });
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb132" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Prof D's Regression Sessions - Vol 4"</span></span>
