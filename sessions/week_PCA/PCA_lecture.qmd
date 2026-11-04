@@ -18,7 +18,7 @@ format:
 ---
 
 ## Last week
-**Lecture 8 - multilevel regression**
+**Lecture 8 was on multilevel regression**
 
 Looked at:
 
@@ -37,43 +37,51 @@ Looked at:
   </div>
 </div>
 
-## Objectives
-
-- Explain the motivation of dimensionality reduction
-- Describe the principle of Principal Component Analysis
-- Apply PCA to school datasets or other datasets
-
-# Supervised vs unsupervised learning
-
-## Supervised learning
+## Learning Objectives
+By the end of this lecture you should be able to:
 
 ::: {.incremental}
-- We have a *target variable* (or label) to predict
-- We have a *training dataset* with known target variable values
-- We can use the training dataset to build a model to predict the target variable for new data points
+1. Explain the motivation of dimensionality reduction
+2. Describe the principle of Principal Component Analysis
+3. Apply PCA to school datasets or other datasets
+:::
+
+# Supervised vs unsupervised learning
+Two main categories of machine learning. 
+
+## Supervised learning
+[Machine learning techniques that use labelled datasets to train models to identify underlying patterns.]{style="color:#49a0c4"} 
+
+::: {.incremental}
+- There is a *target variable* (or label) to predict
+- The *training dataset* has known target variable values
+- Use the training dataset to build a model to predict the target variable for new data points
 :::
 
 ## Unsupervised learning
+[Machine learning techniques that identify patterns in unlabeled datasets.]{style="color:#49a0c4"} 
 
 ::: {.incremental}
-- We do not have a target variable to predict
-- We do not have a training dataset with known target variable values
-- We want to find patterns in the data, e.g. clusters of similar data points, or a lower-dimensional representation of the data
+- Theres is no target variable (label) to predict
+- Want to discover hidden patterns or data groupings, without the need for human input
 :::
 
-This is what we will focus on in this lecture, and next weeks lecture. 
+. . .
+
+Principal component analysis (PCA) and Clustering are both types of unsupervised learning. 
 
 # High-dimensional data
 
 ## Dimensionality
 
+[Dimensionality refers to the number of features or variables in a dataset.]{style="color:#49a0c4"} 
+
 ::: {.incremental}
-- Definition: number of variables for each data point
 - A tabular data of *M rows, N numerical columns* has a dimensionality of **N** (not *M*)
-- Note - *A column representing seasons in a year* has a dimensionality of **4**, or **3** (if using one-hot encoding and K-1 dummy variables), rather than **1**
+- Note: A column representing seasons in a year has a dimensionality of **4**, or **3** (if using one-hot encoding and K-1 dummy variables), rather than **1**
 :::
 
-## Dimensionality Quiz
+## Quiz {.smaller}
 
 :::: {.columns}
 
@@ -93,7 +101,9 @@ This is what we will focus on in this lecture, and next weeks lecture.
 
 ::: {.column width="50%"}
 
-Canon EOR R8 has a maximum resolution of 6000 * 4000 pixels for JPEG/HEIF, where every pixel corresponds to three colour channels (RGB). What is the dimensionality of an image from EOR R8?
+Canon EOR R8 has a maximum resolution of 6000 * 4000 pixels for JPEG/HEIF, where every pixel corresponds to three colour channels (RGB). 
+
+What is the dimensionality of an image from EOR R8?
 
 - **A.** 6000 * 4000
 - **B.** 6000 * 4000 * 3
@@ -104,13 +114,17 @@ Canon EOR R8 has a maximum resolution of 6000 * 4000 pixels for JPEG/HEIF, where
 
 ::::
 
-## Dimensionality Quiz
+:::{.notes}
+In this case, the image has 6000 * 4000 pixels, and each pixel has 3 color channels (RGB). Therefore, the dimensionality is 6000 * 4000 * 3.
+:::
+
+## Quiz {.smaller}
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-You are given the following dataset (with 1000 rows and 3 columns)
+You are given the following dataset with 1000 rows and 3 columns. 
 
 |   | x1   | x2   | month |
 |---|------|------|-------|
@@ -125,58 +139,97 @@ You are given the following dataset (with 1000 rows and 3 columns)
 
 ::: {.column width="50%"}
 
+What is the dimensionality of the feature space for this dataset after one-hot encoding of the *month* column (with one category dropped)?
+
+- **A.** 2
+- **B.** 11  
+- **C.** 13  
+- **D.** 14  
+
 :::
-
-**What is the dimensionality of the feature space for this dataset after one-hot encoding of the **month** column (with one category dropped)?**
-
-A. 2
-B. 11  
-C. 13  
-D. 14  
 
 ::::
 
-## High-dimensional data (*Curse of dimensionality*)
+## High-dimensional data 
+*The curse of dimensionality!* 
 
+When data has a large number of dimensions: 
+
+::: {.incremental}
 - Analysis is hard, e.g. multicollinearity & variable selection in linear models
 - Interpretation is challenging
 - Visualisation is impossible
 - Storage is expensive
+:::
 
 ## Exploitable properties 
 
+::: {.incremental}
 - Many dimensions are redundant and can be explained by a combination of other dimensions
 - Many dimensions are correlated
 - The data often lies in an underlying lower-dimensional space
+:::
 
 ## Dimensionality reduction
 
-- Reducing the dimensionality of data by generating a new set of (fewer) dimensions  
-- Often at cost of information loss
+::: {.incremental}
+- We can reduce the dimensionality of data by generating a new set of (fewer) dimensions  
 - Doesn't change the number of data points
+- Often there is a cost of information loss
 - It is *unsupervised learning*, and there is no ground truth to validate the result
 - Can be viewed as *data compression*
+:::
 
 ## Dimensionality reduction as compression
 
-- *Music*: WAV → MP3 (typical size reduction ≈ 10:1, e.g. ∼50 MB → 5 MB for an album)
-- *Image*: TIFF → JPEG (typical size reduction ≈ 5:1 to 10:1)
-- *Map projection*: Earth (3D ellipsoid) → 2D map (dimension reduction 3→2, with distortion of area/shape/distance)
+- *Music*: WAV → MP3 
+  - typical size reduction ≈ 10:1
+  - e.g. ∼50 MB → 5 MB for an album
+- *Image*: TIFF → JPEG 
+  - typical size reduction ≈ 5:1 to 10:1
+- *Map projection*: Earth (3D ellipsoid) → 2D map 
+  - dimension reduction 3:2, with distortion of area/shape/distance
 
-# Principal component analysis
+::: {.notes}
+TIFF - very high quality raster based image format. Standard output for high spec DSLRs. 
+:::
+
+## Map projection
+
+::: {.r-stack}
+
+<div class="fragment fade-out" data-fragment-index="1" style="text-align:center;">
+  <img src="images/stereoproj2.png" alt="Stereographic projection" style="max-width:70%">
+  <div style="font-size:0.8em; color: #555; margin-top:4px;">
+    Mathematical projection of a sphere onto a plane. The stereographic projection is conformal, meaning that it preserves angles. However, it does not preserve area or distance.
+    Source: LibreTexts Mathematics.
+  </div>
+</div>
+
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
+  <img src="images/Gall–Peters_projection_SW.jpg" alt="Gall-Peters projection" style="max-width:70%">
+  <div style="font-size:0.8em; color: #555; margin-top:4px;">
+    The Gall-Peters projection is an equal-area cylindrical map projection. It preserves area but distorts shapes, especially near the poles.
+    Source: Wikipedia.
+  </div>
+</div>
+
+:::
+
+# Principal component analysis (PCA)
 
 ## PCA
 
 - A method for linear dimensionality reduction
 - Each new dimension is a linear combination of original ones
 - Proposed by Pearson (1901)* and Hotelling (1933)
-- Still one of the most popular technical for data compression and visualisation
+- Still one of the most popular techniques for data compression and visualisation
 
-*Pearson, Karl. "LIII. On lines and planes of closest fit to systems of points in space." The London, Edinburgh, and Dublin philosophical magazine and journal of science 2.11 (1901): 559-572.*
+[*Pearson, Karl. "LIII. On lines and planes of closest fit to systems of points in space." The London, Edinburgh, and Dublin philosophical magazine and journal of science 2.11 (1901): 559-572]{style="font-size:0.6em; color:#555;"}
 
 ## Illustration
 
-- PCA from 2D to 1D
+- simplified example of PCA from 2D to 1D
 - Aim to find a 'direction' (i.e. a line) that keeps the most information (or variance) between data points in 2D
 
 ```{python}
@@ -392,7 +445,7 @@ display(Markdown(html))
 
 ::::
 
-## PCA automatically searching for informative directions
+## PCA automatically searching for informative directions {.smaller}
 
 :::: {.columns}
 
@@ -400,8 +453,8 @@ display(Markdown(html))
 - PCA automatically searches the most informative direction, called the **first principal component (PC)**
 - After finding this one, PCA looks for a second PC:
   - Not overlapping the information already captured by the first PC
-  - With as spread as possible between data points
-  - Not needed when #1 PC explains 100% variance
+  - With as much spread as possible between data points
+  - Not needed when 1st PC explains 100% variance
 :::
 
 ::: {.column width="50%"}
@@ -524,36 +577,62 @@ plt.show()
 
 ## Generalisation to M-dimensional dataset
 
-- The example above is for illustration; [please don't apply PCA to a 2-D dataset in your work]{style="color:blue"} 
+::: {.incremental}
+- The example above is for illustration; [please don't apply PCA to a 2-D dataset in your work]{style="color:red"} 
 - For data with M dimensions (not M columns), PCA method will find M (or fewer than M) PCs as a new space to represent the data points
 - These PCs are ranked by variance explained, i.e. #1 PC with maximal variance, followed by #2, #3
 - These PCs are uncorrelated with each other
 - We will choose the first *k* PCs for analysis, usually $k$=2,3
+:::
+
+:::{.notes}
+remember M dimensions is not the same as M columns. 
+:::
 
 ## Different ways to understand PCA
 
 1. Maximum variance perspective (we did it!)
-2. Projection perspective*
-3. Engenvector Computation and Low-Rank Approximations*
+2. Projection perspective
+3. Maths perspective - Eigenvector Computation and Low-Rank Approximations*
 
 - See *Chapter 10, Mathematics for Machine Learning*
+
+## Maths perspective
+
+- Mathematically PCA is built on Linear Algebra principles (week 4). 
+- The goal is to describe the data using independent vectors. 
+- This is acheived through cosntructing the covariance matrix, which captures the relationships between the different dimensions of the data.
+- Read more in this Medium article: [The Math of Principal Component Analysis (PCA)](https://medium.com/analytics-vidhya/the-math-of-principal-component-analysis-pca-bf7da48247fc)
+
+:::{.notes}
+Very briefly thinking back to the linear algebra in week 4. 
+:::
 
 # PCA in practice
 
 ## Illustrating steps of PCA
 <div style="text-align:center;">
-  <img src="images/example_PCA_steps.jpg" alt="Wild of Unsupervised Learning" style="max-width:80%">
+  <img src="images/example_PCA_steps.jpg" alt="Wild of Unsupervised Learning" style="max-width:70%">
   <div style="font-size:0.8em; color: #555; margin-top:4px;">
     Image credit: Mathematics for Machine Learning
   </div>
 </div>
 
-## Q: how to choose k?
+## How to choose k?
 
-- *No golden rules; some guidelines*
+No hard and fast rule to choose the number of principal components, but there are some general guidelines.
+
+:::{.incremental}
 1. For visualisation: k = 2 or 3  
 2. Keep components with eigenvalues > 1. *Eigenvalue* of a PC is proportional to variance explained by this PC
 3. Scree plot (elbow method): use the point where the bend happens, where the curve changes from *steep* to *flat*
+:::
+
+## Scree plots
+
+<div style="text-align:center;">
+  <img src="images/scree_plot.png" alt="Scree plot" style="max-width:70%">
+</div>
 
 ## Example: PCA on performance & disadvantage attributes of school data
 
@@ -724,19 +803,21 @@ plt.show()
 ## How many data points are sufficient for PCA
 
 ::: {.incremental}
-
-- [Rule #1]{style="color:blue"}: "5-10 times as many subjects as variables"
+- **Rule 1** "5-10 times as many subjects as variables"
   - e.g. with 10 variables, we need at least 50 or 100 data points
-- [Rule #2]{style="color:blue"}: with several hundred observations, PCA are probably reliable.
+- **Rule 2**: with several hundred observations, PCA are probably reliable.
+:::
+
+. . .
 
 - Reference: R in Action, by Robert I Kabacoff
 - [Discussion on StackExchange](https://stats.stackexchange.com/questions/45820/minimum-sample-size-for-pca-or-fa-when-the-main-goal-is-to-estimate-only-few-com)
-:::
+
 
 ## *PCA* is not *factor analysis*
 
-- [PCA]{style="color:blue"} aims to find PCs that are combination of original variables for maximising the variance explained.
-- [FA]{style="color:blue"} aims to find hidden factors that underlie or *cause* the observed variables.
+- PCA aims to find PCs that are combination of original variables for maximising the variance explained.
+- Factor analysis (FA) aims to find hidden factors that underlie or *cause* the observed variables.
 
 <div style="text-align:center;">
   <img src="images/PCA_FA.jpg" alt="Wild of Unsupervised Learning" style="max-width:120%">
@@ -745,17 +826,64 @@ plt.show()
   </div>
 </div>
 
-## Example of PCA on MNIST digit recognition
+## Balancing components with information loss
 
-60,000 examples of handwritten digits 0~9.
-Each digit is an 28*28 image or 784 pixels (dimensions)
+::: {.r-stack}
 
-<div style="text-align:center;">
+::: {.fragment .fade-out fragment-index=1 style="width:100%; margin:0; align-self:start;"}
+Example of PCA on the [MNIST](https://www.kaggle.com/datasets/hojjatk/mnist-dataset) dataset. 
+
+- 60,000 examples of handwritten digits 0~9.
+- Each digit is an 28*28 image or 784 pixels (dimensions)
+:::
+
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
   <img src="images/MNIST_example.jpg" alt="MNIST" style="max-width:90%">
   <div style="font-size:0.8em; color: #555; margin-top:4px;">
     Source: Chapter 10, Mathematics for Machine Learning
   </div>
 </div>
+
+:::
+
+## Example of PCA on a research question 
+
+::: {.r-stack}
+
+::: {.fragment .fade-out fragment-index=1 style="width:100%; margin:0; align-self:start;"}
+[Mapping social vulnerability to floods. A comprehensive framework using a vulnerability index approach and PCA analysis](https://www.sciencedirect.com/science/article/pii/S1470160X23009809)
+
+- **Research question:** Create an index of social vulnerability to floods in the Somes-Tisa river basin in Romania.
+- **Data:** 76 regions, each with data on 14 indicators 
+  - indicators such as population density, population growth rate, percent of built up area, access to drinking water
+  - note: 14 indicators = 14 dimensions
+- **Method:** applied PCA to create a composite index of vulnerability.
+
+:::
+
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
+  <img src="images/ajtai_figure_4_PCA_loading.png" alt="PCA loadings" style="max-width:40%">
+  <div style="font-size:0.8em; color: #555; margin-top:4px;">
+    Source: Ajtai, I., Ștefănie, H., Maloș, C., Botezan, C., Radovici, A., Bizău-Cârstea, M., & Baciu, C. (2023). Mapping social vulnerability to floods. A comprehensive framework using a vulnerability index approach and PCA analysis. Ecological Indicators, 154, 110838.
+  </div>
+</div>
+
+:::
+
+
+## Using PCA is practise 
+
+- large number of variables 
+- want to reduce the variables 
+- want to understand how the variables relate to each other
+
+## Quiz 
+
+::: {.incremental}
+- What is the main goal of PCA?
+- How should you decide how many principal components to retain?
+- I have a dataset with a dimension of 3, should I use PCA to reduce it to 2 dimensions? Why or why not?
+:::
 
 ## Key takeaways 
 
@@ -767,5 +895,5 @@ Each digit is an 28*28 image or 784 pixels (dimensions)
 
 ## Practical 
 - The practical will focus on calculating and interpreting PCA.  
-- Have you questions prepared! 
+- Have your questions prepared! 
 
