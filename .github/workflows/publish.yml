@@ -7,7 +7,12 @@ name: Quarto Publish
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest: when that label moved to a newer
+    # Ubuntu, its glibc clashed with the tinycthread code bundled in the
+    # `later` package ("conflicting types for pthread_once_t"), so
+    # later/httpuv/plotly/webshot2 etc. failed to compile in renv::restore().
+    # 24.04 matches the rocker/r-ver:4.5.1 base used by the local Dockerfile.
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
 
