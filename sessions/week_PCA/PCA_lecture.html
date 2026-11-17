@@ -162,7 +162,7 @@
 </section>
 <section id="last-week" class="slide level2">
 <h2>Last week</h2>
-<p><strong>Lecture 8 - multilevel regression</strong></p>
+<p><strong>Lecture 8 was on multilevel regression</strong></p>
 <p>Looked at:</p>
 <ul>
 <li class="fragment">Understand Ordinary Least Squares (OLS) and Linear Mixed Effects (LME) models</li>
@@ -179,35 +179,39 @@
 </div>
 </div>
 </section>
-<section id="objectives" class="slide level2">
-<h2>Objectives</h2>
-<ul>
-<li>Explain the motivation of dimensionality reduction</li>
-<li>Describe the principle of Principal Component Analysis</li>
-<li>Apply PCA to school datasets or other datasets</li>
-</ul>
+<section id="learning-objectives" class="slide level2">
+<h2>Learning Objectives</h2>
+<p>By the end of this lecture you should be able to:</p>
+<ol type="1">
+<li class="fragment">Explain the motivation of dimensionality reduction</li>
+<li class="fragment">Describe the principle of Principal Component Analysis</li>
+<li class="fragment">Apply PCA to school datasets or other datasets</li>
+</ol>
 </section>
 <section>
 <section id="supervised-vs-unsupervised-learning" class="title-slide slide level1 center">
 <h1>Supervised vs unsupervised learning</h1>
-
+<p>Two main categories of machine learning.</p>
 </section>
 <section id="supervised-learning" class="slide level2">
 <h2>Supervised learning</h2>
+<p><span style="color:#49a0c4">Machine learning techniques that use labelled datasets to train models to identify underlying patterns.</span></p>
 <ul>
-<li class="fragment">We have a <em>target variable</em> (or label) to predict</li>
-<li class="fragment">We have a <em>training dataset</em> with known target variable values</li>
-<li class="fragment">We can use the training dataset to build a model to predict the target variable for new data points</li>
+<li class="fragment">There is a <em>target variable</em> (or label) to predict</li>
+<li class="fragment">The <em>training dataset</em> has known target variable values</li>
+<li class="fragment">Use the training dataset to build a model to predict the target variable for new data points</li>
 </ul>
 </section>
 <section id="unsupervised-learning" class="slide level2">
 <h2>Unsupervised learning</h2>
+<p><span style="color:#49a0c4">Machine learning techniques that identify patterns in unlabeled datasets.</span></p>
 <ul>
-<li class="fragment">We do not have a target variable to predict</li>
-<li class="fragment">We do not have a training dataset with known target variable values</li>
-<li class="fragment">We want to find patterns in the data, e.g.&nbsp;clusters of similar data points, or a lower-dimensional representation of the data</li>
+<li class="fragment">Theres is no target variable (label) to predict</li>
+<li class="fragment">Want to discover hidden patterns or data groupings, without the need for human input</li>
 </ul>
-<p>This is what we will focus on in this lecture, and next weeks lecture.</p>
+<div class="fragment">
+<p>Principal component analysis (PCA) and Clustering are both types of unsupervised learning.</p>
+</div>
 </section></section>
 <section>
 <section id="high-dimensional-data" class="title-slide slide level1 center">
@@ -216,14 +220,14 @@
 </section>
 <section id="dimensionality" class="slide level2">
 <h2>Dimensionality</h2>
+<p><span style="color:#49a0c4">Dimensionality refers to the number of features or variables in a dataset.</span></p>
 <ul>
-<li class="fragment">Definition: number of variables for each data point</li>
 <li class="fragment">A tabular data of <em>M rows, N numerical columns</em> has a dimensionality of <strong>N</strong> (not <em>M</em>)</li>
-<li class="fragment">Note - <em>A column representing seasons in a year</em> has a dimensionality of <strong>4</strong>, or <strong>3</strong> (if using one-hot encoding and K-1 dummy variables), rather than <strong>1</strong></li>
+<li class="fragment">Note: A column representing seasons in a year has a dimensionality of <strong>4</strong>, or <strong>3</strong> (if using one-hot encoding and K-1 dummy variables), rather than <strong>1</strong></li>
 </ul>
 </section>
-<section id="dimensionality-quiz" class="slide level2">
-<h2>Dimensionality Quiz</h2>
+<section id="quiz" class="slide level2 smaller">
+<h2>Quiz</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div style="text-align:center;">
@@ -233,7 +237,8 @@
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<p>Canon EOR R8 has a maximum resolution of 6000 * 4000 pixels for JPEG/HEIF, where every pixel corresponds to three colour channels (RGB). What is the dimensionality of an image from EOR R8?</p>
+<p>Canon EOR R8 has a maximum resolution of 6000 * 4000 pixels for JPEG/HEIF, where every pixel corresponds to three colour channels (RGB).</p>
+<p>What is the dimensionality of an image from EOR R8?</p>
 <ul>
 <li><strong>A.</strong> 6000 * 4000</li>
 <li><strong>B.</strong> 6000 * 4000 * 3</li>
@@ -241,12 +246,25 @@
 <li><strong>D.</strong> 6000 * 4000 * 3 * 2</li>
 </ul>
 </div></div>
+<aside class="notes">
+<p>In this case, the image has 6000 * 4000 pixels, and each pixel has 3 color channels (RGB). Therefore, the dimensionality is 6000 * 4000 * 3.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="dimensionality-quiz-1" class="slide level2">
-<h2>Dimensionality Quiz</h2>
+<section id="quiz-1" class="slide level2 smaller">
+<h2>Quiz</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>You are given the following dataset (with 1000 rows and 3 columns)</p>
+<p>You are given the following dataset with 1000 rows and 3 columns.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -296,51 +314,100 @@
 </tbody>
 </table>
 </div><div class="column" style="width:50%;">
-
-</div><p><strong>What is the dimensionality of the feature space for this dataset after one-hot encoding of the </strong>month** column (with one category dropped)?**</p><p>A. 2 B. 11<br>
-C. 13<br>
-D. 14</p>
-</div>
-</section>
-<section id="high-dimensional-data-curse-of-dimensionality" class="slide level2">
-<h2>High-dimensional data (<em>Curse of dimensionality</em>)</h2>
+<p>What is the dimensionality of the feature space for this dataset after one-hot encoding of the <em>month</em> column (with one category dropped)?</p>
 <ul>
-<li>Analysis is hard, e.g.&nbsp;multicollinearity &amp; variable selection in linear models</li>
-<li>Interpretation is challenging</li>
-<li>Visualisation is impossible</li>
-<li>Storage is expensive</li>
+<li><strong>A.</strong> 2</li>
+<li><strong>B.</strong> 11<br>
+</li>
+<li><strong>C.</strong> 13<br>
+</li>
+<li><strong>D.</strong> 14</li>
+</ul>
+</div></div>
+</section>
+<section id="high-dimensional-data-1" class="slide level2">
+<h2>High-dimensional data</h2>
+<p><em>The curse of dimensionality!</em></p>
+<p>When data has a large number of dimensions:</p>
+<ul>
+<li class="fragment">Analysis is hard, e.g.&nbsp;multicollinearity &amp; variable selection in linear models</li>
+<li class="fragment">Interpretation is challenging</li>
+<li class="fragment">Visualisation is impossible</li>
+<li class="fragment">Storage is expensive</li>
 </ul>
 </section>
 <section id="exploitable-properties" class="slide level2">
 <h2>Exploitable properties</h2>
 <ul>
-<li>Many dimensions are redundant and can be explained by a combination of other dimensions</li>
-<li>Many dimensions are correlated</li>
-<li>The data often lies in an underlying lower-dimensional space</li>
+<li class="fragment">Many dimensions are redundant and can be explained by a combination of other dimensions</li>
+<li class="fragment">Many dimensions are correlated</li>
+<li class="fragment">The data often lies in an underlying lower-dimensional space</li>
 </ul>
 </section>
 <section id="dimensionality-reduction" class="slide level2">
 <h2>Dimensionality reduction</h2>
 <ul>
-<li>Reducing the dimensionality of data by generating a new set of (fewer) dimensions<br>
+<li class="fragment">We can reduce the dimensionality of data by generating a new set of (fewer) dimensions<br>
 </li>
-<li>Often at cost of information loss</li>
-<li>Doesn’t change the number of data points</li>
-<li>It is <em>unsupervised learning</em>, and there is no ground truth to validate the result</li>
-<li>Can be viewed as <em>data compression</em></li>
+<li class="fragment">Doesn’t change the number of data points</li>
+<li class="fragment">Often there is a cost of information loss</li>
+<li class="fragment">It is <em>unsupervised learning</em>, and there is no ground truth to validate the result</li>
+<li class="fragment">Can be viewed as <em>data compression</em></li>
 </ul>
 </section>
 <section id="dimensionality-reduction-as-compression" class="slide level2">
 <h2>Dimensionality reduction as compression</h2>
 <ul>
-<li><em>Music</em>: WAV → MP3 (typical size reduction ≈ 10:1, e.g.&nbsp;∼50&nbsp;MB → 5&nbsp;MB for an album)</li>
-<li><em>Image</em>: TIFF → JPEG (typical size reduction ≈ 5:1&nbsp;to&nbsp;10:1)</li>
-<li><em>Map projection</em>: Earth (3D ellipsoid) → 2D map (dimension reduction 3→2, with distortion of area/shape/distance)</li>
+<li><em>Music</em>: WAV → MP3
+<ul>
+<li>typical size reduction ≈ 10:1</li>
+<li>e.g.&nbsp;∼50&nbsp;MB → 5&nbsp;MB for an album</li>
+</ul></li>
+<li><em>Image</em>: TIFF → JPEG
+<ul>
+<li>typical size reduction ≈ 5:1&nbsp;to&nbsp;10:1</li>
+</ul></li>
+<li><em>Map projection</em>: Earth (3D ellipsoid) → 2D map
+<ul>
+<li>dimension reduction 3:2, with distortion of area/shape/distance</li>
+</ul></li>
 </ul>
+<aside class="notes">
+<p>TIFF - very high quality raster based image format. Standard output for high spec DSLRs.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="map-projection" class="slide level2">
+<h2>Map projection</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="1" style="text-align:center;">
+<img src="images/stereoproj2.png" alt="Stereographic projection" style="max-width:70%">
+<div style="font-size:0.8em; color: #555; margin-top:4px;">
+<pre><code>Mathematical projection of a sphere onto a plane. The stereographic projection is conformal, meaning that it preserves angles. However, it does not preserve area or distance.
+Source: LibreTexts Mathematics.</code></pre>
+</div>
+</div>
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
+<img src="images/Gall–Peters_projection_SW.jpg" alt="Gall-Peters projection" style="max-width:70%">
+<div style="font-size:0.8em; color: #555; margin-top:4px;">
+<pre><code>The Gall-Peters projection is an equal-area cylindrical map projection. It preserves area but distorts shapes, especially near the poles.
+Source: Wikipedia.</code></pre>
+</div>
+</div>
+</div>
 </section></section>
 <section>
-<section id="principal-component-analysis" class="title-slide slide level1 center">
-<h1>Principal component analysis</h1>
+<section id="principal-component-analysis-pca" class="title-slide slide level1 center">
+<h1>Principal component analysis (PCA)</h1>
 
 </section>
 <section id="pca" class="slide level2">
@@ -349,17 +416,17 @@ D. 14</p>
 <li>A method for linear dimensionality reduction</li>
 <li>Each new dimension is a linear combination of original ones</li>
 <li>Proposed by Pearson (1901)* and Hotelling (1933)</li>
-<li>Still one of the most popular technical for data compression and visualisation</li>
+<li>Still one of the most popular techniques for data compression and visualisation</li>
 </ul>
-<p><em>Pearson, Karl. “LIII. On lines and planes of closest fit to systems of points in space.” The London, Edinburgh, and Dublin philosophical magazine and journal of science 2.11 (1901): 559-572.</em></p>
+<p><span style="font-size:0.6em; color:#555;">*Pearson, Karl. “LIII. On lines and planes of closest fit to systems of points in space.” The London, Edinburgh, and Dublin philosophical magazine and journal of science 2.11 (1901): 559-572</span></p>
 </section>
 <section id="illustration" class="slide level2">
 <h2>Illustration</h2>
 <ul>
-<li>PCA from 2D to 1D</li>
+<li>simplified example of PCA from 2D to 1D</li>
 <li>Aim to find a ‘direction’ (i.e.&nbsp;a line) that keeps the most information (or variance) between data points in 2D</li>
 </ul>
-<div id="ed28a1a0" class="cell" data-execution_count="1">
+<div id="d9f458c6" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -373,7 +440,7 @@ D. 14</p>
 <h2>Which direction is the best?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="15235611" class="cell" data-execution_count="2">
+<div id="09c64c59" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -383,7 +450,7 @@ D. 14</p>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="1095ec01" class="cell" data-results="asis" data-execution_count="3">
+<div id="8a95157a" class="cell" data-results="asis" data-execution_count="3">
 <div class="cell-output cell-output-display cell-output-markdown">
 <div style="font-size: 15px;">
 <table class="caption-top">
@@ -432,7 +499,7 @@ D. 14</p>
 </div>
 </div></div>
 </section>
-<section id="pca-automatically-searching-for-informative-directions" class="slide level2">
+<section id="pca-automatically-searching-for-informative-directions" class="slide level2 smaller">
 <h2>PCA automatically searching for informative directions</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -441,12 +508,12 @@ D. 14</p>
 <li>After finding this one, PCA looks for a second PC:
 <ul>
 <li>Not overlapping the information already captured by the first PC</li>
-<li>With as spread as possible between data points</li>
-<li>Not needed when #1 PC explains 100% variance</li>
+<li>With as much spread as possible between data points</li>
+<li>Not needed when 1st PC explains 100% variance</li>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="532fee8c" class="cell" data-execution_count="4">
+<div id="4b052062" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -460,23 +527,58 @@ D. 14</p>
 <section id="generalisation-to-m-dimensional-dataset" class="slide level2">
 <h2>Generalisation to M-dimensional dataset</h2>
 <ul>
-<li>The example above is for illustration; <span style="color:blue">please don’t apply PCA to a 2-D dataset in your work</span></li>
-<li>For data with M dimensions (not M columns), PCA method will find M (or fewer than M) PCs as a new space to represent the data points</li>
-<li>These PCs are ranked by variance explained, i.e.&nbsp;#1 PC with maximal variance, followed by #2, #3</li>
-<li>These PCs are uncorrelated with each other</li>
-<li>We will choose the first <em>k</em> PCs for analysis, usually <span class="math inline">\(k\)</span>=2,3</li>
+<li class="fragment">The example above is for illustration; <span style="color:red">please don’t apply PCA to a 2-D dataset in your work</span></li>
+<li class="fragment">For data with M dimensions (not M columns), PCA method will find M (or fewer than M) PCs as a new space to represent the data points</li>
+<li class="fragment">These PCs are ranked by variance explained, i.e.&nbsp;#1 PC with maximal variance, followed by #2, #3</li>
+<li class="fragment">These PCs are uncorrelated with each other</li>
+<li class="fragment">We will choose the first <em>k</em> PCs for analysis, usually <span class="math inline">\(k\)</span>=2,3</li>
 </ul>
+<aside class="notes">
+<p>remember M dimensions is not the same as M columns.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="different-ways-to-understand-pca" class="slide level2">
 <h2>Different ways to understand PCA</h2>
 <ol type="1">
 <li>Maximum variance perspective (we did it!)</li>
-<li>Projection perspective*</li>
-<li>Engenvector Computation and Low-Rank Approximations*</li>
+<li>Projection perspective</li>
+<li>Maths perspective - Eigenvector Computation and Low-Rank Approximations*</li>
 </ol>
 <ul>
 <li>See <em>Chapter 10, Mathematics for Machine Learning</em></li>
 </ul>
+</section>
+<section id="maths-perspective" class="slide level2">
+<h2>Maths perspective</h2>
+<ul>
+<li>Mathematically PCA is built on Linear Algebra principles (week 4).</li>
+<li>The goal is to describe the data using independent vectors.</li>
+<li>This is acheived through cosntructing the covariance matrix, which captures the relationships between the different dimensions of the data.</li>
+<li>Read more in this Medium article: <a href="https://medium.com/analytics-vidhya/the-math-of-principal-component-analysis-pca-bf7da48247fc">The Math of Principal Component Analysis (PCA)</a></li>
+</ul>
+<aside class="notes">
+<p>Very briefly thinking back to the linear algebra in week 4.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="pca-in-practice" class="title-slide slide level1 center">
@@ -486,27 +588,31 @@ D. 14</p>
 <section id="illustrating-steps-of-pca" class="slide level2">
 <h2>Illustrating steps of PCA</h2>
 <div style="text-align:center;">
-<img src="images/example_PCA_steps.jpg" alt="Wild of Unsupervised Learning" style="max-width:80%">
+<img src="images/example_PCA_steps.jpg" alt="Wild of Unsupervised Learning" style="max-width:70%">
 <div style="font-size:0.8em; color: #555; margin-top:4px;">
 <pre><code>Image credit: Mathematics for Machine Learning</code></pre>
 </div>
 </div>
 </section>
-<section id="q-how-to-choose-k" class="slide level2">
-<h2>Q: how to choose k?</h2>
-<ul>
-<li><em>No golden rules; some guidelines</em></li>
-</ul>
+<section id="how-to-choose-k" class="slide level2">
+<h2>How to choose k?</h2>
+<p>No hard and fast rule to choose the number of principal components, but there are some general guidelines.</p>
 <ol type="1">
-<li>For visualisation: k = 2 or 3<br>
+<li class="fragment">For visualisation: k = 2 or 3<br>
 </li>
-<li>Keep components with eigenvalues &gt; 1. <em>Eigenvalue</em> of a PC is proportional to variance explained by this PC</li>
-<li>Scree plot (elbow method): use the point where the bend happens, where the curve changes from <em>steep</em> to <em>flat</em></li>
+<li class="fragment">Keep components with eigenvalues &gt; 1. <em>Eigenvalue</em> of a PC is proportional to variance explained by this PC</li>
+<li class="fragment">Scree plot (elbow method): use the point where the bend happens, where the curve changes from <em>steep</em> to <em>flat</em></li>
 </ol>
+</section>
+<section id="scree-plots" class="slide level2">
+<h2>Scree plots</h2>
+<div style="text-align:center;">
+<p><img src="images/scree_plot.png" alt="Scree plot" style="max-width:70%"></p>
+</div>
 </section>
 <section id="example-pca-on-performance-disadvantage-attributes-of-school-data" class="slide level2">
 <h2>Example: PCA on performance &amp; disadvantage attributes of school data</h2>
-<div id="d84c9d9e" class="cell" data-execution_count="5">
+<div id="4a534f18" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display cell-output-markdown">
 <div style="font-size: 12px;">
 <table class="caption-top">
@@ -571,7 +677,7 @@ D. 14</p>
 <h2>Scree plot</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="d237cac6" class="cell" data-execution_count="6">
+<div id="9c7245c5" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display cell-output-markdown">
 <div style="font-size: 18px;">
 <table class="caption-top">
@@ -639,7 +745,7 @@ D. 14</p>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="0c8609e8" class="cell" data-execution_count="7">
+<div id="eb619c27" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -653,20 +759,24 @@ D. 14</p>
 <section id="how-many-data-points-are-sufficient-for-pca" class="slide level2">
 <h2>How many data points are sufficient for PCA</h2>
 <ul>
-<li class="fragment"><p><span style="color:blue">Rule #1</span>: “5-10 times as many subjects as variables”</p>
+<li class="fragment"><strong>Rule 1</strong> “5-10 times as many subjects as variables”
 <ul>
 <li class="fragment">e.g.&nbsp;with 10 variables, we need at least 50 or 100 data points</li>
 </ul></li>
-<li class="fragment"><p><span style="color:blue">Rule #2</span>: with several hundred observations, PCA are probably reliable.</p></li>
-<li class="fragment"><p>Reference: R in Action, by Robert I Kabacoff</p></li>
-<li class="fragment"><p><a href="https://stats.stackexchange.com/questions/45820/minimum-sample-size-for-pca-or-fa-when-the-main-goal-is-to-estimate-only-few-com">Discussion on StackExchange</a></p></li>
+<li class="fragment"><strong>Rule 2</strong>: with several hundred observations, PCA are probably reliable.</li>
 </ul>
+<div class="fragment">
+<ul>
+<li>Reference: R in Action, by Robert I Kabacoff</li>
+<li><a href="https://stats.stackexchange.com/questions/45820/minimum-sample-size-for-pca-or-fa-when-the-main-goal-is-to-estimate-only-few-com">Discussion on StackExchange</a></li>
+</ul>
+</div>
 </section>
 <section id="pca-is-not-factor-analysis" class="slide level2">
 <h2><em>PCA</em> is not <em>factor analysis</em></h2>
 <ul>
-<li><span style="color:blue">PCA</span> aims to find PCs that are combination of original variables for maximising the variance explained.</li>
-<li><span style="color:blue">FA</span> aims to find hidden factors that underlie or <em>cause</em> the observed variables.</li>
+<li>PCA aims to find PCs that are combination of original variables for maximising the variance explained.</li>
+<li>Factor analysis (FA) aims to find hidden factors that underlie or <em>cause</em> the observed variables.</li>
 </ul>
 <div style="text-align:center;">
 <img src="images/PCA_FA.jpg" alt="Wild of Unsupervised Learning" style="max-width:120%">
@@ -675,15 +785,62 @@ D. 14</p>
 </div>
 </div>
 </section>
-<section id="example-of-pca-on-mnist-digit-recognition" class="slide level2">
-<h2>Example of PCA on MNIST digit recognition</h2>
-<p>60,000 examples of handwritten digits 0~9. Each digit is an 28*28 image or 784 pixels (dimensions)</p>
-<div style="text-align:center;">
+<section id="balancing-components-with-information-loss" class="slide level2">
+<h2>Balancing components with information loss</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="1" style="width:100%; margin:0; align-self:start;">
+<p>Example of PCA on the <a href="https://www.kaggle.com/datasets/hojjatk/mnist-dataset">MNIST</a> dataset.</p>
+<ul>
+<li>60,000 examples of handwritten digits 0~9.</li>
+<li>Each digit is an 28*28 image or 784 pixels (dimensions)</li>
+</ul>
+</div>
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
 <img src="images/MNIST_example.jpg" alt="MNIST" style="max-width:90%">
 <div style="font-size:0.8em; color: #555; margin-top:4px;">
 <pre><code>Source: Chapter 10, Mathematics for Machine Learning</code></pre>
 </div>
 </div>
+</div>
+</section>
+<section id="example-of-pca-on-a-research-question" class="slide level2">
+<h2>Example of PCA on a research question</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="1" style="width:100%; margin:0; align-self:start;">
+<p><a href="https://www.sciencedirect.com/science/article/pii/S1470160X23009809">Mapping social vulnerability to floods. A comprehensive framework using a vulnerability index approach and PCA analysis</a></p>
+<ul>
+<li><strong>Research question:</strong> Create an index of social vulnerability to floods in the Somes-Tisa river basin in Romania.</li>
+<li><strong>Data:</strong> 76 regions, each with data on 14 indicators
+<ul>
+<li>indicators such as population density, population growth rate, percent of built up area, access to drinking water</li>
+<li>note: 14 indicators = 14 dimensions</li>
+</ul></li>
+<li><strong>Method:</strong> applied PCA to create a composite index of vulnerability.</li>
+</ul>
+</div>
+<div class="fragment fade-in" data-fragment-index="1" style="text-align:center;">
+<img src="images/ajtai_figure_4_PCA_loading.png" alt="PCA loadings" style="max-width:40%">
+<div style="font-size:0.8em; color: #555; margin-top:4px;">
+<pre><code>Source: Ajtai, I., Ștefănie, H., Maloș, C., Botezan, C., Radovici, A., Bizău-Cârstea, M., &amp; Baciu, C. (2023). Mapping social vulnerability to floods. A comprehensive framework using a vulnerability index approach and PCA analysis. Ecological Indicators, 154, 110838.</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="using-pca-is-practise" class="slide level2">
+<h2>Using PCA is practise</h2>
+<ul>
+<li>large number of variables</li>
+<li>want to reduce the variables</li>
+<li>want to understand how the variables relate to each other</li>
+</ul>
+</section>
+<section id="quiz-2" class="slide level2">
+<h2>Quiz</h2>
+<ul>
+<li class="fragment">What is the main goal of PCA?</li>
+<li class="fragment">How should you decide how many principal components to retain?</li>
+<li class="fragment">I have a dataset with a dimension of 3, should I use PCA to reduce it to 2 dimensions? Why or why not?</li>
+</ul>
 </section>
 <section id="key-takeaways" class="slide level2">
 <h2>Key takeaways</h2>
@@ -700,7 +857,7 @@ D. 14</p>
 <ul>
 <li>The practical will focus on calculating and interpreting PCA.<br>
 </li>
-<li>Have you questions prepared!</li>
+<li>Have your questions prepared!</li>
 </ul>
 
 
