@@ -42,7 +42,7 @@ To save a copy of notebook to your own GitHub Repo: follow the GitHub link, clic
 
 To access the practical:
 
-1. [Main Practical Page](multiple_regression_practical.html)
-2. [Download](multiple_regression_practical.ipynb)
+1. [Main Practical Page](multiple_regression_practical.html) Please note that this page is for R code. For the current python practical you need to download the notebook via the git repository.
+2. You can [download](https://github.com/Bea-Taylor/Quant_Methods/tree/main/practicals) the practical here as a python notebook (.ipynb) - ready for you to run the code 
 
 ## Further resources
