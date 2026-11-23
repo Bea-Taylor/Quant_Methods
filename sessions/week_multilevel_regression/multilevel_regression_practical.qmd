@@ -410,10 +410,10 @@ print(boxplot_att8scr)
 ```
 :::
 
-### The Interclass Correlation Coefficient - ICC
+### The Intraclass Correlation Coefficient - ICC
 
 -   Again, if you recall from the lecture, the ICC is simply the ratio
-    between the between the between group variance and the total
+    between the between group variance and the total
     variance
 -   The higher the ICC (closer to 1), the more variance is due to
     differences between groups (i.e. differences between the Ofsted
@@ -487,7 +487,7 @@ density_att8scr <- ggplot(england_filtered_clean, aes(x = ATT8SCR, fill = OFSTED
   labs(
     title = "Density of Attainment 8 (ATT8SCR) by Ofsted Rating",
     subtitle = "Low overlap suggests large differences between ratings (High ICC)",
-    x = "Attainment 8 Score (P8MEA)",
+    x = "Attainment 8 Score (ATT8SCR)",
     y = "Density"
   ) +
   theme_minimal() +
@@ -497,7 +497,7 @@ print(density_att8scr)
 ```
 :::
 
-## Running the Null Model and Calculating the Inter-Class Correlation Coefficient (ICC)
+## Running the Null Model and Calculating the Intra-Class Correlation Coefficient (ICC)
 
 -   You will also remember from the lecture, that we can run our null
     model using standard statistical software. - In R, we use the `lmer`
@@ -578,7 +578,7 @@ print(icc_value)
 
 ## Null Model Visualisation
 
--   You will know by know that I am a big advovate of visualising
+-   You will know by now that I am a big advovate of visualising
     everything as we go, so here is a visualisation of the null model
     which shows the different intercept values for the different group
 -   Remember, we can think of the intercept as the 'baseline' expected
@@ -1204,9 +1204,9 @@ VarCorr(lme_nested)
 
 ```{python}
 #| eval: false
-nested = smf.mixedlm("log_ATT8 ~ log_FSM + log_ABS",
-                     data=d,
-                     groups=d["gor_name"],                 # top level
+nested = smf.mixedlm("log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT",
+                     data=df,
+                     groups=df["gor_name"],                 # top level
                      re_formula="1",                       # its intercept
                      vc_formula={"LA": "0 + C(LANAME)"}    # nested inside it
                     ).fit()
@@ -1236,11 +1236,11 @@ VarCorr(lme_crossed)
 
 ```{python}
 #| eval: false
-d["one"] = 1                                   # one group containing everything
+df["one"] = 1                                   # one group containing everything
 
-crossed = smf.mixedlm("log_ATT8 ~ log_FSM + log_ABS",
-                      data=d,
-                      groups=d["one"],
+crossed = smf.mixedlm("log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT",
+                      data=df,
+                      groups=df["one"],
                       re_formula="0",          # no intercept for the fake group
                       vc_formula={"la":     "0 + C(LANAME)",
                                   "ofsted": "0 + C(OFSTEDRATING)"}
@@ -1589,7 +1589,7 @@ library(lme4)
 library(tibble)
 
 # --- Schools of interest ---
-target_urns  <- c("114581", "14608", "136164", "114580")
+target_urns  <- c("114581", "114608", "136164", "114580")
 target_names <- c("Longhill High School", "Patcham High School", "Brighton Aldridge Community Academy", "Dorothy Stringer School")
 
 # --- Variables of interest (from your final model) ---
@@ -1725,7 +1725,7 @@ required to reach the same outcomes (Patcham would need to reduce
 absence by fewer percentage points to achieve the same 5 point
 attainment 8 increase), but we can see how much more effective reducing
 absence is than reducing levels of disadvantage - with Longhill needing
-to reduce its levels of disadvantaged students down from 29% to to 5% to
+to reduce its levels of disadvantaged students down from 29% to 5% to
 achieve the same point score improvement.
 
 Given the policy levers that Brighton and Hove Council tried to pull,
