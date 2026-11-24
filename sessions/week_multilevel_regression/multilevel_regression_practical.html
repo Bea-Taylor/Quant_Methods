@@ -80,9 +80,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-315849e9e7634edc2f71e8ae1fbee747.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-686d827ae9120d99f8f0719fd02dd217.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-686d827ae9120d99f8f0719fd02dd217.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-686d827ae9120d99f8f0719fd02dd217.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-810760705969ccdeae41521d84167494.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-810760705969ccdeae41521d84167494.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-810760705969ccdeae41521d84167494.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
@@ -263,10 +263,10 @@ window.Quarto = {
 <a href="#building-our-linear-mixed-effects-model" id="toc-building-our-linear-mixed-effects-model" class="nav-link" data-scroll-target="#building-our-linear-mixed-effects-model">Building Our Linear Mixed Effects Model</a>
   <ul class="collapse">
 <li><a href="#stage-1---the-null-variance-components-model-for-ofsted-ratings" id="toc-stage-1---the-null-variance-components-model-for-ofsted-ratings" class="nav-link" data-scroll-target="#stage-1---the-null-variance-components-model-for-ofsted-ratings">Stage 1 - The Null / Variance Components Model for Ofsted Ratings</a></li>
-  <li><a href="#the-interclass-correlation-coefficient---icc" id="toc-the-interclass-correlation-coefficient---icc" class="nav-link" data-scroll-target="#the-interclass-correlation-coefficient---icc">The Interclass Correlation Coefficient - ICC</a></li>
+  <li><a href="#the-intraclass-correlation-coefficient---icc" id="toc-the-intraclass-correlation-coefficient---icc" class="nav-link" data-scroll-target="#the-intraclass-correlation-coefficient---icc">The Intraclass Correlation Coefficient - ICC</a></li>
   </ul>
 </li>
-  <li><a href="#running-the-null-model-and-calculating-the-inter-class-correlation-coefficient-icc" id="toc-running-the-null-model-and-calculating-the-inter-class-correlation-coefficient-icc" class="nav-link" data-scroll-target="#running-the-null-model-and-calculating-the-inter-class-correlation-coefficient-icc">Running the Null Model and Calculating the Inter-Class Correlation Coefficient (ICC)</a></li>
+  <li><a href="#running-the-null-model-and-calculating-the-intra-class-correlation-coefficient-icc" id="toc-running-the-null-model-and-calculating-the-intra-class-correlation-coefficient-icc" class="nav-link" data-scroll-target="#running-the-null-model-and-calculating-the-intra-class-correlation-coefficient-icc">Running the Null Model and Calculating the Intra-Class Correlation Coefficient (ICC)</a></li>
   <li><a href="#null-model-visualisation" id="toc-null-model-visualisation" class="nav-link" data-scroll-target="#null-model-visualisation">Null Model Visualisation</a></li>
   <li>
 <a href="#stage-2---adding-an-initial-fixed-effect" id="toc-stage-2---adding-an-initial-fixed-effect" class="nav-link" data-scroll-target="#stage-2---adding-an-initial-fixed-effect">Stage 2 - Adding an initial Fixed Effect</a>
@@ -428,8 +428,8 @@ window.Quarto = {
 Dep. Variable:            log_ATT8SCR   R-squared:                       0.844
 Model:                            OLS   Adj. R-squared:                  0.843
 Method:                 Least Squares   F-statistic:                     868.5
-Date:                Tue, 17 Nov 2026   Prob (F-statistic):               0.00
-Time:                        10:28:47   Log-Likelihood:                 3411.9
+Date:                Tue, 24 Nov 2026   Prob (F-statistic):               0.00
+Time:                        09:16:37   Log-Likelihood:                 3411.9
 No. Observations:                2902   AIC:                            -6786.
 Df Residuals:                    2883   BIC:                            -6672.
 Df Model:                          18                                         
@@ -683,9 +683,9 @@ F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
-</section><section id="the-interclass-correlation-coefficient---icc" class="level3"><h3 class="anchored" data-anchor-id="the-interclass-correlation-coefficient---icc">The Interclass Correlation Coefficient - ICC</h3>
+</section><section id="the-intraclass-correlation-coefficient---icc" class="level3"><h3 class="anchored" data-anchor-id="the-intraclass-correlation-coefficient---icc">The Intraclass Correlation Coefficient - ICC</h3>
 <ul>
-<li>Again, if you recall from the lecture, the ICC is simply the ratio between the between the between group variance and the total variance</li>
+<li>Again, if you recall from the lecture, the ICC is simply the ratio between the between group variance and the total variance</li>
 <li>The higher the ICC (closer to 1), the more variance is due to differences between groups (i.e.&nbsp;differences between the Ofsted rating of schools) than within groups (i.e.&nbsp;between schools within Ofsted rating bands)</li>
 <li>This can be judged visually with a stacked density plot:
 <ul>
@@ -760,7 +760,7 @@ F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Density of Attainment 8 (ATT8SCR) by Ofsted Rating"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Low overlap suggests large differences between ratings (High ICC)"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Attainment 8 Score (P8MEA)"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Attainment 8 Score (ATT8SCR)"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Density"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -777,7 +777,7 @@ F-statistic: 868.5 on 18 and 2883 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
-</section></section><section id="running-the-null-model-and-calculating-the-inter-class-correlation-coefficient-icc" class="level2"><h2 class="anchored" data-anchor-id="running-the-null-model-and-calculating-the-inter-class-correlation-coefficient-icc">Running the Null Model and Calculating the Inter-Class Correlation Coefficient (ICC)</h2>
+</section></section><section id="running-the-null-model-and-calculating-the-intra-class-correlation-coefficient-icc" class="level2"><h2 class="anchored" data-anchor-id="running-the-null-model-and-calculating-the-intra-class-correlation-coefficient-icc">Running the Null Model and Calculating the Intra-Class Correlation Coefficient (ICC)</h2>
 <ul>
 <li><p>You will also remember from the lecture, that we can run our null model using standard statistical software. - In R, we use the <code>lmer</code> package, whereas in Python for now we’ll use <code>statsmodels</code></p></li>
 <li><p>First run the model as below:</p></li>
@@ -902,7 +902,7 @@ OFSTEDRATING | 0.560</code></pre>
 </div>
 </section><section id="null-model-visualisation" class="level2"><h2 class="anchored" data-anchor-id="null-model-visualisation">Null Model Visualisation</h2>
 <ul>
-<li>You will know by know that I am a big advovate of visualising everything as we go, so here is a visualisation of the null model which shows the different intercept values for the different group</li>
+<li>You will know by now that I am a big advovate of visualising everything as we go, so here is a visualisation of the null model which shows the different intercept values for the different group</li>
 <li>Remember, we can think of the intercept as the ‘baseline’ expected for our dependent variable</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset qna-question multicode">
@@ -1143,7 +1143,7 @@ dtype: float64</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ax.legend(title<span class="op">=</span><span class="st">"OFSTED rating"</span>, loc<span class="op">=</span><span class="st">"lower center"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.25</span>), ncol<span class="op">=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.legend.Legend object at 0x7fa6215dbd30&gt;</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend object at 0x7f3655385690&gt;</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">"log"</span>)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">"log"</span>)</span>
@@ -1344,7 +1344,7 @@ dtype: float64</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>ax.legend(title<span class="op">=</span><span class="st">"Ofsted rating"</span>, loc<span class="op">=</span><span class="st">"lower center"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.25</span>), ncol<span class="op">=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.legend.Legend object at 0x7fa621024220&gt;</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend object at 0x7f3655040370&gt;</code></pre>
 </div>
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1540,7 +1540,7 @@ Number of obs: 2902, groups:  OFSTEDRATING, 5
 
 Fixed effects:
                  Estimate Std. Error t value
-(Intercept)       4.39367    0.01319  333.12
+(Intercept)       4.39368    0.01319  333.13
 log(PTFSM6CLA1A) -0.19491    0.01707  -11.42
 
 Correlation of Fixed Effects:
@@ -1662,9 +1662,9 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 </div>
 <div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>nested <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM + log_ABS"</span>,</span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>d,</span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>                     groups<span class="op">=</span>d[<span class="st">"gor_name"</span>],                 <span class="co"># top level</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>nested <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT"</span>,</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>df,</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>                     groups<span class="op">=</span>df[<span class="st">"gor_name"</span>],                 <span class="co"># top level</span></span>
 <span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>                     re_formula<span class="op">=</span><span class="st">"1"</span>,                       <span class="co"># its intercept</span></span>
 <span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>                     vc_formula<span class="op">=</span>{<span class="st">"LA"</span>: <span class="st">"0 + C(LANAME)"</span>}    <span class="co"># nested inside it</span></span>
 <span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>                    ).fit()</span>
@@ -1694,11 +1694,11 @@ boundary (singular) fit: see help('isSingular')</code></pre>
 </div>
 <div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"one"</span>] <span class="op">=</span> <span class="dv">1</span>                                   <span class="co"># one group containing everything</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"one"</span>] <span class="op">=</span> <span class="dv">1</span>                                   <span class="co"># one group containing everything</span></span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>crossed <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM + log_ABS"</span>,</span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>                      data<span class="op">=</span>d,</span>
-<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>                      groups<span class="op">=</span>d[<span class="st">"one"</span>],</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>crossed <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT"</span>,</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>                      data<span class="op">=</span>df,</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>                      groups<span class="op">=</span>df[<span class="st">"one"</span>],</span>
 <span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>                      re_formula<span class="op">=</span><span class="st">"0"</span>,          <span class="co"># no intercept for the fake group</span></span>
 <span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>                      vc_formula<span class="op">=</span>{<span class="st">"la"</span>:     <span class="st">"0 + C(LANAME)"</span>,</span>
 <span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"ofsted"</span>: <span class="st">"0 + C(OFSTEDRATING)"</span>}</span>
@@ -2013,7 +2013,7 @@ lg(vr____.)  0.021</code></pre>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- Schools of interest ---</span></span>
-<span><span class="va">target_urns</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"114581"</span>, <span class="st">"14608"</span>, <span class="st">"136164"</span>, <span class="st">"114580"</span><span class="op">)</span></span>
+<span><span class="va">target_urns</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"114581"</span>, <span class="st">"114608"</span>, <span class="st">"136164"</span>, <span class="st">"114580"</span><span class="op">)</span></span>
 <span><span class="va">target_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Longhill High School"</span>, <span class="st">"Patcham High School"</span>, <span class="st">"Brighton Aldridge Community Academy"</span>, <span class="st">"Dorothy Stringer School"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># --- Variables of interest (from your final model) ---</span></span>
@@ -2315,7 +2315,7 @@ lg(vr____.)  0.021</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This output is highly illustrative and shows that given the different starting points for each school, not only are different levels of effort required to reach the same outcomes (Patcham would need to reduce absence by fewer percentage points to achieve the same 5 point attainment 8 increase), but we can see how much more effective reducing absence is than reducing levels of disadvantage - with Longhill needing to reduce its levels of disadvantaged students down from 29% to to 5% to achieve the same point score improvement.</p>
+<p>This output is highly illustrative and shows that given the different starting points for each school, not only are different levels of effort required to reach the same outcomes (Patcham would need to reduce absence by fewer percentage points to achieve the same 5 point attainment 8 increase), but we can see how much more effective reducing absence is than reducing levels of disadvantage - with Longhill needing to reduce its levels of disadvantaged students down from 29% to 5% to achieve the same point score improvement.</p>
 <p>Given the policy levers that Brighton and Hove Council tried to pull, this is very important information.</p>
 </section><section id="task" class="level3"><h3 class="anchored" data-anchor-id="task">Task</h3>
 <p>See if you can experiment with feeding your own tame AI (Copilot/Chat GPT, ClaudeAI, Gemini etc. will all do this slightly differently and with greater or lesser success) with your model outputs and some specifics about some schools or local authorities, and then ask some questions of it to aid in some insightful interpretation.</p>
@@ -3273,10 +3273,10 @@ Caution
 <span id="cb91-423"><a href="#cb91-423" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb91-424"><a href="#cb91-424" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb91-425"><a href="#cb91-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb91-426"><a href="#cb91-426" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Interclass Correlation Coefficient - ICC</span></span>
+<span id="cb91-426"><a href="#cb91-426" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Intraclass Correlation Coefficient - ICC</span></span>
 <span id="cb91-427"><a href="#cb91-427" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-428"><a href="#cb91-428" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Again, if you recall from the lecture, the ICC is simply the ratio</span>
-<span id="cb91-429"><a href="#cb91-429" aria-hidden="true" tabindex="-1"></a>    between the between the between group variance and the total</span>
+<span id="cb91-429"><a href="#cb91-429" aria-hidden="true" tabindex="-1"></a>    between the between group variance and the total</span>
 <span id="cb91-430"><a href="#cb91-430" aria-hidden="true" tabindex="-1"></a>    variance</span>
 <span id="cb91-431"><a href="#cb91-431" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The higher the ICC (closer to 1), the more variance is due to</span>
 <span id="cb91-432"><a href="#cb91-432" aria-hidden="true" tabindex="-1"></a>    differences between groups (i.e. differences between the Ofsted</span>
@@ -3349,7 +3349,7 @@ Caution
 <span id="cb91-503"><a href="#cb91-503" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb91-504"><a href="#cb91-504" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Density of Attainment 8 (ATT8SCR) by Ofsted Rating"</span>,</span>
 <span id="cb91-505"><a href="#cb91-505" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Low overlap suggests large differences between ratings (High ICC)"</span>,</span>
-<span id="cb91-506"><a href="#cb91-506" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Attainment 8 Score (P8MEA)"</span>,</span>
+<span id="cb91-506"><a href="#cb91-506" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Attainment 8 Score (ATT8SCR)"</span>,</span>
 <span id="cb91-507"><a href="#cb91-507" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
 <span id="cb91-508"><a href="#cb91-508" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb91-509"><a href="#cb91-509" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
@@ -3359,7 +3359,7 @@ Caution
 <span id="cb91-513"><a href="#cb91-513" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb91-514"><a href="#cb91-514" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb91-515"><a href="#cb91-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb91-516"><a href="#cb91-516" aria-hidden="true" tabindex="-1"></a><span class="fu">## Running the Null Model and Calculating the Inter-Class Correlation Coefficient (ICC)</span></span>
+<span id="cb91-516"><a href="#cb91-516" aria-hidden="true" tabindex="-1"></a><span class="fu">## Running the Null Model and Calculating the Intra-Class Correlation Coefficient (ICC)</span></span>
 <span id="cb91-517"><a href="#cb91-517" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-518"><a href="#cb91-518" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>You will also remember from the lecture, that we can run our null</span>
 <span id="cb91-519"><a href="#cb91-519" aria-hidden="true" tabindex="-1"></a>    model using standard statistical software. - In R, we use the <span class="in">`lmer`</span></span>
@@ -3438,7 +3438,7 @@ Caution
 <span id="cb91-600"><a href="#cb91-600" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-601"><a href="#cb91-601" aria-hidden="true" tabindex="-1"></a><span class="fu">## Null Model Visualisation</span></span>
 <span id="cb91-602"><a href="#cb91-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb91-603"><a href="#cb91-603" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>You will know by know that I am a big advovate of visualising</span>
+<span id="cb91-603"><a href="#cb91-603" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>You will know by now that I am a big advovate of visualising</span>
 <span id="cb91-604"><a href="#cb91-604" aria-hidden="true" tabindex="-1"></a>    everything as we go, so here is a visualisation of the null model</span>
 <span id="cb91-605"><a href="#cb91-605" aria-hidden="true" tabindex="-1"></a>    which shows the different intercept values for the different group</span>
 <span id="cb91-606"><a href="#cb91-606" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Remember, we can think of the intercept as the 'baseline' expected</span>
@@ -4061,9 +4061,9 @@ Caution
 <span id="cb91-1241"><a href="#cb91-1241" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-1244"><a href="#cb91-1244" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb91-1245"><a href="#cb91-1245" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb91-1246"><a href="#cb91-1246" aria-hidden="true" tabindex="-1"></a>nested <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM + log_ABS"</span>,</span>
-<span id="cb91-1247"><a href="#cb91-1247" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>d,</span>
-<span id="cb91-1248"><a href="#cb91-1248" aria-hidden="true" tabindex="-1"></a>                     groups<span class="op">=</span>d[<span class="st">"gor_name"</span>],                 <span class="co"># top level</span></span>
+<span id="cb91-1246"><a href="#cb91-1246" aria-hidden="true" tabindex="-1"></a>nested <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT"</span>,</span>
+<span id="cb91-1247"><a href="#cb91-1247" aria-hidden="true" tabindex="-1"></a>                     data<span class="op">=</span>df,</span>
+<span id="cb91-1248"><a href="#cb91-1248" aria-hidden="true" tabindex="-1"></a>                     groups<span class="op">=</span>df[<span class="st">"gor_name"</span>],                 <span class="co"># top level</span></span>
 <span id="cb91-1249"><a href="#cb91-1249" aria-hidden="true" tabindex="-1"></a>                     re_formula<span class="op">=</span><span class="st">"1"</span>,                       <span class="co"># its intercept</span></span>
 <span id="cb91-1250"><a href="#cb91-1250" aria-hidden="true" tabindex="-1"></a>                     vc_formula<span class="op">=</span>{<span class="st">"LA"</span>: <span class="st">"0 + C(LANAME)"</span>}    <span class="co"># nested inside it</span></span>
 <span id="cb91-1251"><a href="#cb91-1251" aria-hidden="true" tabindex="-1"></a>                    ).fit()</span>
@@ -4093,11 +4093,11 @@ Caution
 <span id="cb91-1277"><a href="#cb91-1277" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-1280"><a href="#cb91-1280" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb91-1281"><a href="#cb91-1281" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb91-1282"><a href="#cb91-1282" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"one"</span>] <span class="op">=</span> <span class="dv">1</span>                                   <span class="co"># one group containing everything</span></span>
+<span id="cb91-1282"><a href="#cb91-1282" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"one"</span>] <span class="op">=</span> <span class="dv">1</span>                                   <span class="co"># one group containing everything</span></span>
 <span id="cb91-1283"><a href="#cb91-1283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb91-1284"><a href="#cb91-1284" aria-hidden="true" tabindex="-1"></a>crossed <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8 ~ log_FSM + log_ABS"</span>,</span>
-<span id="cb91-1285"><a href="#cb91-1285" aria-hidden="true" tabindex="-1"></a>                      data<span class="op">=</span>d,</span>
-<span id="cb91-1286"><a href="#cb91-1286" aria-hidden="true" tabindex="-1"></a>                      groups<span class="op">=</span>d[<span class="st">"one"</span>],</span>
+<span id="cb91-1284"><a href="#cb91-1284" aria-hidden="true" tabindex="-1"></a>crossed <span class="op">=</span> smf.mixedlm(<span class="st">"log_ATT8SCR ~ log_PTFSM6CLA1A + log_PERCTOT"</span>,</span>
+<span id="cb91-1285"><a href="#cb91-1285" aria-hidden="true" tabindex="-1"></a>                      data<span class="op">=</span>df,</span>
+<span id="cb91-1286"><a href="#cb91-1286" aria-hidden="true" tabindex="-1"></a>                      groups<span class="op">=</span>df[<span class="st">"one"</span>],</span>
 <span id="cb91-1287"><a href="#cb91-1287" aria-hidden="true" tabindex="-1"></a>                      re_formula<span class="op">=</span><span class="st">"0"</span>,          <span class="co"># no intercept for the fake group</span></span>
 <span id="cb91-1288"><a href="#cb91-1288" aria-hidden="true" tabindex="-1"></a>                      vc_formula<span class="op">=</span>{<span class="st">"la"</span>:     <span class="st">"0 + C(LANAME)"</span>,</span>
 <span id="cb91-1289"><a href="#cb91-1289" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"ofsted"</span>: <span class="st">"0 + C(OFSTEDRATING)"</span>}</span>
@@ -4446,7 +4446,7 @@ Caution
 <span id="cb91-1650"><a href="#cb91-1650" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
 <span id="cb91-1651"><a href="#cb91-1651" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-1652"><a href="#cb91-1652" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Schools of interest ---</span></span>
-<span id="cb91-1653"><a href="#cb91-1653" aria-hidden="true" tabindex="-1"></a>target_urns  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"114581"</span>, <span class="st">"14608"</span>, <span class="st">"136164"</span>, <span class="st">"114580"</span>)</span>
+<span id="cb91-1653"><a href="#cb91-1653" aria-hidden="true" tabindex="-1"></a>target_urns  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"114581"</span>, <span class="st">"114608"</span>, <span class="st">"136164"</span>, <span class="st">"114580"</span>)</span>
 <span id="cb91-1654"><a href="#cb91-1654" aria-hidden="true" tabindex="-1"></a>target_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Longhill High School"</span>, <span class="st">"Patcham High School"</span>, <span class="st">"Brighton Aldridge Community Academy"</span>, <span class="st">"Dorothy Stringer School"</span>)</span>
 <span id="cb91-1655"><a href="#cb91-1655" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-1656"><a href="#cb91-1656" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variables of interest (from your final model) ---</span></span>
@@ -4582,7 +4582,7 @@ Caution
 <span id="cb91-1786"><a href="#cb91-1786" aria-hidden="true" tabindex="-1"></a>absence by fewer percentage points to achieve the same 5 point</span>
 <span id="cb91-1787"><a href="#cb91-1787" aria-hidden="true" tabindex="-1"></a>attainment 8 increase), but we can see how much more effective reducing</span>
 <span id="cb91-1788"><a href="#cb91-1788" aria-hidden="true" tabindex="-1"></a>absence is than reducing levels of disadvantage - with Longhill needing</span>
-<span id="cb91-1789"><a href="#cb91-1789" aria-hidden="true" tabindex="-1"></a>to reduce its levels of disadvantaged students down from 29% to to 5% to</span>
+<span id="cb91-1789"><a href="#cb91-1789" aria-hidden="true" tabindex="-1"></a>to reduce its levels of disadvantaged students down from 29% to 5% to</span>
 <span id="cb91-1790"><a href="#cb91-1790" aria-hidden="true" tabindex="-1"></a>achieve the same point score improvement.</span>
 <span id="cb91-1791"><a href="#cb91-1791" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-1792"><a href="#cb91-1792" aria-hidden="true" tabindex="-1"></a>Given the policy levers that Brighton and Hove Council tried to pull,</span>
